@@ -1,5 +1,6 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@include file="/html/library/init.jsp"%>
 
-<portlet:defineObjects />
-
-This is the <b>Library Portlet</b> portlet in View mode.
+<portlet:renderURL var="updateBookURL">
+	<portlet:param name="jspPage" value="/html/library/update.jsp" />
+</portlet:renderURL>
+<br /><a href="<%= updateBookURL %>">Add new Book &raquo;</a>
