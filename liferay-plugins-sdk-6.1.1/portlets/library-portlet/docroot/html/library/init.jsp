@@ -4,4 +4,6 @@
 <%@page import="javax.portlet.PortletURL"%> 
 <%@page import="javax.portlet.ActionRequest"%>
 
+<%@page import="com.library.LibraryConstants"%>
+
 <portlet:defineObjects />
