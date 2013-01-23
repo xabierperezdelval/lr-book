@@ -5,7 +5,7 @@
 <%
 	PortletURL updateBookURL = renderResponse.createActionURL();
 	updateBookURL.setParameter(
-			ActionRequest.ACTION_NAME, "updateBook");
+			ActionRequest.ACTION_NAME, LibraryConstants.ACTION_UPDATE_BOOK);
 %>
 
 <aui:form name="fm"
