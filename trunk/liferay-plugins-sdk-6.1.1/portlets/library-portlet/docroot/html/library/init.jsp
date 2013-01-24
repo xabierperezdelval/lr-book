@@ -6,4 +6,8 @@
 
 <%@page import="com.library.LibraryConstants"%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.slayer.model.LMSBook"%>
+<%@page import="com.slayer.service.LMSBookLocalServiceUtil"%>
+
 <portlet:defineObjects />
