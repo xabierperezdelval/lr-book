@@ -10,6 +10,10 @@
 
 <aui:form name="fm"
 	action="<%= updateBookURL.toString() %>">
+	
+	<aui:input name="redirectURL" type="hidden"
+		value="<%= renderResponse.createRenderURL().toString() %>"/>
+	
 	<aui:input name="bookTitle" label="Book Title" >
 		<aui:validator name="" errorMessage=""/>
 	</aui:input>

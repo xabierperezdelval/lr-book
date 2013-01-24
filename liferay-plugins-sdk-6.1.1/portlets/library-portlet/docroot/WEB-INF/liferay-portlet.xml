@@ -6,12 +6,15 @@
 	<portlet>
 		<portlet-name>library</portlet-name>
 		<icon>/icon.png</icon>
+		<action-url-redirect>false</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
+		
 		<css-class-wrapper>library-portlet</css-class-wrapper>
+		
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
