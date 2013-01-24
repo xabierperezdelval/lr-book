@@ -27,6 +27,10 @@ public class LibraryPortlet extends MVCPortlet {
 		String author = ParamUtil.getString(actionRequest, "author");
 		
 		insertBook(bookTitle, author);
+		
+		// redirect after insert
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		actionResponse.sendRedirect(redirectURL);
 	}
 
 	private void insertBook(String bookTitle, String author) {
