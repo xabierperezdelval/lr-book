@@ -8,15 +8,6 @@
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<header-portlet-css>
-			http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css
-		</header-portlet-css>
-		<header-portlet-javascript>
-			http://code.jquery.com/jquery-latest.min.js
-		</header-portlet-javascript>
-		<header-portlet-javascript>
-			http://code.jquery.com/ui/1.10.0/jquery-ui.js
-		</header-portlet-javascript>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
