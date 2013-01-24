@@ -7,7 +7,7 @@
 
 <%
 	PortletURL listBooksURL = renderResponse.createRenderURL();
-	listBooksURL.setParameter("jspPage", "/html/library/list.jsp"); 
+	listBooksURL.setParameter("jspPage", "/html/library/list.jsp");
 %>
 &nbsp;|&nbsp;
 <a href="<%= listBooksURL.toString() %>">Show All Books &raquo;</a>

@@ -5,10 +5,16 @@ import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
 import com.slayer.model.impl.LMSBookImpl;
@@ -29,8 +35,22 @@ public class LibraryPortlet extends MVCPortlet {
 		insertBook(bookTitle, author);
 		
 		// redirect after insert
-		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
-		actionResponse.sendRedirect(redirectURL);
+		ThemeDisplay themeDisplay = 
+				(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		PortletConfig portletConfig = 
+				(PortletConfig) actionRequest.getAttribute("javax.portlet.config");
+		
+		String portletName = portletConfig.getPortletName();
+		
+		PortletURL successPageURL = PortletURLFactoryUtil.create(
+				actionRequest,
+				portletName + "_WAR_" + portletName + "portlet", 
+				themeDisplay.getPlid(), 
+				PortletRequest.RENDER_PHASE);
+		
+		successPageURL.setParameter("jspPage", LibraryConstants.PAGE_SUCCESS);
+		actionResponse.sendRedirect(successPageURL.toString());
 	}
 
 	private void insertBook(String bookTitle, String author) {
