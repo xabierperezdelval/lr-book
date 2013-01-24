@@ -5,6 +5,13 @@
 </portlet:renderURL>
 <br /><a href="<%= updateBookURL %>">Add new Book &raquo;</a>
 
+<%
+	PortletURL listBooksURL = renderResponse.createRenderURL();
+	listBooksURL.setParameter("jspPage", "/html/library/list.jsp"); 
+%>
+&nbsp;|&nbsp;
+<a href="<%= listBooksURL.toString() %>">Show All Books &raquo;</a>
+
 <hr/>
 
 <a href="javascript:void();" id="jqueryText">jQuery in action</a>
