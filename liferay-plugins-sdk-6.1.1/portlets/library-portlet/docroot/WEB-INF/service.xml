@@ -14,5 +14,7 @@
 		
 		<!-- Audit fields -->
 		<column name="createDate" type="Date" />
+		
+		<reference package-path="com.liferay.portal" entity="Image"/>
 	</entity>
 </service-builder>
