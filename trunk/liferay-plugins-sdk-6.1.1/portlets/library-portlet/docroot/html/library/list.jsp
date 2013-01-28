@@ -8,6 +8,11 @@
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", LibraryConstants.PAGE_LIST);
+	
+	PortletURL deleteBookURL = renderResponse.createActionURL(); 
+	deleteBookURL.setParameter(ActionRequest.ACTION_NAME, 
+			LibraryConstants.ACTION_DELETE_BOOK);
+	deleteBookURL.setParameter("redirectURL", iteratorURL.toString());
 %>
 
 <liferay-ui:search-container delta="4" 
@@ -25,8 +30,14 @@
 			property="bookTitle" />
 		<liferay-ui:search-container-column-text name="Author"
 			property="author" />
-		<liferay-ui:search-container-column-text name="Date Added"
-			property="createDate" />
+		<liferay-ui:search-container-column-text name="Date Added">
+			<fmt:formatDate value="<%= book.getCreateDate() %>"
+				pattern="dd/MMM/yyyy" />
+		</liferay-ui:search-container-column-text>
+		
+		<% deleteBookURL.setParameter("bookId", Long.toString(book.getBookId())); %>
+		<liferay-ui:search-container-column-text name="Delete" 
+			href="<%= deleteBookURL.toString() %>" value="delete &raquo;"/>
 	</liferay-ui:search-container-row>
 	
 	<liferay-ui:search-iterator 
