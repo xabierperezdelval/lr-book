@@ -8,6 +8,9 @@
        	request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);		
 	LMSBook book = (LMSBook) row.getObject();
 	PortletURL editBookURL = renderResponse.createRenderURL(); 
+	editBookURL.setParameter("bookId", Long.toString(book.getBookId()));
+	editBookURL.setParameter("jspPage", LibraryConstants.PAGE_UPDATE);
+	
 	PortletURL viewBookURL = renderResponse.createRenderURL();
 %>
 
