@@ -7,11 +7,15 @@
 		lmsBook = LMSBookLocalServiceUtil.fetchLMSBook(bookId);
 	}
 	String backURL = ParamUtil.getString(request, "backURL");
+	boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 %>
 
-<liferay-ui:header
-	backLabel="&laquo; Back to List" 
-	title="Book Details" backURL="<%= backURL %>" />
+<c:if test="<%= showHeader %>">
+	<liferay-ui:header
+		backLabel="&laquo; Back to List" 
+		title="Book Details" backURL="<%= backURL %>" />
+</c:if>
+
 
 <c:if test="<%= Validator.isNotNull(lmsBook) %>">
 	<table border="1">

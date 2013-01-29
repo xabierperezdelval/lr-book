@@ -32,9 +32,9 @@
 		className="LMSBook">
 		<% bookDetailsURL.setParameter("bookId", Long.toString(book.getBookId())); %>
 		<liferay-ui:search-container-column-text name="Book Title"
-			property="bookTitle" href="<%= bookDetailsURL.toString() %>" />
+			property="bookTitle" href="<%= bookDetailsURL.toString() %>" orderable="true" orderableProperty="bookTitle"/>
 		<liferay-ui:search-container-column-text name="Author"
-			property="author" />
+			property="author" orderable="true" orderableProperty="author" />
 		<liferay-ui:search-container-column-text name="Date Added">
 			<fmt:formatDate value="<%= book.getCreateDate() %>"
 				pattern="dd/MMM/yyyy" />
