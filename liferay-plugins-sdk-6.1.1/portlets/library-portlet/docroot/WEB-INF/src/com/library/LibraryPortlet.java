@@ -8,10 +8,13 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -75,5 +78,27 @@ public class LibraryPortlet extends MVCPortlet {
 		// gracefully redirecting to the default list view
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 		actionResponse.sendRedirect(redirectURL);
+	}
+	
+	@Override
+	public void render(RenderRequest request, RenderResponse response)
+			throws PortletException, IOException {
+		
+		setSortParams(request);
+		super.render(request, response);
+	}
+
+	private void setSortParams(RenderRequest request) {
+		String jspPage = ParamUtil.getString(request, "jspPage");
+		
+		if (jspPage.equalsIgnoreCase(LibraryConstants.PAGE_LIST)) {
+			String orderByCol = ParamUtil.getString(
+								request, "orderByCol", "bookTitle");
+			request.setAttribute("orderByCol", orderByCol);
+			
+			String orderByType = ParamUtil.getString(
+								request, "orderByType", "asc");
+			request.setAttribute("orderByType", orderByType);
+		}
 	}
 }

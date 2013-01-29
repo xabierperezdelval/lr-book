@@ -1,3 +1,5 @@
+<%@page import="java.util.Collections"%>
+<%@page import="org.apache.commons.beanutils.BeanComparator"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@include file="/html/library/init.jsp" %>
 
@@ -5,6 +7,17 @@
 
 <%
 	List<LMSBook> books = LMSBookLocalServiceUtil.getLMSBooks(0, -1);
+
+	// additional code for sorting the list
+	String orderByCol = (String) request.getAttribute("orderByCol");
+	String orderByType = (String) request.getAttribute("orderByType");	
+			
+	BeanComparator comp = new BeanComparator(orderByCol);
+	Collections.sort(books, comp);
+	
+	if (orderByType.equalsIgnoreCase("desc")) {
+		Collections.reverse(books);
+	}
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", LibraryConstants.PAGE_LIST);
@@ -21,7 +34,8 @@
 
 <liferay-ui:search-container delta="4" 
 	emptyResultsMessage="Sorry. There are no items to display."
-	iteratorURL="<%= iteratorURL %>">
+	iteratorURL="<%= iteratorURL %>" 
+	orderByCol="<%= orderByCol %>" orderByType="<%= orderByType %>">
 	<liferay-ui:search-container-results 
 		total="<%= books.size() %>"
 		results="<%= ListUtil.subList(books, 
