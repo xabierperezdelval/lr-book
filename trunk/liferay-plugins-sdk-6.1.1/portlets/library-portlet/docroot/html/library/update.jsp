@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.slayer.model.impl.LMSBookImpl"%>
 <%@include file="/html/library/init.jsp"%>
 
