@@ -31,3 +31,7 @@
 </aui:form>
 
 <br/><a href="<portlet:renderURL/>">&laquo; Go Back</a>
+
+<aui:script>
+	Liferay.Util.focusFormField(document.<portlet:namespace/>fm.<portlet:namespace/>bookTitle);
+</aui:script>

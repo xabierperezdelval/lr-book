@@ -12,12 +12,10 @@ import javax.portlet.PortletURL;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
 
 /**
@@ -35,7 +33,7 @@ public class LibraryPortlet extends MVCPortlet {
 		long bookId = ParamUtil.getLong(actionRequest, "bookId");
 		
 		if (bookId > 0l) {
-			modifyBook(bookId, bookTitle, author);
+			LMSBookLocalServiceUtil.modifyBook(bookId, bookTitle, author);
 		} else {
 			LMSBookLocalServiceUtil.insertBook(bookTitle, author);
 		}
@@ -54,34 +52,12 @@ public class LibraryPortlet extends MVCPortlet {
 				portletName + "_WAR_" + portletName + "portlet", 
 				themeDisplay.getPlid(), 
 				PortletRequest.RENDER_PHASE);
-		
-		successPageURL.setParameter("jspPage", LibraryConstants.PAGE_SUCCESS);
+	
+		successPageURL.setParameter("jspPage", 
+			(bookId > 0l)? LibraryConstants.PAGE_LIST : LibraryConstants.PAGE_SUCCESS);
 		actionResponse.sendRedirect(successPageURL.toString());
 	}
 
-	private void modifyBook(long bookId, String bookTitle, String author) {
-	
-		LMSBook lmsBook = null;
-		try {
-			lmsBook = LMSBookLocalServiceUtil.fetchLMSBook(bookId);
-		} catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (Validator.isNotNull(lmsBook)) {
-			lmsBook.setBookTitle(bookTitle);
-			lmsBook.setAuthor(author);
-			
-			// update the book
-			try {
-				LMSBookLocalServiceUtil.updateLMSBook(lmsBook);
-			} catch (SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public void deleteBook(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
