@@ -17,6 +17,7 @@ package com.slayer.service.impl;
 import java.util.Date;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 import com.slayer.model.LMSBook;
 import com.slayer.model.impl.LMSBookImpl;
 import com.slayer.service.LMSBookLocalServiceUtil;
@@ -59,6 +60,31 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 
+		return lmsBook;
+	}
+	
+	public LMSBook modifyBook(long bookId, String bookTitle, String author) {
+		
+		LMSBook lmsBook = null;
+		try {
+			lmsBook = fetchLMSBook(bookId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(lmsBook)) {
+			lmsBook.setBookTitle(bookTitle);
+			lmsBook.setAuthor(author);
+			lmsBook.setModifiedDate(new Date());
+			
+			// update the book
+			try {
+				updateLMSBook(lmsBook);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return lmsBook;
 	}
 }
