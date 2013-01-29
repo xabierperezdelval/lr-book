@@ -13,4 +13,6 @@ public interface LibraryConstants {
 	static final String PAGE_LIST = "/html/library/list.jsp";
 	
 	static final String PAGE_ACTIONS = "/html/library/actions.jsp";
+	
+	static final String PAGE_DETAILS = "/html/library/detail.jsp";
 }
