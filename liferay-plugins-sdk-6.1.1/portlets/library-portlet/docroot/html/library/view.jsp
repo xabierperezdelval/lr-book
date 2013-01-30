@@ -11,3 +11,12 @@
 %>
 &nbsp;|&nbsp;
 <a href="<%= listBooksURL.toString() %>">Show All Books &raquo;</a>
+
+<hr/>
+<portlet:actionURL var="searchBooksURL" 
+	name="<%= LibraryConstants.ACTION_SEARCH_BOOKS %>"  />
+	
+<aui:form action="<%= searchBooksURL.toString() %>">
+	<aui:input name="searchTerm" label="Enter Title to search"/>
+	<aui:input name="" type="submit" value="Search"/>
+</aui:form>	

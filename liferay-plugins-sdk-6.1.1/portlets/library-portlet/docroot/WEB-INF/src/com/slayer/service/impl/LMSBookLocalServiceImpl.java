@@ -15,6 +15,7 @@
 package com.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
@@ -79,12 +80,17 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 			
 			// update the book
 			try {
-				updateLMSBook(lmsBook);
+				lmsBook = updateLMSBook(lmsBook);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 		}
 		
 		return lmsBook;
+	}
+	
+	public List<LMSBook> searchBooks(String bookTitle) 
+			throws SystemException { 
+		return lmsBookPersistence.findByBookTitle(bookTitle);
 	}
 }

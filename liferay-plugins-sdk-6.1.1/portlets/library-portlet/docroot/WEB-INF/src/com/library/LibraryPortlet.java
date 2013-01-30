@@ -1,6 +1,7 @@
 package com.library;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -19,7 +20,9 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
+import com.slayer.service.persistence.LMSBookUtil;
 
 /**
  * Portlet implementation class LibraryPortlet
@@ -99,6 +102,29 @@ public class LibraryPortlet extends MVCPortlet {
 			String orderByType = ParamUtil.getString(
 								request, "orderByType", "asc");
 			request.setAttribute("orderByType", orderByType);
+		}
+	}
+	
+	public void searchBooks(ActionRequest actionRequest,
+			ActionResponse actionResponse) 
+					throws IOException, PortletException {
+		
+		String searchTerm = 
+				ParamUtil.getString(actionRequest, "searchTerm");
+		
+		if (Validator.isNotNull(searchTerm)) {
+			try {
+				List<LMSBook> lmsBooks = 
+					LMSBookLocalServiceUtil.searchBooks(searchTerm);
+	
+				actionRequest.setAttribute("SEARCH_RESULT", 
+						lmsBooks);
+				actionResponse.setRenderParameter("jspPage",
+			             LibraryConstants.PAGE_LIST);
+	
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -16,6 +16,19 @@
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date"/>
 		
+		<order by="desc">
+		    <order-column name="modifiedDate"/>
+		</order>
+		
+		<finder name="BookTitle" return-type="Collection" >
+			<finder-column name="bookTitle"/>
+		</finder>
+		
+		<finder name="BookTitle_Author" return-type="LMSBook">
+			<finder-column name="bookTitle"/>
+			<finder-column name="author"/>
+		</finder>		
+		
 		<reference package-path="com.liferay.portal" entity="Image"/>
 	</entity>
 </service-builder>
