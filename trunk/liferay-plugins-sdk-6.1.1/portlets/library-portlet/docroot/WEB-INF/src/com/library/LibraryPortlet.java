@@ -22,7 +22,6 @@ import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
-import com.slayer.service.persistence.LMSBookUtil;
 
 /**
  * Portlet implementation class LibraryPortlet

@@ -23,6 +23,7 @@ import com.slayer.model.LMSBook;
 import com.slayer.model.impl.LMSBookImpl;
 import com.slayer.service.LMSBookLocalServiceUtil;
 import com.slayer.service.base.LMSBookLocalServiceBaseImpl;
+import com.slayer.service.persistence.LMSBookFinderUtil;
 
 /**
  * The implementation of the l m s book local service.
@@ -91,6 +92,18 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 	
 	public List<LMSBook> searchBooks(String bookTitle) 
 			throws SystemException { 
-		return lmsBookPersistence.findByBookTitle(bookTitle);
+		//return lmsBookPersistence.findByBookTitle(bookTitle);
+		
+		// dynamic query
+		/*
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(LMSBook.class);
+		
+		Property bookTitleProperty = PropertyFactoryUtil.forName("bookTitle");
+		dynamicQuery.add(bookTitleProperty.like("%" + bookTitle + "%"));
+		
+		return dynamicQuery(dynamicQuery);
+		*/
+		
+		return LMSBookFinderUtil.findBooks("%" + bookTitle + "%");
 	}
 }
