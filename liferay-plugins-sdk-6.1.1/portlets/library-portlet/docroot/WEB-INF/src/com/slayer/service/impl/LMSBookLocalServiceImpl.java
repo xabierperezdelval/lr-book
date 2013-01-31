@@ -20,10 +20,12 @@ import java.util.List;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.slayer.model.LMSBook;
+import com.slayer.model.LMSBorrowing;
 import com.slayer.model.impl.LMSBookImpl;
 import com.slayer.service.LMSBookLocalServiceUtil;
 import com.slayer.service.base.LMSBookLocalServiceBaseImpl;
 import com.slayer.service.persistence.LMSBookFinderUtil;
+import com.slayer.service.persistence.LMSBorrowingUtil;
 
 /**
  * The implementation of the l m s book local service.
@@ -105,5 +107,12 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		*/
 		
 		return LMSBookFinderUtil.findBooks("%" + bookTitle + "%");
+	}
+	
+	public List<LMSBorrowing> getBorrowings(long bookId) 
+			throws SystemException {
+		//return lmsBookPersistence.getLMSBorrowings(bookId);
+		
+		return LMSBorrowingUtil.findByBookId(bookId);
 	}
 }
