@@ -14,6 +14,10 @@ import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -125,5 +129,49 @@ public class LibraryPortlet extends MVCPortlet {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void deleteBooks(ActionRequest actionRequest,
+			ActionResponse actionResponse) 
+					throws IOException, PortletException {
+	
+		String bookIdsForDelete = 
+				ParamUtil.getString(actionRequest, "bookIdsForDelete");
+	
+		// convert this into JSON format. 
+		bookIdsForDelete = "[" + bookIdsForDelete + "]";
+		
+		// The presence of ":" in the string 
+		// creates problem while parsing.
+		// replace all occurance of ":" with 
+		// some other unique string, eg. "-"
+		bookIdsForDelete = bookIdsForDelete.replaceAll(":", "-");
+		
+		// parse and get a JSON array of objects
+		JSONArray jsonArray = null;
+		try {
+			jsonArray = JSONFactoryUtil.createJSONArray(bookIdsForDelete);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		// process the jsonArray
+		if (Validator.isNotNull(jsonArray)) {
+			for (int i=0; i<jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				
+				long bookId = jsonObject.getLong("bookId");
+				try {
+					LMSBookLocalServiceUtil.deleteLMSBook(bookId);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}			
+		}
+		
+		// redirect to the list page again. 
+		actionResponse.setRenderParameter("jspPage", LibraryConstants.PAGE_LIST);
 	}
 }

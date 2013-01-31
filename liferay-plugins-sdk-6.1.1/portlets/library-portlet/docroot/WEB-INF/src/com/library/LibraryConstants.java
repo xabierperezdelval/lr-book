@@ -6,6 +6,8 @@ public interface LibraryConstants {
 	
 	static final String ACTION_DELETE_BOOK = "deleteBook";
 	
+	static final String ACTION_DELETE_BOOKS = "deleteBooks";
+	
 	static final String ACTION_SEARCH_BOOKS = "searchBooks";
 	
 	static final String PAGE_UPDATE = "/html/library/update.jsp";

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="java.util.Collections"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
@@ -41,44 +42,107 @@
 %>
 
 <c:if test="<%= !books.isEmpty() %>">
+	<% String functionName = 
+		renderResponse.getNamespace() + "submitFormForAction();"; %>
 	<aui:button-row>
-		<aui:button value="delete" name="deleteBooksBtn"/>
+		<aui:button value="delete" cssClass="delete-books-button"
+			onClick="<%= functionName %>"/>
 	</aui:button-row>
 </c:if>
 
-<liferay-ui:search-container delta="4" 
-	emptyResultsMessage="Sorry. There are no items to display."
-	iteratorURL="<%= iteratorURL %>" 
-	orderByCol="<%= orderByCol %>" orderByType="<%= orderByType %>" 
-	rowChecker="<%= new RowChecker(renderResponse) %>">
-	<liferay-ui:search-container-results 
-		total="<%= books.size() %>"
-		results="<%= ListUtil.subList(books, 
-						searchContainer.getStart(),
-						searchContainer.getEnd()) %>"/>
-						
-	<liferay-ui:search-container-row modelVar="book"
-		className="LMSBook">
-		<% bookDetailsURL.setParameter("bookId", Long.toString(book.getBookId())); %>
-		<liferay-ui:search-container-column-text name="Book Title"
-			property="bookTitle" href="<%= bookDetailsURL.toString() %>" orderable="true" orderableProperty="bookTitle"/>
-		<liferay-ui:search-container-column-text name="Author"
-			property="author" orderable="true" orderableProperty="author" />
-		<liferay-ui:search-container-column-text name="Date Added">
-			<fmt:formatDate value="<%= book.getCreateDate() %>"
-				pattern="dd/MMM/yyyy" />
-		</liferay-ui:search-container-column-text>
-		
-		<% deleteBookURL.setParameter("bookId", Long.toString(book.getBookId())); %>
-		<liferay-ui:search-container-column-text name="Delete" 
-			href="<%= deleteBookURL.toString() %>" value="delete &raquo;"/>
+<portlet:actionURL 
+	name="<%= LibraryConstants.ACTION_DELETE_BOOKS %>" 
+	var="deleteBooksURL">
+	<portlet:param name="redirectURL" 
+		value="<%= iteratorURL.toString() %>"/>
+</portlet:actionURL>
+
+<aui:form action="<%= deleteBooksURL.toString() %>">
+	<aui:input name="bookIdsForDelete" type="hidden" />
+	<liferay-ui:search-container delta="4" 
+		emptyResultsMessage="Sorry. There are no items to display."
+		iteratorURL="<%= iteratorURL %>" 
+		orderByCol="<%= orderByCol %>" orderByType="<%= orderByType %>" 
+		rowChecker="<%= new RowChecker(renderResponse) %>">
+		<liferay-ui:search-container-results 
+			total="<%= books.size() %>"
+			results="<%= ListUtil.subList(books, 
+							searchContainer.getStart(),
+							searchContainer.getEnd()) %>"/>
+							
+		<liferay-ui:search-container-row modelVar="book"
+			className="LMSBook">
+			<% bookDetailsURL.setParameter("bookId", Long.toString(book.getBookId())); %>
+			<liferay-ui:search-container-column-text name="Book Title"
+				property="bookTitle" href="<%= bookDetailsURL.toString() %>" 
+				orderable="true" orderableProperty="bookTitle"/>
+			<liferay-ui:search-container-column-text name="Author"
+				property="author" orderable="true" orderableProperty="author" />
+			<liferay-ui:search-container-column-text name="Date Added">
+				<fmt:formatDate value="<%= book.getCreateDate() %>"
+					pattern="dd/MMM/yyyy" />
+			</liferay-ui:search-container-column-text>
 			
-		<liferay-ui:search-container-column-jsp name="Actions"
-			path="<%= LibraryConstants.PAGE_ACTIONS %>" />
-	</liferay-ui:search-container-row>
-	
-	<liferay-ui:search-iterator 
-		searchContainer="<%= searchContainer %>" />
-</liferay-ui:search-container>
+			<% deleteBookURL.setParameter("bookId", Long.toString(book.getBookId())); %>
+			<liferay-ui:search-container-column-text name="Delete" 
+				href="<%= deleteBookURL.toString() %>" value="delete &raquo;"/>
+				
+			<liferay-ui:search-container-column-jsp name="Actions"
+				path="<%= LibraryConstants.PAGE_ACTIONS %>" />
+		</liferay-ui:search-container-row>
+		
+		<liferay-ui:search-iterator 
+			searchContainer="<%= searchContainer %>" />
+	</liferay-ui:search-container>
+</aui:form>
 
 <br/><a href="<portlet:renderURL/>">&laquo; Go Back</a>
+
+<aui:script use="aui-base">
+
+	var deleteBooksBtn = A.one('.delete-books-button');
+	
+	if (deleteBooksBtn != 'undefined') {
+		var toggleDisabled = function(disabled) {
+	    	deleteBooksBtn.one(':button').attr('disabled', disabled);
+	        deleteBooksBtn.toggleClass('aui-button-disabled', disabled);
+		};
+	
+	    var resultsGrid = A.one('.results-grid');
+	
+	    if (resultsGrid) {
+	    	resultsGrid.delegate(
+	        	'click',
+	            function(event) {
+	            	var disabled = (resultsGrid.one(':checked') == null);
+	                toggleDisabled(disabled);
+	           	},
+	            ':checkbox'
+	      	);
+	 	}
+	
+	    toggleDisabled(true);
+	}
+
+	Liferay.provide(
+	       window,
+	       '<portlet:namespace />submitFormForAction',
+	       function() {	
+			var accepted = confirm('<%= 
+				UnicodeLanguageUtil.get(pageContext, 
+				"are-you-sure-you-want-to-delete-selected-books") %>');
+	
+		    if (accepted) {
+		    	var frm = document.<portlet:namespace/>fm;
+		    	var hiddenField = frm.<portlet:namespace/>bookIdsForDelete;
+		    	
+		    	hiddenField.value = 
+		     		Liferay.Util.listCheckedExcept(
+		     			frm, "<portlet:namespace/>allRowIds");
+		     				
+		      	submitForm(frm);
+		    }
+		},
+	    ['liferay-util-list-fields']
+	);      
+</aui:script>
