@@ -12,6 +12,10 @@
 		<column name="bookTitle" type="String" />
 		<column name="author" type="String" />
 		
+		<!-- Relationship -->
+		<column name="lmsBorrowings" type="Collection" 
+			entity="LMSBorrowing" mapping-key="bookId" />
+			
 		<!-- Audit fields -->
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date"/>
@@ -31,4 +35,22 @@
 		
 		<reference package-path="com.liferay.portal" entity="Image"/>
 	</entity>
+	
+	<entity name="LMSBorrowing" local-service="true" remote-service="false">
+		<!-- PK fields -->
+		<column name="borrowingId" type="long" 
+				primary="true" id-type="increment"/>
+		
+		<!-- FK fields -->
+		<column name="bookId" type="long"/>
+		<column name="memberId" type="long"/>
+		
+		<!-- Audit fields -->
+		<column name="dateBorrowed" type="Date"/>
+		<column name="dateReturned" type="Date"/>
+		
+		<finder return-type="Collection" name="BookId">
+			<finder-column name="bookId"/>
+		</finder>
+	</entity>	
 </service-builder>
