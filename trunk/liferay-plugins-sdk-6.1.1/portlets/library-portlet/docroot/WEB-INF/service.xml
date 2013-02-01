@@ -52,5 +52,19 @@
 		<finder return-type="Collection" name="BookId">
 			<finder-column name="bookId"/>
 		</finder>
+	</entity>
+	
+	<entity name="LMSRecentBorrowing" local-service="true" 
+		remote-service="false">
+		
+		<column name="dummyId" type="long" primary="true"/>
+		
+		<column name="bookId" type="long" />
+		<column name="bookTitle" type="String"/>
+		
+		<column name="memberId" type="long"/>
+		<column name="memberName" type="String"/>
+		
+		<column name="dateBorrowed" type="Date"/>
 	</entity>	
 </service-builder>
