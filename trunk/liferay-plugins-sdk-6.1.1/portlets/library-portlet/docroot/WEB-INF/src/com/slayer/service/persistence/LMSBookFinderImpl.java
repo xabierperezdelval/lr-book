@@ -40,4 +40,18 @@ public class LMSBookFinderImpl
 		// 6. Execute query and return results. 
 		return (List<LMSBook>) query.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LMSBook> findBooksThroughSP(String bookTitle)
+			throws SystemException {
+		
+		Session session = openSession();
+		
+		SQLQuery query = session.createSQLQuery("CALL GetBooks(:bookTitle)");
+		
+		query.addEntity("LMSBook", LMSBookImpl.class);
+		query.setString("bookTitle", bookTitle);
+		
+		return (List<LMSBook>) query.list();
+	}
 }

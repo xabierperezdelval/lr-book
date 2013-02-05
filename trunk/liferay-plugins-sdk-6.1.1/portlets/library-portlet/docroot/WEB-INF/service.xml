@@ -4,7 +4,7 @@
 	<author>Ahmed Hasan</author>
 	<namespace>LMS</namespace>
 
-	<entity name="LMSBook" local-service="true" remote-service="false">
+	<entity name="LMSBook" local-service="true" remote-service="true">
 		<!-- PK fields -->
 		<column name="bookId" type="long" primary="true" id-type="increment"/>
 		
@@ -68,16 +68,4 @@
 		<column name="dateBorrowed" type="Date"/>
 	</entity>
 	
-	<entity name="Dummy" local-service="true" remote-service="false"/>
-	
-	<entity name="Employee"  
-			local-service="true" remote-service="false" 
-			data-source="customDataSource"
-			tx-manager="customTransactionManager" 
-			session-factory="customSessionFactory">
-		
-		<column name="employeeId" type="long" primary="true"/>
-		<column name="employeeName" type="String"/>
-	</entity>
-
 </service-builder>
