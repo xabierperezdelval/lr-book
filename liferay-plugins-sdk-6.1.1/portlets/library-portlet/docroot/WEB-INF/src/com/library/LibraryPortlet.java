@@ -76,7 +76,9 @@ public class LibraryPortlet extends MVCPortlet {
 		if (bookId > 0l) { // valid bookId
 			try {
 				LMSBookLocalServiceUtil.deleteLMSBook(bookId);
-			} catch (PortalException | SystemException e) {
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 		}
