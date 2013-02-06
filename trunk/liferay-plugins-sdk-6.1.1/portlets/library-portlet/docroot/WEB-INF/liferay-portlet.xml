@@ -9,6 +9,8 @@
 		<action-url-redirect>false</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		
+		<header-portlet-javascript>/js/service.js</header-portlet-javascript>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>

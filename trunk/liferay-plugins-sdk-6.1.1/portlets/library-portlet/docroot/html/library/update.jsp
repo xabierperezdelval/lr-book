@@ -27,10 +27,35 @@
 	<aui:input name="author" helpMessage="Give the Author Name" value="<%= lmsBook.getAuthor() %>"/>
 	
 	<aui:button type="submit" value="Save" />
+	
+	<% String functionName = 
+		renderResponse.getNamespace() + "invokeJSONWS();"; %>
+	
+	<aui:button value="Save thru JSON" 
+		onClick="<%= functionName %>"/>
 </aui:form>
 
 <br/><a href="<portlet:renderURL/>">&laquo; Go Back</a>
 
 <aui:script>
 	Liferay.Util.focusFormField(document.<portlet:namespace/>fm.<portlet:namespace/>bookTitle);
+	
+	<portlet:namespace/>invokeJSONWS=function() {
+		var frm = document.<portlet:namespace/>fm;
+		
+		// create the payload in JSON format
+		var payLoad = {
+			bookTitle: frm.<portlet:namespace/>bookTitle.value, 
+			author: frm.<portlet:namespace/>author.value
+		};
+		
+		// invoke the Web Service
+		Liferay.Service.LMS.LMSBook.insertBook(payLoad, function(obj) {
+			alert('Id of the book just got created --> ' + obj.bookId);
+		});
+		
+		// clear values in the input fields
+		frm.<portlet:namespace/>bookTitle.value = '';
+		frm.<portlet:namespace/>author.value = '';
+	}
 </aui:script>
