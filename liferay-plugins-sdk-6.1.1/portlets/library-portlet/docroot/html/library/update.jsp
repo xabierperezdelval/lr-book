@@ -44,15 +44,20 @@
 		var frm = document.<portlet:namespace/>fm;
 		
 		// create the payload in JSON format
-		var payLoad = {
+		var payload = {
 			bookTitle: frm.<portlet:namespace/>bookTitle.value, 
 			author: frm.<portlet:namespace/>author.value
 		};
 		
 		// invoke the Web Service
-		Liferay.Service.LMS.LMSBook.insertBook(payLoad, function(obj) {
-			alert('Id of the book just got created --> ' + obj.bookId);
-		});
+		Liferay.Service(
+			'/library-portlet#lmsbook/insert-book',
+			payload,
+		  	function(obj) {
+		   		console.log(obj);
+		  	}
+		);
+
 		
 		// clear values in the input fields
 		frm.<portlet:namespace/>bookTitle.value = '';
