@@ -1,0 +1,45 @@
+<%@page import="com.liferay.portal.model.Country"%>
+<%@page import="com.liferay.portal.service.CountryServiceUtil"%>
+
+<br/>
+<liferay-ui:panel-container extended="true">
+	<liferay-ui:panel title="Author Address" collapsible="true"
+		defaultState="collapsed"
+		helpMessage="Optionally enter Author's address details">
+
+		<aui:input name="saveAddress" type="checkbox"
+			label="Save Author Address"/>
+
+		<aui:select name="countryId"/>
+		
+		<aui:input name="city"/>
+		<aui:input name="street1"/>
+		<aui:input name="street2"/>
+		<aui:input name="zip"/>
+
+		<aui:input name="mobile-phone" label="Mobile Phone"/>
+		<aui:input name="business" label="Business Phone"/>
+	</liferay-ui:panel>
+</liferay-ui:panel-container>
+<br/>
+
+<aui:script>
+	AUI().ready(function(A){
+		var frm = document.<portlet:namespace/>fm;
+		var countries = frm.<portlet:namespace/>countryId;
+		
+		Liferay.Service(
+		  	'/country/get-countries',
+		  	{ active: true },
+		  	function(obj) {
+		  		for (var key in obj) {
+		   			if (obj.hasOwnProperty(key)) {
+		      			var name = obj[key].name;
+		      			var countryId = obj[key].countryId;
+		      			countries.options[key] = new Option(name,countryId);
+		     		}
+				}
+		    }
+		);
+	});
+</aui:script>
