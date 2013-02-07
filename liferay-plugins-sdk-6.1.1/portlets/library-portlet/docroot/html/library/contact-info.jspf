@@ -10,7 +10,9 @@
 		<aui:input name="saveAddress" type="checkbox"
 			label="Save Author Address"/>
 
-		<aui:select name="countryId"/>
+		<aui:select name="countryId" 
+			onChange="javascript:listRegions(this);"/>
+		<aui:select name="regionId"/>
 		
 		<aui:input name="city"/>
 		<aui:input name="street1"/>
@@ -42,4 +44,37 @@
 		    }
 		);
 	});
+	
+	function listRegions(country) {
+		var frm = document.<portlet:namespace/>fm;
+		var regions = frm.<portlet:namespace/>regionId;
+		
+		var _countryId = country.value;
+
+		regions.disabled = (_countryId <= 0);
+		
+		if (_countryId <= 0) {
+			regions.selectedIndex = 0;
+		} else {
+			// calling regions of this country
+			var payload = {
+				countryId: _countryId,
+				active: true
+			};
+			
+			Liferay.Service.Portal.Region.getRegions(payload,
+				function(data) {
+					alert(data.toSource());
+
+					regions.options.length = data.length;
+					for (var i=0; i<(data.length-1); i++) {
+						var rgn = data[i];
+						regions.options[i] = 
+							new Option(rgn.name, rgn.regionId);
+					}
+
+				}
+			);
+		}
+	}
 </aui:script>
