@@ -62,17 +62,15 @@
 				active: true
 			};
 			
-			Liferay.Service.Portal.Region.getRegions(payload,
+			Liferay.Service(
+				'/region/get-regions',
+				payload,
 				function(data) {
-					alert(data.toSource());
-
 					regions.options.length = data.length;
 					for (var i=0; i<(data.length-1); i++) {
-						var rgn = data[i];
 						regions.options[i] = 
-							new Option(rgn.name, rgn.regionId);
+							new Option(data[i].name, data[i].regionId);
 					}
-
 				}
 			);
 		}
