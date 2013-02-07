@@ -1,6 +1,7 @@
 package com.library;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -12,6 +13,7 @@ import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -21,7 +23,13 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Contact;
+import com.liferay.portal.model.ListType;
+import com.liferay.portal.service.AddressLocalServiceUtil;
+import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
@@ -41,11 +49,10 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		long bookId = ParamUtil.getLong(actionRequest, "bookId");
 		
-		if (bookId > 0l) {
-			LMSBookLocalServiceUtil.modifyBook(bookId, bookTitle, author);
-		} else {
-			LMSBookLocalServiceUtil.insertBook(bookTitle, author);
-		}
+		LMSBook lmsBook = (bookId > 0l)?
+				LMSBookLocalServiceUtil.modifyBook(bookId, bookTitle, author) :
+					LMSBookLocalServiceUtil.insertBook(bookTitle, author);
+		saveAddress(actionRequest, lmsBook);		
 		
 		// redirect after insert
 		ThemeDisplay themeDisplay = 
@@ -67,6 +74,105 @@ public class LibraryPortlet extends MVCPortlet {
 		actionResponse.sendRedirect(successPageURL.toString());
 	}
 
+	private void saveAddress(PortletRequest request, LMSBook lmsBook) {
+		boolean saveAddress = ParamUtil.getBoolean(
+				request, "saveAddress", false);
+		
+		if (!saveAddress) return;
+		
+		long addressId = ParamUtil.getLong(request, "addressId", 0l);
+		long countryId = ParamUtil.getLong(request, "countryId");
+		String city = ParamUtil.getString(request, "city"); 
+		String street1 = ParamUtil.getString(request, "street1"); 
+		String street2 = ParamUtil.getString(request, "street2"); 
+		String zip = ParamUtil.getString(request, "zip");
+		
+		long userId = PortalUtil.getUserId(request);
+		long companyId = PortalUtil.getCompanyId(request);
+		
+		saveAddress(addressId, countryId, city, street1,
+				street2, zip, userId, companyId, lmsBook.getBookId(), LMSBook.class.getName());	
+	}
+
+	private void saveAddress(long addressId, long countryId, 
+			String city, String street1, String street2, 
+			String zip, long userId, long companyId, 
+			long parentId, String parentClassName) {
+		
+		// 1. creating the address object (fresh or old)
+		Address address = getAddress(addressId); 
+		
+		// 2. setting the UI fields
+		address.setCountryId(countryId); 
+		address.setCity(city); 
+		address.setStreet1(street1); 
+		address.setStreet2(street2); 
+		address.setZip(zip);
+		
+		// 3. set audit fields
+		address.setUserId(userId);
+		address.setCompanyId(companyId);
+		
+		// 4. Set address type and if primary.
+		address.setTypeId(getTypeId("address", "personal"));
+		address.setPrimary(true); 		
+	
+		// 5. most importantly set the parent details.
+		address.setClassPK(parentId);
+		address.setClassName(parentClassName);
+		
+		// 6. finally update the object (save address)
+		try {
+			AddressLocalServiceUtil.updateAddress(address);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private int getTypeId(String entity, String type) {
+	
+		int typeId = 0;		
+		List<ListType> listTypes = null;
+		
+		try {
+			listTypes = ListTypeServiceUtil.getListTypes(
+				Contact.class.getName() + "." + entity);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		for (ListType listType: listTypes) {
+			if (listType.getName().equalsIgnoreCase(type)) {
+				typeId = listType.getListTypeId();
+				break;
+			}
+		}
+		
+		return typeId;
+	}
+
+	private Address getAddress(long addressId) {
+		Address address = null;
+		if (addressId > 0l) {
+			try {
+				address = AddressLocalServiceUtil.getAddress(addressId);
+				address.setModifiedDate(new Date());
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				addressId = CounterLocalServiceUtil.increment(); 
+			} catch (SystemException e) {
+		       e.printStackTrace();
+			}
+			address = AddressLocalServiceUtil.createAddress(addressId);
+			address.setCreateDate(new Date());
+		}
+		return address;
+	}
 
 	public void deleteBook(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {

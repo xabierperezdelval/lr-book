@@ -26,6 +26,8 @@
 	</aui:input>
 	<aui:input name="author" helpMessage="Give the Author Name" value="<%= lmsBook.getAuthor() %>"/>
 	
+	<%@include file="/html/library/contact-info.jspf" %>
+	
 	<aui:button type="submit" value="Save" />
 	
 	<% String functionName = 
@@ -58,7 +60,6 @@
 		  	}
 		);
 
-		
 		// clear values in the input fields
 		frm.<portlet:namespace/>bookTitle.value = '';
 		frm.<portlet:namespace/>author.value = '';
