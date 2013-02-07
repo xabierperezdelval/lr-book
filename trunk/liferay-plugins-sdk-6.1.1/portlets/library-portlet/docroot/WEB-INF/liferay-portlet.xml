@@ -9,6 +9,9 @@
 		<action-url-redirect>false</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portal-javascript>
+			/html/js/liferay/service.js
+		</header-portal-javascript>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
