@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.service.ServiceContext;
 import com.slayer.model.LMSBook;
 import com.slayer.model.LMSBorrowing;
 import com.slayer.model.impl.LMSBookImpl;
@@ -48,7 +49,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.LMSBookLocalServiceUtil} to access the l m s book local service.
 	 */
 	
-	public LMSBook insertBook(String bookTitle, String author) {
+	public LMSBook insertBook(String bookTitle, String author, ServiceContext serviceContext) {
 		// 1. Instantiate an empty object of type LMSBookImpl
 		LMSBook lmsBook = new LMSBookImpl();
 		
@@ -56,6 +57,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		lmsBook.setBookTitle(bookTitle);
 		lmsBook.setAuthor(author);
 		lmsBook.setCreateDate(new Date());
+		lmsBook.setUuid(serviceContext.getUuid());
 		
 		// 4. Call the Service Layer API to persist the object
 		try {

@@ -28,6 +28,8 @@ import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.ListType;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -49,10 +51,19 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		long bookId = ParamUtil.getLong(actionRequest, "bookId");
 		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
 		LMSBook lmsBook = (bookId > 0l)?
 				LMSBookLocalServiceUtil.modifyBook(bookId, bookTitle, author) :
-					LMSBookLocalServiceUtil.insertBook(bookTitle, author);
-		saveAddress(actionRequest, lmsBook);		
+					LMSBookLocalServiceUtil.insertBook(bookTitle, author, serviceContext);
+		saveAddress(actionRequest, lmsBook);
 		
 		// redirect after insert
 		ThemeDisplay themeDisplay = 
