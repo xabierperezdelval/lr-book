@@ -14,6 +14,7 @@
 
 package com.slayer.service.impl;
 
+import com.liferay.portal.service.ServiceContext;
 import com.slayer.model.LMSBook;
 import com.slayer.service.base.LMSBookServiceBaseImpl;
 
@@ -39,6 +40,9 @@ public class LMSBookServiceImpl extends LMSBookServiceBaseImpl {
 	 */
 	
 	public LMSBook insertBook(String bookTitle, String author) {
-		return lmsBookLocalService.insertBook(bookTitle, author);
+		
+		ServiceContext serviceContext = new ServiceContext();
+		
+		return lmsBookLocalService.insertBook(bookTitle, author, serviceContext);
 	}
 }

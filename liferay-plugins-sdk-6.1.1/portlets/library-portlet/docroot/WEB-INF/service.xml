@@ -4,7 +4,7 @@
 	<author>Ahmed Hasan</author>
 	<namespace>LMS</namespace>
 
-	<entity name="LMSBook" local-service="true" remote-service="true">
+	<entity name="LMSBook" local-service="true" remote-service="true" uuid="true">
 		<!-- PK fields -->
 		<column name="bookId" type="long" primary="true" id-type="increment"/>
 		
