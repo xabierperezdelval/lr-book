@@ -6,6 +6,11 @@
 	<portlet>
 		<portlet-name>library</portlet-name>
 		<icon>/icon.png</icon>
+		<friendly-url-mapper-class>
+			com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper
+		</friendly-url-mapper-class>
+		<friendly-url-mapping>library</friendly-url-mapping>
+		<friendly-url-routes>META-INF/routes.xml</friendly-url-routes>
 		<action-url-redirect>false</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
