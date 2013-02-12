@@ -33,5 +33,14 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
-	</portlet>
+	</portlet>	
+	<filter>
+		<filter-name>HitCountFilter</filter-name>
+	    <filter-class>com.library.filter.HitCountFilter</filter-class>
+	    <lifecycle>RENDER_PHASE</lifecycle>
+	</filter>
+	<filter-mapping>
+		<filter-name>HitCountFilter</filter-name>
+	    <portlet-name>library</portlet-name>
+	</filter-mapping>
 </portlet-app>
