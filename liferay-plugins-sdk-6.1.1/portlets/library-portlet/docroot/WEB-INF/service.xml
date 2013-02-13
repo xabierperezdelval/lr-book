@@ -20,6 +20,10 @@
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date"/>
 		
+		<column name="companyId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="userName" type="String"/>
+		
 		<order by="desc">
 		    <order-column name="modifiedDate"/>
 		</order>
