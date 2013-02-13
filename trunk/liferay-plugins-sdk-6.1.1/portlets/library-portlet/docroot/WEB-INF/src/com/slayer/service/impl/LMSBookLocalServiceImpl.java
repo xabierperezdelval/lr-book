@@ -27,6 +27,7 @@ import com.slayer.service.LMSBookLocalServiceUtil;
 import com.slayer.service.base.LMSBookLocalServiceBaseImpl;
 import com.slayer.service.persistence.LMSBookFinderUtil;
 import com.slayer.service.persistence.LMSBorrowingUtil;
+import com.util.LMSUtil;
 
 /**
  * The implementation of the l m s book local service.
@@ -55,7 +56,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		
 		// 2. Set the fields for this object
 		lmsBook.setBookTitle(bookTitle);
-		lmsBook.setAuthor(author);
+		lmsBook.setAuthor(LMSUtil.encrypt(author, serviceContext.getCompanyId()));
 		lmsBook.setCreateDate(new Date());
 		lmsBook.setUuid(serviceContext.getUuid());
 		

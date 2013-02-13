@@ -1,3 +1,4 @@
+<%@page import="com.util.LMSUtil"%>
 <%@include file="/html/library/init.jsp"%>
 
 <%
@@ -25,7 +26,7 @@
 		</tr>
 		<tr>
 			<td>Author</td>
-			<td><%= lmsBook.getAuthor() %></td>
+			<td><%= LMSUtil.decrypt(lmsBook.getAuthor(), company.getCompanyId()) %></td>
 		</tr>
 		<tr>
 			<td>Date Added</td>
