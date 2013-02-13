@@ -19,4 +19,6 @@ public interface LibraryConstants {
 	static final String PAGE_ACTIONS = "/html/library/actions.jsp";
 	
 	static final String PAGE_DETAILS = "/html/library/detail.jsp";
+	
+	static final String KEY_SEARCH = "search";
 }
