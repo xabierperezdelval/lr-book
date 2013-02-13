@@ -26,7 +26,7 @@
 		</tr>
 		<tr>
 			<td>Author</td>
-			<td><%= LMSUtil.decrypt(lmsBook.getAuthor(), company.getCompanyId()) %></td>
+			<td><%= lmsBook.getAuthor() %></td>
 		</tr>
 		<tr>
 			<td>Date Added</td>
