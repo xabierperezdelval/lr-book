@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.slayer.model.LMSBook;
@@ -49,6 +51,9 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.LMSBookLocalServiceUtil} to access the l m s book local service.
 	 */
 	
+	private static final Log _log = 
+			LogFactoryUtil.getLog(LMSBookLocalServiceImpl.class);
+	
 	public LMSBook insertBook(String bookTitle, String author, ServiceContext serviceContext) {
 		// 1. Instantiate an empty object of type LMSBookImpl
 		LMSBook lmsBook = new LMSBookImpl();
@@ -69,6 +74,12 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		_log.debug("Book just got added - debug"); 
+		_log.info("Book just got added - info"); 
+		_log.warn("Book just got added - warn"); 
+		_log.error("Book just got added - error"); 
+		_log.fatal("Book just got added - fatal");
 
 		return lmsBook;
 	}
