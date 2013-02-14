@@ -1,4 +1,9 @@
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@include file="/html/library/init.jsp"%>
+
+<liferay-ui:journal-article articleId="LIBRARY_WELCOME_MESSAGE" 
+	groupId="<%= themeDisplay.getScopeGroupId() %>"/>
 
 <portlet:renderURL var="updateBookURL">
 	<portlet:param name="jspPage" value="<%= LibraryConstants.PAGE_UPDATE %>" />
