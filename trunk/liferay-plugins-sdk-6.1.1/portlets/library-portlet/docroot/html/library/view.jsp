@@ -8,7 +8,11 @@
 <portlet:renderURL var="updateBookURL">
 	<portlet:param name="jspPage" value="<%= LibraryConstants.PAGE_UPDATE %>" />
 </portlet:renderURL>
-<br /><a href="<%= updateBookURL %>"><liferay-ui:message key="add-new-book"/> &raquo;</a>
+
+<% String addImagePath = themeDisplay.getPathThemeImage() + "/common/add.png"; %>
+<img src="<%= addImagePath %>"/>
+
+<br/><a href="<%= updateBookURL %>"><liferay-ui:message key="add-new-book"/> &raquo;</a>
 
 <%
 	PortletURL listBooksURL = renderResponse.createRenderURL();
