@@ -17,6 +17,7 @@ package com.slayer.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -67,6 +68,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		lmsBook.setAuthor(author);
 		lmsBook.setCreateDate(new Date());
 		lmsBook.setUuid(serviceContext.getUuid());
+		lmsBook.setGroupId(serviceContext.getScopeGroupId());
 		
 		// 4. Call the Service Layer API to persist the object
 		try {
@@ -114,7 +116,9 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		//return lmsBookPersistence.findByBookTitle(bookTitle);
 		
 		// dynamic query
+		
 		/*
+		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(LMSBook.class);
 		
 		Property bookTitleProperty = PropertyFactoryUtil.forName("bookTitle");
@@ -126,10 +130,21 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		return LMSBookFinderUtil.findBooks("%" + bookTitle + "%");
 	}
 	
+	public List<LMSBook> searchBooks(String bookTitle, long companyId, long groupId) 
+			throws SystemException { 
+		
+		return null;
+	}
+	
 	public List<LMSBorrowing> getBorrowings(long bookId) 
 			throws SystemException {
 		//return lmsBookPersistence.getLMSBorrowings(bookId);
 		
 		return LMSBorrowingUtil.findByBookId(bookId);
+	}
+	
+	public List<LMSBook> getLibraryBooks(long companyId, long groupId)
+			throws SystemException {
+		return lmsBookPersistence.findByCompanyId_GroupId(companyId, groupId);
 	}
 }
