@@ -13,7 +13,8 @@
 	
 	List<LMSBook> books = Validator.isNotNull(booksTemp)? 
 			ListUtil.copy(booksTemp) : 
-			LMSBookLocalServiceUtil.getLMSBooks(0, -1);
+			LMSBookLocalServiceUtil.getLibraryBooks(
+				company.getCompanyId(), themeDisplay.getScopeGroupId());
 			
 	// additional code for sorting the list
 	String orderByCol = (String) request.getAttribute("orderByCol");

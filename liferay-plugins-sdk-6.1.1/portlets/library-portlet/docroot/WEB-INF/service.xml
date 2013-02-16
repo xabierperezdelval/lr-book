@@ -24,6 +24,8 @@
 		<column name="userId" type="long"/>
 		<column name="userName" type="String"/>
 		
+		<column name="groupId" type="long"/>
+		
 		<order by="desc">
 		    <order-column name="modifiedDate"/>
 		</order>
@@ -35,7 +37,12 @@
 		<finder name="BookTitle_Author" return-type="LMSBook">
 			<finder-column name="bookTitle"/>
 			<finder-column name="author"/>
-		</finder>		
+		</finder>
+		
+		<finder return-type="Collection" name="CompanyId_GroupId">
+			<finder-column name="companyId"/>
+			<finder-column name="groupId"/>
+		</finder>
 		
 		<reference package-path="com.liferay.portal" entity="Image"/>
 	</entity>

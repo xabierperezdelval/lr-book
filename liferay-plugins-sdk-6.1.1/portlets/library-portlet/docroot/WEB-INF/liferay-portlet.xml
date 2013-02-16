@@ -11,8 +11,11 @@
 		</friendly-url-mapper-class>
 		<friendly-url-mapping>library</friendly-url-mapping>
 		<friendly-url-routes>META-INF/routes.xml</friendly-url-routes>
+		<control-panel-entry-category>content</control-panel-entry-category>
+		<control-panel-entry-weight>3.5</control-panel-entry-weight>
 		<action-url-redirect>false</action-url-redirect>
 		<instanceable>false</instanceable>
+		<scopeable>true</scopeable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
