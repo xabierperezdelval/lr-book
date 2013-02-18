@@ -59,6 +59,7 @@
 		<!-- Audit fields -->
 		<column name="dateBorrowed" type="Date"/>
 		<column name="dateReturned" type="Date"/>
+		<column name="dateOfReturn" type="Date"/>
 		
 		<finder return-type="Collection" name="BookId">
 			<finder-column name="bookId"/>
