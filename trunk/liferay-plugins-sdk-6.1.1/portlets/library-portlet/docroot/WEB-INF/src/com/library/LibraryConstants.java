@@ -21,4 +21,9 @@ public interface LibraryConstants {
 	static final String PAGE_DETAILS = "/html/library/detail.jsp";
 	
 	static final String KEY_SEARCH = "search";
+	
+	static final String PROP_BOOK_TYPES = "book.types";
+	
+	static final String PROP_DEFAULTING_REMINDER_EMAIL_SUBJECT = 
+			"defaulting.reminder.email.subject";
 }

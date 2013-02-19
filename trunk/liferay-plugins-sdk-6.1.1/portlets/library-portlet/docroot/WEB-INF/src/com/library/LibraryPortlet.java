@@ -2,7 +2,6 @@ package com.library;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -23,7 +22,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -38,6 +37,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.util.portlet.PortletProps;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
 
@@ -311,5 +311,15 @@ public class LibraryPortlet extends MVCPortlet {
 		preferences.store();
 		
 		actionResponse.setPortletMode(PortletMode.VIEW);
+	}
+	
+	@Override
+	public void doView(RenderRequest renderRequest,
+			RenderResponse renderResponse) throws IOException, PortletException {
+		// TODO Auto-generated method stub
+		super.doView(renderRequest, renderResponse);
+		
+		String[] bookTypes = PortletProps.getArray(
+				LibraryConstants.PROP_BOOK_TYPES);
 	}
 }
