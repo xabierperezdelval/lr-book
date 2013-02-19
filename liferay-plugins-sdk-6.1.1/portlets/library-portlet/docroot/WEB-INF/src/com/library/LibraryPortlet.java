@@ -2,12 +2,15 @@ package com.library;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
@@ -20,6 +23,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -292,5 +296,20 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		// redirect to the list page again. 
 		actionResponse.setRenderParameter("jspPage", LibraryConstants.PAGE_LIST);
+	}
+	
+	public void setPreferences(ActionRequest actionRequest,
+			ActionResponse actionResponse) 
+				throws IOException, PortletException {
+	
+		String maxBooksLimit = 
+				ParamUtil.getString(actionRequest, "maxBooksLimit");
+		
+		PortletPreferences preferences = 
+				actionRequest.getPreferences();		
+		preferences.setValue("maxBooksLimit", maxBooksLimit);
+		preferences.store();
+		
+		actionResponse.setPortletMode(PortletMode.VIEW);
 	}
 }

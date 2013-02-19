@@ -1,7 +1,6 @@
 package com.library.job;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletPreferences;
@@ -14,7 +13,6 @@ import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.PortalPreferencesLocalServiceUtil;

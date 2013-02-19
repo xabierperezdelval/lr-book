@@ -10,10 +10,23 @@
 			<name>view-template</name>
 			<value>/html/library/view.jsp</value>
 		</init-param>
-		<expiration-cache>0</expiration-cache>
+		<init-param>
+			<name>edit-template</name>
+			<value>/html/library/edit.jsp</value>
+		</init-param>		
+		<init-param>
+			<name>max-books-limit</name>
+			<value>2000</value>
+		</init-param>
+		<init-param>
+			<name>add-process-action-success-action</name>
+			<value>false</value>
+		</init-param>		
+        <expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
