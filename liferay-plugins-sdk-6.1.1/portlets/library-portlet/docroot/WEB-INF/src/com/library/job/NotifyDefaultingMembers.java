@@ -21,7 +21,6 @@ import com.slayer.model.LMSBorrowing;
 
 public class NotifyDefaultingMembers implements MessageListener {
 
-	@Override
 	public void receive(Message message) 
 			throws MessageListenerException {
 
