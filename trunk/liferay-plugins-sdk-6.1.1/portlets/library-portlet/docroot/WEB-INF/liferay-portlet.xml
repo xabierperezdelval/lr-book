@@ -6,6 +6,9 @@
 	<portlet>
 		<portlet-name>library</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>
+			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
+		</configuration-action-class>
 		<scheduler-entry>
 			<scheduler-event-listener-class>
 				com.library.job.NotifyDefaultingMembers
