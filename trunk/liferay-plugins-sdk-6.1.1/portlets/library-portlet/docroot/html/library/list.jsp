@@ -21,11 +21,14 @@
 	String orderByType = (String) request.getAttribute("orderByType");
 
 	BeanComparator comp = new BeanComparator(orderByCol);
-	Collections.sort(books, comp);
-
+	
+	booksTemp = ListUtil.copy(books);
+	Collections.sort(booksTemp, comp);
+	
 	if (orderByType.equalsIgnoreCase("desc")) {
-		Collections.reverse(books);
+		Collections.reverse(booksTemp);
 	}
+	books = ListUtil.copy(booksTemp);
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", LibraryConstants.PAGE_LIST);
