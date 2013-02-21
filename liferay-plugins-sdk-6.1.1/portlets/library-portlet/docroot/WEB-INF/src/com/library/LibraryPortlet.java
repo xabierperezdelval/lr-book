@@ -6,12 +6,16 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.Event;
+import javax.portlet.EventRequest;
+import javax.portlet.EventResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
+import javax.portlet.ProcessEvent;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -22,7 +26,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -321,5 +324,30 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		String[] bookTypes = PortletProps.getArray(
 				LibraryConstants.PROP_BOOK_TYPES);
+	}
+	
+	@ProcessEvent(qname = "{http://liferay.com}lmsBook")
+	public void quickAdd(EventRequest request, EventResponse response)
+			throws PortletException, IOException {
+		
+		Event event = request.getEvent();
+		
+		LMSBook lmsBook = (LMSBook) event.getValue();
+		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(request);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		LMSBookLocalServiceUtil.insertBook(
+				lmsBook.getBookTitle(), 
+				lmsBook.getAuthor(), 
+				serviceContext);
+		
+		response.setRenderParameter("jspPage", LibraryConstants.PAGE_LIST);
 	}
 }

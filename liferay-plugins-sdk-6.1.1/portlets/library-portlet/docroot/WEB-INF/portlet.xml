@@ -51,7 +51,51 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
-	</portlet>	
+		<supported-processing-event xmlns:x="http://liferay.com">
+			<qname>x:lmsBook</qname>
+		</supported-processing-event>
+		<supported-public-render-parameter>
+			DAILY_GREETING
+		</supported-public-render-parameter>		
+	</portlet>
+	<portlet>
+		<portlet-name>trigger</portlet-name>
+		<display-name>Trigger Portlet</display-name>
+		<portlet-class>com.library.TriggerPortlet</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/trigger/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content/Language</resource-bundle>
+		<portlet-info>
+			<title>Trigger Portlet</title>
+			<short-title>Trigger Portlet</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+		<supported-publishing-event xmlns:x="http://liferay.com">
+			<qname>x:lmsBook</qname>
+		</supported-publishing-event>
+		<supported-public-render-parameter>
+			DAILY_GREETING
+		</supported-public-render-parameter>
+	</portlet>
 	<filter>
 		<filter-name>HitCountFilter</filter-name>
 	    <filter-class>com.library.filter.HitCountFilter</filter-class>
@@ -61,4 +105,12 @@
 		<filter-name>HitCountFilter</filter-name>
 	    <portlet-name>library</portlet-name>
 	</filter-mapping>
+	<event-definition xmlns:x="http://liferay.com">
+		<qname>x:lmsBook</qname>
+		<value-type>com.slayer.model.LMSBook</value-type>
+	</event-definition>
+	<public-render-parameter>
+		<identifier>DAILY_GREETING</identifier>
+		<qname xmlns:x="http://liferay.com">x:DAILY_GREETING</qname>
+	</public-render-parameter>
 </portlet-app>

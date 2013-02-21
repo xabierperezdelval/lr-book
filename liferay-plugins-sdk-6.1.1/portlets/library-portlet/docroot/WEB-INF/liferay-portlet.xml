@@ -15,8 +15,8 @@
 			</scheduler-event-listener-class>
 			<trigger>
 				<simple>
-					<simple-trigger-value>5</simple-trigger-value>
-					<time-unit>minute</time-unit>
+					<simple-trigger-value>1</simple-trigger-value>
+					<time-unit>hour</time-unit>
 				</simple>
 			</trigger>
 		</scheduler-entry>
@@ -42,6 +42,16 @@
 		</footer-portlet-javascript>
 		
 		<css-class-wrapper>library-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>trigger</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>false</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>trigger-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
