@@ -4,7 +4,12 @@
 
 <liferay-ui:journal-article articleId="LIBRARY_WELCOME_MESSAGE" 
 	groupId="<%= themeDisplay.getScopeGroupId() %>"/>
-
+	
+<h1>
+	<u>Greeting for Today</u>: 
+	<%= ParamUtil.getString(renderRequest, "DAILY_GREETING", "Welcome") %>
+</h1>
+	
 <portlet:renderURL var="updateBookURL">
 	<portlet:param name="jspPage" value="<%= LibraryConstants.PAGE_UPDATE %>" />
 </portlet:renderURL>
