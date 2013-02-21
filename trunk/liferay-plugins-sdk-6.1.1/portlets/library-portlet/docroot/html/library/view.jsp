@@ -1,3 +1,4 @@
+<%@page import="javax.portlet.PortletSession"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@include file="/html/library/init.jsp"%>
@@ -36,3 +37,11 @@
 </aui:form>
 
 <h1>Limit:<%= portletConfig.getInitParameter("max-books-limit") %><h1>
+
+<aui:script>
+	AUI().ready(function(A){
+		Liferay.on("sayHelloEvent", function(payload){
+			alert('I am in the other Porltet:' + payload.helloTo);
+		});
+	});
+</aui:script>

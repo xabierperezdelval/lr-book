@@ -6,6 +6,7 @@
 	<portlet>
 		<portlet-name>library</portlet-name>
 		<icon>/icon.png</icon>
+		
 		<configuration-action-class>
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>
@@ -20,6 +21,7 @@
 				</simple>
 			</trigger>
 		</scheduler-entry>
+		
 		<friendly-url-mapper-class>
 			com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper
 		</friendly-url-mapper-class>
@@ -33,8 +35,10 @@
 		<action-url-redirect>false</action-url-redirect>
 		
 		<instanceable>false</instanceable>
+		
 
 		<scopeable>true</scopeable>
+		<private-session-attributes>false</private-session-attributes>
 		
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
