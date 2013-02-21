@@ -19,7 +19,7 @@ public class TriggerPortlet extends MVCPortlet {
 
 	public void quickAdd(ActionRequest request, ActionResponse response) 
 			throws IOException, PortletException {
-	
+			
 		// Retrive parameters	
 		String bookTitle = ParamUtil.getString(request, "bookTitle");
 		String author = ParamUtil.getString(request, "author");
@@ -39,6 +39,6 @@ public class TriggerPortlet extends MVCPortlet {
 		
 		String dailyGreeting = ParamUtil.getString(actionRequest, "dailyGreeting");
 		
-		actionResponse.setRenderParameter("DAILY_GREETING", dailyGreeting);
+		actionResponse.setRenderParameter("DAILY_GREETING", dailyGreeting);		
 	}
 }
