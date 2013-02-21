@@ -64,4 +64,15 @@
 		portletURL.setPortletId(80);
 		alert( "that is the url: " + portletURL.toString());
 	});	
-</aui:script>	
+</aui:script>
+
+<%
+	boolean showAddressBlock = GetterUtil.getBoolean(
+		PortalUtil.getOriginalServletRequest(request)
+			.getParameter("show-address"), false);
+%>
+
+<c:if test="<%= showAddressBlock %>">
+	<h2>The address block is shown ....</h2>
+</c:if>
+
