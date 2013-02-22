@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.util.LMSUtil"%>
@@ -9,6 +10,16 @@
 <portlet:actionURL var="quickAddURL" name="quickAdd" />
 
 <aui:form action="<%= quickAddURL.toString() %>">
+	<aui:input name="bookTitle"/>
+	<aui:input name="author"/>
+	<aui:button type="submit" />
+</aui:form>
+
+<liferay-portlet:actionURL var="quickAddNewURL" 
+	name="<%= LibraryConstants.ACTION_UPDATE_BOOK %>" 
+	portletName="library_WAR_libraryportlet" />
+
+<aui:form action="<%= quickAddNewURL %>" useNamespace="false">
 	<aui:input name="bookTitle"/>
 	<aui:input name="author"/>
 	<aui:button type="submit" />
@@ -64,7 +75,6 @@
 		var portletURL = new Liferay.PortletURL();
 		portletURL.setParameter("key1", "value");
 		portletURL.setPortletId(80);
-		alert( "that is the url: " + portletURL.toString());
 	});	
 </aui:script>
 
@@ -77,4 +87,3 @@
 <c:if test="<%= showAddressBlock %>">
 	<h2>The address block is shown ....</h2>
 </c:if>
-
