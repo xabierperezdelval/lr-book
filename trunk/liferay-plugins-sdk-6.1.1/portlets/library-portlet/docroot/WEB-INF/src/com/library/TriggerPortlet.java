@@ -5,9 +5,11 @@ import java.io.IOException;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
 import com.slayer.model.impl.LMSBookImpl;
@@ -39,6 +41,6 @@ public class TriggerPortlet extends MVCPortlet {
 		
 		String dailyGreeting = ParamUtil.getString(actionRequest, "dailyGreeting");
 		
-		actionResponse.setRenderParameter("DAILY_GREETING", dailyGreeting);		
+		actionResponse.setRenderParameter("DAILY_GREETING", dailyGreeting);			
 	}
 }
