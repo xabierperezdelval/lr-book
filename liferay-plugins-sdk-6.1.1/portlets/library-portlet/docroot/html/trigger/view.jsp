@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.util.LMSUtil"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
