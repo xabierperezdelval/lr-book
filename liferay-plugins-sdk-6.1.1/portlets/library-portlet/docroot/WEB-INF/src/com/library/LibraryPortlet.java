@@ -32,15 +32,16 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.ListType;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import com.liferay.util.portlet.PortletProps;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
 
@@ -212,12 +213,38 @@ public class LibraryPortlet extends MVCPortlet {
 		actionResponse.sendRedirect(redirectURL);
 	}
 	
-	@Override
 	public void render(RenderRequest request, RenderResponse response)
 			throws PortletException, IOException {
 		
 		setSortParams(request);
+		checkBeforeServe(request);
 		super.render(request, response);
+	}
+
+	private void checkBeforeServe(RenderRequest request) 
+			throws PortletException {
+		
+		String jspPage = ParamUtil.getString(request, "jspPage");
+		
+		if (jspPage.equalsIgnoreCase(LibraryConstants.PAGE_UPDATE)) {
+			ThemeDisplay themeDisplay = (ThemeDisplay)
+				request.getAttribute(WebKeys.THEME_DISPLAY);
+			
+			StringBuilder portletName = new StringBuilder()
+				.append(getPortletName())
+				.append("_WAR_")
+				.append(getPortletName())
+				.append("portlet");
+			
+						
+			try {
+				PortletPermissionUtil.check(
+					themeDisplay.getPermissionChecker(), 
+					portletName.toString(), ActionKeys.ADD_ENTRY);
+			} catch (PortalException | SystemException e) {
+				throw new PortletException(e.getMessage());
+			}
+		}		
 	}
 
 	private void setSortParams(RenderRequest request) {
@@ -314,16 +341,6 @@ public class LibraryPortlet extends MVCPortlet {
 		preferences.store();
 		
 		actionResponse.setPortletMode(PortletMode.VIEW);
-	}
-	
-	@Override
-	public void doView(RenderRequest renderRequest,
-			RenderResponse renderResponse) throws IOException, PortletException {
-		// TODO Auto-generated method stub
-		super.doView(renderRequest, renderResponse);
-		
-		String[] bookTypes = PortletProps.getArray(
-				LibraryConstants.PROP_BOOK_TYPES);
 	}
 	
 	@ProcessEvent(qname = "{http://liferay.com}lmsBook")

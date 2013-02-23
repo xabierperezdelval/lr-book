@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.security.permission.ActionKeys"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletSession"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -19,7 +20,12 @@
 <% String addImagePath = themeDisplay.getPathThemeImage() + "/common/add.png"; %>
 <img src="<%= addImagePath %>"/>
 
-<br/><a href="<%= updateBookURL %>"><liferay-ui:message key="add-new-book"/> &raquo;</a>
+<br/>
+<c:if test="<%= canAddBook %>">
+	<a href="<%= updateBookURL %>">
+		<liferay-ui:message key="add-new-book"/> &raquo;
+	</a>
+</c:if>
 
 <%
 	PortletURL listBooksURL = renderResponse.createRenderURL();
