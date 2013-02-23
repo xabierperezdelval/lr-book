@@ -26,7 +26,9 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
@@ -62,6 +64,25 @@ public class LibraryPortlet extends MVCPortlet {
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			
+			System.out.println("@@@@@");
+			
+			String[] array1 = serviceContext.getGroupPermissions();
+			
+			if (Validator.isNotNull(array1)) {
+				for (int i=0; i<array1.length; i++) {
+					System.out.println(array1[i]);
+				}
+			}
+
+			System.out.println("#####");
+			String[] array2 = serviceContext.getGuestPermissions();
+			if (Validator.isNotNull(array2)) {
+				for (int i=0; i<array2.length; i++) {
+					System.out.println(array2[i]);
+				}
+			}
+			
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
