@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portal.security.permission.ActionKeys"%>
+<%@page import="com.liferay.portal.service.permission.PortletPermissionUtil"%>
 <%@taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
@@ -34,4 +36,8 @@
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(
 				request, portletResource);
 	}
+	
+	boolean canAddBook = PortletPermissionUtil.contains(
+		permissionChecker, layout, 
+		portletDisplay.getRootPortletId(), ActionKeys.ADD_ENTRY);
 %>
