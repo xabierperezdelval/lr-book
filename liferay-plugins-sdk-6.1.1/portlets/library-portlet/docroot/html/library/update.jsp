@@ -26,6 +26,11 @@
 	</aui:input>
 	<aui:input name="author" helpMessage="Give the Author Name" value="<%= lmsBook.getAuthor() %>"/>
 	
+	<aui:field-wrapper label="Permissions">
+		<liferay-ui:input-permissions
+			modelName="<%= LMSBook.class.getName() %>" />
+	</aui:field-wrapper>
+	
 	<%@include file="/html/library/contact-info.jspf" %>
 	
 	<aui:button type="submit" value="Save" />

@@ -14,14 +14,18 @@
 
 package com.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ServiceContext;
 import com.slayer.model.LMSBook;
 import com.slayer.model.LMSBorrowing;
@@ -82,6 +86,14 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		_log.warn("Book just got added - warn"); 
 		_log.error("Book just got added - error"); 
 		_log.fatal("Book just got added - fatal");
+		
+		try {
+			resourceLocalService.addModelResources(lmsBook, serviceContext);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
 
 		return lmsBook;
 	}
@@ -133,6 +145,9 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 	public List<LMSBook> searchBooks(String bookTitle, long companyId, long groupId) 
 			throws SystemException { 
 		
+		PermissionChecker permissionChecker = 
+			PermissionThreadLocal .getPermissionChecker();
+		
 		return null;
 	}
 	
@@ -145,6 +160,27 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 	
 	public List<LMSBook> getLibraryBooks(long companyId, long groupId)
 			throws SystemException {
-		return lmsBookPersistence.findByCompanyId_GroupId(companyId, groupId);
+		List<LMSBook> books = 
+			lmsBookPersistence.findByCompanyId_GroupId(
+				companyId, groupId);
+		
+		List<LMSBook> result = null;
+		
+		if (Validator.isNotNull(books) && !books.isEmpty()) {
+			
+			result = new ArrayList<LMSBook>();
+			String className = LMSBook.class.getName();
+			PermissionChecker permissionChecker = 
+				PermissionThreadLocal.getPermissionChecker();
+			
+			for (LMSBook book : books) {
+				if (permissionChecker.hasPermission(groupId, 
+						className, book.getBookId(), ActionKeys.VIEW)) {
+					result.add(book);
+				}
+			}
+		}
+		
+		return result;
 	}
 }

@@ -9,6 +9,7 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.slayer.model.LMSBook;
 
 public class LibraryPermissionUtil {
 	
@@ -40,5 +41,12 @@ public class LibraryPermissionUtil {
 			portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		return hasPermissionToAddBook(themeDisplay.getPermissionChecker());
+	}
+	
+	public static boolean canEditThisBook(long groupId,
+			PermissionChecker permissionChecker, long bookId) {
+		
+		return permissionChecker.hasPermission(groupId, 
+			LMSBook.class.getName(), bookId, ActionKeys.UPDATE);
 	}
 }
