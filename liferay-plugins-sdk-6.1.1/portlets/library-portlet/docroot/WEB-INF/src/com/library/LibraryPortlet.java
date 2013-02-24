@@ -26,17 +26,17 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.ListType;
+import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
+import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
@@ -64,25 +64,6 @@ public class LibraryPortlet extends MVCPortlet {
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
-			
-			System.out.println("@@@@@");
-			
-			String[] array1 = serviceContext.getGroupPermissions();
-			
-			if (Validator.isNotNull(array1)) {
-				for (int i=0; i<array1.length; i++) {
-					System.out.println(array1[i]);
-				}
-			}
-
-			System.out.println("#####");
-			String[] array2 = serviceContext.getGuestPermissions();
-			if (Validator.isNotNull(array2)) {
-				for (int i=0; i<array2.length; i++) {
-					System.out.println(array2[i]);
-				}
-			}
-			
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -222,6 +203,22 @@ public class LibraryPortlet extends MVCPortlet {
 		if (bookId > 0l) { // valid bookId
 			try {
 				LMSBookLocalServiceUtil.deleteLMSBook(bookId);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			// delete the resource
+			LMSBook lmsBook = null;
+			try {
+				lmsBook = LMSBookLocalServiceUtil.fetchLMSBook(bookId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			try {
+				ResourceLocalServiceUtil.deleteResource(
+					lmsBook, ResourceConstants.SCOPE_INDIVIDUAL);
 			} catch (PortalException e) {
 				e.printStackTrace();
 			} catch (SystemException e) {
