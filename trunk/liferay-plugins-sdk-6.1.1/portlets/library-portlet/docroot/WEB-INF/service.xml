@@ -45,6 +45,7 @@
 		</finder>
 		
 		<reference package-path="com.liferay.portal" entity="Image"/>
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
 	</entity>
 	
 	<entity name="LMSBorrowing" local-service="true" remote-service="false">
