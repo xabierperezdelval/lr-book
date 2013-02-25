@@ -33,6 +33,18 @@
 	
 	<%@include file="/html/library/contact-info.jspf" %>
 	
+	<aui:field-wrapper label="Assign Tags & Categories">
+		<liferay-ui:asset-tags-selector
+	   		className="<%= LMSBook.class.getName() %>"
+	   		classPK="<%= lmsBook.getPrimaryKey() %>"
+		/>
+	
+		<liferay-ui:asset-categories-selector
+		    className="<%= LMSBook.class.getName() %>"
+		    classPK="<%= lmsBook.getPrimaryKey() %>"
+		/>
+	</aui:field-wrapper>
+	
 	<aui:button type="submit" value="Save" />
 	
 	<% String functionName = 
