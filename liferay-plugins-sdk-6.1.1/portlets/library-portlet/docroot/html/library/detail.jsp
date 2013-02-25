@@ -17,8 +17,18 @@
 		title="Book Details" backURL="<%= backURL %>" />
 </c:if>
 
-
 <c:if test="<%= Validator.isNotNull(lmsBook) %>">
+
+	<aui:field-wrapper label="Tags & Categories">
+		<liferay-ui:asset-tags-summary
+	   		className="<%= LMSBook.class.getName() %>"
+	   		classPK="<%= lmsBook.getPrimaryKey() %>" />
+	
+		<liferay-ui:asset-categories-summary
+		    className="<%= LMSBook.class.getName() %>"
+		    classPK="<%= lmsBook.getPrimaryKey() %>" />
+	</aui:field-wrapper>
+	
 	<table border="1">
 		<tr>
 			<td>Book Title</td>

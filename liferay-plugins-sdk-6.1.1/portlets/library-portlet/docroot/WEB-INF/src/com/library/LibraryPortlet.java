@@ -43,6 +43,7 @@ import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
@@ -224,6 +225,16 @@ public class LibraryPortlet extends MVCPortlet {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+			
+			// delete the asset
+			try {
+				AssetEntryLocalServiceUtil.deleteEntry(
+					LMSBook.class.getName(), lmsBook.getPrimaryKey());
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}	
 		}
 
 		// gracefully redirecting to the default list view
@@ -254,7 +265,6 @@ public class LibraryPortlet extends MVCPortlet {
 				.append(getPortletName())
 				.append("portlet");
 			
-						
 			try {
 				PortletPermissionUtil.check(
 					themeDisplay.getPermissionChecker(), 

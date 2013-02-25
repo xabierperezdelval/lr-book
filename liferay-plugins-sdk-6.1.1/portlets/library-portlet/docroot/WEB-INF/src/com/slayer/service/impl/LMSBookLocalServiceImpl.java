@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.slayer.model.LMSBook;
 import com.slayer.model.LMSBorrowing;
 import com.slayer.model.impl.LMSBookImpl;
@@ -92,7 +93,21 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-
+		
+		try {
+			assetEntryLocalService.updateEntry(
+				serviceContext.getUserId(), 			// userId
+				serviceContext.getScopeGroupId(), 		// groupId
+				LMSBook.class.getName(), 				// className
+				lmsBook.getPrimaryKey(), 				// classPK
+				serviceContext.getAssetCategoryIds(), 	// category Ids
+				serviceContext.getAssetTagNames());		// tag Names
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+				
 		return lmsBook;
 	}
 	
