@@ -6,7 +6,6 @@
 	<portlet>
 		<portlet-name>library</portlet-name>
 		<icon>/icon.png</icon>
-		
 		<configuration-action-class>
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>
@@ -32,8 +31,12 @@
 		</portlet-data-handler-class>
 		<control-panel-entry-category>content</control-panel-entry-category>
 		<control-panel-entry-weight>3.5</control-panel-entry-weight>
-		<action-url-redirect>false</action-url-redirect>
 		
+		<asset-renderer-factory>
+			com.library.asset.LMSBookAssetRendererFactory
+		</asset-renderer-factory>		
+		<action-url-redirect>false</action-url-redirect>
+
 		<instanceable>false</instanceable>
 		
 
