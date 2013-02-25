@@ -71,4 +71,20 @@ public class LMSBookAssetRenderer extends BaseAssetRenderer {
 	public LMSBookAssetRenderer(LMSBook lmsBook) { 
 		_lmsBook = lmsBook;
 	}
+	
+	public boolean isConvertible() {
+		return true;
+	}
+	
+	public boolean isLocalizable() {
+		return true;
+	}
+	
+	public boolean isPrintable() {
+		return true;
+	}
+	
+	public String getDiscussionPath() {
+		return "edit_entry_discussion";
+	}
 }
