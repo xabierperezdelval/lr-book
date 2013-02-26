@@ -12,10 +12,12 @@ import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
+import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.util.Encryptor;
 import com.liferay.util.EncryptorException;
 
@@ -128,5 +130,31 @@ public class LMSUtil {
 		}
 		
 		return bytes;
+	}
+	
+	public static void createFolder(String folderName, long companyId) {
+		long repositoryId = CompanyConstants.SYSTEM;
+		
+		boolean folderExists = false;
+		
+		try {
+			folderExists = DLStoreUtil.hasDirectory(
+				companyId, repositoryId, folderName);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (!folderExists) {
+			try {
+				DLStoreUtil.addDirectory(
+					companyId, repositoryId, folderName);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
