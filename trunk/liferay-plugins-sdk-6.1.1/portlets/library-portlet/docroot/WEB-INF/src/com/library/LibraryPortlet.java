@@ -1,5 +1,6 @@
 package com.library;
 
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -19,24 +20,33 @@ import javax.portlet.PortletURL;
 import javax.portlet.ProcessEvent;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.image.ImageBag;
+import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
+import com.liferay.portal.model.Image;
 import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.AddressLocalServiceUtil;
+import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -49,6 +59,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
+import com.util.LMSUtil;
 
 /**
  * Portlet implementation class LibraryPortlet
@@ -427,5 +438,36 @@ public class LibraryPortlet extends MVCPortlet {
 		// redirecting to original list page
 		actionResponse.sendRedirect(
 			ParamUtil.getString(uploadRequest, "redirectURL"));
+	}
+	
+	public void serveResource(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException,
+			PortletException {
+		
+		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
+		
+		if (cmd.equalsIgnoreCase("serveImage")) {
+			long imageId = 
+				ParamUtil.getLong(resourceRequest, "imageId");
+			
+			Image image = null;
+			try {
+				image = ImageLocalServiceUtil.fetchImage(imageId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(image)) {
+				byte[] bytes = image.getTextObj();
+				
+				HttpServletResponse response = 
+					PortalUtil.getHttpServletResponse(resourceResponse);
+				
+				bytes = LMSUtil.getScaledImage(image, 20);
+				
+				response.setContentType(image.getType());
+				ServletResponseUtil.write(response, bytes);
+			}
+		}
 	}
 }
