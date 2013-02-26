@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.Event;
@@ -33,10 +34,12 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.ListType;
@@ -53,6 +56,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
@@ -470,6 +474,40 @@ public class LibraryPortlet extends MVCPortlet {
 				bytes = LMSUtil.getScaledImage(image, 20);
 				
 				response.setContentType(image.getType());
+				ServletResponseUtil.write(response, bytes);
+			}
+		}
+		
+		if (cmd.equalsIgnoreCase("serveFile")) {
+			String fileName = 
+				ParamUtil.getString(resourceRequest, "fileName");
+			
+			long companyId = PortalUtil.getCompanyId(resourceRequest); 
+			long repositoryId = CompanyConstants.SYSTEM;
+			String filePath = 
+				"Sample_Chapters" + File.separator + fileName;
+			
+			File file = null;
+			try {
+				file = DLStoreUtil.getFile(
+					companyId, repositoryId, filePath);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(file)) {
+				byte[] bytes = FileUtil.getBytes(file);
+				String contentType = 
+					new MimetypesFileTypeMap().getContentType(file);
+				
+				// preparing the response
+				HttpServletResponse response =
+					PortalUtil.getHttpServletResponse(resourceResponse);
+				response.setContentType(contentType);
+				response.setHeader("Content-Disposition", 
+					"attachment; filename= " + fileName);
 				ServletResponseUtil.write(response, bytes);
 			}
 		}
