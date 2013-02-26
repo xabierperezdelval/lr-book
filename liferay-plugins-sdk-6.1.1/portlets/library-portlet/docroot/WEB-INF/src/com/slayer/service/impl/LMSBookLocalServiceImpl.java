@@ -14,6 +14,7 @@
 
 package com.slayer.service.impl;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.slayer.model.LMSBook;
 import com.slayer.model.LMSBorrowing;
 import com.slayer.model.impl.LMSBookImpl;
@@ -107,7 +107,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-				
+
 		return lmsBook;
 	}
 	
@@ -175,5 +175,22 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 			throws SystemException {
 		return lmsBookPersistence
 			.filterFindByCompanyId_GroupId(companyId, groupId);
+	}
+	
+	public void attachFiles(long bookId, ServiceContext serviceContext) {
+		// uploading the image
+		File coverImage = (File) 
+			serviceContext.getAttribute("COVER_IMAGE");
+		
+		if (Validator.isNotNull(coverImage)) {
+			try {
+				imageLocalService.updateImage(
+					bookId, coverImage);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

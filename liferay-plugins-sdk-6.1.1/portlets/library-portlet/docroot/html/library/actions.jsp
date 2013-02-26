@@ -30,6 +30,15 @@
 	modelResourceDescription="<%= book.getBookTitle() %>" 
 	resourcePrimKey="<%= Long.toString(book.getBookId()) %>" 
 	var="permissionsURL" />
+	
+<portlet:renderURL var="attachFilesURL">
+	<portlet:param name="jspPage" 
+			value="<%= LibraryConstants.PAGE_UPLOAD %>"/>
+	<portlet:param name="redirectURL" 
+			value="<%= themeDisplay.getURLCurrent() %>"/>
+	<portlet:param name="bookId" 
+			value="<%= Long.toString(book.getBookId()) %>"/>
+</portlet:renderURL>	
 
 <liferay-ui:icon-menu>
 
@@ -42,7 +51,10 @@
 		
 	<liferay-ui:icon image="view" message="View Details"
 		url="<%= popup %>" />
-	<liferay-ui:icon image="permissions" url="<%= permissionsURL %>"/>	
+	<liferay-ui:icon image="permissions" url="<%= permissionsURL %>"/>
+	
+	<liferay-ui:icon image="add_article" 
+			message="add-attachments" url="<%= attachFilesURL %>"/>	
 </liferay-ui:icon-menu>
 
 <aui:script>

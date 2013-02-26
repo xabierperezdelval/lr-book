@@ -20,6 +20,8 @@ public interface LibraryConstants {
 	
 	static final String PAGE_DETAILS = "/html/library/detail.jsp";
 	
+	static final String PAGE_UPLOAD = "/html/library/upload.jsp";
+	
 	static final String KEY_SEARCH = "search";
 	
 	static final String PROP_BOOK_TYPES = "book.types";

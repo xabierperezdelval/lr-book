@@ -17,7 +17,8 @@
 %>
 
 <aui:form name="fm"
-	action="<%= updateBookURL.toString() %>">
+	action="<%= updateBookURL.toString() %>"
+	enctype="multipart/form-data">
 	
 	<aui:input name="bookId" type="hidden" value="<%= lmsBook.getBookId() %>"/>
 	
@@ -45,7 +46,7 @@
 		/>
 	</aui:field-wrapper>
 	
-	<aui:button type="submit" value="Save" />
+	<aui:button type="submit" />
 	
 	<% String functionName = 
 		renderResponse.getNamespace() + "invokeJSONWS();"; %>
