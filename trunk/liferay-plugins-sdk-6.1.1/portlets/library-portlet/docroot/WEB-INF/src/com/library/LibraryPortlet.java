@@ -1,6 +1,5 @@
 package com.library;
 
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -27,8 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.image.ImageBag;
-import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -416,24 +413,31 @@ public class LibraryPortlet extends MVCPortlet {
 		UploadPortletRequest uploadRequest = 
 			PortalUtil.getUploadPortletRequest(actionRequest);
 		
-		File coverImage = uploadRequest.getFile("coverImage");
-		
-		if (coverImage.getTotalSpace() > 0) {
-			long bookId = ParamUtil.getLong(uploadRequest, "bookId");
-			try {
-				ServiceContext serviceContext = 
-					ServiceContextFactory
-						.getInstance(actionRequest);
-				
-				serviceContext.setAttribute("COVER_IMAGE", coverImage);
-				LMSBookLocalServiceUtil
-						.attachFiles(bookId, serviceContext);
-			} catch (PortalException e) {
-				e.printStackTrace();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = 
+				ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
+		
+		File coverImage = uploadRequest.getFile("coverImage");
+		if (coverImage.getTotalSpace() > 0) {
+			serviceContext.setAttribute("COVER_IMAGE", coverImage);
+		}
+		
+		File sampleChapterFile = uploadRequest.getFile("sampleChapter");
+		if (sampleChapterFile.getTotalSpace() > 0) {
+			serviceContext.setAttribute("SAMPLE_CHAPTER", sampleChapterFile);
+			String fileName = uploadRequest.getFileName("sampleChapter");
+			serviceContext.setAttribute("FILE_NAME", fileName);
+		}
+		
+		long bookId = ParamUtil.getLong(uploadRequest, "bookId");	
+		LMSBookLocalServiceUtil
+				.attachFiles(bookId, serviceContext);
 		
 		// redirecting to original list page
 		actionResponse.sendRedirect(

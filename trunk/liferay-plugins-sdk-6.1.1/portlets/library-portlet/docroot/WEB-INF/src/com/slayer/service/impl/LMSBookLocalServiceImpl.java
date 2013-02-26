@@ -23,9 +23,11 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.slayer.model.LMSBook;
 import com.slayer.model.LMSBorrowing;
 import com.slayer.model.impl.LMSBookImpl;
@@ -33,6 +35,7 @@ import com.slayer.service.LMSBookLocalServiceUtil;
 import com.slayer.service.base.LMSBookLocalServiceBaseImpl;
 import com.slayer.service.persistence.LMSBookFinderUtil;
 import com.slayer.service.persistence.LMSBorrowingUtil;
+import com.util.LMSUtil;
 
 /**
  * The implementation of the l m s book local service.
@@ -190,6 +193,49 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 				e.printStackTrace();
 			} catch (SystemException e) {
 				e.printStackTrace();
+			}
+		}
+		
+		File sampleChapter = (File)
+			serviceContext.getAttribute("SAMPLE_CHAPTER");
+		
+		if (Validator.isNotNull(sampleChapter)) {
+			LMSBook lmsBook = null;
+			try {
+				lmsBook = fetchLMSBook(bookId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(lmsBook)) {
+				
+				// update the original object
+				String fileName = (String) 
+					serviceContext.getAttribute("FILE_NAME");
+				
+				lmsBook.setSampleChapter(fileName);
+				
+				try {
+					updateLMSBook(lmsBook);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				// create a folder to store this file
+				long companyId = serviceContext.getCompanyId();
+				String folderName = "Sample_Chapters";
+				LMSUtil.createFolder(folderName, companyId);
+				
+				// Saving the file now
+				String filePath = folderName + File.separator + fileName;
+				try {
+					DLStoreUtil.addFile(companyId, 
+						CompanyConstants.SYSTEM, filePath, sampleChapter);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

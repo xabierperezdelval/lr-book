@@ -12,5 +12,7 @@
 	<aui:input type="hidden" name="redirectURL" 
 				value="<%= redirectURL %>"/>
 	<aui:input name="coverImage" type="file" />
+	
+	<aui:input name="sampleChapter" type="file" />
 	<aui:button type="submit"/>
 </aui:form>
