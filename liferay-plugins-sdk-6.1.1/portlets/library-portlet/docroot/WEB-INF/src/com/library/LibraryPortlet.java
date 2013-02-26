@@ -397,12 +397,35 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		response.setRenderParameter("jspPage", LibraryConstants.PAGE_LIST);
 	}
-
-	/*
+	
 	public void UploadFiles(ActionRequest actionRequest,
 			ActionResponse actionResponse) 
 				throws IOException, PortletException {
 	
+		UploadPortletRequest uploadRequest = 
+			PortalUtil.getUploadPortletRequest(actionRequest);
+		
+		File coverImage = uploadRequest.getFile("coverImage");
+		
+		if (coverImage.getTotalSpace() > 0) {
+			long bookId = ParamUtil.getLong(uploadRequest, "bookId");
+			try {
+				ServiceContext serviceContext = 
+					ServiceContextFactory
+						.getInstance(actionRequest);
+				
+				serviceContext.setAttribute("COVER_IMAGE", coverImage);
+				LMSBookLocalServiceUtil
+						.attachFiles(bookId, serviceContext);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// redirecting to original list page
+		actionResponse.sendRedirect(
+			ParamUtil.getString(uploadRequest, "redirectURL"));
 	}
-	*/
 }
