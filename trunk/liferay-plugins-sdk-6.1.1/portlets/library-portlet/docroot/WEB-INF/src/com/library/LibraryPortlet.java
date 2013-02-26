@@ -1,5 +1,6 @@
 package com.library;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -395,4 +397,12 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		response.setRenderParameter("jspPage", LibraryConstants.PAGE_LIST);
 	}
+
+	/*
+	public void UploadFiles(ActionRequest actionRequest,
+			ActionResponse actionResponse) 
+				throws IOException, PortletException {
+	
+	}
+	*/
 }

@@ -40,7 +40,7 @@
 	
 <aui:form action="<%= searchBooksURL.toString() %>">
 	<aui:input name="searchTerm" label="enter-title-to-search"/>
-	<aui:input name="" type="submit" value="<%= LanguageUtil.get(locale, LibraryConstants.KEY_SEARCH) %>" />
+	<aui:button type="submit" value="<%= LanguageUtil.get(locale, LibraryConstants.KEY_SEARCH) %>" />
 </aui:form>
 
 <h1>Limit:<%= portletConfig.getInitParameter("max-books-limit") %><h1>
