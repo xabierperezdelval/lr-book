@@ -95,11 +95,23 @@
 				imageURL.setParameter(Constants.CMD, "serveImage");
 				imageURL.setParameter("imageId", String.valueOf(bookId));
 				imageURL.setParameter("t", 
-						WebServerServletTokenUtil.getToken(bookId));
+						WebServerServletTokenUtil.getToken(bookId));				
 			%>
 			<liferay-ui:search-container-column-text name="Cover Page">
 				<img src="<%= imageURL.toString() %>" />
 			</liferay-ui:search-container-column-text>
+			
+			<%
+				ResourceURL chapterURL = renderResponse.createResourceURL();
+				chapterURL.setParameter(Constants.CMD, "serveFile");
+				chapterURL.setParameter("bookId", String.valueOf(bookId));
+				chapterURL.setParameter("fileName", book.getSampleChapter());
+				chapterURL.setParameter("t", 
+						WebServerServletTokenUtil.getToken(bookId));			
+			%>
+			<liferay-ui:search-container-column-text property="sampleChapter"
+				name="Sample Chapter" href="<%= chapterURL.toString() %>" />			
+			
 			<liferay-ui:search-container-column-text name="Book Title"
 				property="bookTitle" href="<%= bookDetailsURL.toString() %>" 
 				orderable="true" orderableProperty="bookTitle"/>
