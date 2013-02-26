@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="javax.portlet.ResourceURL"%>
+<%@page import="com.liferay.portal.webserver.WebServerServletTokenUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="java.util.Collections"%>
@@ -77,6 +80,26 @@
 		<liferay-ui:search-container-row modelVar="book"
 			className="LMSBook">
 			<% bookDetailsURL.setParameter("bookId", Long.toString(book.getBookId())); %>
+			<% 
+				long bookId = book.getBookId();
+				/*
+				StringBuilder imageURL = new StringBuilder()
+					.append(themeDisplay.getPathImage())
+					.append("/book/?img_id=")
+					.append(bookId)
+					.append("&t=")
+					.append(WebServerServletTokenUtil.getToken(bookId));
+				*/
+				
+				ResourceURL imageURL = renderResponse.createResourceURL();
+				imageURL.setParameter(Constants.CMD, "serveImage");
+				imageURL.setParameter("imageId", String.valueOf(bookId));
+				imageURL.setParameter("t", 
+						WebServerServletTokenUtil.getToken(bookId));
+			%>
+			<liferay-ui:search-container-column-text name="Cover Page">
+				<img src="<%= imageURL.toString() %>" />
+			</liferay-ui:search-container-column-text>
 			<liferay-ui:search-container-column-text name="Book Title"
 				property="bookTitle" href="<%= bookDetailsURL.toString() %>" 
 				orderable="true" orderableProperty="bookTitle"/>
