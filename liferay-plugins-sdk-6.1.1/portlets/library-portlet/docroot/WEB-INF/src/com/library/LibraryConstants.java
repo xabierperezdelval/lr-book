@@ -28,4 +28,7 @@ public interface LibraryConstants {
 	
 	static final String PROP_DEFAULTING_REMINDER_EMAIL_SUBJECT = 
 			"defaulting.reminder.email.subject";
+	
+	static final String PROP_BOOK_COVER_IMAGE_MAX_SIZE = 
+			"book.cover.image.max.size";
 }

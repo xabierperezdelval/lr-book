@@ -32,9 +32,11 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -58,6 +60,7 @@ import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.util.portlet.PortletProps;
 import com.slayer.model.LMSBook;
 import com.slayer.service.LMSBookLocalServiceUtil;
 import com.util.LMSUtil;
@@ -428,8 +431,22 @@ public class LibraryPortlet extends MVCPortlet {
 		}
 		
 		File coverImage = uploadRequest.getFile("coverImage");
-		if (coverImage.getTotalSpace() > 0) {
-			serviceContext.setAttribute("COVER_IMAGE", coverImage);
+		
+		long coverImageSize = coverImage.getTotalSpace();
+		
+		if (coverImageSize > 0) {
+			long fileSize = FileUtil.getBytes(coverImage).length;
+			
+			long sizeLimit = GetterUtil.getLong(
+					PortletProps.get(
+						LibraryConstants.PROP_BOOK_COVER_IMAGE_MAX_SIZE));
+			
+			if (fileSize <= sizeLimit) {
+				serviceContext.setAttribute("COVER_IMAGE", coverImage);
+			} else {
+				SessionErrors.add(actionRequest, "image-size-exceeded");
+				actionResponse.setRenderParameter("jspPage", LibraryConstants.PAGE_UPLOAD);
+			}
 		}
 		
 		File sampleChapterFile = uploadRequest.getFile("sampleChapter");
@@ -443,9 +460,11 @@ public class LibraryPortlet extends MVCPortlet {
 		LMSBookLocalServiceUtil
 				.attachFiles(bookId, serviceContext);
 		
-		// redirecting to original list page
-		actionResponse.sendRedirect(
-			ParamUtil.getString(uploadRequest, "redirectURL"));
+		if (SessionErrors.isEmpty(actionRequest)) {
+			// redirecting to original list page
+			actionResponse.sendRedirect(
+				ParamUtil.getString(uploadRequest, "redirectURL"));
+		}
 	}
 	
 	public void serveResource(ResourceRequest resourceRequest,
