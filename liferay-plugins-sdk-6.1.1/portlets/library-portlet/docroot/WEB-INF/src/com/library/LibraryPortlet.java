@@ -73,7 +73,7 @@ public class LibraryPortlet extends MVCPortlet {
 	public void updateBook(ActionRequest actionRequest,
 			ActionResponse actionResponse) 
 					throws IOException, PortletException {
-	
+		
 		String bookTitle = ParamUtil.getString(actionRequest, "bookTitle");
 		String author = ParamUtil.getString(actionRequest, "author");
 		
@@ -81,7 +81,8 @@ public class LibraryPortlet extends MVCPortlet {
 		
 		ServiceContext serviceContext = null;
 		try {
-			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			serviceContext = ServiceContextFactory.getInstance(
+					LMSBook.class.getName(), actionRequest);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {

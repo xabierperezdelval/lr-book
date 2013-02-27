@@ -110,6 +110,8 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		lmsBook.setExpandoBridgeAttributes(serviceContext);
 
 		return lmsBook;
 	}

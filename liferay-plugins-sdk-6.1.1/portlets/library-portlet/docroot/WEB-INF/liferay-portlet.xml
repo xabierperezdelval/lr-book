@@ -5,10 +5,13 @@
 	
 	<portlet>
 		<portlet-name>library</portlet-name>
+		
 		<icon>/icon.png</icon>
+		
 		<configuration-action-class>
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>
+		
 		<scheduler-entry>
 			<scheduler-event-listener-class>
 				com.library.job.NotifyDefaultingMembers
@@ -26,21 +29,29 @@
 		</friendly-url-mapper-class>
 		<friendly-url-mapping>library</friendly-url-mapping>
 		<friendly-url-routes>META-INF/routes.xml</friendly-url-routes>
+		
 		<portlet-data-handler-class>
 			com.library.lar.LibraryPortletDataHandler
 		</portlet-data-handler-class>
+		
+		
 		<control-panel-entry-category>content</control-panel-entry-category>
 		<control-panel-entry-weight>3.5</control-panel-entry-weight>
 		
 		<asset-renderer-factory>
 			com.library.asset.LMSBookAssetRendererFactory
-		</asset-renderer-factory>		
+		</asset-renderer-factory>	
+		<custom-attributes-display>
+			com.library.custom.LMSBookCustomFieldsDisplay		
+		</custom-attributes-display>
+
 		<action-url-redirect>false</action-url-redirect>
 
 		<instanceable>false</instanceable>
-		
+
 
 		<scopeable>true</scopeable>
+		
 		<private-session-attributes>false</private-session-attributes>
 		
 		<header-portlet-css>/css/main.css</header-portlet-css>

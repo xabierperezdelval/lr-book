@@ -17,8 +17,7 @@
 %>
 
 <aui:form name="fm"
-	action="<%= updateBookURL.toString() %>"
-	enctype="multipart/form-data">
+	action="<%= updateBookURL.toString() %>">
 	
 	<aui:input name="bookId" type="hidden" value="<%= lmsBook.getBookId() %>"/>
 	
@@ -46,6 +45,14 @@
 		/>
 	</aui:field-wrapper>
 	
+	<liferay-ui:custom-attributes-available 
+			className="<%= LMSBook.class.getName() %>">
+		<liferay-ui:custom-attribute-list 
+			classPK="<%= lmsBook.getBookId() %>" 
+			className="<%= LMSBook.class.getName() %>"
+			editable="<%= true %>" label="<%= true %>"/>
+	</liferay-ui:custom-attributes-available>
+
 	<aui:button type="submit" />
 	
 	<% String functionName = 
