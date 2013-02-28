@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.service.SubscriptionLocalServiceUtil"%>
 <%@page import="com.liferay.portal.security.permission.ActionKeys"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletSession"%>
@@ -43,7 +45,7 @@
 	<aui:button type="submit" value="<%= LanguageUtil.get(locale, LibraryConstants.KEY_SEARCH) %>" />
 </aui:form>
 
-<h1>Limit:<%= portletConfig.getInitParameter("max-books-limit") %><h1>
+<h1>Limit:<%= portletConfig.getInitParameter("max-books-limit") %></h1>
 
 <aui:script>
 	AUI().ready(function(A){
@@ -52,3 +54,41 @@
 		});
 	});
 </aui:script>
+
+<c:if test="<%= themeDisplay.isSignedIn() %>">
+	<%
+		boolean isSubscribed = 
+			SubscriptionLocalServiceUtil.isSubscribed(
+				company.getCompanyId(), user.getUserId(), 
+				LMSBook.class.getName(), scopeGroupId);
+		String currentURL = themeDisplay.getURLCurrent();
+	%>
+	<c:choose>
+		<c:when test="<%= isSubscribed %>">
+			<portlet:actionURL var="unsubscribeURL" name="subscribe">
+				<portlet:param name="<%= Constants.CMD %>" 
+						value="<%= Constants.UNSUBSCRIBE %>" />
+				<portlet:param name="redirectURL" 
+						value="<%= currentURL %>" />
+			</portlet:actionURL>
+	
+			<liferay-ui:icon
+				image="unsubscribe"
+				label="<%= true %>"
+				url="<%= unsubscribeURL %>" />
+		</c:when>
+		<c:otherwise>
+			<portlet:actionURL var="subscribeURL" name="subscribe">
+				<portlet:param name="<%= Constants.CMD %>" 
+					value="<%= Constants.SUBSCRIBE %>" />
+				<portlet:param name="redirectURL" 
+					value="<%= currentURL %>" />
+			</portlet:actionURL>
+	
+			<liferay-ui:icon
+				image="subscribe"
+				label="<%= true %>"
+				url="<%= subscribeURL %>" />
+		</c:otherwise>
+	</c:choose>
+</c:if>
