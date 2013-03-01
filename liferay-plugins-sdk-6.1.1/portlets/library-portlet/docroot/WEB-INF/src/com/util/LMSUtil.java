@@ -6,20 +6,29 @@ import java.security.Key;
 import java.util.List;
 import java.util.Locale;
 
+import javax.portlet.PortletRequest;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
+import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.SubscriptionConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.SubscriptionLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.util.Encryptor;
 import com.liferay.util.EncryptorException;
+import com.slayer.model.LMSBook;
 
 public class LMSUtil {
 	public static String encrypt(String data, long companyId) {
@@ -155,6 +164,30 @@ public class LMSUtil {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public static void applySubscription(
+			PortletRequest portletRequest, String cmd) {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long userId = themeDisplay.getUserId();
+		long groupId = themeDisplay.getScopeGroupId();
+		String className = LMSBook.class.getName();
+		long classPK = ParamUtil.getLong(portletRequest, "bookId", groupId);
+		String frequency = SubscriptionConstants.FREQUENCY_INSTANT;
+		
+		try {
+			if (cmd.equalsIgnoreCase(Constants.SUBSCRIBE)) 
+				SubscriptionLocalServiceUtil.addSubscription(
+				userId, groupId, className, classPK, frequency);
+			else 
+				SubscriptionLocalServiceUtil.deleteSubscription(
+						userId, className, classPK);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 	}
 }

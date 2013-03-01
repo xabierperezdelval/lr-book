@@ -55,40 +55,4 @@
 	});
 </aui:script>
 
-<c:if test="<%= themeDisplay.isSignedIn() %>">
-	<%
-		boolean isSubscribed = 
-			SubscriptionLocalServiceUtil.isSubscribed(
-				company.getCompanyId(), user.getUserId(), 
-				LMSBook.class.getName(), scopeGroupId);
-		String currentURL = themeDisplay.getURLCurrent();
-	%>
-	<c:choose>
-		<c:when test="<%= isSubscribed %>">
-			<portlet:actionURL var="unsubscribeURL" name="subscribe">
-				<portlet:param name="<%= Constants.CMD %>" 
-						value="<%= Constants.UNSUBSCRIBE %>" />
-				<portlet:param name="redirectURL" 
-						value="<%= currentURL %>" />
-			</portlet:actionURL>
-	
-			<liferay-ui:icon
-				image="unsubscribe"
-				label="<%= true %>"
-				url="<%= unsubscribeURL %>" />
-		</c:when>
-		<c:otherwise>
-			<portlet:actionURL var="subscribeURL" name="subscribe">
-				<portlet:param name="<%= Constants.CMD %>" 
-					value="<%= Constants.SUBSCRIBE %>" />
-				<portlet:param name="redirectURL" 
-					value="<%= currentURL %>" />
-			</portlet:actionURL>
-	
-			<liferay-ui:icon
-				image="subscribe"
-				label="<%= true %>"
-				url="<%= subscribeURL %>" />
-		</c:otherwise>
-	</c:choose>
-</c:if>
+<%@include file="/html/library/social/subscription.jspf" %>
