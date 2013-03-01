@@ -2,6 +2,7 @@ package com.library;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,7 @@ import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
@@ -46,7 +48,6 @@ import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.ResourceConstants;
-import com.liferay.portal.model.SubscriptionConstants;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ImageLocalServiceUtil;
@@ -54,7 +55,6 @@ import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -533,6 +533,22 @@ public class LibraryPortlet extends MVCPortlet {
 				ServletResponseUtil.write(response, bytes);
 			}
 		}
+		
+		if (cmd.equalsIgnoreCase(Constants.SUBSCRIBE) 
+				|| cmd.equalsIgnoreCase(Constants.UNSUBSCRIBE)) {
+			
+			LMSUtil.applySubscription(resourceRequest, cmd);
+			
+			// setting the response in JSON format
+			JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
+			jsonObj.put("subscribed",
+				cmd.equalsIgnoreCase(Constants.SUBSCRIBE));
+			HttpServletResponse response = PortalUtil
+					.getHttpServletResponse(resourceResponse);
+			PrintWriter pw = response.getWriter();
+			pw.write(jsonObj.toString());
+			pw.close();
+		}
 	}
 	
 	public void subscribe(ActionRequest actionRequest,
@@ -541,27 +557,7 @@ public class LibraryPortlet extends MVCPortlet {
 	
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 		
-		ThemeDisplay themeDisplay = (ThemeDisplay) 
-			actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
-		long userId = themeDisplay.getUserId();
-		long groupId = themeDisplay.getScopeGroupId();
-		String className = LMSBook.class.getName();
-		long classPK = ParamUtil.getLong(actionRequest, "bookId", groupId);
-		String frequency = SubscriptionConstants.FREQUENCY_INSTANT;
-		
-		try {
-			if (cmd.equalsIgnoreCase(Constants.SUBSCRIBE)) 
-				SubscriptionLocalServiceUtil.addSubscription(
-				userId, groupId, className, classPK, frequency);
-			else 
-				SubscriptionLocalServiceUtil.deleteSubscription(
-						userId, className, classPK);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		LMSUtil.applySubscription(actionRequest, cmd);
 		
 		actionResponse.sendRedirect(
 			ParamUtil.getString(actionRequest, "redirectURL"));
