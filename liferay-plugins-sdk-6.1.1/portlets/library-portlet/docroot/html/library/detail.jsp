@@ -47,4 +47,14 @@
 			<td><%= lmsBook.getModifiedDate() %></td>
 		</tr>						
 	</table>
+	
+	<portlet:actionURL var="discussionURL" name="discussOnThisBook" />
+	<liferay-ui:discussion 
+		classPK="<%= lmsBook.getPrimaryKey() %>" 
+		userId="<%= themeDisplay.getUserId() %>" 
+		className="<%= LMSBook.class.getName() %>" 
+		subject="<%= lmsBook.getBookTitle() %>"  
+		formAction="<%= discussionURL %>" 
+		ratingsEnabled="<%= true %>"
+		redirect="<%= themeDisplay.getURLCurrent() %>"/>
 </c:if>
