@@ -8,9 +8,12 @@
 		
 		<icon>/icon.png</icon>
 		
+		
 		<configuration-action-class>
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>
+		
+		
 		
 		<scheduler-entry>
 			<scheduler-event-listener-class>
@@ -24,6 +27,8 @@
 			</trigger>
 		</scheduler-entry>
 		
+		
+		
 		<friendly-url-mapper-class>
 			com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper
 		</friendly-url-mapper-class>
@@ -33,17 +38,24 @@
 		<portlet-data-handler-class>
 			com.library.lar.LibraryPortletDataHandler
 		</portlet-data-handler-class>
-		
+		<social-activity-interpreter-class>
+			com.library.social.LibraryActivityInterpreter
+		</social-activity-interpreter-class>
 		
 		<control-panel-entry-category>content</control-panel-entry-category>
 		<control-panel-entry-weight>3.5</control-panel-entry-weight>
 		
+		
 		<asset-renderer-factory>
 			com.library.asset.LMSBookAssetRendererFactory
 		</asset-renderer-factory>	
+		
+		
 		<custom-attributes-display>
 			com.library.custom.LMSBookCustomFieldsDisplay		
 		</custom-attributes-display>
+		
+		
 
 		<action-url-redirect>false</action-url-redirect>
 
