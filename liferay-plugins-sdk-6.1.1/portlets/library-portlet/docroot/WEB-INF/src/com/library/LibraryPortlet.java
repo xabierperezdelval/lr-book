@@ -61,6 +61,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
+import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.liferay.util.portlet.PortletProps;
 import com.slayer.model.LMSBook;
@@ -552,6 +553,27 @@ public class LibraryPortlet extends MVCPortlet {
 			PortalClassInvoker.invoke(true, className, methodName,
 					parameterTypeNames, arguments);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		logSocialActivity(actionRequest);
+	}
+
+	private void logSocialActivity(PortletRequest portletRequest) {
+		ThemeDisplay themeDisplay = (ThemeDisplay) 
+				portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long userId = themeDisplay.getUserId();
+		long groupId = themeDisplay.getScopeGroupId();
+		long classPK = ParamUtil.getLong(portletRequest, "classPK");
+		
+		try {
+			SocialActivityLocalServiceUtil.addActivity(
+				userId, groupId, LMSBook.class.getName(),
+				classPK, 1, 
+				"User commented on book: " + classPK, classPK);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 	}

@@ -59,5 +59,5 @@
 		redirect="<%= themeDisplay.getURLCurrent() %>"/>
 		
 	<liferay-ui:ratings classPK="<%= lmsBook.getBookId() %>" 
-		className="<%= LMSBook.class.getName() %>"/>
+		className="<%= LMSBook.class.getName() %>"/>		
 </c:if>
