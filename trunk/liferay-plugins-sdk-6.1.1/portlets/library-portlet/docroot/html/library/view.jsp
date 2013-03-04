@@ -7,9 +7,8 @@
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@include file="/html/library/init.jsp"%>
 
-<liferay-ui:journal-article articleId="LIBRARY_WELCOME_MESSAGE" 
-	groupId="<%= themeDisplay.getScopeGroupId() %>"/>
-	
+<div id="LibraryWelcomeMessage"></div>
+ 	
 <h1>
 	<u>Greeting for Today</u>: 
 	<%= ParamUtil.getString(renderRequest, "DAILY_GREETING", "Welcome") %>
@@ -47,11 +46,25 @@
 
 <h1>Limit:<%= portletConfig.getInitParameter("max-books-limit") %></h1>
 
-<aui:script>
+<aui:script use='aui-io-request'>
 	AUI().ready(function(A){
 		Liferay.on("sayHelloEvent", function(payload){
 			alert('I am in the other Porltet:' + payload.helloTo);
 		});
+		
+		// loading the welcome article
+		var url = '/c/journal/view_article_content?'+
+				'groupId=<%= themeDisplay.getScopeGroupId() %>'+
+				'&articleId=LIBRARY_WELCOME_MESSAGE';
+		A.io.request(url, {
+			method: 'GET', 
+			on: {
+				success: function() {
+					var data = this.get("responseData");
+					A.one('#LibraryWelcomeMessage').html(data);
+				}
+			} 
+		});		
 	});
 </aui:script>
 
