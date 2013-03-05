@@ -23,7 +23,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-import javax.portlet.WindowState;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -73,7 +72,7 @@ import com.util.LMSUtil;
  * Portlet implementation class LibraryPortlet
  */
 public class LibraryPortlet extends MVCPortlet {
-
+	
 	public void updateBook(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 

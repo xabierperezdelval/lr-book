@@ -28,6 +28,12 @@
 		
 		<column name="groupId" type="long"/>
 		
+		<!-- Workflow fields --> 
+		<column name="status" type="int" />
+		<column name="statusByUserId" type="long" />
+		<column name="statusByUserName" type="String" />
+		<column name="statusDate" type="Date" />	
+		
 		<order by="desc">
 		    <order-column name="modifiedDate"/>
 		</order>
@@ -48,6 +54,9 @@
 		
 		<reference package-path="com.liferay.portal" entity="Image"/>
 		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+
+		<reference package-path="com.liferay.portal" 
+					entity="WorkflowInstanceLink"/>
 	</entity>
 	
 	<entity name="LMSBorrowing" local-service="true" remote-service="false">
