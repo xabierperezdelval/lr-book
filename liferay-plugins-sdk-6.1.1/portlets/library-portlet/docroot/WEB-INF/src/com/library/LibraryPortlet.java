@@ -23,6 +23,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -554,9 +555,7 @@ public class LibraryPortlet extends MVCPortlet {
 					parameterTypeNames, arguments);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-		logSocialActivity(actionRequest);
+		}		
 	}
 
 	private void logSocialActivity(PortletRequest portletRequest) {
