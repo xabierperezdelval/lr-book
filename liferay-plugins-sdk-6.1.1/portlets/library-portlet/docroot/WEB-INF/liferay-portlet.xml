@@ -48,6 +48,10 @@
 			com.library.custom.LMSBookCustomFieldsDisplay		
 		</custom-attributes-display>
 
+		<workflow-handler>
+			com.library.workflow.LibraryWorkflowHandler
+		</workflow-handler>
+		
 		<action-url-redirect>false</action-url-redirect>
 
 		<instanceable>false</instanceable>
