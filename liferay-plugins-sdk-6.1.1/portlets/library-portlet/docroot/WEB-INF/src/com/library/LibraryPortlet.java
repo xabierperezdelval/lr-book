@@ -286,8 +286,10 @@ public class LibraryPortlet extends MVCPortlet {
 				PortletPermissionUtil.check(
 						themeDisplay.getPermissionChecker(),
 						portletName.toString(), ActionKeys.ADD_ENTRY);
-			} catch (PortalException | SystemException e) {
-				throw new PortletException(e.getMessage());
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -312,9 +314,14 @@ public class LibraryPortlet extends MVCPortlet {
 		String searchTerm = ParamUtil.getString(actionRequest, "searchTerm");
 
 		if (Validator.isNotNull(searchTerm)) {
+
+			ThemeDisplay themeDisplay = (ThemeDisplay) 
+				actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			
 			try {
 				List<LMSBook> lmsBooks = LMSBookLocalServiceUtil
-						.searchBooks(searchTerm);
+					.searchIndex(searchTerm, 
+						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
 
 				actionRequest.setAttribute("SEARCH_RESULT", lmsBooks);
 				actionResponse.setRenderParameter("jspPage",
