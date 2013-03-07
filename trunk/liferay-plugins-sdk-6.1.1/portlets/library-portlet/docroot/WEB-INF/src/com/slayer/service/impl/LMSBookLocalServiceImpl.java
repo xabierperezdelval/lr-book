@@ -15,6 +15,7 @@
 package com.slayer.service.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,21 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.BooleanQuery;
+import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
+import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.ParseException;
+import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.SearchEngineUtil;
+import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
@@ -31,7 +46,6 @@ import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.slayer.model.LMSBook;
 import com.slayer.model.LMSBorrowing;
 import com.slayer.model.impl.LMSBookImpl;
-import com.slayer.service.LMSBookLocalServiceUtil;
 import com.slayer.service.base.LMSBookLocalServiceBaseImpl;
 import com.slayer.service.persistence.LMSBookFinderUtil;
 import com.slayer.service.persistence.LMSBorrowingUtil;
@@ -76,11 +90,31 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		lmsBook.setUuid(serviceContext.getUuid());
 		lmsBook.setGroupId(serviceContext.getScopeGroupId());
 		
+		// workflow status
+		lmsBook.setStatus(WorkflowConstants.STATUS_PENDING);
+		lmsBook.setStatusByUserId(serviceContext.getUserId());
+		lmsBook.setStatusDate(new java.util.Date());
+		
 		// 4. Call the Service Layer API to persist the object
 		try {
-			lmsBook = LMSBookLocalServiceUtil.addLMSBook(lmsBook);
+			lmsBook = lmsBookPersistence.update(lmsBook, false);
 		} catch (SystemException e) {
 			e.printStackTrace();
+		}
+		
+		try {
+			WorkflowHandlerRegistryUtil.startWorkflowInstance(
+				lmsBook.getCompanyId(), 	// companyId
+				lmsBook.getGroupId(), 		// groupId
+				lmsBook.getUserId(), 		// userId
+				LMSBook.class.getName(), 	// className
+				lmsBook.getPrimaryKey(), 	// classPK
+				lmsBook, 					// model
+				serviceContext);			// serviceContext
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
 		}
 		
 		_log.debug("Book just got added - debug"); 
@@ -112,7 +146,16 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		}
 		
 		lmsBook.setExpandoBridgeAttributes(serviceContext);
-
+		
+		// indexer 
+		Indexer indexer = 
+			IndexerRegistryUtil.getIndexer(LMSBook.class);
+		try {
+			indexer.reindex(lmsBook);
+		} catch (SearchException e) {
+			e.printStackTrace();
+		}
+						
 		return lmsBook;
 	}
 	
@@ -169,6 +212,58 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		return null;
 	}
 	
+	
+	public List<LMSBook> searchIndex(
+			String keyword, long companyId, long groupId) 
+				throws SystemException { 
+		
+		// 1. Preparing a Search Context
+		SearchContext searchContext = new SearchContext();
+		searchContext.setCompanyId(companyId);
+		
+		String[] CLASS_NAMES = { LMSBook.class.getName() };
+		searchContext.setEntryClassNames(CLASS_NAMES);
+		
+		long[] groupIds = {groupId};
+		searchContext.setGroupIds(groupIds);
+		
+		// 2. Preparing a Query to search
+		BooleanQuery searchQuery = 
+			BooleanQueryFactoryUtil.create(searchContext);
+		String[] terms = {Field.TITLE, "author"};
+		
+		try {
+			searchQuery.addTerms(terms, keyword);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		// 3. Firing the query to get hits
+		Hits hits = null;
+		try {
+			hits = SearchEngineUtil.search(
+					searchContext, searchQuery);
+		} catch (SearchException e) {
+			e.printStackTrace();
+		}
+		
+		// 4. return null if no results
+		if (Validator.isNull(hits) || hits.getLength() == 0) 
+			return null;
+		
+		// 5. Convert results into a List of LMSBook objects
+		List<LMSBook> books = new ArrayList<LMSBook>();
+		for (Document document : hits.getDocs()) {
+			long bookId = GetterUtil.getLong(
+					document.get(Field.ENTRY_CLASS_PK));
+			LMSBook book = fetchLMSBook(bookId);
+			
+			books.add(book);
+		}
+		
+		return books;
+	}
+ 	
 	public List<LMSBorrowing> getBorrowings(long bookId) 
 			throws SystemException {
 		//return lmsBookPersistence.getLMSBorrowings(bookId);
