@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.BaseWorkflowHandler;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -46,6 +48,12 @@ public class LibraryWorkflowHandler extends BaseWorkflowHandler {
 		lmsBook.setStatus(WorkflowConstants.STATUS_APPROVED);
 		lmsBook.setStatusByUserId(statusByUserId);
 		lmsBook.setStatusDate(new java.util.Date());
+		
+		// Sending New Book Message to the MessageBus
+		Message message = new Message();
+		message.setPayload(lmsBook);
+		String destinationName = "destination/library";
+		MessageBusUtil.sendMessage(destinationName, message);
 		
 		return LMSBookLocalServiceUtil.updateLMSBook(lmsBook);
 	}
