@@ -1,5 +1,6 @@
 package com.library.search;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -7,7 +8,6 @@ import javax.portlet.PortletURL;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.Document;
@@ -45,13 +45,19 @@ public class LibraryIndexer extends BaseIndexer {
 		document.addKeyword("author", lmsBook.getAuthor());
 		document.addText(Field.TITLE, lmsBook.getBookTitle());
 		
+		Date modifiedDate = lmsBook.getModifiedDate();
+		if (modifiedDate == null) modifiedDate = new Date(); 
+		document.addDate(Field.MODIFIED_DATE, modifiedDate);
+		
 		return document;
 	}
 
-	protected Summary doGetSummary(Document document, Locale local, String snippet,
-			PortletURL portletUrl) throws Exception {
-		System.out.println("inside doGetSummary");
-		return null;
+	protected Summary doGetSummary(
+		Document document, Locale local, String snippet,
+		PortletURL portletURL) throws Exception {
+		
+		return new Summary(
+			document.get(Field.TITLE), snippet, portletURL);
 	}
 	
 	protected void doReindex(Object obj) throws Exception {
