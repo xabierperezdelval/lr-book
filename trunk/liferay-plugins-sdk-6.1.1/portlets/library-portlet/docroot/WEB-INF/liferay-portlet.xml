@@ -12,6 +12,9 @@
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>	
 		<indexer-class>com.library.search.LibraryIndexer</indexer-class>
+		<open-search-class>
+			com.library.search.LibraryOpenSearchImpl
+		</open-search-class>
 		<scheduler-entry>
 			<scheduler-event-listener-class>
 				com.library.job.NotifyDefaultingMembers
