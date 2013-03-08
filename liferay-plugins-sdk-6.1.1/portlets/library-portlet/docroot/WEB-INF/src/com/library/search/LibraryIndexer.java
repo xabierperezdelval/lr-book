@@ -75,7 +75,7 @@ public class LibraryIndexer extends BaseIndexer {
 			LMSBookLocalServiceUtil.dynamicQuery(dynamicQuery);
 		
 		for (LMSBook book: books) {
-			reindex(book);
+			if (book.getGroupId() > 0l) reindex(book);
 		}
 	}
 
