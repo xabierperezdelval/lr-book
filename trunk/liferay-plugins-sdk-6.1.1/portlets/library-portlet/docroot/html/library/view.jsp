@@ -68,4 +68,8 @@
 	});
 </aui:script>
 
-<%@include file="/html/library/social/subscription.jspf" %>
+<%-- <%@include file="/html/library/social/subscription.jspf" %> --%>
+
+<library-ui:subscribe 
+	classPK="<%= themeDisplay.getScopeGroupId() %>" 
+	className="<%= LMSBook.class.getName() %>"/>
