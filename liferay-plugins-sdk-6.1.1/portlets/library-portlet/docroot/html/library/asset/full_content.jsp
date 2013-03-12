@@ -1,7 +1,6 @@
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portlet.journal.NoSuchArticleException"%>
 <%@page import="com.liferay.portlet.journalcontent.util.JournalContent"%>
-<%@page import="com.liferay.portlet.journal.model.JournalArticleConstants"%>
 <%@page import="com.liferay.portlet.journal.model.JournalArticle"%>
 <%@page import="com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil"%>
 
