@@ -44,6 +44,21 @@
 	<aui:button type="submit" value="<%= LanguageUtil.get(locale, LibraryConstants.KEY_SEARCH) %>" />
 </aui:form>
 
+<hr/>
+<portlet:actionURL var="searchAdvancedURL" 
+	name="searchAdvanced" />
+
+<aui:form action="<%= searchAdvancedURL %>">
+	<aui:select name="searchType" 
+			label="Search Type" inlineLabel="true">
+		<aui:option value="<%= false %>" label="Any"/>
+		<aui:option value="<%= true %>" label="All"/>
+	</aui:select>
+	<aui:input name="bookTitle"/>
+	<aui:input name="author" />
+	<aui:button type="submit" value="Search"/>
+</aui:form>
+
 <h1>Limit:<%= portletConfig.getInitParameter("max-books-limit") %></h1>
 
 <aui:script use='aui-io-request'>

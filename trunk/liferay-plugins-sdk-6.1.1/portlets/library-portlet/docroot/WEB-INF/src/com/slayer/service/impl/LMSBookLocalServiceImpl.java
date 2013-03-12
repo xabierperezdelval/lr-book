@@ -23,6 +23,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.BooleanClause;
+import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
@@ -31,6 +33,7 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.ParseException;
+import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.SearchException;
@@ -217,6 +220,27 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 			String keyword, long companyId, long groupId) 
 				throws SystemException { 
 		
+		Hits hits = getHits(keyword, companyId, groupId);
+		
+		// 4. return null if no results
+		if (Validator.isNull(hits) || hits.getLength() == 0) 
+			return null;
+		
+		// 5. Convert results into a List of LMSBook objects
+		List<LMSBook> books = new ArrayList<LMSBook>();
+		for (Document document : hits.getDocs()) {
+			long bookId = GetterUtil.getLong(
+					document.get(Field.ENTRY_CLASS_PK));
+			
+			LMSBook book = fetchLMSBook(bookId);
+			
+			books.add(book);
+		}
+		
+		return books;
+	}
+
+	public Hits getHits(String keyword, long companyId, long groupId) {
 		// 1. Preparing a Search Context
 		SearchContext searchContext = new SearchContext();
 		searchContext.setCompanyId(companyId);
@@ -246,22 +270,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		} catch (SearchException e) {
 			e.printStackTrace();
 		}
-		
-		// 4. return null if no results
-		if (Validator.isNull(hits) || hits.getLength() == 0) 
-			return null;
-		
-		// 5. Convert results into a List of LMSBook objects
-		List<LMSBook> books = new ArrayList<LMSBook>();
-		for (Document document : hits.getDocs()) {
-			long bookId = GetterUtil.getLong(
-					document.get(Field.ENTRY_CLASS_PK));
-			LMSBook book = fetchLMSBook(bookId);
-			
-			books.add(book);
-		}
-		
-		return books;
+		return hits;
 	}
  	
 	public List<LMSBorrowing> getBorrowings(long bookId) 
@@ -335,5 +344,68 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 				}
 			}
 		}
+	}
+	
+	public List<LMSBook> advancedSearch(long companyId, long groupId, 
+			String bookTitle, String author, boolean andSearch) {
+		
+		Hits hits = null;
+		try {
+			hits = getHits(
+				companyId, groupId, bookTitle, author, andSearch);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (hits == null || hits.getLength() == 0) return null;
+		
+		List<LMSBook> books = new ArrayList<LMSBook>();
+		for (int i=0; i<hits.getLength(); i++) {
+			Document doc = hits.doc(i);
+			
+			long bookId = GetterUtil.getLong(
+					doc.get(Field.ENTRY_CLASS_PK));
+			try {
+				LMSBook book = fetchLMSBook(bookId);
+				books.add(book);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return books;
+	}
+	
+	protected Hits getHits(
+		long companyId, long groupId, String bookTitle, 
+		String author, boolean andSearch)
+				throws SystemException {
+	
+		// 1. Preparing the Search Context
+		SearchContext searchContext = new SearchContext();
+		searchContext.setAndSearch(andSearch);
+		searchContext.setCompanyId(companyId);
+		long[] groupIds = {groupId};
+		searchContext.setGroupIds(groupIds);
+		
+		BooleanQuery searchQuery = 
+				BooleanQueryFactoryUtil.create(searchContext);
+		try {
+			searchQuery.addTerm(Field.TITLE, bookTitle);
+			searchQuery.addTerm("author", author);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+	
+		// 2. Firing the query and getting the hits
+		Hits hits = null;
+		try {
+			hits = SearchEngineUtil.search(
+					searchContext, searchQuery);
+		} catch (SearchException e) {
+			e.printStackTrace();
+		}
+		
+		return hits;
 	}
 }
