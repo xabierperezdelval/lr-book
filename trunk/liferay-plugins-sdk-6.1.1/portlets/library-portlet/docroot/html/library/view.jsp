@@ -88,3 +88,10 @@
 <library-ui:subscribe 
 	classPK="<%= themeDisplay.getScopeGroupId() %>" 
 	className="<%= LMSBook.class.getName() %>"/>
+
+<hr/>
+<portlet:renderURL var="formNavigatorURL">
+	<portlet:param name="jspPage" 
+		value="/html/sample/form-navigator.jsp"/>
+</portlet:renderURL>
+<aui:a href="<%= formNavigatorURL %>" label="Form Navigator"/>
