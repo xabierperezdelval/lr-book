@@ -312,24 +312,23 @@ public class LibraryPortlet extends MVCPortlet {
 			ActionResponse actionResponse) throws IOException, PortletException {
 
 		String searchTerm = ParamUtil.getString(actionRequest, "searchTerm");
+		
+		if (Validator.isNull(searchTerm)) return;
 
-		if (Validator.isNotNull(searchTerm)) {
+		ThemeDisplay themeDisplay = (ThemeDisplay) 
+			actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		try {
+			List<LMSBook> lmsBooks = LMSBookLocalServiceUtil
+				.searchIndex(searchTerm, 
+					themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
 
-			ThemeDisplay themeDisplay = (ThemeDisplay) 
-				actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-			
-			try {
-				List<LMSBook> lmsBooks = LMSBookLocalServiceUtil
-					.searchIndex(searchTerm, 
-						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
+			actionRequest.setAttribute("SEARCH_RESULT", lmsBooks);
+			actionResponse.setRenderParameter("jspPage",
+					LibraryConstants.PAGE_LIST);
 
-				actionRequest.setAttribute("SEARCH_RESULT", lmsBooks);
-				actionResponse.setRenderParameter("jspPage",
-						LibraryConstants.PAGE_LIST);
-
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -389,6 +388,7 @@ public class LibraryPortlet extends MVCPortlet {
 
 		actionResponse.setPortletMode(PortletMode.VIEW);
 	}
+
 
 	@ProcessEvent(qname = "{http://liferay.com}lmsBook")
 	public void quickAdd(EventRequest request, EventResponse response)
@@ -581,5 +581,22 @@ public class LibraryPortlet extends MVCPortlet {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void doView(RenderRequest renderRequest,
+			RenderResponse renderResponse) throws IOException, PortletException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) 
+				renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long companyId = themeDisplay.getCompanyId();
+		long groupId = themeDisplay.getScopeGroupId();
+		
+		List<LMSBook> books = LMSBookLocalServiceUtil.advancedSearch(
+			companyId, groupId, "java", "veena", true);
+		
+		System.out.println(books);
+		
+		super.doView(renderRequest, renderResponse);
 	}
 }

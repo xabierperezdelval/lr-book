@@ -6,6 +6,8 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -64,6 +66,14 @@ public class LMSBookAssetRenderer extends BaseAssetRenderer {
 		}
 		
 		return page;
+	}
+	
+	public String getURLViewInContext(
+			LiferayPortletRequest liferayPortletRequest,
+			LiferayPortletResponse liferayPortletResponse,
+			String noSuchEntryRedirect) throws Exception {
+		
+		return noSuchEntryRedirect;
 	}
 	
 	private LMSBook _lmsBook;
