@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql
+		id="com.mpower.slayer.service.persistence.InvitationCardFinderImpl.findCountByUserId"> 
+ 			<![CDATA[
+ 				SELECT userId, count(userId) as cnt
+ 				FROM  mpower_InvitationCard 
+ 				WHERE status=2 
+ 				GROUP BY userId
+ 				order by cnt desc 
+ 			]]>
+	</sql>
+</custom-sql>
