@@ -114,7 +114,7 @@ public class LibraryPortlet extends MVCPortlet {
 						: LibraryConstants.PAGE_SUCCESS);
 		actionResponse.sendRedirect(successPageURL.toString());
 	}
-
+	
 	private void saveAddress(PortletRequest request, LMSBook lmsBook) {
 		boolean saveAddress = ParamUtil.getBoolean(request, "saveAddress",
 				false);
@@ -196,10 +196,8 @@ public class LibraryPortlet extends MVCPortlet {
 		Address address = null;
 		if (addressId > 0l) {
 			try {
-				address = AddressLocalServiceUtil.getAddress(addressId);
+				address = AddressLocalServiceUtil.fetchAddress(addressId);
 				address.setModifiedDate(new Date());
-			} catch (PortalException e) {
-				e.printStackTrace();
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -214,7 +212,7 @@ public class LibraryPortlet extends MVCPortlet {
 		}
 		return address;
 	}
-
+	
 	public void deleteBook(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 
