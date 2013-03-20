@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-	<bean id="com.mpower.slayer.service.InvitationCardLocalService" class="com.mpower.slayer.service.impl.InvitationCardLocalServiceImpl" />
-	<bean id="com.mpower.slayer.service.persistence.InvitationCardPersistence" class="com.mpower.slayer.service.persistence.InvitationCardPersistenceImpl" parent="basePersistence" />
-	<bean id="com.mpower.slayer.service.persistence.InvitationCardFinder" class="com.mpower.slayer.service.persistence.InvitationCardFinderImpl" parent="basePersistence" />
-</beans>
