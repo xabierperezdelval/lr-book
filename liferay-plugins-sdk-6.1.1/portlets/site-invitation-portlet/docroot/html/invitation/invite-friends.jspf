@@ -1,0 +1,23 @@
+<portlet:actionURL var="saveInvitationsURL" name="saveInvitations" />
+
+<aui:form action="<%= saveInvitationsURL %>">
+	<aui:input name="textWithEmails" 
+			type="textarea" 
+			label="text-with-emails-label" 
+			helpMessage="text-with-emails-help-message">
+		<aui:validator name="required"/>
+	</aui:input>	
+	<aui:button type="submit" value="Invite"/>
+</aui:form>
+
+<aui:script>
+	AUI().ready(function(A){
+		var frm = document.<portlet:namespace/>fm;
+		var fld = frm.<portlet:namespace/>textWithEmails;
+		Liferay.Util.focusFormField(fld);
+		
+		// set size of the field
+		fld.setAttribute("rows", "10");
+		fld.setAttribute("cols", "70");
+	});
+</aui:script>
