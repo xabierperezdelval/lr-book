@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="com.mpower.slayer.service.persistence.SiteInvitationFinderImpl.breakupByUserId"> 
+		<![CDATA[
+			SELECT userId, count(userId) as cnt
+			FROM  mpower_siteinvitation 
+			WHERE status = 2 and inviteeNewUserId > 0
+			GROUP BY userId
+			order by cnt desc 
+		]]>
+	</sql>
+</custom-sql>
