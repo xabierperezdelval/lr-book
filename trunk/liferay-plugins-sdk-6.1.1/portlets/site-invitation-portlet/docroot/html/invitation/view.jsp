@@ -1,9 +1,15 @@
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@include file="/html/invitation/init.jsp"%>
  
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", InvitationConstants.TAB_STATISTICS);
 %>
-
+	
+<c:if test="<%= SessionMessages.contains(portletRequest, InvitationConstants.KEY_MESSAGE_SUCCESS) %>">
+	<div class="portlet-msg-success">
+		<%= SessionMessages.get(portletRequest, InvitationConstants.KEY_MESSAGE_SUCCESS) %>
+	</div>
+</c:if>	
 <portlet:renderURL var="portletURL" />
 
 <liferay-ui:tabs names="statistics,invite-friends,my-invitations" 

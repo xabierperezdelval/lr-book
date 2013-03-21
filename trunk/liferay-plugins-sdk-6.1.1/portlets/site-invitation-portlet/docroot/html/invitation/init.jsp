@@ -4,7 +4,10 @@
 <%@taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<%@page import="javax.portlet.PortletRequest"%>
+
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="com.liferay.portal.kernel.util.JavaConstants"%>
 
 <%@page import="com.mpower.util.InvitationConstants"%>
 
@@ -32,4 +35,8 @@
 --%>
 
 <portlet:defineObjects />
-<liferay-theme:defineObjects /> 
+<liferay-theme:defineObjects />
+
+<%
+	PortletRequest portletRequest = (PortletRequest)request.getAttribute(JavaConstants.JAVAX_PORTLET_REQUEST);
+%>

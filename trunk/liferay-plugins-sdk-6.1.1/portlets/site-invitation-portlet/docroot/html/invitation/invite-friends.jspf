@@ -1,6 +1,11 @@
+<liferay-ui:error key="<%= InvitationConstants.KEY_MESSAGE_INVALID_EMAILS %>" 
+	message="<%= InvitationConstants.KEY_MESSAGE_INVALID_EMAILS %>"/>
+	
 <portlet:actionURL var="saveInvitationsURL" name="saveInvitations" />
 
 <aui:form action="<%= saveInvitationsURL %>">
+	<aui:input type="hidden" name="tabs1" 
+		value="<%= InvitationConstants.TAB_INVITE_FRIENDS %>" />
 	<aui:input name="textWithEmails" 
 			type="textarea" 
 			label="text-with-emails-label" 

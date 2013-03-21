@@ -20,10 +20,10 @@ public class InvitationUtil {
 	
 	/*
 	public static void  getRank(HttpServletRequest request) throws SystemException {
-			
+		
 		List<UserRank> ranks=null;
 		final String append=",";
-		ranks = InvitationCardLocalServiceUtil.findByCount();
+		ranks = SiteInvitationLocalServiceUtil.findRankByCount();
 		Map<Integer , String> rankMap = new LinkedHashMap<Integer, String>();
 		for(UserRank userRank: ranks){
 			long userId=userRank.getUserId();
@@ -40,41 +40,26 @@ public class InvitationUtil {
 		request.setAttribute("mapObject", rankMap);
 	}
 
-	
-	public static List<InvitationCard> getInvitationByStatus(int status)
-			throws SystemException {
-		
-		List<InvitationCard> invitationCard = null;
-		try {
-			invitationCard = InvitationCardLocalServiceUtil.findbystatus(status);
-		} catch (Exception e) {
 
-		}
-		return invitationCard;
 
-	}
-
-	public static int caluclatePoints(ThemeDisplay themedisplay,
-			RenderRequest request) throws SystemException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+	public static int caluclatePoints(long inviterId,RenderRequest request) throws SystemException {
 		PortletPreferences preferences = request.getPreferences();
-	
 		String acceptancePoints = preferences.getValue("accept", "");
+		System.out.println(acceptancePoints);
 		int emailAcceptancePoints = Integer.parseInt(acceptancePoints);
+		System.out.println(emailAcceptancePoints);
+		System.out.println("acceptedddd"+emailAcceptancePoints);
 		String sentPoints = preferences.getValue("sent", "");
 		int emailSentPoints = Integer.parseInt(sentPoints);
-
+		System.out.println("emailSentPoints"+emailSentPoints);
 		// points Calculation
-		List<InvitationCard> pointCaluclationsInvited = InvitationCardLocalServiceUtil
-					.findByUserIdSatus(themeDisplay.getUserId(),InvitationConstants.STATUS_INVITED);
+		List<SiteInvitation> pointCaluclationsInvited = SiteInvitationLocalServiceUtil.getUserInvitations(inviterId, InvitationConstants.STATUS_INVITED);
+					
 		
 		int pointSize = pointCaluclationsInvited.size();
 		int invitationsPoints = emailSentPoints * pointSize;
 		
-		List<InvitationCard> pointCaluclationAccepted = InvitationCardLocalServiceUtil
-				.findByUserIdSatus(themeDisplay.getUserId(),InvitationConstants.STATUS_ACCEPTED);
-		
+		List<SiteInvitation> pointCaluclationAccepted = SiteInvitationLocalServiceUtil.getUserInvitations(inviterId, InvitationConstants.STATUS_INVITED);
 		int acceptedSize = pointCaluclationAccepted.size();
 		int invitationsAccept = emailAcceptancePoints * acceptedSize;
 		int pointCaluclation = invitationsAccept + invitationsPoints;
@@ -82,5 +67,20 @@ public class InvitationUtil {
 		return pointCaluclation;
 
 	}
+	
+	
+	public static List<SiteInvitation> chartDispalay(long inviterId,int status)
+			throws SystemException {
+		
+		List<SiteInvitation> siteInvitation = null;
+		try {
+			siteInvitation = SiteInvitationLocalServiceUtil.getUserInvitations(inviterId, status);
+		} catch (Exception e) {
+
+		}
+		return siteInvitation;
+
+	}
 	*/
+
 }
