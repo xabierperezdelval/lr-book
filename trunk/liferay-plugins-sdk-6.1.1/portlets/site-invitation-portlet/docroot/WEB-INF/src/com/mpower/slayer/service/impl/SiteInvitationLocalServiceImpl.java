@@ -24,6 +24,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.mpower.slayer.model.SiteInvitation;
 import com.mpower.slayer.model.impl.SiteInvitationImpl;
 import com.mpower.slayer.service.base.SiteInvitationLocalServiceBaseImpl;
+import com.mpower.slayer.service.persistence.SiteInvitationFinderUtil;
 import com.mpower.util.InvitationConstants;
 
 /**
@@ -137,5 +138,33 @@ public class SiteInvitationLocalServiceImpl extends
 			throws SystemException {
 		
 		return siteInvitationPersistence.findByUserId_Status(inviterId, status);
+	}
+	
+	public int getUserRank(long userId) {
+		
+		System.out.println("calling getUserRank.....");
+		
+		return SiteInvitationFinderUtil.getUserRank(100);
+	}
+	
+	public int getTotalPoints(long userId, int pointsForInviting, int pointsForAccepting) {
+		
+		int points = 0;
+		
+		try {
+			int invitedCount = siteInvitationPersistence.countByUserId_Status(userId, InvitationConstants.STATUS_INVITED);
+			points += invitedCount * pointsForInviting;
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			int acceptedCount = siteInvitationPersistence.countByUserId_Status(userId, InvitationConstants.STATUS_ACCEPTED);
+			points += acceptedCount * pointsForAccepting;
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return points;
 	}
 }

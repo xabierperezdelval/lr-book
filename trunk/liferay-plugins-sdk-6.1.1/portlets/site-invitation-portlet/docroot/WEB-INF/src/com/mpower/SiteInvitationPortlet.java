@@ -13,7 +13,6 @@ import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.language.UnicodeLanguageUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -111,6 +110,9 @@ public class SiteInvitationPortlet extends MVCPortlet {
 				request.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 		portletDisplay.setShowConfigurationIcon(true);
+		
+		SiteInvitationLocalServiceUtil.getUserRank(100);
+		
 		super.render(request, response);
 	}
 }
