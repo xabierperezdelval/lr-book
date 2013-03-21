@@ -23,8 +23,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.search.BooleanClause;
-import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
@@ -33,11 +31,11 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.ParseException;
-import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
@@ -333,7 +331,7 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 				LMSUtil.createFolder(folderName, companyId);
 				
 				// Saving the file now
-				String filePath = folderName + File.separator + fileName;
+				String filePath = folderName + StringPool.SLASH + fileName;
 				try {
 					DLStoreUtil.addFile(companyId, 
 						CompanyConstants.SYSTEM, filePath, sampleChapter);
@@ -390,13 +388,13 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		
 		BooleanQuery searchQuery = 
 				BooleanQueryFactoryUtil.create(searchContext);
-		try {
-			searchQuery.addTerm(Field.TITLE, bookTitle);
-			searchQuery.addTerm("author", author);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-	
+		
+		appendSearchTerm(Field.TITLE, bookTitle, 
+			searchContext.isAndSearch(), searchQuery);
+		appendSearchTerm("author", author, 
+			searchContext.isAndSearch(), searchQuery);
+		
+		
 		// 2. Firing the query and getting the hits
 		Hits hits = null;
 		try {
@@ -407,5 +405,21 @@ public class LMSBookLocalServiceImpl extends LMSBookLocalServiceBaseImpl {
 		}
 		
 		return hits;
+	}
+
+	private void appendSearchTerm(String field, String value, 
+		boolean isAndSearch, BooleanQuery searchQuery) {
+		
+		if (Validator.isNotNull(value)) {
+			if (isAndSearch) {
+				searchQuery.addRequiredTerm(field, value, true);
+			} else {
+				try {
+					searchQuery.addTerm(field, value, true);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

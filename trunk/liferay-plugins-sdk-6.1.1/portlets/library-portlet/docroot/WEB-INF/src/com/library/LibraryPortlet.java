@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassInvoker;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
@@ -61,7 +62,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
-import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.liferay.util.portlet.PortletProps;
 import com.slayer.model.LMSBook;
@@ -496,7 +496,7 @@ public class LibraryPortlet extends MVCPortlet {
 
 			long companyId = PortalUtil.getCompanyId(resourceRequest);
 			long repositoryId = CompanyConstants.SYSTEM;
-			String filePath = "Sample_Chapters" + File.separator + fileName;
+			String filePath = "Sample_Chapters" + StringPool.SLASH + fileName;
 
 			File file = null;
 			try {
@@ -560,25 +560,6 @@ public class LibraryPortlet extends MVCPortlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
-	}
-
-	private void logSocialActivity(PortletRequest portletRequest) {
-		ThemeDisplay themeDisplay = (ThemeDisplay) 
-				portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		long userId = themeDisplay.getUserId();
-		long groupId = themeDisplay.getScopeGroupId();
-		long classPK = ParamUtil.getLong(portletRequest, "classPK");
-		
-		try {
-			SocialActivityLocalServiceUtil.addActivity(
-				userId, groupId, LMSBook.class.getName(),
-				classPK, 1, 
-				"User commented on book: " + classPK, classPK);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void doView(RenderRequest renderRequest,
