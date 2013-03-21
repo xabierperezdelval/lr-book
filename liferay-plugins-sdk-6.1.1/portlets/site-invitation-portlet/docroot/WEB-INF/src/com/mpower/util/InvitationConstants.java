@@ -5,7 +5,11 @@ public interface InvitationConstants {
 	
 	static final int STATUS_INVITED = 1;
 	
-	static final int STATUS_ACCEPTED = 2;	
+	static final int STATUS_ACCEPTED = 2;
+	
+	static final String KEY_MESSAGE_SUCCESS = "key.message.success";
+	
+	static final String KEY_MESSAGE_INVALID_EMAILS = "key.message.invalid.emails";
 	
 	static final String KEY_MESSAGE_INVITED_EMAILS = "key.message.invited.emails";
 	
