@@ -1,1 +1,21 @@
-My Invitations
+<% 
+	int status = ParamUtil.getInteger(request, "status", InvitationConstants.STATUS_ALL);
+	List<SiteInvitation> siteInvitations = SiteInvitationLocalServiceUtil.getUserInvitations(user.getUserId(), status);
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("tabs1", InvitationConstants.TAB_MY_INVITATIONS);
+%>
+		
+<liferay-ui:search-container delta="5" emptyResultsMessage="No Invitations to display" iteratorURL="<%= iteratorURL %>">
+	<liferay-ui:search-container-results
+		total="<%= siteInvitations.size() %>"
+		results="<%= ListUtil.subList(siteInvitations,searchContainer.getStart(), searchContainer.getEnd())%>" />
+		
+	<liferay-ui:search-container-row className="com.mpower.slayer.model.SiteInvitation" modelVar="siteInvitation">
+		<liferay-ui:search-container-column-text name="inviteeEmail" />
+		<liferay-ui:search-container-column-text name="date-invited">
+			<fmt:formatDate value="<%= siteInvitation.getCreateDate() %>" pattern="dd/MMM/yyyy"/>
+		</liferay-ui:search-container-column-text>
+	</liferay-ui:search-container-row>
+		
+	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
+</liferay-ui:search-container>

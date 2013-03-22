@@ -7,6 +7,8 @@ public interface InvitationConstants {
 	
 	static final int STATUS_ACCEPTED = 2;
 	
+	static final int STATUS_ALL = -1;
+	
 	static final String KEY_MESSAGE_SUCCESS = "key.message.success";
 	
 	static final String KEY_MESSAGE_INVALID_EMAILS = "key.message.invalid.emails";

@@ -1,5 +1,2 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@include file="/html/invitation/init.jsp"%>
 
-<portlet:defineObjects />
-
-This is the <b>Site Invitations</b> portlet in Config mode.
