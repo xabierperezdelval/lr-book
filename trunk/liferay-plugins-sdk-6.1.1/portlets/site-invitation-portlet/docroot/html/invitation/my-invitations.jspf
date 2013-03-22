@@ -3,7 +3,21 @@
 	List<SiteInvitation> siteInvitations = SiteInvitationLocalServiceUtil.getUserInvitations(user.getUserId(), status);
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("tabs1", InvitationConstants.TAB_MY_INVITATIONS);
+	iteratorURL.setParameter("status", String.valueOf(status));
 %>
+
+<portlet:renderURL var="allInvitationsURL">
+	<portlet:param name="tabs1" value="<%= InvitationConstants.TAB_MY_INVITATIONS %>"/>
+</portlet:renderURL>
+<portlet:renderURL var="invitedInvitationsURL">
+	<portlet:param name="tabs1" value="<%= InvitationConstants.TAB_MY_INVITATIONS %>"/>
+	<portlet:param name="status" value="<%= String.valueOf(InvitationConstants.STATUS_INVITED) %>"/>
+</portlet:renderURL>	
+<portlet:renderURL var="acceptedInvitationsURL">
+	<portlet:param name="tabs1" value="<%= InvitationConstants.TAB_MY_INVITATIONS %>"/>
+	<portlet:param name="status" value="<%= String.valueOf(InvitationConstants.STATUS_ACCEPTED) %>"/>
+</portlet:renderURL>				
+<aui:a href="<%= allInvitationsURL %>" label="All"/> | <aui:a href="<%= invitedInvitationsURL %>" label="Invited"/> | <aui:a href="<%= acceptedInvitationsURL %>" label="Accepted"/>
 		
 <liferay-ui:search-container delta="5" emptyResultsMessage="No Invitations to display" iteratorURL="<%= iteratorURL %>">
 	<liferay-ui:search-container-results
