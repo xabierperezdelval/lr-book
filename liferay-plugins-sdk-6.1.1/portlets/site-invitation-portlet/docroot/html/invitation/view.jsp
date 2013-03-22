@@ -1,4 +1,8 @@
+<%@page import="com.mpower.slayer.model.SiteInvitation"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mpower.slayer.service.SiteInvitationLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@include file="/html/invitation/init.jsp"%>
  
 <%

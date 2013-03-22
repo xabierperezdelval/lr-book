@@ -137,7 +137,13 @@ public class SiteInvitationLocalServiceImpl extends
 	public List<SiteInvitation> getUserInvitations(long inviterId, int status) 
 			throws SystemException {
 		
-		return siteInvitationPersistence.findByUserId_Status(inviterId, status);
+		List<SiteInvitation> siteInvitations = null;
+		
+		siteInvitations = (status == InvitationConstants.STATUS_ALL)? 
+			siteInvitationPersistence.findByUserId(inviterId) : 
+				siteInvitationPersistence.findByUserId_Status(inviterId, status);
+		
+		return siteInvitations;
 	}
 	
 	public int getUserRank(long userId) {
