@@ -1,8 +1,4 @@
-<%@page import="com.mpower.slayer.model.SiteInvitation"%>
-<%@page import="java.util.List"%>
-<%@page import="com.mpower.slayer.service.SiteInvitationLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@include file="/html/invitation/init.jsp"%>
  
 <%
@@ -27,7 +23,7 @@
 	</c:when>
 	
 	<c:when test="<%= tabs1.equalsIgnoreCase(InvitationConstants.TAB_MY_INVITATIONS) %>">
-		<%@include file="/html/invitation/my-invitations.jspf"%>
+		<%@include file="/html/invitation/my-invitations.jspf"%>		
 	</c:when>
 	
 	<c:otherwise>
