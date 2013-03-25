@@ -146,11 +146,28 @@ public class SiteInvitationLocalServiceImpl extends
 		return siteInvitations;
 	}
 	
+	public int getUserInvitationsCount(long inviterId, int status) {
+		
+		int count = 0;
+		
+		if (userHasInvitations(inviterId)) {
+			List<SiteInvitation> siteInvitations = null;
+			try {
+				siteInvitations = getUserInvitations(inviterId, status);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			if (Validator.isNotNull(siteInvitations) && !siteInvitations.isEmpty()) {
+				count = siteInvitations.size();
+			}
+		} 
+		
+		return count;
+	}
+	
 	public int getUserRank(long userId) {
 		
-		System.out.println("calling getUserRank.....");
-		
-		return SiteInvitationFinderUtil.getUserRank(100);
+		return SiteInvitationFinderUtil.getUserRank(userId);
 	}
 	
 	public int getTotalPoints(long userId, int pointsForInviting, int pointsForAccepting) {
@@ -172,5 +189,17 @@ public class SiteInvitationLocalServiceImpl extends
 		}
 		
 		return points;
+	}
+	
+	public boolean userHasInvitations(long userId) {
+		
+		int count = 0;
+		try {
+			count = siteInvitationPersistence.countByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return (count > 0);
 	}
 }

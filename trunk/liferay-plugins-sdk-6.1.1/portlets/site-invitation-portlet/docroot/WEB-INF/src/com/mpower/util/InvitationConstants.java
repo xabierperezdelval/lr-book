@@ -28,4 +28,6 @@ public interface InvitationConstants {
 	static final String TAB_STATISTICS = "statistics";
 	
 	static final String TAB_INVITE_FRIENDS = "invite-friends";
+	
+	static final String TAB_CONFIG_TEMPLATE = "invitation-template";
 }
