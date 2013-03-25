@@ -33,11 +33,10 @@
         <portlet-preferences>
             <preference>
                 <name>points-for-inviting</name>
-                <value>2</value>
-                <read-only>true</read-only>
+                <value>3</value>
             </preference>
             <preference>
-                <name>points-for-accepting-invitation</name>
+                <name>points-for-accepting</name>
                 <value>5</value>
             </preference>
         </portlet-preferences>
