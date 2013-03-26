@@ -1,16 +1,11 @@
 package com.mpower;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -21,7 +16,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
-import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.ContentUtil;
@@ -78,15 +72,13 @@ public class SiteInvitationPortlet extends MVCPortlet {
 		//String pattern = LanguageUtil.get(themeDisplay.getLocale(), InvitationConstants.KEY_MESSAGE_INVITED_EMAILS);
 		String pattern = LanguageUtil.get(themeDisplay.getLocale(), "key-message-invited-emails");
 		
-		System.out.println("pattern ==> " + pattern);
 		String successMessage = themeDisplay.translate(pattern, arguments);
 		SessionMessages.add(actionRequest, InvitationConstants.KEY_MESSAGE_SUCCESS, successMessage);
 		
 		if (!validInvitations) return;
 				
 		// 3. Register in the MessageBus
-		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(actionRequest);
-		String createAccountURL = PortalUtil.getCreateAccountURL(httpServletRequest, themeDisplay);
+		String createAccountURL = InvitationUtil.getCreateAccountURL(themeDisplay);
 		Message message = new Message();
 		message.put("inviterId", Long.valueOf(inviterId));
 		message.put("createAccountURL", createAccountURL);
@@ -102,17 +94,5 @@ public class SiteInvitationPortlet extends MVCPortlet {
 		fromAddress.setPersonal(user.getFullName());
 		message.put("fromAddress", fromAddress);
 		MessageBusUtil.sendMessage("liferay/invitation", message);
-	}
-	
-	public void render(RenderRequest request, RenderResponse response)
-			throws PortletException, IOException {
-		ThemeDisplay themeDisplay = (ThemeDisplay)
-				request.getAttribute(WebKeys.THEME_DISPLAY);
-		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
-		portletDisplay.setShowConfigurationIcon(true);
-		
-		SiteInvitationLocalServiceUtil.getUserRank(100);
-		
-		super.render(request, response);
 	}
 }
