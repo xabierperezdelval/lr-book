@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.portlet.PortletMode;
-import javax.portlet.PortletRequest;
 import javax.portlet.WindowState;
 
 import com.liferay.portal.kernel.exception.SystemException;
@@ -16,6 +15,7 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortletKeys;
 
 public class InvitationUtil {
 	
@@ -35,24 +35,28 @@ public class InvitationUtil {
 	}
 	
 	public static String getCreateAccountURL(ThemeDisplay themeDisplay) {
+		return getCreateAccountURL(themeDisplay.getScopeGroupId(), themeDisplay.getURLPortal(), themeDisplay.getUserId());
+	}
+	
+	public static String getCreateAccountURL(long groupId, String portalURL, long userId) {
 		Layout layout = null;
 		try {
-			layout = LayoutLocalServiceUtil.fetchFirstLayout(themeDisplay.getScopeGroupId(), false, 0l);
+			layout = LayoutLocalServiceUtil.fetchFirstLayout(groupId, false, 0l);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(themeDisplay.getURLPortal());
+		sb.append(portalURL);
 		sb.append(layout.getFriendlyURL());
-		sb.append("?p_p_id=58");
-		sb.append("&p_p_lifecycle=").append(PortletRequest.RENDER_PHASE);
+		sb.append("?p_p_id=").append(PortletKeys.LOGIN);
+		sb.append("&p_p_lifecycle=").append("0");
 		sb.append("&p_p_state=").append(WindowState.MAXIMIZED);
 		sb.append("&p_p_mode=").append(PortletMode.VIEW);
 		sb.append("&saveLastPath=0");
-		sb.append("&_58_struts_action=");
+		sb.append("&_").append(PortletKeys.LOGIN).append("_struts_action=");
 		sb.append(HttpUtil.encodeURL("/login/create_account"));
-		sb.append("&inviterId=").append(themeDisplay.getUserId());
+		sb.append("&inviterId=").append(userId);
 		
 		return sb.toString();
 	}

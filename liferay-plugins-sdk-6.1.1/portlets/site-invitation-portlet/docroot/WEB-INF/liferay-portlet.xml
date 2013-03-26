@@ -9,12 +9,24 @@
 		<configuration-action-class>
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>
+		<scheduler-entry>
+			<scheduler-event-listener-class>
+				com.mpower.job.ReminderInvitationJob
+			</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>1</simple-trigger-value>
+					<time-unit>MINUTE</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
 		<portlet-layout-listener-class>
 			com.mpower.listener.MyPortletLayoutListener
 		</portlet-layout-listener-class>
 		<control-panel-entry-category>my</control-panel-entry-category>
 		<control-panel-entry-weight>1.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
+		
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
