@@ -14,9 +14,14 @@
 
 package com.mpower.slayer.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -202,5 +207,26 @@ public class SiteInvitationLocalServiceImpl extends
 		}
 		
 		return (count > 0);
+	}
+	
+	public List<SiteInvitation> getListForSendingReminder() {
+		List<SiteInvitation> siteInvitations = null;
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(SiteInvitation.class);
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", InvitationConstants.STATUS_INVITED));
+		dynamicQuery.add(RestrictionsFactoryUtil.lt("reminders", 3));
+		
+		Calendar calendar = new GregorianCalendar();
+		calendar.roll(Calendar.DATE, -(10));
+		
+		dynamicQuery.add(RestrictionsFactoryUtil.lt("lastReminderDate", calendar.getTime()));
+		
+		try {
+			siteInvitations = dynamicQuery(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return siteInvitations;
 	}
 }
