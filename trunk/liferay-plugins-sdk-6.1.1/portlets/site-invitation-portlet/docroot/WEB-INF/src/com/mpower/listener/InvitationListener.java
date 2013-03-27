@@ -59,6 +59,7 @@ public class InvitationListener extends BaseMessageListener {
 			
 			siteInvitation.setStatus(InvitationConstants.STATUS_INVITED);
 			siteInvitation.setModifiedDate(new Date());
+			siteInvitation.setLastReminderDate(new Date());
 			try {
 				SiteInvitationLocalServiceUtil.updateSiteInvitation(siteInvitation);
 			} catch (SystemException e) {

@@ -20,6 +20,17 @@
 		<column name="status" type="int"/>
 		<column name="inviteeNewUserId" type="long"/>
 		
+		<!-- Reminders -->
+		<column name="reminders" type="int"/>
+		<column name="lastReminderDate" type="Date"/>
+		
+		<!-- Order By -->
+		<order>
+			<order-column name="createDate" order-by="desc" />
+			<order-column name="modifiedDate" order-by="desc" />
+			<order-column name="inviteeEmail" order-by="asc" />
+		</order>
+		
 		<!-- Finder Tags -->
 		<finder name="Status" return-type="Collection">
 			<finder-column name="status" />
@@ -38,5 +49,7 @@
 			<finder-column name="userId" />
 			<finder-column name="status" />
 		</finder>
+		
+
 	</entity>
 </service-builder>
