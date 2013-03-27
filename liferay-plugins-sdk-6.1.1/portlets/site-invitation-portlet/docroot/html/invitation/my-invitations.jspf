@@ -25,8 +25,15 @@
 	<liferay-ui:search-container-row className="com.mpower.slayer.model.SiteInvitation" modelVar="siteInvitation">
 		<liferay-ui:search-container-column-text name="inviteeEmail" />
 		<liferay-ui:search-container-column-text name="date-invited">
-			<fmt:formatDate value="<%= siteInvitation.getCreateDate() %>" pattern="dd/MMM/yyyy"/>
+			<fmt:formatDate value="<%= siteInvitation.getCreateDate() %>" pattern="dd/MMM/yyyy HH:mm"/>
 		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="date-accepted">
+			<fmt:formatDate value="<%= siteInvitation.getModifiedDate() %>" pattern="dd/MMM/yyyy HH:mm" />
+		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="status">
+			flag
+		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="reminders"/>
 	</liferay-ui:search-container-row>
 		
 	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />

@@ -9,11 +9,11 @@ public interface InvitationConstants {
 	
 	static final int STATUS_ALL = -1;
 	
-	static final String KEY_MESSAGE_SUCCESS = "key.message.success";
+	static final String KEY_MESSAGE_SUCCESS = "key-message-success";
 	
-	static final String KEY_MESSAGE_INVALID_EMAILS = "key.message.invalid.emails";
+	static final String KEY_MESSAGE_INVALID_EMAILS = "key-message-invalid-emails";
 	
-	static final String KEY_MESSAGE_INVITED_EMAILS = "key.message.invited.emails";
+	static final String KEY_MESSAGE_INVITED_EMAILS = "key-message-invited-emails";
 	
 	static final String EMAIL_TEMPLATE_PATH = "/com/mpower/listener/invitation.tmpl";
 	

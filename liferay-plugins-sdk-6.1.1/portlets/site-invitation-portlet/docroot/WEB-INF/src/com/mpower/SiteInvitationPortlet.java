@@ -1,11 +1,15 @@
 package com.mpower;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -94,5 +98,15 @@ public class SiteInvitationPortlet extends MVCPortlet {
 		fromAddress.setPersonal(user.getFullName());
 		message.put("fromAddress", fromAddress);
 		MessageBusUtil.sendMessage("liferay/invitation", message);
+	}
+	
+	public void render(RenderRequest request, RenderResponse response)
+			throws PortletException, IOException {
+
+		// setting the configuration icon
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		themeDisplay.getPortletDisplay().setShowConfigurationIcon(true);
+		
+		super.render(request, response);
 	}
 }

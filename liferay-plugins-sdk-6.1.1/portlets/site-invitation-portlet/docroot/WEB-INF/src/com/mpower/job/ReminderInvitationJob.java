@@ -1,5 +1,7 @@
 package com.mpower.job;
 
+import java.util.Iterator;
+
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.model.Group;
@@ -18,9 +20,14 @@ public class ReminderInvitationJob extends BaseMessageListener {
 		
 		Group group = GroupLocalServiceUtil.fetchGroup(companyId, GroupConstants.GUEST);
 		
-		System.out.println("createAccountURL ==> " + InvitationUtil.getCreateAccountURL(group.getGroupId(), "", userId));
+		String portalURL = ""; // ???????
+		System.out.println("createAccountURL ==> " + 
+				InvitationUtil.getCreateAccountURL(group.getGroupId(), portalURL, userId));
 		
+		Iterator<String> itr = message.getValues().keySet().iterator();
 		
-		
+		while (itr.hasNext()) {
+			System.out.println(itr.next());
+		}
 	}
 }

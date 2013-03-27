@@ -100,6 +100,7 @@ public class SiteInvitationLocalServiceImpl extends
 
 		siteInvitation.setStatus(InvitationConstants.STATUS_ACCEPTED);
 		siteInvitation.setInviteeNewUserId(inviteeNewUserId);
+		siteInvitation.setModifiedDate(new Date());
 
 		try {
 			siteInvitationPersistence.update(siteInvitation, false);

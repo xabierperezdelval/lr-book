@@ -25,7 +25,9 @@
 	<c:choose>
 		<c:when test="<%= tabs2.equals(InvitationConstants.TAB_CONFIG_TEMPLATE) %>">
 			<aui:input type="hidden" name="tabs2" value="<%= InvitationConstants.TAB_CONFIG_TEMPLATE %>" />
-			<aui:input label="subject" name="preferences--email-subject--" value="<%= emailSubject %>" size="70"/>
+			<aui:input label="subject" name="preferences--email-subject--" value="<%= emailSubject %>" size="70">
+				<aui:validator name="required"/>
+			</aui:input>
 			<aui:field-wrapper label="email-body">
 				<liferay-ui:input-editor initMethod="initEditor" />
 				<aui:input name="preferences--email-body-template--" id="messageBodyId"
@@ -58,8 +60,20 @@
 		</c:when>
 		<c:otherwise>
 			<aui:input type="hidden" name="tabs2" value="general" />
-			<aui:input label="points-for-inviting" name="preferences--points-for-inviting--"  value="<%= pointsForInviting %>" />
-			<aui:input label="points-for-accepting" name="preferences--points-for-accepting--"  value="<%= pointsForAccepting %>" />
+			<aui:input label="points-for-inviting" name="preferences--points-for-inviting--"  value="<%= pointsForInviting %>" inlineLabel="true" size="3">
+				<aui:validator name="required" />
+				<aui:validator name="digits" />
+				<aui:validator name="range">[1,50]</aui:validator>
+			</aui:input>
+			<br/>
+			<aui:input label="points-for-accepting" name="preferences--points-for-accepting--"  value="<%= pointsForAccepting %>" inlineLabel="true" size="3">
+				<aui:validator name="required" />
+				<aui:validator name="digits" />
+				<aui:validator name="range">[1,100]</aui:validator>
+				<aui:validator name="custom" errorMessage="accepting-more-than-inviting">
+					
+				</aui:validator>
+			</aui:input>
 		</c:otherwise>
 	</c:choose>
 	<aui:button type="submit"/>
