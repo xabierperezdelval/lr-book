@@ -73,8 +73,7 @@ public class SiteInvitationPortlet extends MVCPortlet {
 				String.valueOf(alreadyInvited),
 				String.valueOf(totalInvited - (alreadyMember+alreadyInvited))};
 		
-		//String pattern = LanguageUtil.get(themeDisplay.getLocale(), InvitationConstants.KEY_MESSAGE_INVITED_EMAILS);
-		String pattern = LanguageUtil.get(themeDisplay.getLocale(), "key-message-invited-emails");
+		String pattern = LanguageUtil.get(getPortletConfig(), themeDisplay.getLocale(), InvitationConstants.KEY_MESSAGE_INVITED_EMAILS);
 		
 		String successMessage = themeDisplay.translate(pattern, arguments);
 		SessionMessages.add(actionRequest, InvitationConstants.KEY_MESSAGE_SUCCESS, successMessage);
@@ -107,6 +106,19 @@ public class SiteInvitationPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		themeDisplay.getPortletDisplay().setShowConfigurationIcon(true);
 		
+		setSortParams(request);
 		super.render(request, response);
+	}
+
+	private void setSortParams(RenderRequest request) {
+		if (!ParamUtil.getString(request, "tabs1").equalsIgnoreCase(InvitationConstants.TAB_MY_INVITATIONS)) return;
+		
+		String orderByCol = ParamUtil.getString(
+				request, "orderByCol", "createDate");
+		request.setAttribute("orderByCol", orderByCol);
+		
+		String orderByType = ParamUtil.getString(
+				request, "orderByType", "desc");
+		request.setAttribute("orderByType", orderByType);
 	}
 }
