@@ -24,6 +24,7 @@ public class SiteInvitationFinderImpl extends BasePersistenceImpl implements Sit
 		List<Object[]> results = (List<Object[]>)query.list();
 		
 		if (Validator.isNotNull(results) && !results.isEmpty()) {
+			int index = 1;
 			Map<Integer, List<String>> rankMap = new LinkedHashMap<Integer, List<String>>();
 			for (Object[] row: results) {
 				String inviterId = row[0].toString();
@@ -39,14 +40,13 @@ public class SiteInvitationFinderImpl extends BasePersistenceImpl implements Sit
 				rankMap.put(count, userIds);
 				
 				if (inviterId.equals(String.valueOf(userId))) {
-					rank = count;
+					rank = index;
 					break;
 				}
+				index++;
 			}
 		}
 		
 		return rank;
 	}
 }
-
-
