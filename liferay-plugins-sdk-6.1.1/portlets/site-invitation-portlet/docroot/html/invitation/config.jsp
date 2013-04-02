@@ -70,9 +70,6 @@
 				<aui:validator name="required" />
 				<aui:validator name="digits" />
 				<aui:validator name="range">[1,100]</aui:validator>
-				<aui:validator name="custom" errorMessage="accepting-more-than-inviting">
-
-				</aui:validator>
 			</aui:input>
 		</c:otherwise>
 	</c:choose>
