@@ -37,17 +37,18 @@ public class InvitationListener extends BaseMessageListener {
 		String inviterName = message.getString("inviterName");
 		
 		String emailBody = message.getString("emailBody");
-		String[] tokens = {"[{CREATE_ACCOUNT_URL}]", "[{INVITER_NAME}]"};		
+		String[] tokens = {"[$CREATE_ACCOUNT_URL$]", "[$INVITER_NAME$]"};		
 		String subject = "You are invited to join...";
 		
 		for (SiteInvitation siteInvitation : siteInvitations) {
 			
-			createAccountURL += "&inviteeEmail=" + siteInvitation.getInviteeEmail();
-			String[] replacements = {createAccountURL, inviterName};
+			String inviteeEmail = siteInvitation.getInviteeEmail();
+			String inviteeCreateAccountURL = createAccountURL + "&inviteeEmail=" + inviteeEmail;
+			String[] replacements = {inviteeCreateAccountURL, inviterName};
 			emailBody = StringUtil.replace(emailBody, tokens, replacements);
 			
 			InternetAddress toAddress = new InternetAddress();
-			toAddress.setAddress(siteInvitation.getInviteeEmail());
+			toAddress.setAddress(inviteeEmail);
 			
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.setFrom(fromAddress);
