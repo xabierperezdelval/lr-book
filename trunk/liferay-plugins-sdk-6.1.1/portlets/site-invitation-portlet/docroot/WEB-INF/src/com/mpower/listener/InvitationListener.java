@@ -45,7 +45,7 @@ public class InvitationListener extends BaseMessageListener {
 			String inviteeEmail = siteInvitation.getInviteeEmail();
 			String inviteeCreateAccountURL = createAccountURL + "&inviteeEmail=" + inviteeEmail;
 			String[] replacements = {inviteeCreateAccountURL, inviterName};
-			emailBody = StringUtil.replace(emailBody, tokens, replacements);
+			String messageBody = StringUtil.replace(emailBody, tokens, replacements);
 			
 			InternetAddress toAddress = new InternetAddress();
 			toAddress.setAddress(inviteeEmail);
@@ -53,7 +53,7 @@ public class InvitationListener extends BaseMessageListener {
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.setFrom(fromAddress);
 			mailMessage.setTo(toAddress);
-			mailMessage.setBody(emailBody);
+			mailMessage.setBody(messageBody);
 			mailMessage.setSubject(subject);
 			
 			MailServiceUtil.sendEmail(mailMessage);
