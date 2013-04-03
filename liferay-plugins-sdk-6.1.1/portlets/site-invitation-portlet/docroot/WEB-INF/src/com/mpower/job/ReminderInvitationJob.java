@@ -96,17 +96,15 @@ public class ReminderInvitationJob extends BaseMessageListener {
 			mailMessage.setFrom(fromAddress);
 			mailMessage.setTo(toAddress);
 			mailMessage.setBody(messageBody);
+			mailMessage.setHTMLFormat(true);
 			
 			String subject = PortletProps.get(InvitationConstants.PROP_DEFAULT_EMAIL_SUBJECT) + portalURL;
 			mailMessage.setSubject(subject);
 			
 			MailServiceUtil.sendEmail(mailMessage);
 			
-			siteInvitation.setStatus(InvitationConstants.STATUS_INVITED);
-			siteInvitation.setModifiedDate(new Date());
 			siteInvitation.setLastReminderDate(new Date());
-			siteInvitation.setPortalURL(portalURL);
-			
+			siteInvitation.setReminders(siteInvitation.getReminders() + 1);
 			try {
 				SiteInvitationLocalServiceUtil.updateSiteInvitation(siteInvitation);
 			} catch (SystemException e) {
