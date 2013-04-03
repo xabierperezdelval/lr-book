@@ -15,11 +15,13 @@
 	String orderByCol = (String) request.getAttribute("orderByCol");
 	String orderByType = (String) request.getAttribute("orderByType");			
 	BeanComparator comp = new BeanComparator(orderByCol);
-	Collections.sort(siteInvitations, comp);
+	List<SiteInvitation> siteInvitationsTemp = ListUtil.copy(siteInvitations);
+	Collections.sort(siteInvitationsTemp, comp);
 
 	if (orderByType.equalsIgnoreCase("desc")) {
-		Collections.reverse(siteInvitations);
+		Collections.reverse(siteInvitationsTemp);
 	}
+	siteInvitations = ListUtil.copy(siteInvitationsTemp);
 %>
 			
 <aui:a href="<%= filterURL.toString() %>" label="All"/> | 

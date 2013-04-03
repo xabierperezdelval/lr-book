@@ -30,4 +30,6 @@ public interface InvitationConstants {
 	static final String TAB_INVITE_FRIENDS = "invite-friends";
 	
 	static final String TAB_CONFIG_TEMPLATE = "invitation-template";
+	
+	static final String PROP_DEFAULT_EMAIL_SUBJECT = "default-email-subject";
 }
