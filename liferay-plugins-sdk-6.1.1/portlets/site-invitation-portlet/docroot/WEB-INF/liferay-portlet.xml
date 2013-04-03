@@ -6,9 +6,11 @@
 	<portlet>
 		<portlet-name>siteinvitation</portlet-name>
 		<icon>/icon.png</icon>
+		
 		<configuration-action-class>
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>
+		
 		<scheduler-entry>
 			<scheduler-event-listener-class>
 				com.mpower.job.ReminderInvitationJob
@@ -20,6 +22,7 @@
 				</simple>
 			</trigger>
 		</scheduler-entry>
+		
 		<portlet-layout-listener-class>
 			com.mpower.listener.MyPortletLayoutListener
 		</portlet-layout-listener-class>

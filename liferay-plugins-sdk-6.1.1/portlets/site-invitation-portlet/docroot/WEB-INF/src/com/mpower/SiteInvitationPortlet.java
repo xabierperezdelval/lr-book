@@ -90,6 +90,7 @@ public class SiteInvitationPortlet extends MVCPortlet {
 		
 		String defaultTemplate = ContentUtil.get(InvitationConstants.EMAIL_TEMPLATE_PATH);
 		message.put("emailBody", portletPreferences.getValue(InvitationConstants.EMAIL_BODY_TEXT, defaultTemplate));
+		message.put("portalURL", PortalUtil.getPortalURL(actionRequest));
 		
 		User user = PortalUtil.getUser(actionRequest);
 		InternetAddress fromAddress = new InternetAddress();

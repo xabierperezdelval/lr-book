@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.util.portlet.PortletProps;
 import com.mpower.slayer.model.SiteInvitation;
 import com.mpower.slayer.service.SiteInvitationLocalServiceUtil;
 import com.mpower.util.InvitationConstants;
@@ -36,9 +37,10 @@ public class InvitationListener extends BaseMessageListener {
 		InternetAddress fromAddress = (InternetAddress)message.get("fromAddress");
 		String inviterName = message.getString("inviterName");
 		
+		String portalURL = message.getString("portalURL");
 		String emailBody = message.getString("emailBody");
 		String[] tokens = {"[$CREATE_ACCOUNT_URL$]", "[$INVITER_NAME$]"};		
-		String subject = "You are invited to join...";
+		String subject = PortletProps.get(InvitationConstants.PROP_DEFAULT_EMAIL_SUBJECT) + portalURL;
 		
 		for (SiteInvitation siteInvitation : siteInvitations) {
 			
@@ -61,6 +63,8 @@ public class InvitationListener extends BaseMessageListener {
 			siteInvitation.setStatus(InvitationConstants.STATUS_INVITED);
 			siteInvitation.setModifiedDate(new Date());
 			siteInvitation.setLastReminderDate(new Date());
+			siteInvitation.setPortalURL(portalURL);
+			
 			try {
 				SiteInvitationLocalServiceUtil.updateSiteInvitation(siteInvitation);
 			} catch (SystemException e) {

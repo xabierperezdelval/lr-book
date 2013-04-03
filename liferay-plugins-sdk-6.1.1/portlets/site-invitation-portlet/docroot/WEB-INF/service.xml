@@ -21,6 +21,7 @@
 		<column name="inviteeNewUserId" type="long"/>
 		
 		<!-- Reminders -->
+		<column name="portalURL" type="String"/>
 		<column name="reminders" type="int"/>
 		<column name="lastReminderDate" type="Date"/>
 		
@@ -49,7 +50,5 @@
 			<finder-column name="userId" />
 			<finder-column name="status" />
 		</finder>
-		
-
 	</entity>
 </service-builder>

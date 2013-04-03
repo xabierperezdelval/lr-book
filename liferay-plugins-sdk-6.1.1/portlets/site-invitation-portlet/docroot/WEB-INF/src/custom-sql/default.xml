@@ -3,7 +3,7 @@
 	<sql id="com.mpower.slayer.service.persistence.SiteInvitationFinderImpl.breakupByUserId"> 
 		<![CDATA[
 			SELECT userId, count(userId) as cnt
-			FROM  mpower_siteinvitation 
+			FROM  mpower_SiteInvitation 
 			WHERE status = 2 and inviteeNewUserId > 0
 			GROUP BY userId
 			order by cnt desc 
