@@ -57,6 +57,7 @@ public class InvitationListener extends BaseMessageListener {
 			mailMessage.setTo(toAddress);
 			mailMessage.setBody(messageBody);
 			mailMessage.setSubject(subject);
+			mailMessage.setHTMLFormat(true);
 			
 			MailServiceUtil.sendEmail(mailMessage);
 			
