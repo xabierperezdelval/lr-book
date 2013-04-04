@@ -25,6 +25,7 @@ import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.util.ContentUtil;
 import com.liferay.util.portlet.PortletProps;
 import com.mpower.slayer.model.SiteInvitation;
@@ -38,20 +39,7 @@ public class ReminderInvitationJob extends BaseMessageListener {
 		
 		// email template
 		String portletId = (String)message.getValues().get("PORTLET_ID");
-		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(PortletPreferences.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("portletId", portletId));
-		List<PortletPreferences> portletPreferencesList = PortletPreferencesLocalServiceUtil.dynamicQuery(dynamicQuery);
-		HashMap<Long, PortletPreferences> hashMap = new HashMap<Long, PortletPreferences>();
-		
-		for (PortletPreferences portletPreferences: portletPreferencesList) {
-			long companyId = portletPreferences.getOwnerId();
-			if (companyId > 0l && portletPreferences.getPlid() == 0l) {
-				hashMap.put(companyId, portletPreferences);
-				break;
-			}
-		}
-		
+	
 		List<SiteInvitation> siteInvitations = SiteInvitationLocalServiceUtil.getListForSendingReminder();
 		
 		String[] tokens = {"[$CREATE_ACCOUNT_URL$]", "[$INVITER_NAME$]"};
@@ -73,15 +61,13 @@ public class ReminderInvitationJob extends BaseMessageListener {
 			String[] replacements = {createAccountURL, user.getFullName()};
 			
 			String emailBody = ContentUtil.get(InvitationConstants.EMAIL_TEMPLATE_PATH);
-			PortletPreferences portletPreferences = hashMap.get(companyId);
-			if (Validator.isNotNull(portletPreferences)) {
-				javax.portlet.PortletPreferences portletPrefs = 
-						PortletPreferencesLocalServiceUtil.getPreferences(
-								companyId, portletPreferences.getOwnerId(), 
-								portletPreferences.getOwnerType(), 
-								portletPreferences.getPlid(), portletId);
-				emailBody = portletPrefs.getValue(InvitationConstants.EMAIL_BODY_TEXT, emailBody);
-			}
+
+			javax.portlet.PortletPreferences portletPrefs = 
+					PortletPreferencesLocalServiceUtil.getPreferences(
+							companyId, companyId, 
+							PortletKeys.PREFS_OWNER_TYPE_COMPANY, 
+							0l, portletId);
+			emailBody = portletPrefs.getValue(InvitationConstants.EMAIL_BODY_TEXT, emailBody);
 			
 			String messageBody = StringUtil.replace(emailBody, tokens, replacements);
 			
