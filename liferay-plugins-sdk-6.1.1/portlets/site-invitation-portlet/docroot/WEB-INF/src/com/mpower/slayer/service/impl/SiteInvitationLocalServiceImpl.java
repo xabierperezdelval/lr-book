@@ -171,9 +171,20 @@ public class SiteInvitationLocalServiceImpl extends
 		return count;
 	}
 	
-	public int getUserRank(long userId) {
+	public String getUserRank(long userId) {
 		
-		return SiteInvitationFinderUtil.getUserRank(userId);
+		int acceptedInvitations = 0;
+		try {
+			acceptedInvitations = siteInvitationPersistence.countByUserId_Status(userId, InvitationConstants.STATUS_ACCEPTED);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (acceptedInvitations > 0) { 
+			return String.valueOf(SiteInvitationFinderUtil.getUserRank(userId));
+		} else {
+			return "Not Applicable";
+		}
 	}
 	
 	public int getTotalPoints(long userId, int pointsForInviting, int pointsForAccepting) {
