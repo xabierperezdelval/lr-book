@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="inikah-portlet" basedir="." default="deploy">
+	<import file="/Users/ahmedhasan/projects/inikah7/liferay-plugins-sdk-6.2.0/portlets/build-common-portlet.xml" />
+</project>
