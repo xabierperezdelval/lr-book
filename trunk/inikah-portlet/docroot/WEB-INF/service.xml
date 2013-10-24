@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+<service-builder package-path="com.inikah.slayer">
+	<author>Ahmed Hasan</author>
+	<namespace>inikah</namespace>
+
+	<entity name="Profile" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="profileId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" /> <!-- ownerName for offline profile -->
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		<column name="groupId" type="long" />
+		<column name="ownerLastLogin" type="Date" />
+
+		<!-- Other fields -->
+		<column name="createdFor" type="int" />
+		<column name="profileName" type="String" />
+		<column name="profileCode" type="String" />
+		<column name="bride" type="boolean" />
+		<column name="maritalStatus" type="int" />
+		<column name="bornOn" type="int" />
+		
+		<!-- fields related to "married/widow/divorce" -->
+		<column name="reMarriageReasons" type="String" />
+		<column name="hasChildren" type="boolean" />
+		<column name="sons" type="int" />
+		<column name="daughters" type="int" />		
+
+		<!-- additional attributes -->
+		<column name="height" type="int" />
+		<column name="weight" type="int" />
+		<column name="complexion" type="int" />
+		<column name="motherTongue" type="int" />
+
+		<!-- Contact Information -->
+		<column name="emailAddress" type="String" />
+		<column name="phone1" type="String" />
+		<column name="phone2" type="String" />
+		<column name="residingCountry" type="long" />
+		<column name="residingState" type="long" />
+		<column name="residingCity" type="long" />
+		<column name="residingArea" type="String" />
+		<column name="nearbyMasjid" type="String" />
+
+		<!-- Education/Occupation Information -->
+		<column name="education" type="int" />
+		<column name="educationDetail" type="String" />
+		<column name="religiousEducation" type="int" />
+		<column name="religiousEducationDetail" type="String" />
+		<column name="profession" type="int" />
+		<column name="professionDetail" type="String" />
+		<column name="organization" type="String" />
+		<column name="currency" type="int" />
+		<column name="monthlyIncome" type="int" />
+
+		<!-- Family Details -->
+		<column name="countryOfBirth" type="long" />
+		<column name="stateOfBirth" type="long" />
+		<column name="cityOfBirth" type="long" />
+		<column name="community" type="int" />
+		<column name="ethnicity" type="int" />
+		<column name="canSpeak" type="String"/>
+
+		<!-- Additional Information -->
+		<column name="description" type="String" />
+		<column name="expectation" type="String" />
+		<column name="hobbies" type="String" />
+		<column name="physicallyChallenged" type="boolean" />
+		<column name="physicallyChallengedDetails" type="String" />
+		<column name="performedHaj" type="boolean" />
+		<column name="revertedToIslam" type="boolean" />
+		<column name="muslimSince" type="int" />
+		<column name="hasNoFather" type="boolean" />
+		<column name="hasNoMother" type="boolean" />
+		
+		<!-- status -->
+		<column name="status" type="int" />
+		
+		<order by="desc">
+			<order-column name="ownerLastLogin"/>
+		</order>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId" />
+		</finder>
+		
+		<finder return-type="Profile" name="UserId_EmailAddress" where="status = 0">
+			<finder-column name="userId"/>
+			<finder-column name="emailAddress"/>
+		</finder>
+		
+	</entity>
+	
+	<entity name="Bridge"  local-service="false" remote-service="true">
+		<reference entity="Country" package-path="com.liferay.portal"/>
+		<reference entity="ListType" package-path="com.liferay.portal"/>
+		<reference entity="Address" package-path="com.liferay.portal" />
+	</entity>
+	
+	<entity name="MMRegion"  local-service="true" remote-service="true">
+		<column name="regionId" type="long" primary="true"/>
+		<column name="countryId" type="long" />
+		<column name="isoCode" type="String" />
+		<column name="name" type="String" />
+		
+		<finder return-type="MMRegion" name="CountryId_isoCode">
+			<finder-column name="countryId" />
+			<finder-column name="isoCode" />
+		</finder>
+		
+		<finder return-type="Collection" name="CountryId">
+			<finder-column name="countryId"/>
+		</finder>
+	</entity>
+	
+	<entity name="MMCity" local-service="true" remote-service="true">
+		<column name="cityId" type="long" primary="true"/>
+		<column name="regionId" type="long" />
+		<column name="name" type="String" />
+		
+		<finder return-type="MMCity" name="RegionId_Name">
+			<finder-column name="regionId" />
+			<finder-column name="name" />
+		</finder>
+		
+		<finder return-type="Collection" name="RegionId">
+			<finder-column name="regionId"/>
+		</finder>
+	</entity>
+</service-builder>
