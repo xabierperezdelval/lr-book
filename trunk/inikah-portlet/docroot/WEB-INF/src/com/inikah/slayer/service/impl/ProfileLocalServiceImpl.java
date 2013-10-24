@@ -18,7 +18,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.base.ProfileLocalServiceBaseImpl;
+import com.inikah.util.IConstants;
 import com.inikah.util.ProfileCodeUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -88,6 +90,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		// setting the match criteria
+		matchCriteriaLocalService.init(profile);
 		
 		return profile;
 	}
@@ -265,5 +270,36 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	public boolean isOwner(long userId, long profileId) {
+		
+		boolean flag = false;
+		try {
+			Profile profile = profilePersistence.fetchByUserId_ProfileId(userId, profileId);
+			
+			flag = (Validator.isNotNull(profile));
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
+	}
+	
+	public boolean hasSelfProfile(long userId) {
+		
+		boolean flag = false;
+		
+		int createdFor = BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self");
+		
+		try {
+			Profile profile = profilePersistence.fetchByUserId_CreatedFor(userId, createdFor);
+			
+			flag = (Validator.isNotNull(profile));
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
 	}
 }

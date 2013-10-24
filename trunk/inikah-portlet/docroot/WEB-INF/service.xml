@@ -97,6 +97,15 @@
 			<finder-column name="emailAddress"/>
 		</finder>
 		
+		<finder return-type="Profile" name="UserId_ProfileId">
+			<finder-column name="userId"/>
+			<finder-column name="profileId"/>
+		</finder>
+		
+		<finder return-type="Profile" name="UserId_CreatedFor">
+			<finder-column name="userId"/>
+			<finder-column name="createdFor"/>
+		</finder>
 	</entity>
 	
 	<entity name="Bridge"  local-service="false" remote-service="true">
@@ -135,4 +144,67 @@
 			<finder-column name="regionId"/>
 		</finder>
 	</entity>
+	
+	<entity name="MatchCriteria" local-service="true" remote-service="false" >
+
+		<!-- PK fields -->
+		<column name="profileId" type="long" primary="true" />
+		
+		<column name="groom" type="boolean"/>
+		
+		<!-- age -->	
+		<column name="minAge" type="int" />
+		<column name="maxAge" type="int" />
+		
+		<!-- height -->
+		<column name="minHeight" type="int" />
+		<column name="maxHeight" type="int" />
+				
+		<!-- fields from list master -->
+		<column name="maritalStatus" type="String" />
+		
+		<column name="motherTongue" type="String" />
+		<column name="motherTongueExcluded" type="boolean" />
+		
+		<column name="community" type="String" />
+		<column name="communityExcluded" type="boolean" />
+		
+		<column name="education" type="String" />
+		<column name="educationExcluded" type="boolean" />
+		
+		<column name="religiousEducation" type="String" />
+		<column name="religiousEducationExcluded" type="boolean" />
+
+		<column name="profession" type="String" />
+		<column name="professionExcluded" type="boolean" />
+		
+		<!-- location information -->
+		<column name="residingCountry" type="String" />	
+		<column name="residingState" type="String" />
+		<column name="residingCity" type="String" />
+		<column name="locationOfResidenceExcluded" type="boolean" />	
+		
+		<column name="countryOfBirth" type="String" />	
+		<column name="stateOfBirth" type="String" />
+		<column name="cityOfBirth" type="String" />
+		<column name="locationOfBirthExcluded" type="boolean" />
+		
+		<!-- other status flags -->
+		<column name="revertedToIslam" type="boolean" />		
+		<column name="phyChallenged" type="boolean" />
+		<column name="hasNoMother" type="boolean" />
+		<column name="hasNoFather" type="boolean" />
+		
+		<column name="minSons" type="int" />
+		<column name="maxSons" type="int" />
+		
+		<column name="minDauthers" type="int" />
+		<column name="maxDauthers" type="int" />
+		
+		<!-- audit fields -->			
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+	</entity>	
 </service-builder>

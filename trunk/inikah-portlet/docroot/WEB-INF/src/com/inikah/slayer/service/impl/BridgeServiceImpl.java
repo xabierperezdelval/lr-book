@@ -149,4 +149,20 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		return address; 
 	}
+	
+	public int getListTypeId(String listName, String suffix) {
+		int listTypeId = 0;
+		try {
+			List<ListType> listTypes = listTypePersistence.findByType(Profile.class.getName() + StringPool.PERIOD + listName);
+			for (ListType listType: listTypes) {
+				if (listType.getName().endsWith(suffix)) {
+					listTypeId = listType.getListTypeId();
+					break;
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return listTypeId;
+	}
 }
