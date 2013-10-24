@@ -5,5 +5,6 @@
 	
 	<category name="inikah.com">
 		<portlet id="main"></portlet>
+		<portlet id="register"></portlet>
 	</category>
 </display>
