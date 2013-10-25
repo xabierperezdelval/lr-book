@@ -105,6 +105,9 @@ public class MatchCriteriaLocalServiceImpl
 		int maxValue = AgeUtil.getBornOnFigure(matchCriteria.getMaxAge(), AgeUtil.MAX);
 		dynamicQuery.add(RestrictionsFactoryUtil.between("bornOn", minValue, maxValue));
 		
+		// exclude the profiles of the same user
+		dynamicQuery.add(RestrictionsFactoryUtil.ne("userId", matchCriteria.getUserId()));
+		
 		return matches;
 		
 	}
