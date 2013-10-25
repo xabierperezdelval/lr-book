@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="inikah-theme" basedir="." default="deploy">
+	<import file="/Users/ahmedhasan/projects/inikah7/liferay-plugins-sdk-6.2.0/themes/build-common-theme.xml" />
+
+	<property name="theme.parent" value="classic" />
+</project>
