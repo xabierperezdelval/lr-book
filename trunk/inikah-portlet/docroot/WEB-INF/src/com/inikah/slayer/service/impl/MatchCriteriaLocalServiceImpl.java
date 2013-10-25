@@ -14,12 +14,12 @@
 
 package com.inikah.slayer.service.impl;
 
-import java.util.Calendar;
 import java.util.List;
 
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.MatchCriteriaLocalServiceBaseImpl;
+import com.inikah.util.AgeUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -53,7 +53,7 @@ public class MatchCriteriaLocalServiceImpl
 		
 		MatchCriteria matchCriteria = createMatchCriteria(profile.getProfileId());
 		
-		double age = profile.getComputeAge();
+		double age = AgeUtil.getComputeAge(profile.getBornOn());
 		
 		int minAge = 0;
 		int maxAge = 0;
@@ -101,23 +101,11 @@ public class MatchCriteriaLocalServiceImpl
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("groom", matchCriteria.getGroom()));
 		
 		// minAge and maxAge
-		int minValue = getBornOn(matchCriteria.getMinAge(), true);
-		int maxValue = getBornOn(matchCriteria.getMinAge(), false);
+		int minValue = AgeUtil.getBornOnFigure(matchCriteria.getMinAge(), AgeUtil.MIN);
+		int maxValue = AgeUtil.getBornOnFigure(matchCriteria.getMaxAge(), AgeUtil.MAX);
 		dynamicQuery.add(RestrictionsFactoryUtil.between("bornOn", minValue, maxValue));
 		
 		return matches;
 		
-	}
-	
-	private int getBornOn(int figure, boolean min) {
-		Calendar now = Calendar.getInstance();
-		
-		int year = now.get(Calendar.YEAR);
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(year - figure);
-		sb.append(min? "00":"11");
-
-		return Integer.valueOf(sb.toString());
 	}
 }

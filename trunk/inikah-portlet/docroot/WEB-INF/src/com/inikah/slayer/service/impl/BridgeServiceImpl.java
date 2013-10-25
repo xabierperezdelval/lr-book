@@ -49,6 +49,24 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.BridgeServiceUtil} to access the bridge remote service.
 	 */
 
+	public void setDefaultLocation(User user, Profile profile) {
+		// set other attributes for the profile before updating it
+		Address address = getMaxMindAddress(user);
+		
+		if (Validator.isNotNull(address)) {
+			
+			long city = Long.valueOf(address.getCity());
+			
+			profile.setResidingCountry(address.getCountryId());
+			profile.setResidingState(address.getRegionId());
+			profile.setResidingCity(city);
+			
+			profile.setCountryOfBirth(address.getCountryId());
+			profile.setStateOfBirth(address.getRegionId());
+			profile.setCityOfBirth(city);
+		}
+	}
+	
 	public Country getCountry(String isoCode) {
 		
 		Country country = null;
