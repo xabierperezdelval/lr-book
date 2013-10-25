@@ -262,8 +262,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		if (Validator.isNull(profile)) return; 
 		
 		profile.setUserId(user.getUserId());
-		profile.setDefaultLocation(user);
 		profile.setUserName(user.getFirstName());
+		
+		BridgeServiceUtil.setDefaultLocation(user, profile);
 		
 		try {
 			updateProfile(profile);
