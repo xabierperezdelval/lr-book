@@ -345,4 +345,19 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		
 		return flag;
 	}
+	
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public List<Profile> getProfilesForUser(long userId) {
+		List<Profile> profiles = null;
+		try {
+			profiles = profilePersistence.findByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return profiles;
+	}
 }
