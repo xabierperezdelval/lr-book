@@ -50,6 +50,42 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.ProfileLocalServiceUtil} to access the profile local service.
 	 */
 	
+	public Profile init(boolean bride, String emailAddress, String profileName, ServiceContext serviceContext) {
+		long profileId = 0l;
+		try {
+			profileId = counterLocalService.increment();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		Profile profile = createProfile(profileId);
+				
+		// setting values from serviceContext
+		profile.setCompanyId(serviceContext.getCompanyId());
+		profile.setGroupId(serviceContext.getScopeGroupId());
+		profile.setUserId(serviceContext.getUserId());
+		profile.setCreateDate(new Date());
+		profile.setOwnerLastLogin(new Date());
+				
+		// basic info
+		profile.setBride(bride);
+		profile.setProfileName(profileName);
+		profile.setProfileCode(ProfileCodeUtil.getProfileCode(bride));
+		profile.setEmailAddress(emailAddress);
+				
+		try {
+			profile = addProfile(profile);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		// setting the match criteria
+		//matchCriteriaLocalService.init(profile);
+		
+		return profile;		
+	}
+	
+	
 	/**
 	 * 
 	 */
@@ -273,6 +309,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		}		
 	}
 	
+	/**
+	 * 
+	 */
 	public boolean isOwner(long userId, long profileId) {
 		
 		boolean flag = false;
@@ -287,6 +326,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return flag;
 	}
 	
+	/**
+	 * 
+	 */
 	public boolean hasSelfProfile(long userId) {
 		
 		boolean flag = false;

@@ -2,6 +2,7 @@ package com.inikah.util;
 
 import java.text.DecimalFormat;
 
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
 
 public class ListUtil {
@@ -56,7 +57,8 @@ public class ListUtil {
 		
 		double pounds = weightKgs * conversion;
 		
-		DecimalFormat decimalFormat = new DecimalFormat("000.00");
+		sb.append(CharPool.TILDE);
+		DecimalFormat decimalFormat = new DecimalFormat("000");
 		sb.append(decimalFormat.format(pounds));
 		
 		sb.append(delimiter);

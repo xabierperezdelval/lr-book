@@ -15,103 +15,27 @@
 	
 	<!-- birth day -->
 	<aui:input name="birthdayDay" type="hidden" value="1" />
+	<aui:input name="firstName" type="hidden" value="Not Specified" />
 	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
-		
-	<aui:fieldset>
-		<aui:column>
-			<aui:input name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
-			 
-			<aui:select name="bride" label="profile-gender" showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>"
-					onChange="javascript:updateOtherFields(this);">
-				<aui:option value="1" label="bride"/>
-				<aui:option value="0" label="groom"/>
-			</aui:select>
-						
-			<aui:input name="emailAddress">
-				<aui:validator name="required"/>
-				<aui:validator name="email"/>
-			</aui:input>
-
-		</aui:column>
-		<aui:column>
-		
-			<aui:select name="maritalStatus"
-					listType="<%= Profile.class.getName() + StringPool.PERIOD + IConstants.LIST_MARITAL_STATUS %>" 
-					showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>"/>
-		
-			<div class="control-group">
-				<label class="control-label" for="<%= PORTLET_NSPACE %>bornOn">
-					Born On
-					<span class="label-required">(Required)</span>
-				</label>		
-					
-				<aui:fieldset>
-					<aui:column cssClass="month-selection">
-						<select name="<%= PORTLET_NSPACE %>birthdayMonth">
-							<option value="">Month</option>
-							<%
-								String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
-								for (int i=0; i<12; i++) {
-									%><option value="<%= String.format("%02d",i) %>"><%= months[i] %><%
-								}
-							%>
-						</select>
-					</aui:column>
-			
-					<aui:column cssClass="year-selection">
-						<select name="<%= PORTLET_NSPACE %>birthdayYear">
-							<option value="">Year</option>
-							<%
-								int curYear = Calendar.getInstance().get(Calendar.YEAR);
-								int start = curYear - 70;
-								int end = curYear - 12;
-								for (int i=start; i<end; i++) {
-									%><option value="<%= i %>"><%= i %><%
-								}
-							%>
-						</select>
-					</aui:column>				
-				</aui:fieldset>			
-			</div>
-
-			<aui:select name="createdFor"
-				listType="<%= Profile.class.getName() + StringPool.PERIOD + IConstants.LIST_CREATED_FOR %>" 
-				showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>" />
-
-		</aui:column>
-	</aui:fieldset>
 	
-	<div id="userName">
-		<aui:input name="firstName" required="<%= true %>" />
-	</div>
+	<aui:input name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
+	
+	<aui:input name="emailAddress" required="<%= true %>" helpMessage="help-msg-email-address">
+		<aui:validator name="email"/>
+	</aui:input>
+	
+	<aui:select name="bride" label="profile-type" helpMessage="help-msg-profile-type"
+			showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>" >
+		<aui:option value="1" label="bride"/>
+		<aui:option value="0" label="groom"/>
+	</aui:select>
+	
+	<aui:input name="" type="checkbox" required="<%= true %>" label="i-agree-to-terms-and-conditions" showRequiredLabel="<%= false %>"/>
 	
 	<aui:button type="submit" value="Register" />
 </aui:form>
 
 <aui:script>
-
-	AUI().ready(function(A) {
-		var ele = document.getElementById('<%= PORTLET_NSPACE %>createdFor');
-	   	ele.options[0].value = '';
-	});
-	
 	Liferay.Util.focusFormField(
 		document.<%= PORTLET_NSPACE %>fm.<%= PORTLET_NSPACE %>profileName);
-
-	function updateOtherFields(obj) {
-		var ele = document.getElementById('<%= PORTLET_NSPACE %>createdFor');
-		
-		if (obj.value == 0 || obj.value == 1) {
-			ele.disabled = false;
-		}
-		
-		for (var i=1; i < ele.length; i++) {
-			var original = ele.options[i].text;
-			//alert(original);
-			//var parts = original.toString().split(":");
-			//alerts(parts);
-			//if (parts.length == 1) continue;
-			//ele.options[i].text = parts[obj.value];
-		}
-	}
 </aui:script>
