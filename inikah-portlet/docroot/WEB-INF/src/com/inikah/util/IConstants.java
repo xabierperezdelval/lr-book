@@ -1,7 +1,7 @@
 package com.inikah.util;
 
 public interface IConstants {
-	String PROFILE_STATUS_CREATED = "created";
+	int PROFILE_STATUS_CREATED = 0;
 	String PROFILE_STATUS_DRAFT = "draft";
 	String PROFILE_STATUS_PENDING = "pending";
 	String PROFILE_STATUS_ACTIVE = "active";
