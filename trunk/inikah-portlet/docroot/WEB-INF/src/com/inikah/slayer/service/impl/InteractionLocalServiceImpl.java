@@ -15,6 +15,7 @@
 package com.inikah.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.inikah.slayer.NoSuchInteractionException;
 import com.inikah.slayer.model.Interaction;
@@ -42,10 +43,11 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.InteractionLocalServiceUtil} to access the interaction local service.
 	 */
 	
+	/**
+	 * 
+	 */
 	public void setOperation(long sourceId, long targetId, int operation, boolean duplicate) {
-		
-		System.out.println("setViewed....");
-		
+				
 		try {
 			interactionPersistence.findBySourceId_TargetId_Operation(sourceId, targetId, operation);
 		} catch (NoSuchInteractionException e) {
@@ -71,5 +73,79 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	/**
+	 * 
+	 * @param sourceId
+	 * @param targetId
+	 * @return
+	 */
+	public List<Interaction> getInteractionsInitiatedByMe(long sourceId, long targetId) {
+		
+		List<Interaction> interactions = null;
+		
+		try {
+			interactions = interactionPersistence.findBySourceId_TargetId(sourceId, targetId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return interactions;
+	}
+	
+	/**
+	 * 
+	 * @param sourceId
+	 * @param targetId
+	 * @return
+	 */
+	public List<Interaction> getInteractionsInitiatedByOthers(long sourceId, long targetId) {
+		
+		List<Interaction> interactions = null;
+		
+		try {
+			interactions = interactionPersistence.findBySourceId_TargetId(targetId, sourceId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return interactions;
+	}
+	
+	/**
+	 * 
+	 * @param profileId
+	 * @return
+	 */
+	public List<Interaction> getInteractionsInitiatedByMe(long profileId) {
+		
+		List<Interaction> interactions = null;
+		
+		try {
+			interactions = interactionPersistence.findBySourceId(profileId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return interactions;
+	}
+	
+	/**
+	 * 
+	 * @param profileId
+	 * @return
+	 */
+	public List<Interaction> getInteractionsInitiatedByOthers(long profileId) {
+		
+		List<Interaction> interactions = null;
+		
+		try {
+			interactions = interactionPersistence.findByTargetId(profileId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return interactions;
+	}
 }
