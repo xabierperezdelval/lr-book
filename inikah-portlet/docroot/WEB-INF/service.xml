@@ -228,10 +228,13 @@
 			<finder-column name="targetId"/>
 		</finder>
 		
-		<finder return-type="Collection" name="TargetId_SourceId">
-			<finder-column name="targetId"/>
+		<finder return-type="Collection" name="SourceId">
 			<finder-column name="sourceId"/>
 		</finder>
+		
+		<finder return-type="Collection" name="TargetId">
+			<finder-column name="targetId"/>
+		</finder>		
 
 		<finder return-type="Interaction" name="SourceId_TargetId_Operation">
 			<finder-column name="sourceId"/>
