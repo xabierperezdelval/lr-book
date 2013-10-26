@@ -17,6 +17,7 @@ package com.inikah.slayer.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.inikah.slayer.model.MMRegion;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.base.ProfileLocalServiceBaseImpl;
@@ -25,8 +26,10 @@ import com.inikah.util.ProfileCodeUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -300,7 +303,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setUserId(user.getUserId());
 		profile.setUserName(user.getFirstName());
 		
-		BridgeServiceUtil.setDefaultLocation(user, profile);
+		setDefaultLocation(user, profile);
 		
 		try {
 			updateProfile(profile);
@@ -360,4 +363,46 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		}
 		return profiles;
 	}
+	
+	public void setDefaultLocation(User user, Profile profile) {
+		// set other attributes for the profile before updating it
+		Address address = getMaxMindAddress(user);
+		
+		if (Validator.isNotNull(address)) {
+			
+			long city = Long.valueOf(address.getCity());
+			
+			profile.setResidingCountry(address.getCountryId());
+			profile.setResidingState(address.getRegionId());
+			profile.setResidingCity(city);
+			
+			profile.setCountryOfBirth(address.getCountryId());
+			profile.setStateOfBirth(address.getRegionId());
+			profile.setCityOfBirth(city);
+		}
+	}
+	
+	public Address getMaxMindAddress(User user) {
+		
+		Address address = null;
+		
+		try {
+			List<Address> addresses = 
+					AddressLocalServiceUtil.getAddresses(
+							user.getCompanyId(), MMRegion.class.getName(), user.getUserId());
+			
+			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
+				address = addresses.get(0);
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return address; 
+	}
+	
+	public boolean maxMindCoordinatesSet(User user) {		
+		
+		return Validator.isNotNull(getMaxMindAddress(user));
+	}	
 }
