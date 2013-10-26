@@ -9,6 +9,7 @@ import com.inikah.slayer.model.MMRegion;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.MMCityServiceUtil;
 import com.inikah.slayer.service.MMRegionServiceUtil;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -33,7 +34,7 @@ public class MaxMindUtil {
 		String className = MMRegion.class.getName();
 		
 		// check if the MaxMind coordinates are already set for this user
-		if (BridgeServiceUtil.maxMindCoordinatesSet(user)) return;
+		if (ProfileLocalServiceUtil.maxMindCoordinatesSet(user)) return;
 		
 		int maxMindUserId = GetterUtil.getInteger(PortletProps.get("max.mind.user.id"));
 		String maxMindLicenseKey = PortletProps.get("max.mind.license.key");
