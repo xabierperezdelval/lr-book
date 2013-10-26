@@ -217,7 +217,11 @@
 		<column name="operation" type="int"/>
 		
 		<column name="performedOn" type="Date"/>
-		<column name="comments" type="String"/>
+		<column name="duplicate" type="boolean"/> <!-- will come only in the case of dual operations -->
+		
+		<order by="desc">
+			<order-column name="performedOn"/>
+		</order>
 		
 		<finder return-type="Collection" name="SourceId_TargetId">
 			<finder-column name="sourceId"/>
@@ -227,6 +231,12 @@
 		<finder return-type="Collection" name="TargetId_SourceId">
 			<finder-column name="targetId"/>
 			<finder-column name="sourceId"/>
-		</finder>		
+		</finder>
+
+		<finder return-type="Interaction" name="SourceId_TargetId_Operation">
+			<finder-column name="sourceId"/>
+			<finder-column name="targetId"/>
+			<finder-column name="operation"/>
+		</finder>	
 	</entity>
 </service-builder>
