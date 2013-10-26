@@ -37,14 +37,6 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 		String profileName = ParamUtil.getString(actionRequest, "profileName");
 		
 		boolean bride = ParamUtil.getBoolean(actionRequest, "bride");
-		
-		/*
-		String month = ParamUtil.getString(actionRequest, "birthdayMonth");
-		String year = ParamUtil.getString(actionRequest, "birthdayYear");
-		int maritalStatus = ParamUtil.getInteger(actionRequest, "maritalStatus");
-		int createdFor = ParamUtil.getInteger(actionRequest,  "createdFor");
-		int motherTongue = ParamUtil.getInteger(actionRequest, "motherTongue");
-		*/
 
 		ServiceContext serviceContext = null;
 		try {
@@ -56,11 +48,6 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 		}
 		
 		ProfileLocalServiceUtil.init(bride, emailAddress, profileName, serviceContext);
-		
-		/*
-		ProfileLocalServiceUtil.quickAdd(bride, emailAddress, month, year, maritalStatus, createdFor, 
-				motherTongue, profileName, serviceContext);
-				*/
 	}
 
 	public String render(StrutsPortletAction originalStrutsPortletAction,
