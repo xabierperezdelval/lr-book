@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -382,13 +381,16 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public Address getMaxMindAddress(User user) {
 		
 		Address address = null;
 		
 		try {
 			List<Address> addresses = 
-					AddressLocalServiceUtil.getAddresses(
+					addressLocalService.getAddresses(
 							user.getCompanyId(), MMRegion.class.getName(), user.getUserId());
 			
 			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
@@ -401,6 +403,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return address; 
 	}
 	
+	/**
+	 * 
+	 */
 	public boolean maxMindCoordinatesSet(User user) {		
 		
 		return Validator.isNotNull(getMaxMindAddress(user));
