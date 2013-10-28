@@ -217,16 +217,11 @@
 		<column name="operation" type="int"/>
 		
 		<column name="performedOn" type="Date"/>
-		<column name="duplicate" type="boolean"/> <!-- will come only in the case of dual operations -->
+		<column name="parentId" type="long"/> <!-- will come only in the case of dual operations -->
 		
 		<order by="desc">
 			<order-column name="performedOn"/>
 		</order>
-		
-		<finder return-type="Collection" name="SourceId_TargetId">
-			<finder-column name="sourceId"/>
-			<finder-column name="targetId"/>
-		</finder>
 		
 		<finder return-type="Collection" name="SourceId">
 			<finder-column name="sourceId"/>
@@ -235,11 +230,26 @@
 		<finder return-type="Collection" name="TargetId">
 			<finder-column name="targetId"/>
 		</finder>		
-
+		
+		<finder return-type="Collection" name="SourceId_TargetId">
+			<finder-column name="sourceId"/>
+			<finder-column name="targetId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="SourceId_Operation">
+			<finder-column name="sourceId"/>
+			<finder-column name="operation"/>
+		</finder>
+		
+		<finder return-type="Collection" name="TargetId_Operation">
+			<finder-column name="targetId"/>
+			<finder-column name="operation"/>
+		</finder>				
+		
 		<finder return-type="Interaction" name="SourceId_TargetId_Operation">
 			<finder-column name="sourceId"/>
 			<finder-column name="targetId"/>
 			<finder-column name="operation"/>
-		</finder>	
+		</finder>
 	</entity>
 </service-builder>

@@ -15,20 +15,32 @@
 	
 	<!-- birth day -->
 	<aui:input name="birthdayDay" type="hidden" value="1" />
-	<aui:input name="firstName" type="hidden" value="Not Specified" />
+	<aui:input name="firstName" type="hidden" value="Pending.." />
 	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
 	
-	<aui:input name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
-	
-	<aui:input name="emailAddress" required="<%= true %>" helpMessage="help-msg-email-address">
-		<aui:validator name="email"/>
-	</aui:input>
-	
-	<aui:select name="bride" label="profile-type" helpMessage="help-msg-profile-type"
-			showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>" >
-		<aui:option value="1" label="bride"/>
-		<aui:option value="0" label="groom"/>
-	</aui:select>
+	<aui:fieldset>
+		<aui:column>
+			<aui:input name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
+			
+			<aui:input name="emailAddress" required="<%= true %>" helpMessage="help-msg-email-address">
+				<aui:validator name="email"/>
+			</aui:input>		
+		</aui:column>
+		
+		<aui:column cssClass="mini-selection">
+			<aui:select name="bride" label="profile-type" helpMessage="help-msg-profile-type"
+					showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>"> 
+				<aui:option value="1" label="bride"/>
+				<aui:option value="0" label="groom"/>
+			</aui:select>
+			
+			<aui:select name="creatingForSelf" label="creating-for" helpMessage="help-msg-creating-for"
+					showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>">
+				<aui:option value="1" label="self"/>
+				<aui:option value="0" label="others"/>
+			</aui:select>						
+		</aui:column>		
+	</aui:fieldset>
 	
 	<aui:input name="" type="checkbox" required="<%= true %>" label="i-agree-to-terms-and-conditions" showRequiredLabel="<%= false %>"/>
 	
