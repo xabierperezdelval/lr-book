@@ -1,3 +1,3 @@
 <%@ include file="/html/init.jsp" %>
 
-Match
+<h3>Update: <%= profile.getTitle() %></h3>

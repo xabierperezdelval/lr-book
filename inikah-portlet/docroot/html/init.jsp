@@ -26,3 +26,7 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
+
+<% 
+	Profile profile = (Profile) request.getAttribute("PROFILE");
+%>
