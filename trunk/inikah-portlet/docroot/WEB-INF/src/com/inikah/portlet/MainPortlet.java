@@ -7,9 +7,11 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.Layout;
+import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -18,34 +20,41 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class MainPortlet
  */
 public class MainPortlet extends MVCPortlet {
-
-	@Override
-	public void doView(RenderRequest renderRequest,
-			RenderResponse renderResponse) throws IOException, PortletException {
-
-		Layout layout = (Layout)renderRequest.getAttribute(WebKeys.LAYOUT);
-		
-		
-		
-		System.out.println("The current page is...." + layout.getName(PortalUtil.getLocale(renderRequest)));
-		
-		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
-		
-		HttpServletRequest originalHttpServletRequest = PortalUtil.getOriginalServletRequest(httpServletRequest);
-		
-		System.out.println(ParamUtil.getLong(originalHttpServletRequest, "id", 0l));
-		
-		
-		
-
-		super.doView(renderRequest, renderResponse);
-	}
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response)
 			throws PortletException, IOException {
+		// TODO Auto-generated method stub
 		
-		System.out.println("This is render.....");
+		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(request);
+		
+		long profileId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(httpServletRequest).getParameter("id"), 0l);
+		
+		if (profileId == 0l) {
+			viewTemplate = "/html/error/invalid-id.jsp";
+		} else {
+			Profile profile = null;
+			try {
+				profile = ProfileLocalServiceUtil.fetchProfile(profileId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(profile)) {
+				request.setAttribute("PROFILE_ID", String.valueOf(profileId));
+				viewTemplate = "/html/error/no-profile.jsp";
+			} else {
+				
+				// check ownership
+				long userId = PortalUtil.getUserId(request);
+				if (ProfileLocalServiceUtil.isOwner(userId, profileId)) {
+					request.setAttribute("PROFILE", profile);
+					viewTemplate = "/html/main/view.jsp";
+				} else {
+					viewTemplate = "/html/error/not-owner.jsp";
+				}
+			}
+		}
 		
 		super.render(request, response);
 	}

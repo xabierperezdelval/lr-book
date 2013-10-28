@@ -125,6 +125,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	}
 	
 	public int getListTypeId(String listName, String suffix) {
+		
 		int listTypeId = 0;
 		try {
 			List<ListType> listTypes = listTypePersistence.findByType(Profile.class.getName() + StringPool.PERIOD + listName);
