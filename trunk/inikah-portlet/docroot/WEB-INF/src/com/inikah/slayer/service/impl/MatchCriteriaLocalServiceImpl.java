@@ -20,6 +20,7 @@ import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.MatchCriteriaLocalServiceBaseImpl;
 import com.inikah.util.AgeUtil;
+import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -80,6 +81,8 @@ public class MatchCriteriaLocalServiceImpl
 		}
 	}
 	
+	
+	
 	public List<Profile> getMatches(long profileId) {
 		
 		List<Profile> matches = null;
@@ -107,6 +110,12 @@ public class MatchCriteriaLocalServiceImpl
 		
 		// exclude the profiles of the same user
 		dynamicQuery.add(RestrictionsFactoryUtil.ne("userId", matchCriteria.getUserId()));
+		
+		// only pull profiles that are 'ACTIVE'
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
+		
+		// exclude profiles that are "blocked" for this profile
+		//dynamicQuery.add(RestrictionsFactoryUtil.);
 		
 		return matches;
 		

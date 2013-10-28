@@ -14,6 +14,7 @@
 
 package com.inikah.slayer.service.impl;
 
+import com.inikah.slayer.model.Interaction;
 import com.inikah.slayer.service.base.InteractionServiceBaseImpl;
 import com.inikah.util.IConstants;
 
@@ -39,11 +40,11 @@ public class InteractionServiceImpl extends InteractionServiceBaseImpl {
 	 */
 	
 	public void setViewed(long sourceId, long targetId) {
-		interactionLocalService.setOperation(sourceId, targetId, IConstants.INT_ACTION_VIEWED, false);
+		interactionLocalService.setOperation(sourceId, targetId, IConstants.INT_ACTION_VIEWED, 0l);
 	}
 	
 	public void setBlocked(long sourceId, long targetId) {
-		interactionLocalService.setOperation(sourceId, targetId, IConstants.INT_ACTION_BLOCKED, false);
-		interactionLocalService.setOperation(targetId, sourceId, IConstants.INT_ACTION_BLOCKED, true);
+		Interaction parent = interactionLocalService.setOperation(sourceId, targetId, IConstants.INT_ACTION_BLOCKED, 0l);
+		interactionLocalService.setOperation(targetId, sourceId, IConstants.INT_ACTION_BLOCKED, parent.getInteractionId());
 	}
 }

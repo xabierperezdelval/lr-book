@@ -14,6 +14,7 @@
 
 package com.inikah.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,10 +47,11 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	/**
 	 * 
 	 */
-	public void setOperation(long sourceId, long targetId, int operation, boolean duplicate) {
-				
+	public Interaction setOperation(long sourceId, long targetId, int operation, long parentId) {
+		
+		Interaction interaction = null;
 		try {
-			interactionPersistence.findBySourceId_TargetId_Operation(sourceId, targetId, operation);
+			interaction = interactionPersistence.findBySourceId_TargetId_Operation(sourceId, targetId, operation);
 		} catch (NoSuchInteractionException e) {
 			long interactionId = 0l;
 			try {
@@ -58,12 +60,12 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 				e1.printStackTrace();
 			}
 			
-			Interaction interaction = createInteraction(interactionId);
+			interaction = createInteraction(interactionId);
 			interaction.setSourceId(sourceId);
 			interaction.setTargetId(targetId);
 			interaction.setOperation(operation);
 			interaction.setPerformedOn(new Date());
-			interaction.setDuplicate(duplicate);
+			interaction.setParentId(parentId);
 			
 			try {
 				interactionLocalService.addInteraction(interaction);
@@ -73,6 +75,8 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		return interaction;
 	}
 	
 	/**
@@ -118,12 +122,12 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 * @param profileId
 	 * @return
 	 */
-	public List<Interaction> getInteractionsInitiatedByMe(long profileId) {
+	public List<Interaction> getInteractionsInitiatedByMe(long sourceId) {
 		
 		List<Interaction> interactions = null;
 		
 		try {
-			interactions = interactionPersistence.findBySourceId(profileId);
+			interactions = interactionPersistence.findBySourceId(sourceId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -136,16 +140,58 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 * @param profileId
 	 * @return
 	 */
-	public List<Interaction> getInteractionsInitiatedByOthers(long profileId) {
+	public List<Interaction> getInteractionsInitiatedByOthers(long targetId) {
 		
 		List<Interaction> interactions = null;
 		
 		try {
-			interactions = interactionPersistence.findByTargetId(profileId);
+			interactions = interactionPersistence.findByTargetId(targetId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		return interactions;
+	}
+	
+	public List<Interaction> getInteractionsInitiatedByMe(long sourceId, int operation) {
+		
+		List<Interaction> interactions = null;
+		
+		try {
+			interactionPersistence.findBySourceId_Operation(sourceId, operation);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return interactions;
+	}
+	
+	public List<Interaction> getInteractionsInitiatedByOthers(long targetId, int operation) {
+		
+		List<Interaction> interactions = null;
+		
+		try {
+			interactionPersistence.findByTargetId_Operation(targetId, operation);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return interactions;
+	}	
+	
+
+	public List<Long> getTargetIds(long sourceId, int operation) {
+		
+		List<Long> interactionIds = new ArrayList<Long>();
+		
+		List<Interaction> interactions = getInteractionsInitiatedByMe(sourceId, operation);
+		
+		for (Interaction interaction: interactions) {
+			interactionIds.add(interaction.getInteractionId());
+		}
+		
+		return interactionIds;
+		
+		
 	}
 }

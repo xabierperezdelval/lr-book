@@ -52,7 +52,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.ProfileLocalServiceUtil} to access the profile local service.
 	 */
 	
-	public Profile init(boolean bride, String emailAddress, String profileName, ServiceContext serviceContext) {
+	public Profile init(boolean bride, String emailAddress, String profileName, boolean createdForSelf, ServiceContext serviceContext) {
 		long profileId = 0l;
 		try {
 			profileId = counterLocalService.increment();
@@ -74,15 +74,16 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setProfileName(profileName);
 		profile.setProfileCode(ProfileCodeUtil.getProfileCode(bride));
 		profile.setEmailAddress(emailAddress);
+		
+		if (createdForSelf) {
+			profile.setCreatedFor(BridgeServiceUtil.getListTypeId("createdFor", "self"));
+		}
 				
 		try {
 			profile = addProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
-		// setting the match criteria
-		//matchCriteriaLocalService.init(profile);
 		
 		return profile;		
 	}
@@ -363,24 +364,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return profiles;
 	}
 	
-	public void setDefaultLocation(User user, Profile profile) {
-		// set other attributes for the profile before updating it
-		Address address = getMaxMindAddress(user);
-		
-		if (Validator.isNotNull(address)) {
-			
-			long city = Long.valueOf(address.getCity());
-			
-			profile.setResidingCountry(address.getCountryId());
-			profile.setResidingState(address.getRegionId());
-			profile.setResidingCity(city);
-			
-			profile.setCountryOfBirth(address.getCountryId());
-			profile.setStateOfBirth(address.getRegionId());
-			profile.setCityOfBirth(city);
-		}
-	}
-	
 	/**
 	 * 
 	 */
@@ -409,5 +392,27 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	public boolean maxMindCoordinatesSet(User user) {		
 		
 		return Validator.isNotNull(getMaxMindAddress(user));
+	}	
+	
+	/**
+	 * 
+	 * @param user
+	 */
+	public void setDefaultLocation(User user, Profile profile) {
+		// set other attributes for the profile before updating it
+		Address address = getMaxMindAddress(user);
+		
+		if (Validator.isNotNull(address)) {
+			
+			long city = Long.valueOf(address.getCity());
+			
+			profile.setResidingCountry(address.getCountryId());
+			profile.setResidingState(address.getRegionId());
+			profile.setResidingCity(city);
+			
+			profile.setCountryOfBirth(address.getCountryId());
+			profile.setStateOfBirth(address.getRegionId());
+			profile.setCityOfBirth(city);
+		}
 	}	
 }

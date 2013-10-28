@@ -37,6 +37,7 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 		String profileName = ParamUtil.getString(actionRequest, "profileName");
 		
 		boolean bride = ParamUtil.getBoolean(actionRequest, "bride");
+		boolean createdForSelf = ParamUtil.getBoolean(actionRequest, "createdForSelf", false);
 
 		ServiceContext serviceContext = null;
 		try {
@@ -47,7 +48,7 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 			e.printStackTrace();
 		}
 		
-		ProfileLocalServiceUtil.init(bride, emailAddress, profileName, serviceContext);
+		ProfileLocalServiceUtil.init(bride, emailAddress, profileName, createdForSelf, serviceContext);
 	}
 
 	public String render(StrutsPortletAction originalStrutsPortletAction,

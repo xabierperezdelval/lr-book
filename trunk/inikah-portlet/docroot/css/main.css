@@ -6,6 +6,10 @@
 	width:120px;
 }
 
+.mini-selection select {
+	width:150px;
+}
+
 .month-selection-content {
 	padding-left: 0;
 	padding-right: 0;
