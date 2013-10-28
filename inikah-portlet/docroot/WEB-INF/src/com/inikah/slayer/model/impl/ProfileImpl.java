@@ -15,6 +15,7 @@
 package com.inikah.slayer.model.impl;
 
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 
 /**
@@ -39,5 +40,17 @@ public class ProfileImpl extends ProfileBaseImpl {
 		int createdForSelf = BridgeServiceUtil.getListTypeId("createdFor", "self");
 		
 		return (createdForSelf == getCreatedFor());
+	}
+	
+	public String getTitle() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(getProfileName());
+		sb.append(StringPool.NBSP);
+		sb.append(StringPool.OPEN_BRACKET);
+		sb.append(getProfileCode());
+		sb.append(StringPool.CLOSE_BRACKET);
+		
+		return sb.toString();
 	}
 }

@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.InteractionLocalServiceUtil;
 import com.inikah.slayer.service.base.MatchCriteriaLocalServiceBaseImpl;
 import com.inikah.util.AgeUtil;
 import com.inikah.util.IConstants;
@@ -115,7 +116,10 @@ public class MatchCriteriaLocalServiceImpl
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
 		
 		// exclude profiles that are "blocked" for this profile
-		//dynamicQuery.add(RestrictionsFactoryUtil.);
+		List<Long> blockedIds = InteractionLocalServiceUtil.getTargetIds(profileId, IConstants.INT_ACTION_BLOCKED);
+		for (long targetId: blockedIds) {
+			dynamicQuery.add(RestrictionsFactoryUtil.ne("profileId", targetId));
+		}
 		
 		return matches;
 		

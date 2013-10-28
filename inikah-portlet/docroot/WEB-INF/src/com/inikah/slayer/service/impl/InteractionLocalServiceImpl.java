@@ -191,7 +191,5 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 		}
 		
 		return interactionIds;
-		
-		
 	}
 }
