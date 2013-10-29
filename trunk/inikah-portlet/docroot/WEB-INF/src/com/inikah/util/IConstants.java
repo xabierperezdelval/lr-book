@@ -19,4 +19,6 @@ public interface IConstants {
 	int INT_ACTION_BLOCKED = 6;
 	int INT_ACTION_CAPTURED_IN_REPORT = 7;
 	int INT_ACTION_VEIWED_CONTACT_INFO = 8;
+	
+	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }
