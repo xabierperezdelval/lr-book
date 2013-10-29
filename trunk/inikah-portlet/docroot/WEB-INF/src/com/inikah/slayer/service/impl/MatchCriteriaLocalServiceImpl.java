@@ -55,7 +55,7 @@ public class MatchCriteriaLocalServiceImpl
 		
 		MatchCriteria matchCriteria = createMatchCriteria(profile.getProfileId());
 		
-		double age = AgeUtil.getComputeAge(profile.getBornOn());
+		double age = profile.getComputeAge();
 		
 		int minAge = 0;
 		int maxAge = 0;
