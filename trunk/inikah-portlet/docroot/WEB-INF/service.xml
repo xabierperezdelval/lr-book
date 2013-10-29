@@ -83,6 +83,7 @@
 		
 		<!-- status -->
 		<column name="status" type="int" />
+		<column name="stepsCompleted" type="int"/>
 		
 		<order by="desc">
 			<order-column name="ownerLastLogin"/>

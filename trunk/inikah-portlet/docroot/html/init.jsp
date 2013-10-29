@@ -20,6 +20,7 @@
 
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 
 <%@page import="com.inikah.util.IConstants"%>
 <%@page import="com.inikah.slayer.model.Profile"%>
