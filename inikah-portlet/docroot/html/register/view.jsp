@@ -1,3 +1,7 @@
+<%@page import="com.inikah.slayer.service.SiteInvitationLocalServiceUtil"%>
+<%@page import="com.inikah.slayer.model.SiteInvitation"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@ include file="/html/init.jsp" %>
 
 <% 
@@ -8,6 +12,12 @@
 	createAccountURL.setParameter("struts_action", "/login/create_account");
 	
 	String PORTLET_NSPACE = "_58_";
+	
+	String emailAddress = StringPool.BLANK;
+	long invitationId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(request).getParameter("invitationId"), 0l);
+	if (invitationId > 0l) {
+		emailAddress = SiteInvitationLocalServiceUtil.getInviteeEmail(invitationId);
+	}
 %>
 
 <aui:form portletNamespace="<%= PORTLET_NSPACE %>" action="<%= createAccountURL.toString() %>">
@@ -17,12 +27,13 @@
 	<aui:input name="birthdayDay" type="hidden" value="1" />
 	<aui:input name="firstName" type="hidden" value="Pending.." />
 	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
+	<aui:input name="invitationId" type="hidden" value="<%= String.valueOf(invitationId) %>" />
 	
 	<aui:fieldset>
 		<aui:column>
 			<aui:input name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
 			
-			<aui:input name="emailAddress" required="<%= true %>" helpMessage="help-msg-email-address">
+			<aui:input name="emailAddress" required="<%= true %>" value="<%= emailAddress %>" helpMessage="help-msg-email-address">
 				<aui:validator name="email"/>
 			</aui:input>		
 		</aui:column>

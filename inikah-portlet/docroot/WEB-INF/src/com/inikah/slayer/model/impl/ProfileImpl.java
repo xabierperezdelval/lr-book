@@ -17,8 +17,12 @@ package com.inikah.slayer.model.impl;
 import java.util.Calendar;
 
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
+import com.liferay.portal.model.User;
 
 
 /**
@@ -114,5 +118,27 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return sb.toString();
-	}	
+	}
+	
+	/**
+	 * 
+	 * @param user
+	 */
+	public void setDefaultLocation(User user) {
+		// set other attributes for the profile before updating it
+		Address address = ProfileLocalServiceUtil.getMaxMindAddress(user);
+		
+		if (Validator.isNotNull(address)) {
+			
+			long city = Long.valueOf(address.getCity());
+			
+			setResidingCountry(address.getCountryId());
+			setResidingState(address.getRegionId());
+			setResidingCity(city);
+			
+			setCountryOfBirth(address.getCountryId());
+			setStateOfBirth(address.getRegionId());
+			setCityOfBirth(city);
+		}
+	}
 }
