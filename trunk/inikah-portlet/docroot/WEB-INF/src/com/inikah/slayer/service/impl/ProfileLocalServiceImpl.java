@@ -27,8 +27,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -303,13 +305,36 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setUserId(user.getUserId());
 		profile.setUserName(user.getFirstName());
 		
-		setDefaultLocation(user, profile);
+		profile.setDefaultLocation(user);
 		
 		try {
 			updateProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}		
+		}
+		
+		// update user info if profile created for 'self'
+		if (profile.isCreatedForSelf()) {
+			user.setFirstName(profile.getProfileName());
+			
+			try {
+				userLocalService.updateUser(user);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (profile.isBride()) {
+				try {
+					Contact contact = user.getContact();
+					contact.setMale(false);
+					ContactLocalServiceUtil.updateContact(contact);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}				
+			}
+		}
 	}
 	
 	/**
@@ -392,27 +417,5 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	public boolean maxMindCoordinatesSet(User user) {		
 		
 		return Validator.isNotNull(getMaxMindAddress(user));
-	}	
-	
-	/**
-	 * 
-	 * @param user
-	 */
-	public void setDefaultLocation(User user, Profile profile) {
-		// set other attributes for the profile before updating it
-		Address address = getMaxMindAddress(user);
-		
-		if (Validator.isNotNull(address)) {
-			
-			long city = Long.valueOf(address.getCity());
-			
-			profile.setResidingCountry(address.getCountryId());
-			profile.setResidingState(address.getRegionId());
-			profile.setResidingCity(city);
-			
-			profile.setCountryOfBirth(address.getCountryId());
-			profile.setStateOfBirth(address.getRegionId());
-			profile.setCityOfBirth(city);
-		}
 	}	
 }

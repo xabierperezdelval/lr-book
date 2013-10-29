@@ -7,6 +7,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.inikah.slayer.service.SiteInvitationLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.struts.BaseStrutsPortletAction;
@@ -24,8 +25,29 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 			originalStrutsPortletAction, portletConfig, actionRequest, actionResponse);
 				
 		profileQuickAdd(actionRequest);
+		
+		checkInvitationStatus(actionRequest);
 	}
 	
+	/**
+	 * 
+	 * @param actionRequest
+	 */
+	private void checkInvitationStatus(ActionRequest actionRequest) {
+		// check for invitation Id in the request
+		long invitationId = ParamUtil.getLong(actionRequest, "invitationId", 0l);
+		
+		if (invitationId == 0l) return;
+		
+		String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
+		
+		SiteInvitationLocalServiceUtil.updateInviation(invitationId, emailAddress);
+	}
+
+	/**
+	 * 
+	 * @param actionRequest
+	 */
 	private void profileQuickAdd(ActionRequest actionRequest) {
 				
 		// Don't do anything if not custom registration
