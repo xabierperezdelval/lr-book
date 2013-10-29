@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
 
-public class ListUtil {
+public class MyListUtil {
 	
 	public static String getHeightText(int heightCms, boolean htmlSpace) {
 		
