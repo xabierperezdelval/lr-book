@@ -113,9 +113,29 @@ public class MainPortlet extends MVCPortlet {
 			actionResponse.sendRedirect("/edit?id=" + String.valueOf(profileId));
 		}
 	}
+	
+	private void saveStep1(ActionRequest actionRequest, Profile profile) {
+
+		int maritalStatus = ParamUtil.getInteger(actionRequest, "maritalStatus");
+		int createdFor = ParamUtil.getInteger(actionRequest, "createdFor");
+		
+		int bornMonth = ParamUtil.getInteger(actionRequest, "bornMonth");
+		int bornYear = ParamUtil.getInteger(actionRequest, "bornYear");
+		
+		System.out.println("bornMonth ==> " + bornMonth);
+		System.out.println("bornYear ==> " + bornYear);
+		
+		if (bornMonth >= 0 && bornYear > 0) {
+			profile.setBornOn(Integer.valueOf(bornYear + String.format("%02d", bornMonth)));
+		}
+		
+		profile.setMaritalStatus(maritalStatus);
+		profile.setCreatedFor(createdFor);
+	}	
 
 	private void saveStep3(ActionRequest actionRequest, Profile profile) {
-		// TODO Auto-generated method stub
+	
+		
 		
 	}
 
@@ -124,8 +144,5 @@ public class MainPortlet extends MVCPortlet {
 		
 	}
 
-	private void saveStep1(ActionRequest actionRequest, Profile profile) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }

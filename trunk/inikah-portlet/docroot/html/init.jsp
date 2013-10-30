@@ -28,10 +28,9 @@
 
 <%@page import="com.inikah.util.IConstants"%>
 <%@page import="com.inikah.slayer.model.Profile"%>
+<%@page import="com.inikah.util.MyListUtil"%>
 
 <%@page import="com.inikah.slayer.service.ProfileLocalServiceUtil"%>
-
-
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>

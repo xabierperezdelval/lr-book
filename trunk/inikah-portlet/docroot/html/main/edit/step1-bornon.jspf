@@ -1,0 +1,19 @@
+<div class="control-group">
+	<label class="control-label" for="bornOn">
+		<liferay-ui:message key="born-on"/> <span class="label-required">(<liferay-ui:message key="required"/>)</span>
+	</label>		
+		
+	<aui:fieldset>
+		<aui:column cssClass="month-selection">
+			<select name="<portlet:namespace/>bornMonth">
+				<%= MyListUtil.getMonths(locale, profile.getBornOn()) %>
+			</select>
+		</aui:column>
+
+		<aui:column cssClass="year-selection">
+			<select name="<portlet:namespace/>bornYear">
+				<%= MyListUtil.getYears(locale, profile.getBornOn()) %>
+			</select>
+		</aui:column>
+	</aui:fieldset>			
+</div>
