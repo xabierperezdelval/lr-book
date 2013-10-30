@@ -2,6 +2,7 @@ package com.inikah.util;
 
 import java.text.DecimalFormat;
 
+import com.inikah.slayer.service.BridgeServiceUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -65,5 +66,9 @@ public class MyListUtil {
 		sb.append("Lbs");
 		
 		return sb.toString();
+	}
+	
+	public static int getListTypeId(String listName, String suffix) {
+		return BridgeServiceUtil.getListTypeId(listName, suffix);
 	}
 }

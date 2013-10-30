@@ -74,11 +74,11 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		// basic info
 		profile.setBride(bride);
 		profile.setProfileName(profileName);
-		profile.setProfileCode(ProfileCodeUtil.getProfileCode(bride));
+		profile.setProfileCode(ProfileCodeUtil.getCode(bride));
 		profile.setEmailAddress(emailAddress);
 		
 		if (createdForSelf) {
-			profile.setCreatedFor(BridgeServiceUtil.getListTypeId("createdFor", "self"));
+			profile.setCreatedFor(BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self"));
 		}
 				
 		try {
@@ -119,7 +119,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setBride(bride);
 		profile.setProfileName(profileName);
 		profile.setCreatedFor(createdFor);
-		profile.setProfileCode(ProfileCodeUtil.getProfileCode(bride));
+		profile.setProfileCode(ProfileCodeUtil.getCode(bride));
 		profile.setMaritalStatus(maritalStatus);
 		profile.setEmailAddress(emailAddress);
 				
