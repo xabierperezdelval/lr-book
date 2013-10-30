@@ -15,7 +15,7 @@ public class ProfileCodeUtil {
         	'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'		
     };
 
-	public static String getProfileCode(boolean bride) {
+	public static String getCode(boolean bride) {
 
 		Calendar cal = Calendar.getInstance();
 		
