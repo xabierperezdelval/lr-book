@@ -22,6 +22,7 @@ import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.base.ProfileLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
+import com.inikah.util.MyListUtil;
 import com.inikah.util.ProfileCodeUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -94,6 +95,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	/**
 	 * 
 	 */
+	/*
 	public Profile quickAdd(boolean bride, String emailAddress, 
 			String month, String year, int maritalStatus, 
 			int createdFor, int motherTongue, String profileName, 
@@ -137,10 +139,12 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		
 		return profile;
 	}
+	*/
 	
 	/**
 	 * 
 	 */
+	/*
 	public Profile updateProfile(long profileId, String phone1, String phone2, 
 			long residingCountry, long residingState, long residingCity, 
 			String reMarriageReason, boolean hasChildren, int sons, int daughters, 
@@ -223,6 +227,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		
 		return profile;
 	}
+	*/
 	
 	/*
 	 * (non-Javadoc)
@@ -361,7 +366,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		
 		boolean flag = false;
 		
-		int createdFor = BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self");
+		int createdFor = MyListUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self");
 		
 		try {
 			Profile profile = profilePersistence.fetchByUserId_CreatedFor(userId, createdFor);
