@@ -3,8 +3,10 @@ package com.liferay.portlet.login.action;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.slayer.service.SiteInvitationLocalServiceUtil;
@@ -15,11 +17,14 @@ import com.liferay.portal.kernel.struts.StrutsPortletAction;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.util.PortalUtil;
 
 public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 	public void processAction(StrutsPortletAction originalStrutsPortletAction,
 			PortletConfig portletConfig, ActionRequest actionRequest,
 			ActionResponse actionResponse) throws Exception {
+		
+		setValuesForSelfProfile(actionRequest);
 			
 		originalStrutsPortletAction.processAction(
 			originalStrutsPortletAction, portletConfig, actionRequest, actionResponse);
@@ -76,17 +81,34 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 	}
 	*/
 
+	private void setValuesForSelfProfile(PortletRequest portletRequest) {
+		
+		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(portletRequest);
+				
+		boolean creatingForSelf = ParamUtil.getBoolean(portletRequest, "creatingForSelf", false);
+		
+		if (creatingForSelf) {
+			String profileName = ParamUtil.getString(portletRequest, "profileName");
+			httpServletRequest.setAttribute("_58_firstName", profileName);
+			
+			boolean bride = ParamUtil.getBoolean(portletRequest, "bride", false);
+			if (bride) {
+				httpServletRequest.setAttribute("_58_male", "0");
+			}
+		}		
+	}
+
 	/**
 	 * 
 	 * @param actionRequest
 	 */
-	private void checkInvitationStatus(ActionRequest actionRequest) {
+	private void checkInvitationStatus(PortletRequest portletRequest) {
 		// check for invitation Id in the request
-		long invitationId = ParamUtil.getLong(actionRequest, "invitationId", 0l);
+		long invitationId = ParamUtil.getLong(portletRequest, "invitationId", 0l);
 		
 		if (invitationId == 0l) return;
 		
-		String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
+		String emailAddress = ParamUtil.getString(portletRequest, "emailAddress");
 		
 		SiteInvitationLocalServiceUtil.updateInviation(invitationId, emailAddress);
 	}
@@ -95,22 +117,22 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 	 * 
 	 * @param actionRequest
 	 */
-	private void profileQuickAdd(ActionRequest actionRequest) {
+	private void profileQuickAdd(PortletRequest portletRequest) {
 				
 		// Don't do anything if not custom registration
-		boolean customRegistration = ParamUtil.getBoolean(actionRequest, "customRegistration", false);
+		boolean customRegistration = ParamUtil.getBoolean(portletRequest, "customRegistration", false);
 		
 		if (!customRegistration) return;
 
-		String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
-		String profileName = ParamUtil.getString(actionRequest, "profileName");
+		String emailAddress = ParamUtil.getString(portletRequest, "emailAddress");
+		String profileName = ParamUtil.getString(portletRequest, "profileName");
 		
-		boolean bride = ParamUtil.getBoolean(actionRequest, "bride");
-		boolean creatingForSelf = ParamUtil.getBoolean(actionRequest, "creatingForSelf", false);
+		boolean bride = ParamUtil.getBoolean(portletRequest, "bride");
+		boolean creatingForSelf = ParamUtil.getBoolean(portletRequest, "creatingForSelf", false);
 
 		ServiceContext serviceContext = null;
 		try {
-			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			serviceContext = ServiceContextFactory.getInstance(portletRequest);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {

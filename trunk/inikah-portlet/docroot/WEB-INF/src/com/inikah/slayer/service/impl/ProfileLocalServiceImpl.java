@@ -55,15 +55,13 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.ProfileLocalServiceUtil} to access the profile local service.
 	 */
 	
+	/**
+	 * 
+	 */
 	public Profile init(boolean bride, String emailAddress, String profileName, boolean createdForSelf, ServiceContext serviceContext) {
-		long profileId = 0l;
-		try {
-			profileId = counterLocalService.increment();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+
 		
-		Profile profile = createProfile(profileId);
+		Profile profile = createProfile(bride);
 				
 		// setting values from serviceContext
 		profile.setCompanyId(serviceContext.getCompanyId());
@@ -75,7 +73,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		// basic info
 		profile.setBride(bride);
 		profile.setProfileName(profileName);
-		profile.setProfileCode(ProfileCodeUtil.getCode(bride));
 		profile.setEmailAddress(emailAddress);
 		
 		if (createdForSelf) {
@@ -89,6 +86,25 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		}
 		
 		return profile;		
+	}
+	
+	/**
+	 * 
+	 * @param bride
+	 * @return
+	 */
+	private Profile createProfile(boolean bride) {
+		long profileId = 0l;
+		try {
+			profileId = counterLocalService.increment(Profile.class.getName());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
+		
+		Profile profile = super.createProfile(profileId);
+		profile.setProfileCode(ProfileCodeUtil.getCode(bride, profileId));
+		
+		return profile;
 	}
 	
 	

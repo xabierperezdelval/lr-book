@@ -1,4 +1,4 @@
-<%@ include file="/html/init.jsp" %>
+<%@ include file="/html/common/init.jsp" %>
 
 <%
 	List<Profile> profiles = ProfileLocalServiceUtil.getProfilesForUser(user.getUserId());
