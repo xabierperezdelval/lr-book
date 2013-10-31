@@ -16,7 +16,7 @@ package com.inikah.slayer.service.impl;
 
 import java.util.Date;
 
-import com.inikah.invitation.InvitationConstants;
+import com.inikah.invite.InvitationConstants;
 import com.inikah.slayer.model.SiteInvitation;
 import com.inikah.slayer.service.SiteInvitationLocalServiceUtil;
 import com.inikah.slayer.service.base.SiteInvitationLocalServiceBaseImpl;
