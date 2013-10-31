@@ -7,5 +7,6 @@
 		<portlet id="main"></portlet>
 		<portlet id="register"></portlet>
 		<portlet id="invite"></portlet>
+		<portlet id="payment"></portlet>
 	</category>
 </display>
