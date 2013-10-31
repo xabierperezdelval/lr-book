@@ -31,7 +31,7 @@ public class MainPortlet extends MVCPortlet {
 			throws PortletException, IOException {
 		// TODO Auto-generated method stub
 				
-		viewTemplate = "/html/main/view.jsp";
+		viewTemplate = "/html/profile/view.jsp";
 		
 		Layout layout = (Layout) request.getAttribute(WebKeys.LAYOUT);
 		String page = layout.getName(PortalUtil.getLocale(request));
@@ -121,9 +121,6 @@ public class MainPortlet extends MVCPortlet {
 		
 		int bornMonth = ParamUtil.getInteger(actionRequest, "bornMonth");
 		int bornYear = ParamUtil.getInteger(actionRequest, "bornYear");
-		
-		System.out.println("bornMonth ==> " + bornMonth);
-		System.out.println("bornYear ==> " + bornYear);
 		
 		if (bornMonth >= 0 && bornYear > 0) {
 			profile.setBornOn(Integer.valueOf(bornYear + String.format("%02d", bornMonth)));
