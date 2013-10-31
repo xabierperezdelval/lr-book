@@ -2,7 +2,7 @@
 
 <%	
 	String pageName = layout.getName(locale).toLowerCase();
-	String jspfPath = "/html/main/profile-" + pageName + StringPool.PERIOD + "jsp";
+	String jspfPath = "/html/profile/profile-" + pageName + StringPool.PERIOD + "jsp";
 %>
 
 <jsp:include page="<%= jspfPath %>" flush="false"/>
