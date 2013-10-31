@@ -8,7 +8,7 @@
 		<portlet-class>com.inikah.portlet.MainPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/main/view.jsp</value>
+			<value>/html/profile/view.jsp</value>
 		</init-param>
 		<init-param>
 		    <name>add-process-action-success-action</name>

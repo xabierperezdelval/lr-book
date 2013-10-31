@@ -26,15 +26,15 @@
 	<aui:input name="currentStep" type="hidden" value="<%= _currentStep %>"/>
 	<liferay-ui:tabs names="<%= tabNames %>" refresh="<%= false %>" value="<%= currentStep %>">
 		<liferay-ui:section>
-			<%@ include file="/html/main/edit/step1.jspf" %>
+			<%@ include file="/html/profile/edit/step1.jspf" %>
 		</liferay-ui:section>
 		
 		<liferay-ui:section>
-			<%@ include file="/html/main/edit/step2.jspf" %>
+			<%@ include file="/html/profile/edit/step2.jspf" %>
 		</liferay-ui:section>
 		
 		<liferay-ui:section>
-			<%@ include file="/html/main/edit/step3.jspf" %>
+			<%@ include file="/html/profile/edit/step3.jspf" %>
 		</liferay-ui:section>		
 	</liferay-ui:tabs>
 	
