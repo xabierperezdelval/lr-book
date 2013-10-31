@@ -1,4 +1,4 @@
-<%@ include file="/html/init.jsp" %>
+<%@ include file="/html/common/init.jsp" %>
 
 <%	
 	String pageName = layout.getName(locale).toLowerCase();

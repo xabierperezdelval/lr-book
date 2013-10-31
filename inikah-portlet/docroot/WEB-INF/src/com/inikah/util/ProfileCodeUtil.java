@@ -2,9 +2,6 @@ package com.inikah.util;
 
 import java.util.Calendar;
 
-import com.liferay.counter.service.CounterLocalServiceUtil;
-import com.liferay.portal.kernel.exception.SystemException;
-
 
 public class ProfileCodeUtil {
 	
@@ -15,7 +12,7 @@ public class ProfileCodeUtil {
         	'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'		
     };
 
-	public static String getCode(boolean bride) {
+	public static String getCode(boolean bride, long profileId) {
 
 		Calendar cal = Calendar.getInstance();
 		
@@ -38,17 +35,8 @@ public class ProfileCodeUtil {
 		// week part
 		sb.append(String.format("%02d", cal.get(Calendar.WEEK_OF_YEAR)));
 		
-		// increment part
-		
-		long counter = 0l;
-		try {
-			counter = CounterLocalServiceUtil.increment();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
 		int size = letters.length;
-		int value = (int) (counter % (size * size));
+		int value = (int) (profileId % (size * size));
 		sb.append((char)(letters[value / size]));
 		sb.append((char)(letters[value % size]));
 		

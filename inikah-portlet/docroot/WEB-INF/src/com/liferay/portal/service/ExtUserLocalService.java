@@ -4,7 +4,9 @@ import java.util.Locale;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.model.User;
+import com.liferay.util.PwdGenerator;
 
 public class ExtUserLocalService extends UserLocalServiceWrapper {
 	/* (non-Java-doc)
@@ -26,7 +28,7 @@ public class ExtUserLocalService extends UserLocalServiceWrapper {
 			ServiceContext serviceContext) throws PortalException,
 			SystemException {
 		
-		User user = super.addUserWithWorkflow(creatorUserId, companyId, autoPassword,
+		User user = super.addUserWithWorkflow(creatorUserId, companyId, true,
 				password1, password2, autoScreenName, screenName, emailAddress,
 				facebookId, openId, locale, firstName, middleName, lastName, prefixId,
 				suffixId, male, birthdayMonth, birthdayDay, birthdayYear, jobTitle,

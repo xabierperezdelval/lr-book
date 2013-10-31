@@ -1,4 +1,4 @@
-<%@ include file="/html/init.jsp" %>
+<%@ include file="/html/common/init.jsp" %>
 
 <%
 	Profile profile = (Profile) request.getAttribute("PROFILE");

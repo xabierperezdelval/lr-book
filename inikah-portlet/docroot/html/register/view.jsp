@@ -1,8 +1,7 @@
 <%@page import="com.inikah.slayer.service.SiteInvitationLocalServiceUtil"%>
 <%@page import="com.inikah.slayer.model.SiteInvitation"%>
-<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
-<%@page import="com.liferay.portal.util.PortalUtil"%>
-<%@ include file="/html/init.jsp" %>
+
+<%@ include file="/html/common/init.jsp" %>
 
 <% 
 	PortletURL createAccountURL = PortletURLFactoryUtil.create(request, "58", plid, PortletRequest.ACTION_PHASE);
