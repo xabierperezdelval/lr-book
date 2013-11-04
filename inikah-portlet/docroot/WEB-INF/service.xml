@@ -317,12 +317,25 @@
 	
 	<entity name="Currency" local-service="true" remote-service="false">
 		<column name="countryId" type="long" primary="true"/>
-		<column name="currencyCode" type="String"/>
 		<column name="currencySymbol" type="String"/>
 		<column name="currencyName" type="String"/>
 		<column name="mainUnit" type="String"/>
 		<column name="subUnit" type="String"/>
 		<column name="toDollars" type="double"/>
 		<column name="pppFactor" type="double"/>
+	</entity>
+	
+	<entity name="Plan" local-service="true" remote-service="false" cache-enabled="false">
+		<column name="planId" type="long" primary="true"/>
+		<column name="companyId" type="long"/>
+		<column name="planName" type="String"/>
+		<column name="validity" type="int"/>
+		<column name="discount" type="int"/>
+		<column name="activation" type="String"/>
+		<column name="comments" type="String"/>
+		
+		<finder return-type="Collection" name="CompanyId">
+			<finder-column name="companyId"/>
+		</finder>
 	</entity>
 </service-builder>
