@@ -20,6 +20,7 @@ import com.inikah.invite.InviteConstants;
 import com.inikah.slayer.NoSuchInvitationException;
 import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.service.base.InvitationLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -96,7 +97,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 	 * @param inviterId
 	 * @param emailAddress
 	 */
-	public void initInvitation(long inviterId, String emailAddress, int status) {
+	public Invitation initInvitation(long inviterId, String emailAddress, int status) {
 		
 		long invitationId = 0l;
 		try {
@@ -116,10 +117,12 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 			addInvitation(invitation);
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}		
+		}
+		
+		return invitation;
 	}
 	
-	public void sendInvitation(long inviterId, String emailAddress) {
+	public void sendInvitation(long inviterId, String inviteeName, String emailAddress) {
 		
 		User inviter = null;
 		try {
@@ -130,7 +133,9 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		
 		if (Validator.isNull(inviter)) return;
 		
-		initInvitation(inviterId, emailAddress, 0);
+		Invitation invitation = initInvitation(inviterId, emailAddress, 0);
+		
+		invitation.setUserName(inviteeName);
 		
 		// email the actual invitation
 		String inviterName = inviter.getFirstName();
@@ -159,6 +164,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		
 		invitation.setInviteeNewUserId(user.getUserId());
 		invitation.setStatus(InviteConstants.STATUS_LINKED);
+		invitation.setModifiedDate(new Date());
 		
 		// email the actual inviter. 
 		
@@ -187,5 +193,21 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		}
 		
 		return sb.toString();
+	}
+	
+	public boolean isNewEmail(long companyId, String emailAddress) {
+		
+		boolean flag = true;
+		
+		try {
+			User user = userLocalService.getUserByEmailAddress(companyId, emailAddress);
+			flag = !Validator.isNotNull(user);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
 	}
 }
