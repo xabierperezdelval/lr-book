@@ -1,3 +1,4 @@
+<%@page import="com.inikah.util.PageUtil"%>
 <%@ include file="/html/common/init.jsp" %>
 
 <%
@@ -18,3 +19,13 @@
 	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 	
 </liferay-ui:search-container>
+
+<%
+	long targetPlId = PageUtil.getPageLayoutId(scopeGroupId, "pay", locale);
+%>
+
+<liferay-portlet:renderURL plid="<%= targetPlId %>" portletName="payment_WAR_inikahportlet" refererPlid="<%= plid %>" var="payNowURL">
+	<liferay-portlet:param name="profileId" value="<%= String.valueOf(14017) %>" />
+</liferay-portlet:renderURL>
+
+<aui:a href="<%= payNowURL %>">Pay Now</aui:a>

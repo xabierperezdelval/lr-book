@@ -54,10 +54,10 @@ public class ProfileImpl extends ProfileBaseImpl {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(getProfileName());
-		sb.append(StringPool.NBSP);
-		sb.append(StringPool.OPEN_BRACKET);
+		sb.append(StringPool.SPACE);
+		sb.append(StringPool.OPEN_PARENTHESIS);
 		sb.append(getProfileCode());
-		sb.append(StringPool.CLOSE_BRACKET);
+		sb.append(StringPool.CLOSE_PARENTHESIS);
 		
 		return sb.toString();
 	}
