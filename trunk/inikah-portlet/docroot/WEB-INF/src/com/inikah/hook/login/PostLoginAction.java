@@ -43,7 +43,10 @@ public class PostLoginAction extends Action {
 		MaxMindUtil.setCoordinates(user);
 		
 		// attach new profile with the user. 
-		ProfileLocalServiceUtil.attachProfileToUser(user);		
+		ProfileLocalServiceUtil.attachProfileToUser(user);
+		
+		// check for any invitations for this user
+		
 		
 		// Set the ownerLastLogin for all the profiles owned by this user
 		ProfileLocalServiceUtil.setOwnerLastLogin(user.getUserId());

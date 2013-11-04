@@ -1,5 +1,5 @@
-<%@page import="com.inikah.slayer.service.SiteInvitationLocalServiceUtil"%>
-<%@page import="com.inikah.slayer.model.SiteInvitation"%>
+<%@page import="com.inikah.slayer.service.InvitationLocalServiceUtil"%>
+<%@page import="com.inikah.slayer.model.Invitation"%>
 
 <%@ include file="/html/common/init.jsp" %>
 
@@ -15,8 +15,9 @@
 	String emailAddress = StringPool.BLANK;
 	long invitationId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(request).getParameter("invitationId"), 0l);
 	if (invitationId > 0l) {
-		emailAddress = SiteInvitationLocalServiceUtil.getInviteeEmail(invitationId);
+		emailAddress = InvitationLocalServiceUtil.getInviteeEmail(invitationId);
 	}
+	long inviterId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(request).getParameter("inviterId"), 0l);
 %>
 
 <aui:form portletNamespace="<%= PORTLET_NSPACE %>" action="<%= createAccountURL.toString() %>">
@@ -27,6 +28,7 @@
 	<aui:input name="firstName" type="hidden" value="Pending.." />
 	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
 	<aui:input name="invitationId" type="hidden" value="<%= String.valueOf(invitationId) %>" />
+	<aui:input name="inviterId" type="hidden" value="<%= String.valueOf(inviterId) %>" />
 	
 	<aui:fieldset>
 		<aui:column>

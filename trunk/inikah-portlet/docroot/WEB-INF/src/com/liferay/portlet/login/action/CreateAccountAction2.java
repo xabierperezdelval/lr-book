@@ -8,8 +8,9 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.inikah.invite.InviteConstants;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
-import com.inikah.slayer.service.SiteInvitationLocalServiceUtil;
+import com.inikah.slayer.service.InvitationLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.struts.BaseStrutsPortletAction;
@@ -105,12 +106,15 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 	private void checkInvitationStatus(PortletRequest portletRequest) {
 		// check for invitation Id in the request
 		long invitationId = ParamUtil.getLong(portletRequest, "invitationId", 0l);
-		
-		if (invitationId == 0l) return;
+		long inviterId = ParamUtil.getLong(portletRequest, "inviterId", 0l);
 		
 		String emailAddress = ParamUtil.getString(portletRequest, "emailAddress");
-		
-		SiteInvitationLocalServiceUtil.updateInviation(invitationId, emailAddress);
+		if (invitationId > 0l) {
+			InvitationLocalServiceUtil.updateInviation(invitationId, emailAddress);
+		} else if (inviterId > 0l) {
+			InvitationLocalServiceUtil.initInvitation(inviterId, emailAddress, 
+					InviteConstants.STATUS_REGISTERED);
+		}
 	}
 
 	/**
