@@ -1,5 +1,6 @@
 package com.inikah.hook.login;
 
+import com.inikah.slayer.service.InvitationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.MaxMindUtil;
 import com.liferay.portal.kernel.events.Action;
@@ -46,7 +47,7 @@ public class PostLoginAction extends Action {
 		ProfileLocalServiceUtil.attachProfileToUser(user);
 		
 		// check for any invitations for this user
-		
+		InvitationLocalServiceUtil.linkInvitation(user);
 		
 		// Set the ownerLastLogin for all the profiles owned by this user
 		ProfileLocalServiceUtil.setOwnerLastLogin(user.getUserId());
