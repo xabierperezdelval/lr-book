@@ -174,18 +174,18 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 
 	private String getChain(long inviterId) {
 
+		StringBuilder sb = new StringBuilder(String.valueOf(inviterId));
 		try {
 			Invitation invitation = invitationPersistence.fetchByInviteeNewUserId(inviterId);
 			
 			if (Validator.isNotNull(invitation)) {
-				StringBuilder sb = new StringBuilder(StringPool.COMMA);
+				sb.append(StringPool.COMMA);
 				sb.append(getChain(invitation.getUserId()));
-				return sb.toString();
 			} 
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
-		return String.valueOf(inviterId);
+		return sb.toString();
 	}
 }
