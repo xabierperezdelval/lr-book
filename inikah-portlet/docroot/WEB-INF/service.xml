@@ -136,6 +136,7 @@
 		<column name="cityId" type="long" primary="true"/>
 		<column name="regionId" type="long" />
 		<column name="name" type="String" />
+		<column name="userId" type="long"/>
 		
 		<finder return-type="MMCity" name="RegionId_Name">
 			<finder-column name="regionId" />
@@ -207,6 +208,7 @@
 		<column name="userId" type="long" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
+		<column name="timeTaken" type="double"/>
 		
 	</entity>
 	
@@ -254,7 +256,7 @@
 		</finder>
 	</entity>
 	
-	<entity name="SiteInvitation" local-service="true" remote-service="false">
+	<entity name="Invitation" local-service="true" remote-service="false">
 		
 		<column name="invitationId" type="long" primary="true" />
 		
@@ -269,14 +271,10 @@
 		
 		<!-- UI fields -->
 		<column name="inviteeEmail" type="String"/>
-		<column name="alternateEmail" type="String"/>
+		<column name="registeredEmail" type="String"/>
 		<column name="status" type="int"/>
 		<column name="inviteeNewUserId" type="long"/>
-		
-		<!-- Reminders -->
-		<column name="portalURL" type="String"/>
-		<column name="reminders" type="int"/>
-		<column name="lastReminderDate" type="Date"/>
+		<column name="invitationChain" type="String"/>
 		
 		<!-- Order By -->
 		<order>
@@ -295,6 +293,14 @@
 			<finder-column name="inviteeEmail" />
 		</finder>
 		
+		<finder return-type="Invitation" name="InviteeEmail" where="status = 1">
+			<finder-column name="inviteeEmail"/>
+		</finder>
+		
+		<finder return-type="Invitation" name="RegisteredEmail" where="status = 1">
+			<finder-column name="registeredEmail"/>
+		</finder>		
+		
 		<finder name="UserId" return-type="Collection">
 			<finder-column name="userId" />
 		</finder>
@@ -303,5 +309,20 @@
 			<finder-column name="userId" />
 			<finder-column name="status" />
 		</finder>
-	</entity>	
+		
+		<finder return-type="Invitation" name="InviteeNewUserId">
+			<finder-column name="inviteeNewUserId"/>
+		</finder>		
+	</entity>
+	
+	<entity name="Currency" local-service="true" remote-service="false">
+		<column name="countryId" type="long" primary="true"/>
+		<column name="currencyCode" type="String"/>
+		<column name="currencySymbol" type="String"/>
+		<column name="currencyName" type="String"/>
+		<column name="mainUnit" type="String"/>
+		<column name="subUnit" type="String"/>
+		<column name="toDollars" type="double"/>
+		<column name="pppFactor" type="double"/>
+	</entity>
 </service-builder>
