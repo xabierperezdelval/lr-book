@@ -41,7 +41,7 @@ public class DataInsertEvent extends SimpleAction {
 										
 			String type = parts[0];
 			String value = parts[1];
-			
+	
 			BridgeServiceUtil.createListItem(type, value);
 		}
 	}
