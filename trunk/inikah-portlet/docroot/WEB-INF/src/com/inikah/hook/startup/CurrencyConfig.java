@@ -29,7 +29,7 @@ public class CurrencyConfig extends SimpleAction {
 								
 				long countryId = 0l;
 				try {
-					Country country = CountryServiceUtil.fetchCountryByA2(parts[2]);
+					Country country = CountryServiceUtil.fetchCountryByA2(parts[0]);
 					if (Validator.isNull(country)) continue;
 					countryId = country.getCountryId();
 				} catch (SystemException e) {
@@ -48,12 +48,14 @@ public class CurrencyConfig extends SimpleAction {
 				if (Validator.isNotNull(currency)) continue;
 				
 				currency = CurrencyLocalServiceUtil.createCurrency(countryId);
-				currency.setCurrencyCode(parts[2]);
-				currency.setCurrencyName(parts[0]);
-				//currency.setCurrencySymbol(currencySymbol);
-				//currency.setSubUnit(subUnit);
-				//currency.setPppFactor(pppFactor);
-				//currency.setToDollars(toDollars);
+				currency.setCurrencyCode(parts[1]);
+				currency.setCurrencySymbol(parts[2]);
+				currency.setCurrencyName(parts[3]);
+				currency.setMainUnit(parts[4]);
+				currency.setSubUnit(parts[5]);
+				currency.setToDollars(Double.valueOf(parts[6]));
+				currency.setPppFactor(Double.valueOf(parts[7]));
+				
 				
 				try {
 					CurrencyLocalServiceUtil.addCurrency(currency);
