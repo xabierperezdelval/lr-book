@@ -16,14 +16,18 @@ package com.inikah.slayer.model.impl;
 
 import java.util.Calendar;
 
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 
 /**
@@ -141,5 +145,33 @@ public class ProfileImpl extends ProfileBaseImpl {
 			setStateOfBirth(address.getRegionId());
 			setCityOfBirth(city);
 		}
+	}
+	
+	public String getPriceText(long planId) {
+		
+		return String.valueOf(getPrice(planId));
+		
+	}
+	
+	public double getPrice(long planId) {
+		
+		long userCountryId = getUserCountryId() ;
+		
+		
+		return 0.0d;
+	}
+	
+	public long getUserCountryId() {
+		long countryId = 0l;
+		try {
+			User user = UserLocalServiceUtil.fetchUser(getUserId());
+			
+			Address address = ProfileLocalServiceUtil.getMaxMindAddress(user);
+			countryId = address.getCountryId();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return countryId;
 	}
 }

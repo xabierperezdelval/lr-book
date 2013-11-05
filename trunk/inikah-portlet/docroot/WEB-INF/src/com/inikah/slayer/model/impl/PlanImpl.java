@@ -14,14 +14,6 @@
 
 package com.inikah.slayer.model.impl;
 
-import com.inikah.slayer.model.Profile;
-import com.inikah.slayer.service.ProfileLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.Address;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
-
 /**
  * The extended model implementation for the Plan service. Represents a row in the &quot;inikah_Plan&quot; database table, with each column mapped to a property of this class.
  *
@@ -38,43 +30,5 @@ public class PlanImpl extends PlanBaseImpl {
 	 * Never reference this class directly. All methods that expect a plan model instance should use the {@link com.inikah.slayer.model.Plan} interface instead.
 	 */
 	public PlanImpl() {
-	}
-	
-	//private double price;
-	
-	public String getPriceText(long profileId) {
-		
-		return String.valueOf(getPrice(profileId));
-		
-	}
-	
-	public double getPrice(long profileId) {
-		
-		long countryId = 0l;
-		User user = null;
-		Profile profile = null;
-		try {
-			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
-			try {
-				user = UserLocalServiceUtil.getUser(profile.getUserId());
-				
-				Address address = ProfileLocalServiceUtil.getMaxMindAddress(user);
-				countryId = address.getCountryId();
-			} catch (PortalException e) {
-				e.printStackTrace();
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (countryId > 0l) {
-			long countryOfProfile = profile.getResidingCountry();
-			
-			
-		}
-		
-		
-		
-		return 0.0d;
 	}
 }
