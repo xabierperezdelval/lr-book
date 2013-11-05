@@ -1,26 +1,29 @@
 package com.inikah.hook.startup;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
-import com.liferay.util.ContentUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 
 public class CurrencyConfig extends SimpleAction {
 	public void run(String[] arg0) throws ActionException {
-		//InputStream inputStream = CurrencyConfig.class.getClassLoader().getResourceAsStream("data/currency.csv");
+		InputStream inputStream = CurrencyConfig.class.getClassLoader().getResourceAsStream("data/currency.csv");
+				
+		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		
-		//System.out.println(inputStream);
-		
-		File file = new File("");
-		
-		System.out.println(file.getName());
-		System.out.println(file.getAbsolutePath());
-		
-		String currencies = ContentUtil.get("data/currency.csv");
-		
-		System.out.println(currencies.toString());
-		
+		try {
+			String line = StringPool.BLANK;
+			while (Validator.isNotNull(line = br.readLine())) {
+				System.out.println("line ==> " + line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

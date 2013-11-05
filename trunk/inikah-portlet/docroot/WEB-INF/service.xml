@@ -317,6 +317,7 @@
 	
 	<entity name="Currency" local-service="true" remote-service="false">
 		<column name="countryId" type="long" primary="true"/>
+		<column name="currencyCode" type="String"/>
 		<column name="currencySymbol" type="String"/>
 		<column name="currencyName" type="String"/>
 		<column name="mainUnit" type="String"/>
@@ -331,10 +332,20 @@
 		<column name="planName" type="String"/>
 		<column name="validity" type="int"/>
 		<column name="discount" type="int"/>
-		<column name="activation" type="String"/>
+		<column name="timeToActivate" type="String"/>
+		<column name="priorityInListing" type="String"/>
+		<column name="compatibilityCheckEnabled" type="boolean"/>
+		<column name="proposalsAllowed" type="int"/>
+		<column name="contactsAllowed" type="int"/>
+		<column name="bookmarksAllowed" type="int"/>
+		<column name="towardsCharity" type="int"/>
+		<column name="charityDescription" type="int"/>
+		<column name="referralBonus" type="String"/>
 		<column name="comments" type="String"/>
+		<column name="borderColor" type="String"/>
+		<column name="active_" type="boolean"/>
 		
-		<finder return-type="Collection" name="CompanyId">
+		<finder return-type="Collection" name="CompanyId" where="active_ = 1">
 			<finder-column name="companyId"/>
 		</finder>
 	</entity>
