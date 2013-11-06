@@ -359,6 +359,8 @@
 		<column name="planName" type="String"/>
 		<column name="amount" type="double"/>
 		<column name="paymentMethod" type="String"/>
+		<column name="details" type="String"/>
+		<column name="comments" type="String"/>
 		<column name="paid" type="boolean"/>
 	</entity>
 </service-builder>
