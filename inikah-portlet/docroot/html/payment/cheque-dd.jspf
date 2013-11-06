@@ -1,5 +1,10 @@
-<aui:input name="paymentMode" value="chequeDD" type="hidden"/>
-<aui:input name="chequeDDNumber"/>
-<aui:input name="bankName"/>
-<aui:input name="chequeDate" type="date"/>
-<aui:button type="submit" value="Confirm"/>
+<portlet:actionURL name="finalPay" var="finalPayURL"/>
+	
+<aui:form action="<%= finalPayURL %>">
+	<aui:input name="paymentId" type="hidden" value="<%= String.valueOf(paymentId) %>"/>
+	<aui:input name="paymentMode" value="chequeDD" type="hidden"/>
+	<aui:input name="chequeDDNumber"/>
+	<aui:input name="bankName"/>
+	<aui:input name="chequeDate" type="date"/>
+	<aui:button type="submit" value="Confirm"/>
+</aui:form>

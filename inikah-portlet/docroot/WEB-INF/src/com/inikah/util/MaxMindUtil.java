@@ -10,6 +10,7 @@ import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.MMCityServiceUtil;
 import com.inikah.slayer.service.MMRegionServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.inikah.slayer.service.SysConfigLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -19,7 +20,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
-import com.liferay.util.portlet.PortletProps;
 import com.maxmind.geoip2.WebServiceClient;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.Omni;
@@ -36,8 +36,9 @@ public class MaxMindUtil {
 		// check if the MaxMind coordinates are already set for this user
 		if (ProfileLocalServiceUtil.maxMindCoordinatesSet(user)) return;
 		
-		int maxMindUserId = GetterUtil.getInteger(PortletProps.get("max.mind.user.id"));
-		String maxMindLicenseKey = PortletProps.get("max.mind.license.key");
+		
+		int maxMindUserId = GetterUtil.getInteger(SysConfigLocalServiceUtil.getValue(SysConfigConstants.MAX_MIND_USER_ID));
+		String maxMindLicenseKey = SysConfigLocalServiceUtil.getValue(SysConfigConstants.MAX_MIND_LICENSE_KEY);
 		
 		WebServiceClient client = 
 			new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();

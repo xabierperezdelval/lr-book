@@ -363,4 +363,14 @@
 		<column name="comments" type="String"/>
 		<column name="paid" type="boolean"/>
 	</entity>
+	
+	<entity name="SysConfig" cache-enabled="false" local-service="true" remote-service="false">
+		<column name="sysConfigId" type="long" primary="true"/>
+		<column name="name" type="String"/>
+		<column name="value" type="String"/>
+		
+		<finder return-type="SysConfig" name="Name">
+			<finder-column name="name"/>
+		</finder>
+	</entity>
 </service-builder>
