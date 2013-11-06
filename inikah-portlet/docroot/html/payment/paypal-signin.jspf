@@ -3,7 +3,7 @@
 <aui:a href="<%= PayPalUtil.getCheckoutURL1(request, plid, finalPrice, themeDisplay.getURLCurrent()) %>" label="pay-with-paypal"/>
 
 <%--
-<aui:form action="<%= PayPalUtil.getCheckoutURL2(request, plid, finalPrice) %>">
+<aui:form action="<%= PayPalUtil.getCheckoutURL2(request, plid, finalPrice, themeDisplay.getURLCurrent()) %>">
 	<aui:input type="image" name="paypal_submit" src="https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif" border='0' align='top' alt='Pay with PayPal'/>
 </aui:form>
 

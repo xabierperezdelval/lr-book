@@ -17,6 +17,7 @@ package com.inikah.slayer.service.impl;
 import com.inikah.slayer.model.SysConfig;
 import com.inikah.slayer.service.base.SysConfigLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the sys config local service.
@@ -41,10 +42,15 @@ public class SysConfigLocalServiceImpl extends SysConfigLocalServiceBaseImpl {
 	
 	public String getValue(String name) {
 		
+		System.out.println("name ==> " + name);
+		
 		String value = null;
 		try {
 			SysConfig sysConfig = sysConfigPersistence.fetchByName(name);
-			value = sysConfig.getValue();
+			
+			if (Validator.isNotNull(sysConfig)) {
+				value = sysConfig.getValue();
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
