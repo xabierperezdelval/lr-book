@@ -84,6 +84,7 @@
 		<!-- status -->
 		<column name="status" type="int" />
 		<column name="stepsCompleted" type="int"/>
+		<column name="currentPlan" type="long"/>
 		
 		<order by="desc">
 			<order-column name="ownerLastLogin"/>
@@ -339,7 +340,7 @@
 		<column name="contactsAllowed" type="int"/>
 		<column name="bookmarksAllowed" type="int"/>
 		<column name="towardsCharity" type="int"/>
-		<column name="charityDescription" type="int"/>
+		<column name="charityDescription" type="String"/>
 		<column name="referralBonus" type="String"/>
 		<column name="comments" type="String"/>
 		<column name="borderColor" type="String"/>
@@ -348,5 +349,16 @@
 		<finder return-type="Collection" name="CompanyId" where="active_ = 1">
 			<finder-column name="companyId"/>
 		</finder>
+	</entity>
+	
+	<entity name="Payment" local-service="true" remote-service="false">
+		<column name="paymentId" type="long" primary="true"/>
+		<column name="profileId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="planId" type="long"/>
+		<column name="planName" type="String"/>
+		<column name="amount" type="double"/>
+		<column name="paymentMethod" type="String"/>
+		<column name="paid" type="boolean"/>
 	</entity>
 </service-builder>

@@ -1,0 +1,5 @@
+<aui:input name="paymentMode" value="chequeDD" type="hidden"/>
+<aui:input name="chequeDDNumber"/>
+<aui:input name="bankName"/>
+<aui:input name="chequeDate" type="date"/>
+<aui:button type="submit" value="Confirm"/>
