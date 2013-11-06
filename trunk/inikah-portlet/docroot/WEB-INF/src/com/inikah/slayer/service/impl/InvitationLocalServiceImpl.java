@@ -152,7 +152,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 			try {
 				invitation = invitationPersistence.findByRegisteredEmail(emailAddress);
 			} catch (NoSuchInvitationException e1) {
-				e1.printStackTrace();
+				// ignore
 			} catch (SystemException e1) {
 				e1.printStackTrace();
 			}
