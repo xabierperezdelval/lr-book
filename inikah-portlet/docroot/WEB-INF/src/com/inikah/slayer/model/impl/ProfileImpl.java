@@ -158,16 +158,19 @@ public class ProfileImpl extends ProfileBaseImpl {
 		long userCountryId = getUserCountryId() ;
 		
 		
-		return 0.0d;
+		return 10.0d;
 	}
 	
 	public long getUserCountryId() {
-		long countryId = 0l;
+		long countryId = 108l;
 		try {
 			User user = UserLocalServiceUtil.fetchUser(getUserId());
 			
 			Address address = ProfileLocalServiceUtil.getMaxMindAddress(user);
-			countryId = address.getCountryId();
+			
+			if (Validator.isNotNull(address)) {
+				countryId = address.getCountryId();
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}

@@ -15,13 +15,18 @@
 	<%
 		for (Plan plan: plans) {
 			%>
+				<portlet:actionURL var="showPaymentOptionsURL" name="showPaymentOptions">
+					<portlet:param name="profileId" value="<%= String.valueOf(profile.getProfileId()) %>"/>
+					<portlet:param name="planId" value="<%= String.valueOf(plan.getPlanId()) %>"/>
+				</portlet:actionURL>
 				<aui:column columnWidth="25">
 					<div><%= plan.getPlanName() %></div>
 					<div>Validity: <%= plan.getValidity() %> Month(s)</div>
 					<div>(<%= plan.getValidity() * 30 %> Days)</div>
-					<div><%= plan.getPrice(profile.getProfileId()) %></div>
+					<div><%= profile.getPrice(plan.getPlanId()) %></div>
 					<div>Discount <%= plan.getDiscount() %>%</div>
 					<div>What you pay: </div>
+					<aui:button value="pick" onClick="<%= showPaymentOptionsURL %>" disabled="<%= (profile.getCurrentPlan() > plan.getPlanId()) %>"/>
 				</aui:column>			
 			<% 
 		}
