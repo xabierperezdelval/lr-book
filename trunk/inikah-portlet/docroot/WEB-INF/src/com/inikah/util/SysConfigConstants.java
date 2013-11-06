@@ -11,8 +11,8 @@ public interface SysConfigConstants {
 	
 	String PAYPAL_MERCHANT_USERNAME = "acct1.UserName";
 	String PAYPAL_MERCHANT_PASSWORD = "acct1.Password";
-	String PAYPAL_MERCHANT_SIGNATURE = "sandbox.acct1.Signature";
+	String PAYPAL_MERCHANT_SIGNATURE = "acct1.Signature";
 	
 	String PAYPAL_OAUTH_CLIENTID = "oauth.clientId";
-	String PAYPAL_OAUTH_SECRET = "sandbox.oauth.secret";	
+	String PAYPAL_OAUTH_SECRET = "oauth.secret";	
 }

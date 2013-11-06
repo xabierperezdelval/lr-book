@@ -50,9 +50,12 @@ import com.paypal.exception.SSLConfigurationException;
 import com.paypal.sdk.exceptions.OAuthException;
 
 public class PayPalUtil {
-	public static String getCheckoutURL2(HttpServletRequest request, long plid, double itemAmount) {
+	public static String getCheckoutURL2(HttpServletRequest request, long plid, double itemAmount, String cancelURL) {
 		
 		String token = null;
+		
+		String paypalEnvironment = SysConfigLocalServiceUtil.getValue(SysConfigConstants.PAYPAL_ENVIRONMENT);
+		boolean sandbox = paypalEnvironment.equals(SysConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
 		
 		PaymentDetailsType paymentDetails = new PaymentDetailsType();
 		paymentDetails.setPaymentAction(PaymentActionCodeType.fromValue("Sale"));
@@ -84,7 +87,11 @@ public class PayPalUtil {
 		returnURL.setParameter("jspPage", "/html/payment/thanks.jsp");
 		
 		setExpressCheckoutRequestDetails.setReturnURL(returnURL.toString());
-		setExpressCheckoutRequestDetails.setCancelURL("https://devtools-paypal.com/minibrowser.html?cancel=true");
+		
+		if (sandbox) {
+			cancelURL = "https://devtools-paypal.com/minibrowser.html?cancel=true";
+		}
+		setExpressCheckoutRequestDetails.setCancelURL(cancelURL);
 
 		setExpressCheckoutRequestDetails.setPaymentDetails(paymentDetailsList);
 
@@ -95,8 +102,6 @@ public class PayPalUtil {
 		setExpressCheckoutReq.setSetExpressCheckoutRequest(setExpressCheckoutRequest);
 
 		Map<String, String> sdkConfig = new HashMap<String, String>();
-		
-		String paypalEnvironment = SysConfigLocalServiceUtil.getValue(SysConfigConstants.PAYPAL_ENVIRONMENT);
 		
 		sdkConfig.put("mode", paypalEnvironment);
 		sdkConfig.put("acct1.UserName", 
@@ -137,7 +142,7 @@ public class PayPalUtil {
 		
 		String baseURL = "https://www.paypal.com/incontext?token=";
 		
-		if (SysConfigLocalServiceUtil.getValue(SysConfigConstants.PAYPAL_ENVIRONMENT).equals(SysConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX)) {
+		if (sandbox) {
 			baseURL = "https://www.sandbox.paypal.com/incontext?token=";
 		}
 		
@@ -147,6 +152,9 @@ public class PayPalUtil {
 	public static String getCheckoutURL1(HttpServletRequest request, long plid, double itemAmount, String cancelURL) {
 		String href = StringPool.BLANK;
 		String paypalEnvironment = SysConfigLocalServiceUtil.getValue(SysConfigConstants.PAYPAL_ENVIRONMENT);
+		
+		boolean sandbox = paypalEnvironment.equals(SysConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
+		
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		sdkConfig.put("mode", paypalEnvironment);
 
@@ -182,6 +190,10 @@ public class PayPalUtil {
 			payment.setPayer(payer);
 			payment.setTransactions(transactions);
 			RedirectUrls redirectUrls = new RedirectUrls();
+			
+			if (sandbox) {
+				cancelURL = "https://devtools-paypal.com/minibrowser.html?cancel=true";
+			}
 			redirectUrls.setCancelUrl(cancelURL);
 			
 			PortletURL returnURL = PortletURLFactoryUtil.create(request, "payment_WAR_inikahportlet", plid, PortletRequest.RENDER_PHASE);

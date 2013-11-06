@@ -1,3 +1,6 @@
+<liferay-ui:journal-article articleId="PAYMENT_CHEQUE_DD" 
+	groupId="<%= themeDisplay.getScopeGroupId() %>"/>
+
 <portlet:actionURL name="finalPay" var="finalPayURL"/>
 	
 <aui:form action="<%= finalPayURL %>">
