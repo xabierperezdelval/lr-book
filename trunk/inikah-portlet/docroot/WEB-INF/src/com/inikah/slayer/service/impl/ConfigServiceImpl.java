@@ -55,5 +55,4 @@ public class ConfigServiceImpl extends ConfigServiceBaseImpl {
 		
 		return value;
 	}
-	}
 }
