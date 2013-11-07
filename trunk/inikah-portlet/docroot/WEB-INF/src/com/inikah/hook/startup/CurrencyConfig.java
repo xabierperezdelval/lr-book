@@ -18,6 +18,18 @@ import com.liferay.portal.service.CountryServiceUtil;
 
 public class CurrencyConfig extends SimpleAction {
 	public void run(String[] arg0) throws ActionException {
+		
+		// check for the presence of control record in the table. 
+		try {
+			Currency cntrlRecord = CurrencyLocalServiceUtil.fetchCurrency(1000);
+			if (Validator.isNotNull(cntrlRecord)) {
+				return;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		
 		InputStream inputStream = CurrencyConfig.class.getClassLoader().getResourceAsStream("data/currency.csv");
 				
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -64,6 +76,16 @@ public class CurrencyConfig extends SimpleAction {
 				}
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// insert the control record. 
+		Currency currency = CurrencyLocalServiceUtil.createCurrency(1000l);
+		currency.setCurrencyCode("XXX");
+		
+		try {
+			CurrencyLocalServiceUtil.addCurrency(currency);
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 	}
