@@ -10,6 +10,8 @@ import com.inikah.slayer.service.CurrencyLocalServiceUtil;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
@@ -23,12 +25,12 @@ public class CurrencyConfig extends SimpleAction {
 		try {
 			Currency cntrlRecord = CurrencyLocalServiceUtil.fetchCurrency(1000);
 			if (Validator.isNotNull(cntrlRecord)) {
+				_log.debug("found control record, existing....");
 				return;
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
 		
 		InputStream inputStream = CurrencyConfig.class.getClassLoader().getResourceAsStream("data/currency.csv");
 				
@@ -68,7 +70,6 @@ public class CurrencyConfig extends SimpleAction {
 				currency.setToDollars(Double.valueOf(parts[6]));
 				currency.setPppFactor(Double.valueOf(parts[7]));
 				
-				
 				try {
 					CurrencyLocalServiceUtil.addCurrency(currency);
 				} catch (SystemException e) {
@@ -85,8 +86,12 @@ public class CurrencyConfig extends SimpleAction {
 		
 		try {
 			CurrencyLocalServiceUtil.addCurrency(currency);
+			_log.debug("inserted control record to the currency table");
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private static Log _log = LogFactoryUtil.getLog(
+			CurrencyConfig.class);
 }

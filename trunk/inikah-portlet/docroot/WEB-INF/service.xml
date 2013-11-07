@@ -365,7 +365,7 @@
 		<column name="paid" type="boolean"/>
 	</entity>
 	
-	<entity name="Config" cache-enabled="false" local-service="false" remote-service="true">
+	<entity name="Config" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="configId" type="long" primary="true"/>
 		<column name="name" type="String"/>
 		<column name="value" type="String"/>
