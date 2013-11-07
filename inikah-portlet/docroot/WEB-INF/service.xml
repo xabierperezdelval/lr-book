@@ -342,6 +342,7 @@
 		<column name="towardsCharity" type="int"/>
 		<column name="charityDescription" type="String"/>
 		<column name="referralBonus" type="String"/>
+		<column name="renewalDiscount" type="int"/>
 		<column name="comments" type="String"/>
 		<column name="borderColor" type="String"/>
 		<column name="active_" type="boolean"/>
@@ -364,12 +365,12 @@
 		<column name="paid" type="boolean"/>
 	</entity>
 	
-	<entity name="SysConfig" cache-enabled="false" local-service="true" remote-service="false">
-		<column name="sysConfigId" type="long" primary="true"/>
+	<entity name="Config" cache-enabled="false" local-service="true" remote-service="true">
+		<column name="configId" type="long" primary="true"/>
 		<column name="name" type="String"/>
 		<column name="value" type="String"/>
 		
-		<finder return-type="SysConfig" name="Name">
+		<finder return-type="Config" name="Name">
 			<finder-column name="name"/>
 		</finder>
 	</entity>

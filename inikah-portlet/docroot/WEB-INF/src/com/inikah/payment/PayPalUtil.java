@@ -25,8 +25,8 @@ import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 
-import com.inikah.slayer.service.SysConfigLocalServiceUtil;
-import com.inikah.util.SysConfigConstants;
+import com.inikah.slayer.service.ConfigServiceUtil;
+import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -54,8 +54,8 @@ public class PayPalUtil {
 		
 		String token = null;
 		
-		String paypalEnvironment = SysConfigLocalServiceUtil.getValue(SysConfigConstants.PAYPAL_ENVIRONMENT);
-		boolean sandbox = paypalEnvironment.equals(SysConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
+		String paypalEnvironment = ConfigServiceUtil.get(ConfigConstants.PAYPAL_ENVIRONMENT);
+		boolean sandbox = paypalEnvironment.equals(ConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
 		
 		PaymentDetailsType paymentDetails = new PaymentDetailsType();
 		paymentDetails.setPaymentAction(PaymentActionCodeType.fromValue("Sale"));
@@ -105,11 +105,11 @@ public class PayPalUtil {
 		
 		sdkConfig.put("mode", paypalEnvironment);
 		sdkConfig.put("acct1.UserName", 
-				SysConfigLocalServiceUtil.getValue(paypalEnvironment + StringPool.PERIOD + SysConfigConstants.PAYPAL_MERCHANT_USERNAME));
+				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
 		sdkConfig.put("acct1.Password", 
-				SysConfigLocalServiceUtil.getValue(paypalEnvironment + StringPool.PERIOD + SysConfigConstants.PAYPAL_MERCHANT_PASSWORD));
+				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
 		sdkConfig.put("acct1.Signature",
-				SysConfigLocalServiceUtil.getValue(paypalEnvironment + StringPool.PERIOD + SysConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
+				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
 		
 		PayPalAPIInterfaceServiceService service = new PayPalAPIInterfaceServiceService(sdkConfig);
 		try {
@@ -151,17 +151,17 @@ public class PayPalUtil {
 	
 	public static String getCheckoutURL1(HttpServletRequest request, long plid, double itemAmount, String cancelURL) {
 		String href = StringPool.BLANK;
-		String paypalEnvironment = SysConfigLocalServiceUtil.getValue(SysConfigConstants.PAYPAL_ENVIRONMENT);
+		String paypalEnvironment = ConfigServiceUtil.get(ConfigConstants.PAYPAL_ENVIRONMENT);
 		
-		boolean sandbox = paypalEnvironment.equals(SysConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
+		boolean sandbox = paypalEnvironment.equals(ConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
 		
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		sdkConfig.put("mode", paypalEnvironment);
 
 		String accessToken = StringPool.BLANK;
 		try {
-			String oauthClientId = SysConfigLocalServiceUtil.getValue(paypalEnvironment + StringPool.PERIOD + SysConfigConstants.PAYPAL_OAUTH_CLIENTID);
-			String oauthSecret = SysConfigLocalServiceUtil.getValue(paypalEnvironment + StringPool.PERIOD + SysConfigConstants.PAYPAL_OAUTH_SECRET);
+			String oauthClientId = ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_OAUTH_CLIENTID);
+			String oauthSecret = ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_OAUTH_SECRET);
 			accessToken = new OAuthTokenCredential(oauthClientId, oauthSecret, sdkConfig).getAccessToken();
 		} catch (PayPalRESTException e) {
 			e.printStackTrace();

@@ -1,6 +1,6 @@
 package com.inikah.util;
 
-public interface SysConfigConstants {
+public interface ConfigConstants {
 	String MAX_MIND_USER_ID = "max.mind.user.id";
 	
 	String MAX_MIND_LICENSE_KEY = "max.mind.license.key";
