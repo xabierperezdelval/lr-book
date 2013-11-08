@@ -52,6 +52,7 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		
 		payment.setProfileId(profileId);
 		payment.setPlanId(planId);
+		payment.setAmount(2.30d);
 		
 		try {
 			payment = addPayment(payment);

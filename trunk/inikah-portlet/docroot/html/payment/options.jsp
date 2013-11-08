@@ -9,7 +9,7 @@
 	
 	long paymentId = (Long) request.getAttribute("paymentId");
 	
-	double finalPrice = 1;
+	double finalPrice = GetterUtil.getDouble(portletSession.getAttribute("FINAL_AMOUNT"));
 %>
 
 <liferay-ui:panel-container accordion="<%= true %>">
