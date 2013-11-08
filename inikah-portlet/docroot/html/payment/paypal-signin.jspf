@@ -1,7 +1,7 @@
 <%@page import="com.inikah.payment.PayPalUtil"%>
  
 Extra PayPal Charges <%= String.valueOf(finalPrice * 0.044 + 0.30) %>
-<aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid) %>">
+<aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid) %>" name="fm1">
 	<aui:input type="image" name="paypal_submit" src="https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif" border='0' align='top' alt='Pay with PayPal' label=""/>
 </aui:form>
 
