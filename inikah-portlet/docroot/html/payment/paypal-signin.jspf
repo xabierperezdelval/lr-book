@@ -1,15 +1,13 @@
 <%@page import="com.inikah.payment.PayPalUtil"%>
-
-<aui:a href="<%= PayPalUtil.getCheckoutURL1(request, plid, finalPrice, themeDisplay.getURLCurrent()) %>" label="pay-with-paypal"/>
-
-<aui:form action="<%= PayPalUtil.getCheckoutURL2(request, plid, finalPrice, themeDisplay.getURLCurrent()) %>">
-	<aui:input type="image" name="paypal_submit" src="https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif" border='0' align='top' alt='Pay with PayPal'/>
+ 
+Extra PayPal Charges <%= String.valueOf(finalPrice * 0.044 + 0.30) %>
+<aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid) %>">
+	<aui:input type="image" name="paypal_submit" src="https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif" border='0' align='top' alt='Pay with PayPal' label=""/>
 </aui:form>
 
 <script>
-	var dg = new PAYPAL.apps.DGFlow(
-	{
+	var dg = new PAYPAL.apps.DGFlow({
 		trigger: '<portlet:namespace/>paypal_submit',
 		expType: 'instant'
-	});                           
+	});		
 </script>

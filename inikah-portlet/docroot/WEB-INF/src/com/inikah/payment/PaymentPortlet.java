@@ -14,8 +14,10 @@ import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -48,8 +50,6 @@ public class PaymentPortlet extends MVCPortlet {
 
 	public void showPaymentOptions(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-
-		System.out.println("show payment options....");
 		
 		long planId = ParamUtil.getLong(actionRequest, "planId", 0l);
 		long profileId = ParamUtil.getLong(actionRequest, "profileId", 0l);
@@ -58,6 +58,9 @@ public class PaymentPortlet extends MVCPortlet {
 		if (planId > 0l && profileId > 0l) {
 			Payment payment = PaymentLocalServiceUtil.init(profileId, planId);
 			paymentId = payment.getPaymentId();
+			
+			PortletSession portletSession = actionRequest.getPortletSession();
+			portletSession.setAttribute("FINAL_AMOUNT", String.valueOf(payment.getAmount()));
 		}
 		
 		actionRequest.setAttribute("paymentId", paymentId);
@@ -85,5 +88,20 @@ public class PaymentPortlet extends MVCPortlet {
 		}
 		
 		actionResponse.setRenderParameter("jspPage", "/html/payment/thanks.jsp");
+	}
+	
+	
+	public void paypalComplete(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		String token = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)).getParameter("token");
+		String payerId = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)).getParameter("PayerID");
+		
+		PortletSession portletSession = actionRequest.getPortletSession();
+		double amount = GetterUtil.getDouble(portletSession.getAttribute("FINAL_AMOUNT"));
+		
+		String acknowledgement = PayPalUtil.executePayment(token, payerId, amount);
+		
+		actionResponse.setRenderParameter("jspPage", "/html/payment/paypal-success.jsp");
 	}
 }
