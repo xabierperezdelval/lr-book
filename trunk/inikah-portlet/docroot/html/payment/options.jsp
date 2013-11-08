@@ -21,7 +21,7 @@
 			<%@ include file="/html/payment/use-credits.jspf" %>
 		</liferay-ui:panel>
 		
-		<liferay-ui:panel title="payment-option-paypal-direct" extended="<%= true %>" collapsible="<%= true %>" >
+		<liferay-ui:panel title="payment-option-paypal-direct" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
 			<%@ include file="/html/payment/paypal-direct.jspf" %>
 		</liferay-ui:panel>
 		
