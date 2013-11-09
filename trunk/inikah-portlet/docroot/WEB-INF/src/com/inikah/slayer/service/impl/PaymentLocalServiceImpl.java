@@ -14,9 +14,13 @@
 
 package com.inikah.slayer.service.impl;
 
+import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.model.Payment;
+import com.inikah.slayer.model.Plan;
 import com.inikah.slayer.service.base.PaymentLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the payment local service.
@@ -61,5 +65,46 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		}
 		
 		return payment;
+	}
+	
+	public void reward(long userId, long planId, double amount) {
+		
+		Invitation invitation = null;
+		try {
+			invitation = invitationPersistence.fetchByInviteeNewUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(invitation)) return;
+		
+		String invitationChain = invitation.getInvitationChain();
+		
+		if (Validator.isNull(invitationChain)) return;
+		
+		String[] inviters = invitationChain.split(StringPool.COMMA);
+		
+		System.out.println(inviters);
+		
+		String[] commission = null;
+		try {
+			Plan plan = planLocalService.fetchPlan(planId);
+			String referralBonus = plan.getReferralBonus();
+			if (Validator.isNotNull(referralBonus)) {
+				commission = referralBonus.split(StringPool.COMMA);
+			}
+
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		int loopCount = Math.min(inviters.length, commission.length);
+		
+		for (int i=0; i<loopCount; i++) {
+			int percent = Integer.valueOf(commission[i]);
+			
+			double incentive = amount * (percent / 100);
+			earningService.credit(Long.valueOf(inviters[i]), incentive, "some details");
+		}
 	}
 }
