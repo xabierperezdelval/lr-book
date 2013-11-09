@@ -1,0 +1,28 @@
+.month-selection select {
+	width:90px;
+}
+
+.year-selection select {
+	width:120px;
+}
+
+.mini-selection select {
+	width:150px;
+}
+
+.month-selection-content {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.register-portlet .help-inline {
+    display: block;
+    font-style: italic;
+    color: maroon !important;
+}
+
+.plan-box .column-content  {
+	border: 2px solid orange;
+	text-align: center;
+	margin-right: 10px;
+}

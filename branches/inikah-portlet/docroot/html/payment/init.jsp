@@ -1,0 +1,1 @@
+<script src='https://www.paypalobjects.com/js/external/dg.js' type='text/javascript'></script>
