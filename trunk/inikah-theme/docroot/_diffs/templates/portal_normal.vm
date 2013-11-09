@@ -18,6 +18,8 @@
 
 $theme.include($body_top_include)
 
+#parse ("$full_templates_path/my-earnings.vm")
+
 #dockbar()
 
 <div class="container-fluid" id="wrapper">

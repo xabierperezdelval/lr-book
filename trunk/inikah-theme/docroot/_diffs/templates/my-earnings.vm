@@ -1,0 +1,14 @@
+My Earnings: <label id="my-earnings"/>
+
+<script>
+	Liferay.Service(
+	  '/inikah-portlet.earning/get-earnings-text',
+	  {
+	    userId: $user_id
+	  },
+	  function(obj) {
+	    // update the inner html text of that div
+	    alert(obj);
+	  }
+	);
+</script>
