@@ -374,4 +374,17 @@
 			<finder-column name="name"/>
 		</finder>
 	</entity>
+	
+	<entity name="Earning" local-service="true" remote-service="true">
+		<column name="earningId" type="long" primary="true"/>
+		<column name="userId" type="long"/>
+		<column name="amount" type="double"/>
+		<column name="createDate" type="Date"/>
+		<column name="debit" type="boolean"/>
+		<column name="details" type="String"/>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
+	</entity>
 </service-builder>

@@ -102,6 +102,10 @@ public class PaymentPortlet extends MVCPortlet {
 		
 		String acknowledgement = PayPalUtil.executePayment(token, payerId, amount);
 		
+		if (acknowledgement.equalsIgnoreCase("SUCCESS")) {
+			
+		}
+		
 		actionResponse.setRenderParameter("jspPage", "/html/payment/paypal-success.jsp");
 	}
 }
