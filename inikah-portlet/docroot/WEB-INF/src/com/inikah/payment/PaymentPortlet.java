@@ -103,7 +103,7 @@ public class PaymentPortlet extends MVCPortlet {
 		String acknowledgement = PayPalUtil.executePayment(token, payerId, amount);
 		
 		if (acknowledgement.equalsIgnoreCase("SUCCESS")) {
-			
+			PaymentLocalServiceUtil.reward(17222, 4, 100d);
 		}
 		
 		actionResponse.setRenderParameter("jspPage", "/html/payment/paypal-success.jsp");
