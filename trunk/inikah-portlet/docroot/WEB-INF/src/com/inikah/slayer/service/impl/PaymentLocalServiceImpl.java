@@ -83,9 +83,7 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		if (Validator.isNull(invitationChain)) return;
 		
 		String[] inviters = invitationChain.split(StringPool.COMMA);
-		
-		System.out.println(inviters);
-		
+				
 		String[] commission = null;
 		try {
 			Plan plan = planLocalService.fetchPlan(planId);
