@@ -290,7 +290,7 @@ public class PayPalUtil {
 			transaction.setDescription("This is the description for the <b>profile</b>. <hr/> text after the line");
 			transaction.setAmount(amount);
 			
-			List<Item> items = new ArrayList<>();
+			List<Item> items = new ArrayList<Item>();
 			
 			Item item = new Item();
 			item.setCurrency("USD");
