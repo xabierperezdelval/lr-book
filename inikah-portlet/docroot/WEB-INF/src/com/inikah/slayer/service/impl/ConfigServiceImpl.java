@@ -15,7 +15,6 @@
 package com.inikah.slayer.service.impl;
 
 import com.inikah.slayer.model.Config;
-import com.inikah.slayer.model.SysConfig;
 import com.inikah.slayer.service.base.ConfigServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
