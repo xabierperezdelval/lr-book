@@ -1,0 +1,49 @@
+<%@page import="com.inikah.slayer.service.InvitationLocalService"%>
+<%@page import="java.util.Date"%>
+<%@ include file="/html/common/init.jsp" %>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.ActionRequest"%>
+<%@page import="com.inikah.invite.InviteConstants"%>
+<%@page import="com.inikah.slayer.model.Invitation"%>
+<%@page import="java.util.List"%>
+<%@page import="com.inikah.slayer.service.InvitationLocalServiceUtil"%>
+<portlet:actionURL var="inviteURL" windowState="<%= WindowState.NORMAL.toString()%>">
+	<portlet:param name="<%=ActionRequest.ACTION_NAME%>" value="invite" />
+</portlet:actionURL>
+<h1>Invite friends</h1>
+
+
+<aui:form action="<%= inviteURL %>" method="post" name="LiferayAautoFieldForm">
+
+
+
+<div id="email-fields">
+				<div class="lfr-form-row lfr-form-row-inline">
+					<div class="row-fields">
+					<aui:column>
+						<aui:input fieldParam='inviteeName0' id='inviteeName0' name="inviteeName0" label="Name" required="<%= true %>"/>
+					</aui:column>	
+					<aui:column>
+						<aui:input fieldParam='inviteeEmail0' id='inviteeEmail0' name="inviteeEmail0" label="Email" required="<%= true %>"/>
+					</aui:column>							
+					</div>
+				</div>
+			</div>
+		
+		
+		
+	<aui:layout>
+		<aui:column>
+			<aui:button type="submit" value="Invite" name="InviteEmails"
+				onClick=""></aui:button>
+		</aui:column>
+	</aui:layout>
+<aui:script use="liferay-auto-fields">
+ new Liferay.AutoFields(
+       {
+           contentBox: '#email-fields',
+           fieldIndexes: '<portlet:namespace />emailsIndexes'
+       }
+   ).render();
+</aui:script>
+</aui:form>
