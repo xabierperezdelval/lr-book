@@ -1,0 +1,62 @@
+
+<%@ include file="/html/common/init.jsp" %>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="com.inikah.slayer.model.Invitation"%>
+<%@page import="java.util.List"%>
+<%@page import="com.inikah.slayer.service.InvitationLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="com.inikah.invite.InviteConstants"%>
+<%@page import="java.util.Collections"%>
+
+<%
+	int status = ParamUtil.getInteger(request, "status", InviteConstants.STATUS_ALL);
+	List<Invitation> invitations = InvitationLocalServiceUtil.getUserInvitations(user.getUserId(), status);
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("tabs2", InviteConstants.TAB_MY_INVITATIONS);
+	iteratorURL.setParameter("status", String.valueOf(status));
+	
+	PortletURL filterURL = renderResponse.createRenderURL();
+	filterURL.setParameter("tabs2", InviteConstants.TAB_MY_INVITATIONS);
+	
+	
+%>
+			
+<aui:a href="<%= filterURL.toString() %>" label="All"/> | 
+
+<% filterURL.setParameter("status", String.valueOf(InviteConstants.STATUS_REGISTERED)); %>
+<aui:a href="<%= filterURL.toString() %>" label="Invited" onClick = "preventDefault()" return="<%= false %>"/> |
+
+<% filterURL.setParameter("status", String.valueOf(InviteConstants.STATUS_LINKED)); %> 
+<aui:a href="<%= filterURL.toString() %>" label="Accepted"/><hr/>
+
+<liferay-ui:search-container delta="5" emptyResultsMessage="No Invitations to display" iteratorURL="<%= iteratorURL %>" >
+	<liferay-ui:search-container-results
+		total="<%= invitations.size() %>"
+		results="<%= ListUtil.subList(invitations, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+		
+	<liferay-ui:search-container-row className="com.inikah.slayer.model.Invitation" modelVar="invitation" >
+		<liferay-ui:search-container-column-text>
+			<c:choose>
+				<c:when test="<%= invitation.getStatus() == InviteConstants.STATUS_CREATED  %>">
+					<img src="<%= themeDisplay.getPathThemeImages() + "/messages/alert.png" %>"/>
+				</c:when>
+				<c:otherwise>
+					<img src="<%= themeDisplay.getPathThemeImages() + "/messages/success.png" %>"/>
+				</c:otherwise>
+			</c:choose>
+		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="inviteeEmail" />
+		<liferay-ui:search-container-column-text name="date-invited" >
+			<fmt:formatDate value="<%= invitation.getCreateDate() %>" pattern="dd/MMM/yyyy HH:mm"/>
+		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="date-accepted">
+			<fmt:formatDate value="<%= invitation.getModifiedDate() %>" pattern="dd/MMM/yyyy HH:mm" />
+		</liferay-ui:search-container-column-text>
+		<%-- <liferay-ui:search-container-column-text name="reminders"/> --%>
+	</liferay-ui:search-container-row>
+		
+	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
+</liferay-ui:search-container>
+
+<script>
