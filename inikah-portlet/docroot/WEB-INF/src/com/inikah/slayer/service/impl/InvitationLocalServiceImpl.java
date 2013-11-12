@@ -143,6 +143,10 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 	}
 	
 	public void linkInvitation(User user) {
+				
+		String noInvitationCheck = user.getOpenId();
+		if (Validator.isNotNull(noInvitationCheck) 
+				&& noInvitationCheck.equalsIgnoreCase("no-invitation-check")) return;
 		
 		String emailAddress = user.getEmailAddress();
 		Invitation invitation = null;
@@ -170,6 +174,14 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		
 		// set invitation chain.
 		invitation.setInvitationChain(getChain(invitation.getUserId()));
+		
+		// permanently set this in the user table
+		user.setOpenId("no-invitation-check");
+		try {
+			user = userLocalService.updateUser(user);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			updateInvitation(invitation);
