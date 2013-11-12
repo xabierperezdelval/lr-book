@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="javax.portlet.PortletSession"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 
@@ -37,3 +39,15 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
+
+<%
+	Profile profile = (Profile) portletSession.getAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
+	
+	if (Validator.isNull(profile)) {
+		long profileId = ParamUtil.getLong(request, "profileId", 0l);
+		if (profileId > 0l) {
+			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
+			portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);
+		}
+	}
+%>

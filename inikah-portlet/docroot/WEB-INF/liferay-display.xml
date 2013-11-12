@@ -8,5 +8,9 @@
 		<portlet id="register"></portlet>
 		<portlet id="invite"></portlet>
 		<portlet id="payment"></portlet>
+		<portlet id="filter"></portlet>
+	</category>
+	<category name="category.sample">
+		<portlet id="matches"></portlet>
 	</category>
 </display>
