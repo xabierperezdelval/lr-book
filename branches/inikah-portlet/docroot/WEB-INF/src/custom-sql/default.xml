@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+<sql id="com.inikah.slayer.service.persistence.InvitationFinderImpl.findTodaysInvitation">
+<![CDATA[
+SELECT
+*
+FROM
+inikah_invitation
+WHERE
+(userId like ?)
+AND
+(createDate LIKE ?)
+]]>
+
+</sql>
+</custom-sql>
