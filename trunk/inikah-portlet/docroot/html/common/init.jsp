@@ -42,12 +42,14 @@
 
 <%
 	Profile profile = (Profile) portletSession.getAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
-	
-	if (Validator.isNull(profile)) {
+
+	if (layout.getName(locale).equalsIgnoreCase("mine")) {
+		portletSession.removeAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
+	} else if (Validator.isNull(profile)) {
 		long profileId = ParamUtil.getLong(request, "profileId", 0l);
 		if (profileId > 0l) {
 			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
 			portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);
 		}
-	}
+	} 
 %>

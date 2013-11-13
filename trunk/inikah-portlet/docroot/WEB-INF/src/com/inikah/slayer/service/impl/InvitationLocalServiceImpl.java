@@ -15,6 +15,7 @@
 package com.inikah.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.inikah.invite.InviteConstants;
 import com.inikah.slayer.NoSuchInvitationException;
@@ -57,6 +58,10 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 			
 			if (Validator.isNotNull(invitation)) {
 				inviteeEmail = invitation.getInviteeEmail();
+				
+				// update status
+				invitation.setStatus(InviteConstants.STATUS_CLICKED);
+				updateInvitation(invitation);
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -82,7 +87,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 			invitation.setRegisteredEmail(emailAddress);
 		}
 		
-		invitation.setStatus(InviteConstants.STATUS_REGISTERED);
+		invitation.setStatus(InviteConstants.STATUS_JOINED);
 		invitation.setModifiedDate(new Date());
 		
 		try {
@@ -122,7 +127,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		return invitation;
 	}
 	
-	public void sendInvitation(long inviterId, String inviteeName, String emailAddress) {
+	public void sendInvitation(long inviterId, String inviteeName, String inviteeEmail) {
 		
 		User inviter = null;
 		try {
@@ -133,13 +138,16 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		
 		if (Validator.isNull(inviter)) return;
 		
-		Invitation invitation = initInvitation(inviterId, emailAddress, 0);
+		Invitation invitation = initInvitation(inviterId, inviteeEmail, 0);
 		
 		invitation.setUserName(inviteeName);
 		
 		// email the actual invitation
 		String inviterName = inviter.getFirstName();
 		String inviterEmail = inviter.getEmailAddress();
+		
+		System.out.println("inviterName ==> " + inviterName);
+		System.out.println("inviterEmail ==> " + inviterEmail);
 	}
 	
 	public void linkInvitation(User user) {
@@ -221,5 +229,18 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		}
 		
 		return flag;
+	}
+	
+	public List<Invitation> getByUserId(long userId, int status) {
+		
+		List<Invitation> invitations = null;
+		
+		try {
+			invitations = (status < 0)? invitationPersistence.findByUserId(userId) : invitationPersistence.findByUserId_Status(userId, status);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return invitations;
 	}
 }

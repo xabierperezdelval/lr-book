@@ -6,7 +6,6 @@
 	<portlet>
 		<portlet-name>main</portlet-name>
 		<icon>/icon.png</icon>
-		
 		<scheduler-entry>
 			<scheduler-event-listener-class>com.inikah.jobs.UpdateXRates</scheduler-event-listener-class>
 			<trigger>
@@ -16,9 +15,10 @@
 				</simple>
 			</trigger>
 		</scheduler-entry>		
-
+		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
