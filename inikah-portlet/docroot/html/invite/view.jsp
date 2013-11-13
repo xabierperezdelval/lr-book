@@ -1,5 +1,20 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/html/invite/init.jsp" %>
 
-<portlet:defineObjects />
+ <%
+	String tabNames = "invite-friends,my-invitations,statistics";
+	String tabs2 = renderRequest.getParameter("tabs2");
+%>
 
-This is the <b>Invite Portlet</b> portlet in View mode.
+<liferay-ui:tabs names="<%= tabNames %>" refresh="<%= false %>" value="<%= tabs2 %>">
+	<liferay-ui:section>
+		<%@ include file="/html/invite/invite-friends.jspf" %>
+	</liferay-ui:section>
+	
+	<liferay-ui:section>
+		<%@ include file="/html/invite/my-invitations.jspf" %>
+	</liferay-ui:section>
+	
+	<liferay-ui:section>
+		<%@ include file="/html/invite/statistics.jspf" %>
+	</liferay-ui:section>		
+</liferay-ui:tabs>	

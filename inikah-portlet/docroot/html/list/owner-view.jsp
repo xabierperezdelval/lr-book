@@ -2,7 +2,7 @@
 
 <% 
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	Profile profile = (Profile) row.getObject();
+	Profile profile1 = (Profile) row.getObject();
 %>
 
-<%= profile.getProfileName() %>
+<%= profile1.getProfileName() %>
