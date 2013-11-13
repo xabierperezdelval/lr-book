@@ -4,8 +4,6 @@
 <%@page import="com.inikah.slayer.service.PlanLocalServiceUtil"%>
 
 <%
-	Profile profile = (Profile) portletSession.getAttribute("PROFILE");
-	
 	List<Plan> plans = PlanLocalServiceUtil.getPlans(company.getCompanyId());
 %>
 
