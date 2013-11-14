@@ -20,10 +20,11 @@
 	long inviterId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(request).getParameter("inviterId"), 0l);
 %>
 
-<aui:form portletNamespace="<%= PORTLET_NSPACE %>" action="<%= createAccountURL.toString() %>">
+<aui:form portletNamespace="<%= PORTLET_NSPACE %>" action="<%= createAccountURL.toString() %>" onSubmit="javascript:setValues();">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
 	
 	<!-- birth day -->
+	<aui:input name="male" type="hidden" value="1" />
 	<aui:input name="birthdayDay" type="hidden" value="1" />
 	<aui:input name="firstName" type="hidden" value="Pending.." />
 	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
@@ -62,4 +63,16 @@
 <aui:script>
 	Liferay.Util.focusFormField(
 		document.<%= PORTLET_NSPACE %>fm.<%= PORTLET_NSPACE %>profileName);
+		
+	function setValues() {
+		var frm = document.<%= PORTLET_NSPACE %>fm;
+		var creatingForSelf = frm.<%= PORTLET_NSPACE %>creatingForSelf.value;
+		if (creatingForSelf == 1) {
+			frm.<%= PORTLET_NSPACE %>firstName.value = frm.<%= PORTLET_NSPACE %>profileName.value;
+			
+			if (frm.<%= PORTLET_NSPACE %>bride.value == 1) {
+				frm.<%= PORTLET_NSPACE %>male.value = '0';
+			}
+		}
+	}
 </aui:script>
