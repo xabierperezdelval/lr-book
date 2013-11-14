@@ -60,8 +60,10 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 				inviteeEmail = invitation.getInviteeEmail();
 				
 				// update status
-				invitation.setStatus(InviteConstants.STATUS_CLICKED);
-				updateInvitation(invitation);
+				if (invitation.getStatus() == InviteConstants.STATUS_CREATED) {
+					invitation.setStatus(InviteConstants.STATUS_CLICKED);
+					updateInvitation(invitation);	
+				}
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
