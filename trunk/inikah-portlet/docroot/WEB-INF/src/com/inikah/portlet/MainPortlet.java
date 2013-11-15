@@ -87,8 +87,6 @@ public class MainPortlet extends MVCPortlet {
 		if (Validator.isNotNull(profile) 
 				&& ProfileLocalServiceUtil.isOwner(userId, profileId)) {
 			
-			profile.setStepsCompleted(currentStep);
-			
 			switch (currentStep) {
 				case 1: saveStep1(actionRequest, profile);
 						break;

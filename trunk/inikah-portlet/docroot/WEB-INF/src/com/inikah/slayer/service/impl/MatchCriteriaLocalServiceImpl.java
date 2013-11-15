@@ -14,6 +14,7 @@
 
 package com.inikah.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.inikah.slayer.model.MatchCriteria;
@@ -51,6 +52,9 @@ public class MatchCriteriaLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.MatchCriteriaLocalServiceUtil} to access the match criteria local service.
 	 */
 	
+	/**
+	 * 
+	 */
 	public void init(Profile profile) {
 		
 		MatchCriteria matchCriteria = createMatchCriteria(profile.getProfileId());
@@ -59,8 +63,6 @@ public class MatchCriteriaLocalServiceImpl
 		
 		int minAge = 0;
 		int maxAge = 0;
-		
-		matchCriteria.setGroom(profile.getBride());
 		
 		if (profile.getBride()) {
 			minAge = (int) age - 2;
@@ -83,10 +85,19 @@ public class MatchCriteriaLocalServiceImpl
 	}
 	
 	
-	
+	/**
+	 * 
+	 */
 	public List<Profile> getMatches(long profileId) {
 		
-		List<Profile> matches = null;
+		List<Profile> matches = new ArrayList<Profile>();
+		
+		Profile profile = null;
+		try {
+			profile = profileLocalService.fetchProfile(profileId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		
 		MatchCriteria matchCriteria = null;
 		try {
@@ -96,23 +107,23 @@ public class MatchCriteriaLocalServiceImpl
 		}
 		
 		if (Validator.isNull(matchCriteria)) {
-			return null;
+			return matches;
 		}
-
+		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Profile.class, PortletClassLoaderUtil.getClassLoader());
 		
 		// bride or grooms
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("groom", matchCriteria.getGroom()));
+		dynamicQuery.add(RestrictionsFactoryUtil.ne("bride", profile.isBride()));
 		
 		// minAge and maxAge
-		int minValue = AgeUtil.getBornOnFigure(matchCriteria.getMinAge(), AgeUtil.MIN);
-		int maxValue = AgeUtil.getBornOnFigure(matchCriteria.getMaxAge(), AgeUtil.MAX);
+		int minValue = AgeUtil.getBornOnFigure(matchCriteria.getMaxAge(), AgeUtil.MAX);
+		int maxValue = AgeUtil.getBornOnFigure(matchCriteria.getMinAge(), AgeUtil.MIN);
 		dynamicQuery.add(RestrictionsFactoryUtil.between("bornOn", minValue, maxValue));
 		
 		// exclude the profiles of the same user
-		dynamicQuery.add(RestrictionsFactoryUtil.ne("userId", matchCriteria.getUserId()));
+		dynamicQuery.add(RestrictionsFactoryUtil.ne("userId", profile.getUserId()));
 		
-		// only pull profiles that are 'ACTIVE'
+		// only pull profiles that are currently 'ACTIVE'
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
 		
 		// exclude profiles that are "blocked" for this profile
@@ -121,7 +132,12 @@ public class MatchCriteriaLocalServiceImpl
 			dynamicQuery.add(RestrictionsFactoryUtil.ne("profileId", targetId));
 		}
 		
-		return matches;
+		try {
+			matches = dynamicQuery(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		
+		return matches;
 	}
 }

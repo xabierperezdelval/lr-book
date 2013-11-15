@@ -2,9 +2,15 @@ package com.inikah.util;
 
 public interface IConstants {
 	int PROFILE_STATUS_CREATED = 0;
-	String PROFILE_STATUS_DRAFT = "draft";
+	int PROFILE_STATUS_STEP1_DONE = 1;
+	int PROFILE_STATUS_STEP2_DONE = 2;
+	int PROFILE_STATUS_STEP3_DONE = 3;
+	int PROFILE_STATUS_STEP4_DONE = 4;
+	int PROFILE_STATUS_PAYMENT_PENDING = 5;
+	int PROFILE_STATUS_ACTIVE = 6;
+	int PROFILE_STATUS_INACTIVE = 7;
+	
 	String PROFILE_STATUS_PENDING = "pending";
-	String PROFILE_STATUS_ACTIVE = "active";
 	String PROFILE_STATUS_DELETED = "deleted";
 	
 	String LIST_MARITAL_STATUS = "maritalStatus"; 

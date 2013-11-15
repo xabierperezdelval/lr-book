@@ -154,8 +154,6 @@
 		<!-- PK fields -->
 		<column name="profileId" type="long" primary="true" />
 		
-		<column name="groom" type="boolean"/>
-		
 		<!-- age -->	
 		<column name="minAge" type="int" />
 		<column name="maxAge" type="int" />
@@ -205,8 +203,7 @@
 		<column name="minDauthers" type="int" />
 		<column name="maxDauthers" type="int" />
 		
-		<!-- audit fields -->			
-		<column name="userId" type="long" />
+		<!-- audit fields -->
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 		<column name="timeTaken" type="double"/>

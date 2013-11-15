@@ -5,7 +5,7 @@ import java.util.Calendar;
 public class AgeUtil {
 	
 	public static boolean MIN = true;
-	public static boolean MAX = true;
+	public static boolean MAX = false;
 	
 	public static int getBornOnFigure(int figure, boolean min) {
 		Calendar now = Calendar.getInstance();

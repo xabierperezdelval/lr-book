@@ -87,7 +87,7 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 */
 	public List<Interaction> getInteractionsInitiatedByMe(long sourceId, long targetId) {
 		
-		List<Interaction> interactions = null;
+		List<Interaction> interactions = new ArrayList<Interaction>();
 		
 		try {
 			interactions = interactionPersistence.findBySourceId_TargetId(sourceId, targetId);
@@ -106,7 +106,7 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 */
 	public List<Interaction> getInteractionsInitiatedByOthers(long sourceId, long targetId) {
 		
-		List<Interaction> interactions = null;
+		List<Interaction> interactions = new ArrayList<Interaction>();
 		
 		try {
 			interactions = interactionPersistence.findBySourceId_TargetId(targetId, sourceId);
@@ -124,7 +124,7 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 */
 	public List<Interaction> getInteractionsInitiatedByMe(long sourceId) {
 		
-		List<Interaction> interactions = null;
+		List<Interaction> interactions = new ArrayList<Interaction>();
 		
 		try {
 			interactions = interactionPersistence.findBySourceId(sourceId);
@@ -142,7 +142,7 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	 */
 	public List<Interaction> getInteractionsInitiatedByOthers(long targetId) {
 		
-		List<Interaction> interactions = null;
+		List<Interaction> interactions = new ArrayList<Interaction>();
 		
 		try {
 			interactions = interactionPersistence.findByTargetId(targetId);
@@ -155,10 +155,10 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	
 	public List<Interaction> getInteractionsInitiatedByMe(long sourceId, int operation) {
 		
-		List<Interaction> interactions = null;
+		List<Interaction> interactions = new ArrayList<Interaction>();
 		
 		try {
-			interactionPersistence.findBySourceId_Operation(sourceId, operation);
+			interactions = interactionPersistence.findBySourceId_Operation(sourceId, operation);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -168,10 +168,10 @@ public class InteractionLocalServiceImpl extends InteractionLocalServiceBaseImpl
 	
 	public List<Interaction> getInteractionsInitiatedByOthers(long targetId, int operation) {
 		
-		List<Interaction> interactions = null;
+		List<Interaction> interactions = new ArrayList<Interaction>();
 		
 		try {
-			interactionPersistence.findByTargetId_Operation(targetId, operation);
+			interactions = interactionPersistence.findByTargetId_Operation(targetId, operation);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
