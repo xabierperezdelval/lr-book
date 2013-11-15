@@ -83,8 +83,8 @@
 		
 		<!-- status -->
 		<column name="status" type="int" />
-		<column name="stepsCompleted" type="int"/>
 		<column name="currentPlan" type="long"/>
+		<column name="validUpto" type="Date"/>
 		
 		<order by="desc">
 			<order-column name="ownerLastLogin"/>
