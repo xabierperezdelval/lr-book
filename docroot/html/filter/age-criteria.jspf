@@ -1,0 +1,8 @@
+<aui:fieldset>
+<aui:column>
+<aui:input name="minAge" label="Min Age" />
+</aui:column>
+<aui:column>
+<aui:input name="maxAge" label="Max Age" />
+</aui:column>
+</aui:fieldset>
