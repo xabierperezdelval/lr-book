@@ -1,0 +1,8 @@
+<aui:fieldset>
+<aui:column>
+<aui:input name="minHeight" label="Min Height" />
+</aui:column>
+<aui:column>
+<aui:input name="maxHeight" label="Max Height" />
+</aui:column>
+</aui:fieldset>

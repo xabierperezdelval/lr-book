@@ -19,9 +19,11 @@ import java.util.List;
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.InteractionLocalServiceUtil;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.slayer.service.base.MatchCriteriaLocalServiceBaseImpl;
 import com.inikah.util.AgeUtil;
 import com.inikah.util.IConstants;
+import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -82,15 +84,50 @@ public class MatchCriteriaLocalServiceImpl
 		}
 	}
 	
-	
+	public void insert(long profileId,MatchCriteria matchCriteria) {
+		
+		//long profileId = ParamUtil.getLong(request, "profileId");
+		System.out.println(profileId);
+		boolean oppositeGender = false;
+		Profile profile = null;
+		
+		try {
+			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		if(profile.getBride()==false){
+			
+			oppositeGender=true;
+		}
+			
+		matchCriteria.setProfileId(profileId);
+		matchCriteria.setGroom(oppositeGender);
+		matchCriteria.setUserId(profile.getUserId());
+		matchCriteria.setMinAge(matchCriteria.getMinAge());
+		matchCriteria.setMaxAge(matchCriteria.getMaxAge());
+		matchCriteria.setMinHeight(matchCriteria.getMinHeight());
+		matchCriteria.setMaxHeight(matchCriteria.getMaxHeight());
+		try {
+			updateMatchCriteria(matchCriteria);
+		
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public List<Profile> getMatches(long profileId) {
 		
 		List<Profile> matches = null;
 		
+
 		MatchCriteria matchCriteria = null;
 		try {
 			matchCriteria = fetchMatchCriteria(profileId);
+
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -98,29 +135,41 @@ public class MatchCriteriaLocalServiceImpl
 		if (Validator.isNull(matchCriteria)) {
 			return null;
 		}
-
+				
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Profile.class, PortletClassLoaderUtil.getClassLoader());
 		
 		// bride or grooms
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("groom", matchCriteria.getGroom()));
-		
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("bride",matchCriteria.getGroom()));
+	
 		// minAge and maxAge
-		int minValue = AgeUtil.getBornOnFigure(matchCriteria.getMinAge(), AgeUtil.MIN);
-		int maxValue = AgeUtil.getBornOnFigure(matchCriteria.getMaxAge(), AgeUtil.MAX);
+		Criterion criterion = null;
+		
+		int maxValue = AgeUtil.getBornOnFigure(matchCriteria.getMinAge(), AgeUtil.MIN);
+		int minValue = AgeUtil.getBornOnFigure(matchCriteria.getMaxAge(), AgeUtil.MAX);
 		dynamicQuery.add(RestrictionsFactoryUtil.between("bornOn", minValue, maxValue));
+/*		criterion = RestrictionsFactoryUtil.between("bornOn", minValue, maxValue);
+		dynamicQuery.add(criterion);*/
 		
 		// exclude the profiles of the same user
 		dynamicQuery.add(RestrictionsFactoryUtil.ne("userId", matchCriteria.getUserId()));
 		
 		// only pull profiles that are 'ACTIVE'
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", 1));
 		
-		// exclude profiles that are "blocked" for this profile
+		/*	// exclude profiles that are "blocked" for this profile
 		List<Long> blockedIds = InteractionLocalServiceUtil.getTargetIds(profileId, IConstants.INT_ACTION_BLOCKED);
 		for (long targetId: blockedIds) {
 			dynamicQuery.add(RestrictionsFactoryUtil.ne("profileId", targetId));
-		}
+		}*/
 		
+		try {
+			matches =  ProfileLocalServiceUtil.dynamicQuery(dynamicQuery);
+			
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return matches;
 		
 	}
