@@ -1,14 +1,22 @@
-My Earnings: <label id="my-earnings"/>
+<div class="row">
+	<div class="span9 text-right">
+	<a href='#'><label id=my></label></a>
+	</div>
+</div>
 
-<script>
-	Liferay.Service(
-	  '/inikah-portlet.earning/get-earnings-text',
-	  {
-	    userId: $user_id
-	  },
-	  function(obj) {
-	    // update the inner html text of that div
-	    alert(obj);
-	  }
+<script type="text/javascript">
+	AUI().ready(function (A){
+		Liferay.Service(
+		  '/inikah-portlet.earning/get-earnings-text',
+		  {
+		    userId: 10198
+		  },
+		  function(obj) {
+		    console.log(obj);
+		    alert('Theme'+obj);
+		    A.one('#my').set('innerHTML','My Earnings: '+obj);
+		 }
 	);
+	}); 
+
 </script>
