@@ -18,7 +18,9 @@
 
 $theme.include($body_top_include)
 
-#parse ("$full_templates_path/my-earnings.vm")
+#if ($has_navigation || $is_signed_in)
+	#parse ("$full_templates_path/my-earnings.vm")
+#end
 
 #dockbar()
 

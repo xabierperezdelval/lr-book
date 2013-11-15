@@ -136,4 +136,76 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	<portlet>
+		<portlet-name>filter</portlet-name>
+		<display-name>Filter</display-name>
+		<portlet-class>com.inikah.filter.Filter</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/filter/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Filter</title>
+			<short-title>Filter</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+		<supported-publishing-event xmlns:x='http://liferay.com'>
+			<qname>x:filter</qname>
+		</supported-publishing-event>
+	</portlet>
+	<portlet>
+		<portlet-name>matches</portlet-name>
+		<display-name>Matches</display-name>
+		<portlet-class>com.inikah.matches.Matches</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/matches/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Matches</title>
+			<short-title>Matches</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+		<supported-processing-event xmlns:x='http://liferay.com'>
+            <qname>x:filter</qname>
+        </supported-processing-event>
+	</portlet>
+	<event-definition xmlns:x='http://liferay.com'>
+		<qname>x:filter</qname>
+	<value-type>com.inikah.slayer.MatchCriteria</value-type>
+</event-definition>
 </portlet-app>
