@@ -2,15 +2,13 @@
 <!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
 
 <display>
-	
 	<category name="inikah.com">
-		<portlet id="main"></portlet>
-		<portlet id="register"></portlet>
-		<portlet id="invite"></portlet>
-		<portlet id="payment"></portlet>
-		<portlet id="filter"></portlet>
-	</category>
-	<category name="category.sample">
-		<portlet id="matches"></portlet>
+		<portlet id="main"/>
+		<portlet id="register"/>
+		<portlet id="invite"/>
+		<portlet id="payment"/>
+		<portlet id="filter"/>
+		<portlet id="edit"/>
+		<portlet id="matches"/>
 	</category>
 </display>

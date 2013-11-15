@@ -1,0 +1,3 @@
+<%@ include file="/html/edit/init.jsp" %>
+
+This is edit page....
