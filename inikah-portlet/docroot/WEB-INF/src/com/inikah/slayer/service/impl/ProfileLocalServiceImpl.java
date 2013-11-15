@@ -28,10 +28,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
-import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -332,29 +330,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 			updateProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}
-		
-		// update user info if profile created for 'self'
-		if (profile.isCreatedForSelf()) {
-			user.setFirstName(profile.getProfileName());
-			
-			try {
-				userLocalService.updateUser(user);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			
-			if (profile.isBride()) {
-				try {
-					Contact contact = user.getContact();
-					contact.setMale(false);
-					ContactLocalServiceUtil.updateContact(contact);
-				} catch (PortalException e) {
-					e.printStackTrace();
-				} catch (SystemException e) {
-					e.printStackTrace();
-				}				
-			}
 		}
 	}
 	
