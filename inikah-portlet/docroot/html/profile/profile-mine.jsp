@@ -39,3 +39,13 @@
 </liferay-portlet:renderURL>
 
 <aui:a href="<%= matchNowURL %>">Match Now</aui:a>
+
+<%
+	long editPlId = PageUtil.getPageLayoutId(scopeGroupId, "edit", locale);
+%>
+
+<liferay-portlet:renderURL plid="<%= editPlId %>" portletName="edit_WAR_inikahportlet" refererPlid="<%= plid %>" var="editNowURL">
+	<liferay-portlet:param name="profileId" value="<%= String.valueOf(14017) %>" />
+</liferay-portlet:renderURL>
+
+<aui:a href="<%= editNowURL %>">Edit Now</aui:a>

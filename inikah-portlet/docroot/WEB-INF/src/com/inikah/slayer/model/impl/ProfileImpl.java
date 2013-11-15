@@ -16,11 +16,9 @@ package com.inikah.slayer.model.impl;
 
 import java.util.Calendar;
 
-import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
@@ -176,5 +174,9 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return countryId;
+	}
+	
+	public boolean isEditMode() {
+		return getStatus() > IConstants.PROFILE_STATUS_STEP4_DONE;
 	}
 }

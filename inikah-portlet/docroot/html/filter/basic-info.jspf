@@ -1,0 +1,28 @@
+<div class="control-group">
+	<label class="control-label" for="age-between">
+		<liferay-ui:message key="age-between"/>
+	</label>		
+		
+	<aui:fieldset cssClass="year-selection">
+		<aui:column>
+			<select name="<portlet:namespace/>minAge">
+				<%= MyListUtil.getAgeList(locale, matchCriteria.getMinAge(), bride) %>
+			</select>
+		</aui:column>
+		<aui:column><liferay-ui:message key="and"/></aui:column>
+		<aui:column>
+			<select name="<portlet:namespace/>maxAge">
+				<%= MyListUtil.getAgeList(locale, matchCriteria.getMaxAge(), bride) %>
+			</select>
+		</aui:column>
+	</aui:fieldset>			
+</div>
+
+<hr/>
+<liferay-ui:message key="height-between"/>
+<aui:select name="minHeight" label="" suffix="and">
+	<%= MyListUtil.getHeightList(locale, matchCriteria.getMinHeight()) %>
+</aui:select>
+<aui:select name="maxHeight" label="">
+	<%= MyListUtil.getHeightList(locale, matchCriteria.getMaxHeight()) %>
+</aui:select>

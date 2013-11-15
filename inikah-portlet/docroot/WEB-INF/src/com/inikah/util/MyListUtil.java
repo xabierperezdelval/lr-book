@@ -191,4 +191,73 @@ public class MyListUtil {
 		
 		return sb.toString();
 	}
+	
+	public static String getAgeList(Locale locale, int age, boolean bride) {
+		StringBuilder sb = new StringBuilder();
+		
+		int minLimit = bride? 20 : 10;
+		int maxLimit = bride? 70 : 60;
+		
+		for (int i=minLimit; i<=maxLimit; i++) {
+			sb.append("<option value=");
+			sb.append(StringPool.QUOTE);
+			sb.append(i);
+			sb.append(StringPool.QUOTE);
+			
+			if (i == age) {
+				sb.append(StringPool.SPACE);
+				sb.append("selected");
+			}
+			
+			sb.append(">");
+			sb.append(i);
+			sb.append("</option>");
+		}
+		
+		return sb.toString();
+	}
+	
+	public static String getHeightList(Locale locale, int currValue) {
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i=140; i<=190; i++) {
+			sb.append("<option value=");
+			sb.append(StringPool.QUOTE);
+			sb.append(i);
+			sb.append(StringPool.QUOTE);
+			
+			if (i == currValue) {
+				sb.append(StringPool.SPACE);
+				sb.append("selected");
+			}
+			
+			sb.append(">");
+			sb.append(getHeightText(i, false));
+			sb.append("</option>");
+		}
+		
+		return sb.toString();
+	}
+	
+	public static String getWeightList(Locale locale, int currValue) {
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i=30; i<=120; i++) {
+			sb.append("<option value=");
+			sb.append(StringPool.QUOTE);
+			sb.append(i);
+			sb.append(StringPool.QUOTE);
+			
+			if (i == currValue) {
+				sb.append(StringPool.SPACE);
+				sb.append("selected");
+			}
+			
+			sb.append(">");
+			sb.append(getWeightText(i, false));
+			sb.append("</option>");
+		}
+		
+		return sb.toString();				
+	}
 }
