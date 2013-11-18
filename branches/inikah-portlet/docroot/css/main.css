@@ -21,8 +21,17 @@
     color: maroon !important;
 }
 
+.invite-portlet .help-inline {
+    display: block;
+    font-style: italic;
+    color: maroon !important;
+}
 .plan-box .column-content  {
 	border: 2px solid orange;
 	text-align: center;
 	margin-right: 10px;
+}
+
+#email-fields .undomanager-content {
+	display: none;
 }
