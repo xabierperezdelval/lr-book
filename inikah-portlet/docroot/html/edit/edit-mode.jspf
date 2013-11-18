@@ -1,0 +1,28 @@
+<%
+	String tabNames = "step-1,step-2,step-3,step-4";
+	String tabs1 = ParamUtil.getString(request, "tabs1", "step-1");
+%>
+
+<portlet:renderURL var="tabURL">
+	<portlet:param name="tabs1" value="<%= tabs1 %>"/>
+</portlet:renderURL>
+
+<liferay-ui:tabs names="<%= tabNames %>" refresh="<%= true %>" url="<%= tabURL %>">
+	<liferay-ui:section>
+		<%@ include file="/html/edit/step1.jspf" %>
+	</liferay-ui:section>
+	
+	<liferay-ui:section>
+		<%@ include file="/html/edit/step2.jspf" %>
+	</liferay-ui:section>
+	
+	<liferay-ui:section>
+		<%@ include file="/html/edit/step3.jspf" %>
+	</liferay-ui:section>		
+	
+	<liferay-ui:section>
+		<%@ include file="/html/edit/step4.jspf" %>
+	</liferay-ui:section>		
+</liferay-ui:tabs>
+
+<aui:button type="submit"/>

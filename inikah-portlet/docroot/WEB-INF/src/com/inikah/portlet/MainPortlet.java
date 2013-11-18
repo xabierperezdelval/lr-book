@@ -58,7 +58,7 @@ public class MainPortlet extends MVCPortlet {
 					
 					// check ownership
 					long userId = PortalUtil.getUserId(request);
-					if (ProfileLocalServiceUtil.isOwner(userId, profileId)) {
+					if (profile.isOwner(userId)) {
 						request.setAttribute("PROFILE", profile);
 					} else {
 						viewTemplate = "/html/error/not-owner.jsp";
@@ -85,7 +85,7 @@ public class MainPortlet extends MVCPortlet {
 		
 		long userId = PortalUtil.getUserId(actionRequest);
 		if (Validator.isNotNull(profile) 
-				&& ProfileLocalServiceUtil.isOwner(userId, profileId)) {
+				&& profile.isOwner(userId)) {
 			
 			switch (currentStep) {
 				case 1: saveStep1(actionRequest, profile);

@@ -336,23 +336,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	/**
 	 * 
 	 */
-	public boolean isOwner(long userId, long profileId) {
-		
-		boolean flag = false;
-		try {
-			Profile profile = profilePersistence.fetchByUserId_ProfileId(userId, profileId);
-			
-			flag = (Validator.isNotNull(profile));
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return flag;
-	}
-	
-	/**
-	 * 
-	 */
 	public boolean hasSelfProfile(long userId) {
 		
 		boolean flag = false;

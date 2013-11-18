@@ -16,6 +16,7 @@ package com.inikah.slayer.model.impl;
 
 import java.util.Calendar;
 
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
@@ -177,6 +178,11 @@ public class ProfileImpl extends ProfileBaseImpl {
 	}
 	
 	public boolean isEditMode() {
-		return getStatus() > IConstants.PROFILE_STATUS_STEP4_DONE;
+		return getStatus() >= IConstants.PROFILE_STATUS_STEP4_DONE;
+		//return false;
+	}
+	
+	public boolean isOwner(long userId) {
+		return (userId == getUserId());
 	}
 }
