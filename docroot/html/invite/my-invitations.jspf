@@ -1,0 +1,52 @@
+<%@page import="com.inikah.slayer.service.InvitationLocalServiceUtil"%>
+<%@page import="com.inikah.slayer.service.impl.InvitationLocalServiceImpl"%>
+<%@page import="com.inikah.invite.InviteConstants"%>
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%
+
+	int status = ParamUtil.getInteger(request, "status", -1);
+    long userId=user.getUserId();
+	List<Invitation> invitations = InvitationLocalServiceUtil.getUserInvitations(user.getUserId(), status);
+	
+	
+	int totalInvitationCount= InvitationLocalServiceUtil.getUserInvitationsCount(userId, -1);
+	int clickedInvitationCount= InvitationLocalServiceUtil.getUserInvitationsCount(userId,InviteConstants.STATUS_CLICKED );
+	int joinedInvitationCount= InvitationLocalServiceUtil.getUserInvitationsCount(userId, InviteConstants.STATUS_JOINED);
+	int linkedInvitationCount= InvitationLocalServiceUtil.getUserInvitationsCount(userId, InviteConstants.STATUS_LINKED);
+
+
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("tabs2", "my-invitations");
+	iteratorURL.setParameter("status", String.valueOf(status));
+	
+	PortletURL filterURL = renderResponse.createRenderURL();
+	filterURL.setParameter("tabs2", "my-invitations");
+%>
+
+<font color='#009AE5' face="sans-serif">
+<aui:a href="<%= filterURL.toString() %>" label="invited-invitations"/> (<%= totalInvitationCount %>)| 
+
+<%-- <% filterURL.setParameter("status", String.valueOf(InviteConstants.STATUS_CREATED));%>
+<aui:a href="<%= filterURL.toString() %>" label="invitees-created" /> (<%= clickedInvitationCount %>)|
+ --%>
+ 
+<% filterURL.setParameter("status", String.valueOf(InviteConstants.STATUS_CLICKED));%>
+<aui:a href="<%= filterURL.toString() %>" label="invitees-clicked" /> (<%=clickedInvitationCount %>)|
+
+<% filterURL.setParameter("status", String.valueOf(InviteConstants.STATUS_JOINED)); %>
+<aui:a href="<%= filterURL.toString() %>" label="invitees-joined" /> (<%=joinedInvitationCount %>)|
+
+<% filterURL.setParameter("status", String.valueOf(InviteConstants.STATUS_LINKED)); %> 
+<aui:a href="<%= filterURL.toString() %>" label="invitees-linked"/> (<%= linkedInvitationCount %>)
+</font>
+<liferay-ui:search-container delta="5" emptyResultsMessage="No Invitations to display" iteratorURL="<%= iteratorURL %>" >
+	<liferay-ui:search-container-results
+		total="<%= invitations.size() %>"
+		results="<%= ListUtil.subList(invitations, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+<liferay-ui:search-container-row className="com.inikah.slayer.model.Invitation" modelVar="invitation" >
+<liferay-ui:search-container-column-jsp name="Invitees"
+			path="<%= IConstants.MY_INVITATION %>"  />
+</liferay-ui:search-container-row>
+<liferay-ui:search-iterator searchContainer="<%= searchContainer %>"/>
+</liferay-ui:search-container>

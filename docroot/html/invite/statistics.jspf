@@ -1,0 +1,87 @@
+<%@page import="com.inikah.invite.InviteConstants"%>
+<%@page import="com.inikah.slayer.service.InvitationLocalServiceUtil"%>
+<c:choose>
+	<c:when test="<%= InvitationLocalServiceUtil.userHasInvitations(user.getUserId()) %>">
+		<%
+			int sentInvitations = InvitationLocalServiceUtil.getUserInvitationsCount(user.getUserId(), -1);
+			int joinedInvitations = InvitationLocalServiceUtil.getUserInvitationsCount(user.getUserId(), InviteConstants.STATUS_JOINED);
+			int linkedInvitations = InvitationLocalServiceUtil.getUserInvitationsCount(user.getUserId(), InviteConstants.STATUS_LINKED);
+			int acceptedInvitation = linkedInvitations+joinedInvitations;
+			int pendingInvitations = sentInvitations - acceptedInvitation ;
+		%>
+		<aui:layout>
+			<aui:column first="true" cssClass="aui-w25">
+				<liferay-ui:message key="total-invitations-sent"/>: <b><%= sentInvitations %></b> 
+				<br/><liferay-ui:message key="invitations-accepted"/>: <b><%= acceptedInvitation %></b>
+				<br/><liferay-ui:message key="acceptance-ratio"/>: <b><%= Math.round(((float) acceptedInvitation / (float)sentInvitations) * 100) %>%</b>
+				<%-- <br/><liferay-ui:message key="total-points-earned"/>: <b><%= InvitationLocalServiceUtil.getTotalPoints(user.getUserId(), pointsForInviting, pointsForAccepting) %></b>
+				<br/><liferay-ui:message key="your-rank"/>: <b><%= InvitationLocalServiceUtil.getUserRank(user.getUserId()) %></b> 
+				
+				<hr/>
+				<i>
+					<liferay-ui:message key="points-for-inviting"/>: <b><%=  %></b> 
+					<br/><liferay-ui:message key="points-for-accepting"/>: <b><%= %></b>
+				</i>--%>
+			</aui:column>
+			
+			<aui:column last="true" cssClass="aui-w75">
+			
+			
+			<%-- 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			    <script type="text/javascript">
+			    	google.load("visualization", "1", {packages:["corechart"]});
+			      	google.setOnLoadCallback(drawChart);
+			      	function drawChart() {
+			        	var data = google.visualization.arrayToDataTable([
+							['Invitation', 'Count'],                                              
+			          		['Pending', <%= pendingInvitations %>],
+			          		['Joined', <%= joinedInvitations %>],
+			          		['Linked', <%= linkedInvitations %>]
+						]);
+			
+			        	var options = {
+			          		title: 'Invitation Statistics',
+			          		is3D:true;
+			          		height: 300,
+			          		width: 370
+			        	};
+			
+			        	var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+			        	chart.draw(data, options);
+			      	}
+			    </script>
+ --%>
+ 
+ 
+ <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+    	  var data = google.visualization.arrayToDataTable([
+    	                        							['Invitation', 'Count'],                                              
+    	                        			          		['Pending', <%= pendingInvitations %>],
+    	                        			          		['Joined', <%= joinedInvitations %>],
+    	                        			          		['Linked', <%= linkedInvitations %>]
+    	                        						]);
+
+        var options = {
+        		title: 'Invitation Statistics',
+        		is3D: true,
+          		height: 300,
+          		width: 370
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+ 
+ 			    <div id="piechart_3d"></div>
+			</aui:column>
+		</aui:layout>
+	</c:when>
+	<c:otherwise>
+		<liferay-ui:message key="no-invitations-sent" />
+	</c:otherwise>
+</c:choose>
