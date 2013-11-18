@@ -26,3 +26,6 @@
 <aui:select name="maxHeight" label="">
 	<%= MyListUtil.getHeightList(locale, matchCriteria.getMaxHeight()) %>
 </aui:select>
+
+<liferay-ui:message key="marital-status"/>
+<%= MyListUtil.getMaritalStatus(locale, matchCriteria.getMaritalStatus()) %>

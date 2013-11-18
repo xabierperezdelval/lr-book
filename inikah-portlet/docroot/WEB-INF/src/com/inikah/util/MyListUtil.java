@@ -260,4 +260,22 @@ public class MyListUtil {
 		
 		return sb.toString();				
 	}
+	
+	public static String getMaritalStatus(String selectedValues) {
+		StringBuilder sb = new StringBuilder();
+		
+		String listName = Profile.class.getName() + StringPool.PERIOD + IConstants.LIST_MARITAL_STATUS;
+		
+		try {
+			List<ListType> listTypes = ListTypeServiceUtil.getListTypes(listName);
+			
+			for (ListType listType: listTypes) {
+				sb.append(listType.getName());
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
+	}
 }
