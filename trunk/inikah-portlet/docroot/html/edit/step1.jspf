@@ -4,7 +4,7 @@
 			<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
 		</aui:select>
 		
-		<%@ include file="/html/profile/edit/step1-bornon.jspf" %>
+		<%@ include file="/html/edit/step1-bornon.jspf" %>
 	</aui:column>
 
 	<aui:column>

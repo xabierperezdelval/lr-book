@@ -19,8 +19,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class FilterPortlet extends MVCPortlet {
 	public void saveCriteria(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-
-		System.out.println("inside save criteria....");
 		
 		long profileId = ParamUtil.getLong(actionRequest, "profileId");
 		
@@ -51,8 +49,6 @@ public class FilterPortlet extends MVCPortlet {
 			matchCriteria = MatchCriteriaLocalServiceUtil.updateMatchCriteria(matchCriteria);
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}
-		
-		System.out.println("updated match criteria....");
+		}		
 	} 
 }

@@ -1,0 +1,19 @@
+<c:choose>
+	<c:when test="<%= profile.getStatus() == IConstants.PROFILE_STATUS_CREATED %>">
+		<%@ include file="/html/edit/step1.jspf" %>
+	</c:when>
+
+	<c:when test="<%= profile.getStatus() == IConstants.PROFILE_STATUS_STEP1_DONE %>">
+		<%@ include file="/html/edit/step2.jspf" %>
+	</c:when>	
+	
+	<c:when test="<%= profile.getStatus() == IConstants.PROFILE_STATUS_STEP2_DONE %>">
+		<%@ include file="/html/edit/step3.jspf" %>
+	</c:when>	
+	
+	<c:when test="<%= profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE %>">
+		<%@ include file="/html/edit/step4.jspf" %>
+	</c:when>			
+</c:choose>
+
+<aui:button type="submit" value="Next &raquo;"/>
