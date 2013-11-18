@@ -5,8 +5,10 @@ import java.io.IOException;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
 
 import com.inikah.slayer.model.MatchCriteria;
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -20,11 +22,11 @@ public class FilterPortlet extends MVCPortlet {
 	public void saveCriteria(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
-		long profileId = ParamUtil.getLong(actionRequest, "profileId");
+		Profile profile = (Profile) actionRequest.getPortletSession().getAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
 		
 		MatchCriteria matchCriteria = null;
 		try {
-			matchCriteria = MatchCriteriaLocalServiceUtil.fetchMatchCriteria(profileId);
+			matchCriteria = MatchCriteriaLocalServiceUtil.fetchMatchCriteria(profile.getProfileId());
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
