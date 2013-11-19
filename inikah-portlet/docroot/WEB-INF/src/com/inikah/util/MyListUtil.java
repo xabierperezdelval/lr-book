@@ -98,8 +98,7 @@ public class MyListUtil {
 					
 				// only if the list is for "maritalStatus"
 				if (suffix.equalsIgnoreCase(IConstants.LIST_MARITAL_STATUS) 
-						&& profile.isBride() && (name.endsWith("married") 
-						&& !name.endsWith("unmarried"))) continue;
+						&& profile.isBride() && name.endsWith("single")) continue;
 				
 				// check for createdFor
 				if (suffix.equalsIgnoreCase(IConstants.LIST_CREATED_FOR) 
