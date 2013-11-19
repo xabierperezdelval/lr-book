@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ListType;
 import com.liferay.portal.service.ListTypeServiceUtil;
 
@@ -261,21 +262,20 @@ public class MyListUtil {
 		return sb.toString();				
 	}
 	
-	public static String getMaritalStatus(String selectedValues) {
-		StringBuilder sb = new StringBuilder();
+	public static String getChecked(String csv, String listTypeId) {
+		String checked = StringPool.BLANK;
 		
-		String listName = Profile.class.getName() + StringPool.PERIOD + IConstants.LIST_MARITAL_STATUS;
-		
-		try {
-			List<ListType> listTypes = ListTypeServiceUtil.getListTypes(listName);
+		if (Validator.isNotNull(csv)) {
+			String[] items = csv.split(StringPool.COMMA);
 			
-			for (ListType listType: listTypes) {
-				sb.append(listType.getName());
+			for (int i=0; i<items.length; i++) {
+				if (items[i].equalsIgnoreCase(listTypeId)) {
+					checked = "checked";
+					break;
+				}
 			}
-		} catch (SystemException e) {
-			e.printStackTrace();
 		}
 		
-		return sb.toString();
+		return checked;
 	}
 }

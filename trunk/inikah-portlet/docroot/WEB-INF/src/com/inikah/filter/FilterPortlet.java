@@ -7,11 +7,14 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -46,6 +49,12 @@ public class FilterPortlet extends MVCPortlet {
 		
 		matchCriteria.setMinHeight(minHeight);
 		matchCriteria.setMaxHeight(maxHeight);
+		
+		// marital status
+		String[] maritalStatusArray = ParamUtil.getParameterValues(actionRequest, "maritalStatus");
+		String maritalStatus = StringUtils.join(maritalStatusArray, StringPool.COMMA);
+
+		matchCriteria.setMaritalStatus(maritalStatus);
 		
 		try {
 			matchCriteria = MatchCriteriaLocalServiceUtil.updateMatchCriteria(matchCriteria);

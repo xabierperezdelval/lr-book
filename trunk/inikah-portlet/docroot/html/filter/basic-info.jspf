@@ -19,13 +19,37 @@
 </div>
 
 <hr/>
-<liferay-ui:message key="height-between"/>
-<aui:select name="minHeight" label="" suffix="and">
-	<%= MyListUtil.getHeightList(locale, matchCriteria.getMinHeight()) %>
-</aui:select>
-<aui:select name="maxHeight" label="">
-	<%= MyListUtil.getHeightList(locale, matchCriteria.getMaxHeight()) %>
-</aui:select>
 
-<liferay-ui:message key="marital-status"/>
-<%= MyListUtil.getMaritalStatus(locale, matchCriteria.getMaritalStatus()) %>
+<div class="control-group">
+	<label class="control-label" for="height-between">
+		<liferay-ui:message key="height-between"/>
+	</label>		
+		
+	<aui:select name="minHeight" label="" suffix="and">
+		<%= MyListUtil.getHeightList(locale, matchCriteria.getMinHeight()) %>
+	</aui:select>
+	<aui:select name="maxHeight" label="">
+		<%= MyListUtil.getHeightList(locale, matchCriteria.getMaxHeight()) %>
+	</aui:select>			
+</div>
+
+<hr/>
+
+<div class="control-group">
+	<label class="control-label" for="marital-status">
+		<liferay-ui:message key="marital-status"/>
+	</label>		
+		
+	<%
+		List<ListType> mStatusItems = BridgeServiceUtil.getList(IConstants.LIST_MARITAL_STATUS);
+		for (ListType listType: mStatusItems) {
+			%>
+				<label class="checkbox">
+					<input class="field" type="checkbox" value="<%= listType.getListTypeId() %>" name="<portlet:namespace/>maritalStatus" 
+						<%= MyListUtil.getChecked(matchCriteria.getMaritalStatus(), String.valueOf(listType.getListTypeId())) %>>
+					<liferay-ui:message key="<%= listType.getName() %>"/>
+				</label> 
+			<%
+		}
+	%>		
+</div>
