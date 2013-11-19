@@ -44,11 +44,13 @@
 		List<ListType> mStatusItems = BridgeServiceUtil.getList(IConstants.LIST_MARITAL_STATUS);
 		for (ListType listType: mStatusItems) {
 			%>
-				<label class="checkbox">
-					<input class="field" type="checkbox" value="<%= listType.getListTypeId() %>" name="<portlet:namespace/>maritalStatus" 
-						<%= MyListUtil.getChecked(matchCriteria.getMaritalStatus(), String.valueOf(listType.getListTypeId())) %>>
-					<liferay-ui:message key="<%= listType.getName() %>"/>
-				</label> 
+				<aui:column>
+					<label class="checkbox">
+						<input class="field" type="checkbox" value="<%= listType.getListTypeId() %>" name="<portlet:namespace/>maritalStatus" 
+							<%= MyListUtil.getChecked(matchCriteria.getMaritalStatus(), String.valueOf(listType.getListTypeId())) %>>
+						<liferay-ui:message key="<%= listType.getName() %>"/>
+					</label>
+				</aui:column>
 			<%
 		}
 	%>		
