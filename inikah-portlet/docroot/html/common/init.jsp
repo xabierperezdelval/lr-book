@@ -31,10 +31,12 @@
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 
+<%@page import="com.liferay.portal.model.ListType"%>
 <%@page import="com.inikah.util.IConstants"%>
 <%@page import="com.inikah.slayer.model.Profile"%>
 <%@page import="com.inikah.util.MyListUtil"%>
 
+<%@page import="com.inikah.slayer.service.BridgeServiceUtil"%>
 <%@page import="com.inikah.slayer.service.ProfileLocalServiceUtil"%>
 
 <portlet:defineObjects />

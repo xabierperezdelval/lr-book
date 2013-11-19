@@ -140,4 +140,19 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		}
 		return listTypeId;
 	}
+	
+	public List<ListType> getList(String listName) {
+		
+		
+		List<ListType> listTypes = null;
+		String _listName = Profile.class.getName() + StringPool.PERIOD + listName;
+		
+		try {
+			listTypes = listTypeService.getListTypes(_listName);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return listTypes;
+	}
 }

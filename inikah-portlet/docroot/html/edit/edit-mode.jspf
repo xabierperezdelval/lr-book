@@ -1,6 +1,6 @@
 <%
 	String tabNames = "step-1,step-2,step-3,step-4";
-	String tabs1 = ParamUtil.getString(request, "tabs1", "step-1");
+	String tabs1 = ParamUtil.getString(renderRequest, "tabs1", "step-1");
 %>
 
 <portlet:renderURL var="tabURL">
