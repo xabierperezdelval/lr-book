@@ -126,6 +126,8 @@ public class MatchCriteriaLocalServiceImpl
 		// only pull profiles that are currently 'ACTIVE'
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
 		
+		// marital status
+		
 		// exclude profiles that are "blocked" for this profile
 		List<Long> blockedIds = InteractionLocalServiceUtil.getTargetIds(profileId, IConstants.INT_ACTION_BLOCKED);
 		for (long targetId: blockedIds) {

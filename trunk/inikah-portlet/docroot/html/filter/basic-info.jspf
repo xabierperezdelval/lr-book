@@ -43,6 +43,7 @@
 	<%
 		List<ListType> mStatusItems = BridgeServiceUtil.getList(IConstants.LIST_MARITAL_STATUS);
 		for (ListType listType: mStatusItems) {
+			if (!profile.isBride() && listType.getName().endsWith("married")) continue;
 			%>
 				<aui:column>
 					<label class="checkbox">
