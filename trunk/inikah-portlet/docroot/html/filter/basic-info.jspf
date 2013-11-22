@@ -41,15 +41,14 @@
 	</label>		
 		
 	<%
-		List<ListType> mStatusItems = BridgeServiceUtil.getList(IConstants.LIST_MARITAL_STATUS);
-		for (ListType listType: mStatusItems) {
-			if (!profile.isBride() && listType.getName().endsWith("married")) continue;
+		List<KeyValuePair> kvPairs = MyListUtil.getMaritalStatus(profile.isBride());
+		for (KeyValuePair kvPair: kvPairs) {
 			%>
 				<aui:column>
 					<label class="checkbox">
-						<input class="field" type="checkbox" value="<%= listType.getListTypeId() %>" name="<portlet:namespace/>maritalStatus" 
-							<%= MyListUtil.getChecked(matchCriteria.getMaritalStatus(), String.valueOf(listType.getListTypeId())) %>>
-						<liferay-ui:message key="<%= listType.getName() %>"/>
+						<input class="field" type="checkbox" value="<%= kvPair.getKey() %>" name="<portlet:namespace/>maritalStatus" 
+							<%= MyListUtil.getChecked(matchCriteria.getMaritalStatus(), kvPair.getKey()) %>>
+						<liferay-ui:message key="<%= kvPair.getValue() %>"/>
 					</label>
 				</aui:column>
 			<%

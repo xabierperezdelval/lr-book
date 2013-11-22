@@ -27,6 +27,7 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="com.liferay.portal.kernel.util.KeyValuePair"%>
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
@@ -48,7 +49,7 @@
 	if (layout.getName(locale).equalsIgnoreCase("mine")) {
 		portletSession.removeAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
 	} else if (Validator.isNull(profile)) {
-		long profileId = ParamUtil.getLong(request, "profileId", 0l);
+		long profileId = ParamUtil.getLong(renderRequest, "profileId", 0l);
 		if (profileId > 0l) {
 			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
 			portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);

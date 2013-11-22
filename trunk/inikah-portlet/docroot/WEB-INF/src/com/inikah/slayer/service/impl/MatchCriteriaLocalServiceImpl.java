@@ -15,6 +15,7 @@
 package com.inikah.slayer.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.inikah.slayer.model.MatchCriteria;
@@ -28,6 +29,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -77,6 +79,9 @@ public class MatchCriteriaLocalServiceImpl
 		matchCriteria.setMinAge(minAge);
 		matchCriteria.setMaxAge(maxAge);
 		
+		// set MaritalStatus
+		matchCriteria.setMaritalStatus(profile.getAllowedMaritalStatus());
+		
 		try {
 			addMatchCriteria(matchCriteria);
 		} catch (SystemException e) {
@@ -84,10 +89,10 @@ public class MatchCriteriaLocalServiceImpl
 		}
 	}
 	
-	
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Profile> getMatches(long profileId) {
 		
 		List<Profile> matches = new ArrayList<Profile>();
@@ -127,6 +132,13 @@ public class MatchCriteriaLocalServiceImpl
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
 		
 		// marital status
+		String maritalStatusCSV = matchCriteria.getMaritalStatus();
+		if (Validator.isNotNull(maritalStatusCSV)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", Arrays.asList(maritalStatusCSV.split(StringPool.COMMA))));
+		}
+		
+		// NEVER show "Single" profiles for Non-Single Profiles. 
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("allowNonSingleProposals", !profile.isSingle()));
 		
 		// exclude profiles that are "blocked" for this profile
 		List<Long> blockedIds = InteractionLocalServiceUtil.getTargetIds(profileId, IConstants.INT_ACTION_BLOCKED);

@@ -85,7 +85,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content/invite/Language</resource-bundle>
+		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
 			<title>Invite Portlet</title>
 			<short-title>Invite Portlet</short-title>
@@ -117,7 +117,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content/payment/Language</resource-bundle>
+		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
 			<title>Payment Portlet</title>
 			<short-title>Payment Portlet</short-title>
@@ -144,6 +144,10 @@
 			<name>view-template</name>
 			<value>/html/filter/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>		
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -167,6 +171,9 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
+		<supported-public-render-parameter>
+			profileId
+		</supported-public-render-parameter>		
 	</portlet>
 	<portlet>
 		<portlet-name>matches</portlet-name>
@@ -199,6 +206,9 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
+		<supported-public-render-parameter>
+			profileId
+		</supported-public-render-parameter>
 	</portlet>
 	<portlet>
 		<portlet-name>edit</portlet-name>
@@ -236,4 +246,9 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	
+	<public-render-parameter>
+		<identifier>profileId</identifier>
+		<qname xmlns:x="http://inikah.com">x:profileId</qname>
+	</public-render-parameter>
 </portlet-app>
