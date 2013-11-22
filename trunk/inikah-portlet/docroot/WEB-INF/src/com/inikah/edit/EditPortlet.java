@@ -10,10 +10,17 @@ import javax.portlet.PortletSession;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
+import com.inikah.util.SMSUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Contact;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ContactLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -26,13 +33,20 @@ public class EditPortlet extends MVCPortlet {
 
 		Profile profile = (Profile) actionRequest.getPortletSession().getAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
 		
-		long userId = PortalUtil.getUserId(actionRequest);
-		
-		if (Validator.isNotNull(profile) && profile.isOwner(userId)) {
+		User user = null;
+		try {
+			user = PortalUtil.getUser(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+				
+		if (Validator.isNotNull(profile) && profile.isOwner(user.getUserId())) {
 			
 			switch (profile.getStatus()) {
 				case IConstants.PROFILE_STATUS_CREATED: 
-					saveStep1(actionRequest, profile);
+					saveStep1(actionRequest, profile, user);
 					break;
 					
 				case IConstants.PROFILE_STATUS_STEP1_DONE: 
@@ -54,14 +68,10 @@ public class EditPortlet extends MVCPortlet {
 				e.printStackTrace();
 			}			
 		}
+		actionResponse.setRenderParameter("tabs1", ParamUtil.getString(actionRequest, "tabs1"));
 	}
 	
-	private void saveStep1(ActionRequest actionRequest, Profile profile) {
-		
-		System.out.println("saving step1...");
-
-		int maritalStatus = ParamUtil.getInteger(actionRequest, "maritalStatus");
-		int createdFor = ParamUtil.getInteger(actionRequest, "createdFor");
+	private void saveStep1(ActionRequest actionRequest, Profile profile, User user) {
 		
 		int bornMonth = ParamUtil.getInteger(actionRequest, "bornMonth");
 		int bornYear = ParamUtil.getInteger(actionRequest, "bornYear");
@@ -70,12 +80,46 @@ public class EditPortlet extends MVCPortlet {
 			profile.setBornOn(Integer.valueOf(bornYear + String.format("%02d", bornMonth)));
 		}
 		
-		profile.setMaritalStatus(maritalStatus);
-		profile.setCreatedFor(createdFor);
+		profile.setMaritalStatus(ParamUtil.getInteger(actionRequest, "maritalStatus"));
+		profile.setCreatedFor(ParamUtil.getInteger(actionRequest, "createdFor"));
+		profile.setHeight(ParamUtil.getInteger(actionRequest, "height"));
+		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
+		
+		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
+		profile.setMobileNumber(mobileNumber);
+		profile.setVerificationCode(sendVerificationCode(mobileNumber));
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_CREATED) {
-			System.out.println("setting the new status....");
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP1_DONE);
+			updateNonSelfUser(actionRequest, user, profile.isCreatedForSelf());
+		}
+	}
+
+	private void updateNonSelfUser(ActionRequest actionRequest, User user, boolean createdForSelf) {
+		
+		if (createdForSelf) return;
+		
+		// update user info
+		String userName = ParamUtil.getString(actionRequest, "userName");
+		boolean female = ParamUtil.getBoolean(actionRequest, "female", false);
+
+		user.setFirstName(userName);
+		try {
+			UserLocalServiceUtil.updateUser(user);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (female) {
+			try {
+				Contact contact = user.getContact();
+				contact.setMale(false);
+				ContactLocalServiceUtil.updateContact(contact);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}						
 		}
 	}	
 
@@ -100,5 +144,15 @@ public class EditPortlet extends MVCPortlet {
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
 		}
+	}
+	
+	private String sendVerificationCode(String mobileNumber) {
+		// TODO Auto-generated method stub
+		
+		String verificationCode = PwdGenerator.getPinNumber();
+		
+		SMSUtil.sendVerificationCode("91" + mobileNumber, verificationCode);
+		
+		return verificationCode;
 	}
 }

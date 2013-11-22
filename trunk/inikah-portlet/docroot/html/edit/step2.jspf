@@ -1,2 +1,11 @@
-
-This is step2
+<c:if test="<%= !editMode %>">
+	<aui:row>
+		<aui:column>
+				
+		</aui:column>
+		
+		<aui:column>
+				
+		</aui:column>		
+	</aui:row>
+</c:if>

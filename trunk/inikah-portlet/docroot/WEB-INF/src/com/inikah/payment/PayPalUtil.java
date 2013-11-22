@@ -86,7 +86,6 @@ public class PayPalUtil {
 		
 		String amountRounded = (new DecimalFormat("0.00")).format(itemAmount);
 		
-		System.out.println("amountRounded ==> " + amountRounded);
 		amt.setValue(amountRounded);
 		int itemQuantity = 1;
 		item.setQuantity(itemQuantity);
@@ -343,9 +342,7 @@ public class PayPalUtil {
 				
 				try {
 					JSONObject jsonObject = JSONFactoryUtil.createJSONObject(createdPayment.toJSON());
-					
-					System.out.println("jsonObject ==> " + jsonObject.toString());
-					
+										
 					href = jsonObject.getJSONArray("links").getJSONObject(1).getString("href");					
 				} catch (JSONException e) {
 					e.printStackTrace();

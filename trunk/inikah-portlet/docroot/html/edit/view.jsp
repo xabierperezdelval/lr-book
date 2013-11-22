@@ -2,7 +2,7 @@
 
 <portlet:actionURL var="saveProfileURL" name="saveProfile"/>
 
-<aui:form action="<%= saveProfileURL %>">	
+<aui:form action="<%= saveProfileURL %>">
 	<c:choose>
 		<c:when test="<%= editMode %>">
 			<%@ include file="/html/edit/edit-mode.jspf" %>
