@@ -1,6 +1,7 @@
 package com.inikah.util;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import com.inikah.slayer.service.BridgeServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ListType;
@@ -276,5 +278,24 @@ public class MyListUtil {
 		}
 		
 		return checked;
+	}
+	
+	public static List<KeyValuePair> getMaritalStatus(boolean bride) {
+		
+		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
+		String type = Profile.class.getName() + StringPool.PERIOD + IConstants.LIST_MARITAL_STATUS;
+		
+		try {
+			List<ListType> mStatusItems = ListTypeServiceUtil.getListTypes(type);
+			
+			for (ListType listType: mStatusItems) { 
+				if (!bride && listType.getName().endsWith("married")) continue;
+				kvPairs.add(new KeyValuePair(String.valueOf(listType.getListTypeId()), listType.getName()));
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return kvPairs;
 	}
 }

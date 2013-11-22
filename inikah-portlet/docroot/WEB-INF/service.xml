@@ -85,6 +85,7 @@
 		<column name="status" type="int" />
 		<column name="currentPlan" type="long"/>
 		<column name="validUpto" type="Date"/>
+		<column name="allowNonSingleProposals" type="boolean"/>
 		
 		<order by="desc">
 			<order-column name="ownerLastLogin"/>

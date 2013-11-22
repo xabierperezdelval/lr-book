@@ -60,6 +60,7 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
+		<render-weight>1.5</render-weight>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
@@ -70,6 +71,7 @@
 		<portlet-name>matches</portlet-name>
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
+		<autopropagated-parameters>profileId</autopropagated-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js

@@ -16,7 +16,6 @@ package com.inikah.slayer.model.impl;
 
 import java.util.Calendar;
 
-import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
@@ -184,5 +183,48 @@ public class ProfileImpl extends ProfileBaseImpl {
 	
 	public boolean isOwner(long userId) {
 		return (userId == getUserId());
+	}
+	
+	public boolean isSingle() {
+		return (getMaritalStatus() == BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "single"));
+	}
+	
+	public boolean isMarried() {
+		return (!isBride() && 
+				(getMaritalStatus() == BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "married")));
+	}
+	
+	public String getAllowedMaritalStatus() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		long singleStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "single");
+		long marriedStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "married");
+		long divocedStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "divorced");
+		long widowStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "widow");
+		
+		if (isSingle() && !isAllowNonSingleProposals()) {
+			sb.append(singleStatus);
+		}
+		
+		if (isSingle() && isAllowNonSingleProposals()) {
+			sb.append(singleStatus);
+			sb.append(StringPool.COMMA);
+			sb.append(divocedStatus);
+			sb.append(StringPool.COMMA);
+			sb.append(widowStatus);
+		}
+		
+		if (!isSingle()) {
+			if (isBride()) {
+				sb.append(marriedStatus);
+				sb.append(StringPool.COMMA);				
+			}
+			sb.append(divocedStatus);
+			sb.append(StringPool.COMMA);
+			sb.append(widowStatus);
+		}		
+		
+		return sb.toString();
 	}
 }
