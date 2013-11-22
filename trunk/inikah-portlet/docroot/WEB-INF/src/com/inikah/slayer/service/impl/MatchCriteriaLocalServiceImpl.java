@@ -15,7 +15,6 @@
 package com.inikah.slayer.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.inikah.slayer.model.MatchCriteria;
@@ -24,12 +23,12 @@ import com.inikah.slayer.service.InteractionLocalServiceUtil;
 import com.inikah.slayer.service.base.MatchCriteriaLocalServiceBaseImpl;
 import com.inikah.util.AgeUtil;
 import com.inikah.util.IConstants;
+import com.inikah.util.MyListUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -134,7 +133,7 @@ public class MatchCriteriaLocalServiceImpl
 		// marital status
 		String maritalStatusCSV = matchCriteria.getMaritalStatus();
 		if (Validator.isNotNull(maritalStatusCSV)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", Arrays.asList(maritalStatusCSV.split(StringPool.COMMA))));
+			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", MyListUtil.getIntegers(maritalStatusCSV)));
 		}
 		
 		// NEVER show "Single" profiles for Non-Single Profiles. 

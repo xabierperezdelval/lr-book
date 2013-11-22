@@ -298,4 +298,16 @@ public class MyListUtil {
 		
 		return kvPairs;
 	}
+	
+	public static List<Integer> getIntegers(String csv) {
+		
+		List<Integer> items = new ArrayList<Integer>();
+		if (Validator.isNotNull(csv)) {
+			String[] parts = csv.split(StringPool.COMMA);
+			for (int i=0; i<parts.length; i++) {
+				items.add(Integer.parseInt(parts[i]));
+			}
+		}		
+		return items;
+	}
 }
