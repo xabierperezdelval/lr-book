@@ -178,7 +178,6 @@ public class ProfileImpl extends ProfileBaseImpl {
 	
 	public boolean isEditMode() {
 		return getStatus() >= IConstants.PROFILE_STATUS_STEP4_DONE;
-		//return false;
 	}
 	
 	public boolean isOwner(long userId) {

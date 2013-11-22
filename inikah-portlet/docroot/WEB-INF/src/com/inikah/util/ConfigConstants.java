@@ -15,4 +15,8 @@ public interface ConfigConstants {
 	
 	String PAYPAL_OAUTH_CLIENTID = "oauth.clientId";
 	String PAYPAL_OAUTH_SECRET = "oauth.secret";	
+	
+	String CLICKATELL_USERNAME = "clickatell.username";
+	String CLICKATELL_PASSWORD = "clickatell.password";
+	String CLICKATELL_API_ID = "clickatell.api.id";
 }

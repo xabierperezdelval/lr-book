@@ -3,11 +3,12 @@
 	String tabs1 = ParamUtil.getString(renderRequest, "tabs1", "step-1");
 %>
 
-<portlet:renderURL var="tabURL">
+<portlet:renderURL var="tabsURL">
 	<portlet:param name="tabs1" value="<%= tabs1 %>"/>
 </portlet:renderURL>
 
-<liferay-ui:tabs names="<%= tabNames %>" refresh="<%= true %>" url="<%= tabURL %>">
+<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>"/>
+<liferay-ui:tabs names="<%= tabNames %>" refresh="<%= true %>" url="<%= tabsURL %>">
 	<liferay-ui:section>
 		<%@ include file="/html/edit/step1.jspf" %>
 	</liferay-ui:section>

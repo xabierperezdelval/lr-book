@@ -1,12 +1,9 @@
-<aui:fieldset>
+<aui:row>
 	<aui:column>
 		<aui:select name="maritalStatus" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
 			<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
 		</aui:select>
-		
-		<%@ include file="/html/edit/step1-bornon.jspf" %>
 	</aui:column>
-
 	<aui:column>
 		<c:choose>
 			<c:when test="<%= profile.isCreatedForSelf() %>">
@@ -18,8 +15,51 @@
 				</aui:select>
 			</c:otherwise>
 		</c:choose>
-		
+	</aui:column>	
+</aui:row>
+
+<aui:row>
+	<aui:column>
+		<%@ include file="/html/edit/step1-bornon.jspf" %>
+	</aui:column>
+	<aui:column>
 		<aui:select name="motherTongue">
 		</aui:select>
+	</aui:column>	
+</aui:row>
+
+<aui:row>
+	<aui:column>
+		<aui:select name="height">
+			<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
+		</aui:select>
 	</aui:column>
-</aui:fieldset>
+	<aui:column>
+		<aui:select name="weight">
+			<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
+		</aui:select>
+	</aui:column>	
+</aui:row>
+
+<aui:row>
+	<aui:column>
+		<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>">
+			<aui:validator name="email"/>
+		</aui:input>
+	</aui:column>
+	<aui:column>
+		<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" prefix="+91">
+		</aui:input>
+	</aui:column>	
+</aui:row>
+
+<c:if test="<%= !editMode %>">
+	<aui:row>
+		<aui:column>
+			<aui:input name="userName" label="your-name"/>
+		</aui:column>
+		<aui:column>
+			<aui:input type="checkbox" name="female" label="i-am-a-female"/>
+		</aui:column>	
+	</aui:row>
+</c:if>

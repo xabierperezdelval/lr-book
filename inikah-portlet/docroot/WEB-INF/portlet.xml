@@ -245,6 +245,7 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
+		<supported-public-render-parameter>profileId</supported-public-render-parameter>
 	</portlet>
 	
 	<public-render-parameter>

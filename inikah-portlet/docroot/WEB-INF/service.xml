@@ -42,8 +42,11 @@
 
 		<!-- Contact Information -->
 		<column name="emailAddress" type="String" />
-		<column name="phone1" type="String" />
-		<column name="phone2" type="String" />
+		<column name="emailAddressVerified" type="boolean" />
+		<column name="mobileNumber" type="String" />
+		<column name="mobileNumberVerified" type="boolean" />
+		<column name="verificationCode" type="String"/>
+		<column name="alternateMobile" type="String" />
 		<column name="residingCountry" type="long" />
 		<column name="residingState" type="long" />
 		<column name="residingCity" type="long" />
