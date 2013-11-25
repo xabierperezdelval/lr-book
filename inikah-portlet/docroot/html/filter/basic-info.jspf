@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <div class="control-group">
 	<label class="control-label" for="age-between">
 		<liferay-ui:message key="age-between"/>
@@ -54,4 +55,38 @@
 			<%
 		}
 	%>		
+</div>
+
+<hr/>
+
+
+<div class="control-group">
+	<label class="control-label" for="mother-tongue">
+		<liferay-ui:message key="mother-tongue"/>
+	</label>		
+		
+	<%
+		Map<Long, String> languages = profile.getLanguagesSpoken();
+		Iterator<Long> itr = languages.keySet().iterator();
+		while (itr.hasNext()) {
+			Long key = itr.next();
+			String value = languages.get(key);
+			%>
+				<aui:column>
+					<label class="checkbox">
+						<input class="field" type="checkbox" value="<%= String.valueOf(key) %>" name="<portlet:namespace/>motherTongue" 
+							<%= MyListUtil.getChecked(matchCriteria.getMotherTongue(), String.valueOf(key)) %>>
+						<%= value %>
+					</label>
+				</aui:column>
+			<%
+		}
+	%>		
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="mother-tongue">
+		<liferay-ui:message key="mother-tongue"/>
+	</label>
+	<liferay-ui:input-move-boxes rightList="<%= new ArrayList<KeyValuePair>() %>" rightTitle="selected" leftBoxName="motherTongueLeft" leftList="<%= profile.getLanguagesSpokenAsList() %>" rightBoxName="motherTongue" leftTitle="available"/>
 </div>

@@ -17,6 +17,7 @@ package com.inikah.slayer.model.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
@@ -265,6 +267,22 @@ public class ProfileImpl extends ProfileBaseImpl {
 				
 				items.put(key, value);
 			}
+		}
+		
+		return items;
+	}
+	
+	public List<KeyValuePair> getLanguagesSpokenAsList() {
+		List<KeyValuePair> items = new ArrayList<KeyValuePair>();
+		
+		Map<Long, String> languages = getLanguagesSpoken();
+		Iterator<Long> itr = languages.keySet().iterator();
+		
+		while (itr.hasNext()) {
+			long key = itr.next();
+			String value = languages.get(key);
+			
+			items.add(new KeyValuePair(String.valueOf(key), value));
 		}
 		
 		return items;
