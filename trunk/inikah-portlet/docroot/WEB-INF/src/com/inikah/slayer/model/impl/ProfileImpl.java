@@ -14,11 +14,16 @@
 
 package com.inikah.slayer.model.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -233,5 +238,35 @@ public class ProfileImpl extends ProfileBaseImpl {
 		List<Profile> profiles = ProfileLocalServiceUtil.getProfilesForUser(getUserId());
 		
 		return (Validator.isNull(profiles) || profiles.isEmpty());
+	}
+	
+	public Map<Long, String> getLanguagesSpoken() {
+		Map<Long, String> items = new HashMap<Long, String>();
+	
+		List<Long> countryIds = new ArrayList<Long>();
+		
+		countryIds.add(getUserCountryId());
+		if (!countryIds.contains(getCountryOfBirth())) {
+			countryIds.add(getCountryOfBirth());
+		}
+		
+		if (!countryIds.contains(getResidingCountry())) {
+			countryIds.add(getResidingCountry());
+		}
+		
+		countryIds.add(999l);
+		
+		for (Long countryId: countryIds) {
+			List<MyLanguage> myLanguages = MyLanguageLocalServiceUtil.getLanguagesSpoken(countryId);
+			
+			for (MyLanguage myLanguage: myLanguages) {
+				long key = myLanguage.getLanguageId();
+				String value = myLanguage.getLanguage();
+				
+				items.put(key, value);
+			}
+		}
+		
+		return items;
 	}
 }
