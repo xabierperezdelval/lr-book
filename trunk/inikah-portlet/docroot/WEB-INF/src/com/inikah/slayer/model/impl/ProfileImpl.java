@@ -15,7 +15,9 @@
 package com.inikah.slayer.model.impl;
 
 import java.util.Calendar;
+import java.util.List;
 
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
@@ -225,5 +227,11 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}		
 		
 		return sb.toString();
+	}
+	
+	public boolean isFirstProfile() {
+		List<Profile> profiles = ProfileLocalServiceUtil.getProfilesForUser(getUserId());
+		
+		return (Validator.isNull(profiles) || profiles.isEmpty());
 	}
 }

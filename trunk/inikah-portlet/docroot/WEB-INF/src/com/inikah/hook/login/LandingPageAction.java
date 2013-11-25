@@ -52,8 +52,6 @@ public class LandingPageAction extends Action {
 
 		long companyId = PortalUtil.getCompanyId(request);
 		
-		System.out.println("inside landing page action...");
-
 		String path = null;
 
 		User user = null;
