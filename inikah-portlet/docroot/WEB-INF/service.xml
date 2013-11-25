@@ -328,6 +328,19 @@
 		<column name="pppFactor" type="double"/>
 	</entity>
 	
+	<entity name="MyLanguage" local-service="true" remote-service="false">
+		<column name="languageId" type="long" primary="true"/>
+		<column name="countryId" type="long" />
+		<column name="regionId" type="long" />
+		<column name="language" type="String"/>
+		
+		<finder return-type="Collection" name="CountryId">
+			<finder-column name="countryId"/>
+		</finder>
+		
+		
+	</entity>	
+	
 	<entity name="Plan" local-service="true" remote-service="false" cache-enabled="false">
 		<column name="planId" type="long" primary="true"/>
 		<column name="companyId" type="long"/>
