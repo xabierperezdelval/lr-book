@@ -11,8 +11,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
+<%@page import="java.util.Iterator"%>
 
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.PortletRequest"%>
