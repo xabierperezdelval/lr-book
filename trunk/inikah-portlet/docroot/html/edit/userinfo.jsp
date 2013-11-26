@@ -1,7 +1,5 @@
 <%@ include file="/html/edit/init.jsp" %>
 
-<portlet:actionURL var="updateUserInfoURL" name="updateUserInfo" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"/>
-
 <aui:form>
 	<aui:input type="hidden" name="userId" value="<%= user.getUserId() %>"/>
 	<aui:input name="userName" label="your-full-name"/>
