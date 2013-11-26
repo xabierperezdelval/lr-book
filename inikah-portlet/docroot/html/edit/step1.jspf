@@ -5,16 +5,9 @@
 		</aui:select>
 	</aui:column>
 	<aui:column>
-		<c:choose>
-			<c:when test="<%= profile.isCreatedForSelf() %>">
-				<aui:input type="checkbox" name="" required="<%= true %>" label="really-created-for-self"/>
-			</c:when>
-			<c:otherwise>
-				<aui:select name="createdFor" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-					<%= MyListUtil.getCreatedFor(locale, profile) %>
-				</aui:select>
-			</c:otherwise>
-		</c:choose>
+		<aui:select name="createdFor" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+			<%= MyListUtil.getCreatedFor(locale, profile) %>
+		</aui:select>
 	</aui:column>	
 </aui:row>
 
