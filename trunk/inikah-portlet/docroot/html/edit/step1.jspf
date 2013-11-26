@@ -45,14 +45,3 @@
 		</aui:input>
 	</aui:column>	
 </aui:row>
-
-<c:if test="<%= !editMode %>">
-	<aui:row>
-		<aui:column>
-			<aui:input name="userName" label="your-name"/>
-		</aui:column>
-		<aui:column>
-			<aui:input type="checkbox" name="female" label="i-am-a-female"/>
-		</aui:column>	
-	</aui:row>
-</c:if>

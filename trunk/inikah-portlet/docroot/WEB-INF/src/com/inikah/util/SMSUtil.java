@@ -26,9 +26,7 @@ public class SMSUtil {
 		
 		String httpURL = "http://api.clickatell.com/http/sendmsg?user=[$USERNAME$]&password=[$PASSWORD$]&api_id=[$API_ID$]&to=[$TO$]&text=[$MESSAGE$]";
 		httpURL = StringUtil.replace(httpURL, oldSubs, newSubs);
-		
-		System.out.println("httpURL ==> " + httpURL);
-		
+				
 		HttpClient client = new HttpClient();
 		GetMethod method = new GetMethod(httpURL);
 		
