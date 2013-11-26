@@ -14,10 +14,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.ContactLocalServiceUtil;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -96,44 +93,6 @@ public class EditPortlet extends MVCPortlet {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP1_DONE);
 		}
 	}
-	
-	public void updateUserInfo(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
-		
-		// update user info
-		String userName = ParamUtil.getString(actionRequest, "userName");
-		boolean female = ParamUtil.getBoolean(actionRequest, "female", false);
-		
-		User user = null;
-		try {
-			user = PortalUtil.getUser(actionRequest);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-
-		if (Validator.isNull(user)) return;
-		
-		user.setFirstName(userName);
-		try {
-			UserLocalServiceUtil.updateUser(user);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (female) {
-			try {
-				Contact contact = user.getContact();
-				contact.setMale(false);
-				ContactLocalServiceUtil.updateContact(contact);
-			} catch (PortalException e) {
-				e.printStackTrace();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}						
-		}
-	}	
 
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		// TODO Auto-generated method stub
