@@ -1,5 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.Validator"%>
-<%@page import="javax.portlet.PortletSession"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 
@@ -20,6 +18,7 @@
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="javax.portlet.PortletMode"%>
 <%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletSession"%>
 
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 
@@ -33,6 +32,7 @@
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.kernel.util.Validator"%>
 
 <%@page import="com.liferay.portal.model.ListType"%>
 <%@page import="com.inikah.util.IConstants"%>
@@ -52,9 +52,16 @@
 		portletSession.removeAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
 	} else if (Validator.isNull(profile)) {
 		long profileId = ParamUtil.getLong(renderRequest, "profileId", 0l);
+		
+		if (profileId == 0l) {
+			HttpServletRequest origServletRequest = PortalUtil.getOriginalServletRequest(request);
+			profileId = GetterUtil.getLong(origServletRequest.getParameter("id"), 0l);			
+			renderRequest.setAttribute("profileId", String.valueOf(profileId));
+		}
+		
 		if (profileId > 0l) {
 			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
-			portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);
+			portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);			
 		}
-	} 
+	}
 %>
