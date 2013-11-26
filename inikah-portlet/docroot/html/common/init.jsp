@@ -33,6 +33,7 @@
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 
 <%@page import="com.liferay.portal.model.ListType"%>
 <%@page import="com.inikah.util.IConstants"%>

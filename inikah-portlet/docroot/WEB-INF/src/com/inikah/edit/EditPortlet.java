@@ -10,7 +10,6 @@ import javax.portlet.PortletSession;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
-import com.inikah.util.SMSUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -95,18 +94,27 @@ public class EditPortlet extends MVCPortlet {
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_CREATED) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP1_DONE);
-			updateNonSelfUser(actionRequest, user, profile.isCreatedForSelf());
 		}
 	}
-
-	private void updateNonSelfUser(ActionRequest actionRequest, User user, boolean createdForSelf) {
-		
-		if (createdForSelf) return;
+	
+	public void updateUserInfo(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		// update user info
 		String userName = ParamUtil.getString(actionRequest, "userName");
 		boolean female = ParamUtil.getBoolean(actionRequest, "female", false);
+		
+		User user = null;
+		try {
+			user = PortalUtil.getUser(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 
+		if (Validator.isNull(user)) return;
+		
 		user.setFirstName(userName);
 		try {
 			UserLocalServiceUtil.updateUser(user);
@@ -155,7 +163,7 @@ public class EditPortlet extends MVCPortlet {
 		
 		String verificationCode = PwdGenerator.getPinNumber();
 		
-		SMSUtil.sendVerificationCode("91" + mobileNumber, verificationCode);
+		//SMSUtil.sendVerificationCode("91" + mobileNumber, verificationCode);
 		
 		return verificationCode;
 	}

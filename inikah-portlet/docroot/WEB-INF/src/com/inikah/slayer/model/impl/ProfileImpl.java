@@ -236,10 +236,10 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return sb.toString();
 	}
 	
-	public boolean isFirstProfile() {
+	public boolean isFirst() {
 		List<Profile> profiles = ProfileLocalServiceUtil.getProfilesForUser(getUserId());
 		
-		return (Validator.isNull(profiles) || profiles.isEmpty());
+		return (Validator.isNotNull(profiles) && (profiles.size() == 1));
 	}
 	
 	public Map<Long, String> getLanguagesSpoken() {
