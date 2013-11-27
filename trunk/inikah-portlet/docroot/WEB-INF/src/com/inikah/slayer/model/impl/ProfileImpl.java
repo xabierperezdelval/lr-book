@@ -32,6 +32,8 @@ import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.KeyValuePair;
+import com.liferay.portal.kernel.util.KeyValuePairComparator;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
@@ -284,7 +286,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 			items.add(new KeyValuePair(String.valueOf(key), value));
 		}
 		
-		return items;
+		return ListUtil.sort(items, new KeyValuePairComparator(false, true));
 	}
 	
 	public List<KeyValuePair> getLanguagesSpokenLeft() {
