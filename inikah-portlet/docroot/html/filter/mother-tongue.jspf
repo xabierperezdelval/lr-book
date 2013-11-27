@@ -1,0 +1,40 @@
+<%
+	List<KeyValuePair> languagesSpoken = profile.getLanguagesSpokenAsList();
+%>
+
+<div class="control-group">
+	<label class="control-label" for="mother-tongue">
+		<liferay-ui:message key="mother-tongue"/>
+	</label>		
+
+	<c:choose>
+		<c:when test="<%= languagesSpoken.size() <= 4 %>">
+			<%
+				for (KeyValuePair kvPair: languagesSpoken) {
+					String key = kvPair.getKey();
+					String value = kvPair.getValue();
+					%>
+						<aui:column>
+							<label class="checkbox">
+								<input class="field" type="checkbox" value="<%= key %>" name="<portlet:namespace/>motherTongue" 
+									<%= MyListUtil.getChecked(matchCriteria.getMotherTongue(), key) %>>
+								<%= value %>
+							</label>
+						</aui:column>
+					<%
+				}
+			%>		
+		</c:when>
+		
+		<c:otherwise>
+			<liferay-ui:input-move-boxes 
+				leftList="<%= profile.getLanguagesSpokenLeft() %>"
+				leftBoxName="motherTongueLeft" 
+				leftTitle="available"
+				rightList="<%= profile.getLanguagesSpokenRight() %>"
+				rightBoxName="motherTongue"
+				rightTitle="selected"
+			/>
+		</c:otherwise>
+	</c:choose>
+</div>

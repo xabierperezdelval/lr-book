@@ -21,9 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
@@ -246,11 +248,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		Map<Long, String> items = new HashMap<Long, String>();
 	
 		List<Long> countryIds = new ArrayList<Long>();
-		
-		countryIds.add(getUserCountryId());
-		if (!countryIds.contains(getCountryOfBirth())) {
-			countryIds.add(getCountryOfBirth());
-		}
+		countryIds.add(getCountryOfBirth());
 		
 		if (!countryIds.contains(getResidingCountry())) {
 			countryIds.add(getResidingCountry());
@@ -269,6 +267,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 			}
 		}
 		
+		items.remove(1000l);
 		return items;
 	}
 	
@@ -286,5 +285,61 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return items;
+	}
+	
+	public List<KeyValuePair> getLanguagesSpokenLeft() {
+		List<KeyValuePair> itemsOnLeft = getLanguagesSpokenAsList();
+		
+		List<KeyValuePair> itemsOnRight = getLanguagesSpokenRight();
+		
+		for (KeyValuePair kvPair: itemsOnRight) {
+			itemsOnLeft.remove(kvPair);
+		}
+		
+		return itemsOnLeft;
+	}
+	
+	public List<KeyValuePair> getLanguagesSpokenRight() {
+		
+		List<KeyValuePair> itemsOnRight = new ArrayList<KeyValuePair>();
+		
+		MatchCriteria matchCriteria = getMatchCriteria();
+		
+		String motherTongueCSV = matchCriteria.getMotherTongue();
+		
+		if (Validator.isNotNull(motherTongueCSV)) {
+			String[] parts = motherTongueCSV.split(StringPool.COMMA);
+			
+			for (int i=0; i<parts.length; i++) {
+				
+				String key = parts[i];
+				
+				MyLanguage myLanguage = null;
+				try {
+					myLanguage = MyLanguageLocalServiceUtil.fetchMyLanguage(Long.valueOf(key));
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				if (Validator.isNull(myLanguage)) continue;
+				
+				String value = myLanguage.getLanguage();
+				itemsOnRight.add(new KeyValuePair(key, value));
+			}
+		}
+		
+		return itemsOnRight;
+	}
+	
+	public MatchCriteria getMatchCriteria() {
+		MatchCriteria matchCriteria = null;
+		try {
+			matchCriteria = MatchCriteriaLocalServiceUtil.fetchMatchCriteria(getProfileId());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return matchCriteria;
 	}
 }

@@ -84,10 +84,7 @@ public class EditPortlet extends MVCPortlet {
 		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
 		profile.setMobileNumber(mobileNumber);
 		profile.setVerificationCode(sendVerificationCode(mobileNumber));
-		
-		if (!profile.isSingle()) {
-			profile.setAllowNonSingleProposals(true);
-		}
+		profile.setAllowNonSingleProposals(!profile.isSingle());
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_CREATED) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP1_DONE);
