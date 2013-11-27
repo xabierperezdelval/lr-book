@@ -137,7 +137,9 @@ public class MatchCriteriaLocalServiceImpl
 		}
 		
 		// NEVER show "Single" profiles for Non-Single Profiles. 
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("allowNonSingleProposals", !profile.isSingle()));
+		if (!profile.isSingle()) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("allowNonSingleProposals", true));
+		}
 		
 		// exclude profiles that are "blocked" for this profile
 		List<Long> blockedIds = InteractionLocalServiceUtil.getTargetIds(profileId, IConstants.INT_ACTION_BLOCKED);
