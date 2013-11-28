@@ -78,8 +78,11 @@ public class MatchCriteriaLocalServiceImpl
 		matchCriteria.setMinAge(minAge);
 		matchCriteria.setMaxAge(maxAge);
 		
-		// set MaritalStatus
+		// set Marital Status
 		matchCriteria.setMaritalStatus(profile.getAllowedMaritalStatus());
+		
+		// set Mother Tongue
+		matchCriteria.setMotherTongue(String.valueOf(profile.getMotherTongue()));
 		
 		try {
 			addMatchCriteria(matchCriteria);
