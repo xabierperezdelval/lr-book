@@ -36,17 +36,19 @@
 				rightBoxName="motherTongueRight"
 				rightTitle="selected"
 			/>
-			
-			<aui:script use="liferay-util-list-fields">
-				Liferay.provide(
-			    	window,
-			        'populateCSVLists',
-			        function() {
-			        	var frm = document.<portlet:namespace />fm;
-			        	frm.<portlet:namespace/>motherTongue.value = Liferay.Util.listSelect(frm.<portlet:namespace/>motherTongueRight);
-					}
-			  	);
-			</aui:script>
 		</c:otherwise>
 	</c:choose>
 </div>
+
+<aui:script use="liferay-util-list-fields">
+	Liferay.provide(
+    	window,
+        'populateCSVLists',
+        function() {
+        	var frm = document.<portlet:namespace />fm;
+        	<c:if test="<%= languagesSpoken.size() > 4 %>">
+        		frm.<portlet:namespace/>motherTongue.value = Liferay.Util.listSelect(frm.<portlet:namespace/>motherTongueRight);
+        	</c:if>
+		}
+  	);
+</aui:script>
