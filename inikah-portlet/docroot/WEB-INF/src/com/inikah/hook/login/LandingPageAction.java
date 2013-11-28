@@ -71,7 +71,7 @@ public class LandingPageAction extends Action {
 			boolean hasNoProfiles = (Validator.isNull(profiles));
 			
 			for (Profile profile: profiles) {
-				if (profile.getStatus() == IConstants.PROFILE_STATUS_CREATED) {
+				if (profile.getStatus() <= IConstants.PROFILE_STATUS_STEP4_DONE) {
 					profileId = profile.getProfileId();
 					break;
 				}
