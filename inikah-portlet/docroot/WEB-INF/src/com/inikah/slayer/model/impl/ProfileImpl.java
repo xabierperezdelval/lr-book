@@ -344,4 +344,9 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		return matchCriteria;
 	}
+	
+	public boolean hasChildren() {
+		return (!isSingle() && 
+				((getSons() > 0) || (getDaughters() > 0)));
+	}
 }
