@@ -2,7 +2,7 @@
 
 <portlet:actionURL var="saveCriteriaURL" name="saveCriteria"/>
 
-<aui:form action="<%= saveCriteriaURL %>">
+<aui:form action="<%= saveCriteriaURL %>" onSubmit="populateCSVLists();">
 	<liferay-ui:panel-container accordion="true" extended="true">
 		<liferay-ui:panel title="basic-info" collapsible="true" defaultState="close">
 			<%@ include file="/html/filter/basic-info.jspf" %>

@@ -53,8 +53,11 @@ public class FilterPortlet extends MVCPortlet {
 		// marital status
 		String[] maritalStatusArray = ParamUtil.getParameterValues(actionRequest, "maritalStatus");
 		String maritalStatus = StringUtils.join(maritalStatusArray, StringPool.COMMA);
-
 		matchCriteria.setMaritalStatus(maritalStatus);
+		
+		String[] motherTongueArray = ParamUtil.getParameterValues(actionRequest, "motherTongue");
+		String motherTongue = StringUtils.join(motherTongueArray, StringPool.COMMA);
+		matchCriteria.setMotherTongue(motherTongue);
 		
 		try {
 			matchCriteria = MatchCriteriaLocalServiceUtil.updateMatchCriteria(matchCriteria);

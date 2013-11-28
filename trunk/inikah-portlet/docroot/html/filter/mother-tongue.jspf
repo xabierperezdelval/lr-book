@@ -27,14 +27,26 @@
 		</c:when>
 		
 		<c:otherwise>
+			<aui:input type="hidden" name="motherTongue" value="<%= matchCriteria.getMotherTongue() %>"/>
 			<liferay-ui:input-move-boxes 
 				leftList="<%= profile.getLanguagesSpokenLeft() %>"
 				leftBoxName="motherTongueLeft" 
 				leftTitle="available"
 				rightList="<%= profile.getLanguagesSpokenRight() %>"
-				rightBoxName="motherTongue"
+				rightBoxName="motherTongueRight"
 				rightTitle="selected"
 			/>
+			
+			<aui:script use="liferay-util-list-fields">
+				Liferay.provide(
+			    	window,
+			        'populateCSVLists',
+			        function() {
+			        	var frm = document.<portlet:namespace />fm;
+			        	frm.<portlet:namespace />motherTongue.value = Liferay.Util.listSelect(frm.<portlet:namespace/>motherTongueRight);
+					}
+			  	);
+			</aui:script>
 		</c:otherwise>
 	</c:choose>
 </div>

@@ -136,6 +136,12 @@ public class MatchCriteriaLocalServiceImpl
 			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", MyListUtil.getIntegers(maritalStatusCSV)));
 		}
 		
+		// mother tongue
+		String motherTongueCSV = matchCriteria.getMotherTongue();
+		if (Validator.isNotNull(motherTongueCSV)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.in("motherTongue", MyListUtil.getIntegers(motherTongueCSV)));
+		}
+		
 		// NEVER show "Single" profiles for Non-Single Profiles. 
 		if (!profile.isSingle()) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("allowNonSingleProposals", true));
