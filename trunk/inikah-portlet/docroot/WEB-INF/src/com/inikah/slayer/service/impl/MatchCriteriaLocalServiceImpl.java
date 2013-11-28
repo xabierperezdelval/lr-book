@@ -137,8 +137,11 @@ public class MatchCriteriaLocalServiceImpl
 		String maritalStatusCSV = matchCriteria.getMaritalStatus();
 		if (Validator.isNotNull(maritalStatusCSV)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", MyListUtil.getIntegers(maritalStatusCSV)));
+		}
+		
+		// profiles with kids
+		if (!profile.isSingle()) {
 			
-			// apply check for "profileWithKids"
 		}
 		
 		// mother tongue
