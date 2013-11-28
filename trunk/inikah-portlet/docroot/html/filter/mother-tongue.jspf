@@ -43,7 +43,7 @@
 			        'populateCSVLists',
 			        function() {
 			        	var frm = document.<portlet:namespace />fm;
-			        	frm.<portlet:namespace />motherTongue.value = Liferay.Util.listSelect(frm.<portlet:namespace/>motherTongueRight);
+			        	frm.<portlet:namespace/>motherTongue.value = Liferay.Util.listSelect(frm.<portlet:namespace/>motherTongueRight);
 					}
 			  	);
 			</aui:script>
