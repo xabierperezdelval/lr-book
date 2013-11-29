@@ -58,7 +58,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 */
 	public Profile init(boolean bride, String emailAddress, String profileName, boolean createdForSelf, ServiceContext serviceContext) {
 
-		
 		Profile profile = createProfile(bride);
 				
 		// setting values from serviceContext
