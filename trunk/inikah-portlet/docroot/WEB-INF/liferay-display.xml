@@ -3,12 +3,13 @@
 
 <display>
 	<category name="inikah.com">
-		<portlet id="main"/>
-		<portlet id="register"/>
-		<portlet id="invite"/>
-		<portlet id="payment"/>
-		<portlet id="filter"/>
-		<portlet id="edit"/>
-		<portlet id="matches"/>
+		<portlet id="main" />
+		<portlet id="register" />
+		<portlet id="invite" />
+		<portlet id="payment" />
+		<portlet id="filter" />
+		<portlet id="edit" />
+		<portlet id="matches" />
+		<portlet id="start"></portlet>
 	</category>
 </display>
