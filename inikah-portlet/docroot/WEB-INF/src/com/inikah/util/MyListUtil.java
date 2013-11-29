@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.CharPool;
@@ -104,7 +105,7 @@ public class MyListUtil {
 				
 				// check for createdFor
 				if (suffix.equalsIgnoreCase(IConstants.LIST_CREATED_FOR) 
-						&& profile.isCreatedForSelf() 
+						&& ProfileLocalServiceUtil.hasSelfProfile(profile.getUserId()) 
 						&& name.endsWith("self")) continue;
 
 				long listTypeId = listType.getListTypeId();
