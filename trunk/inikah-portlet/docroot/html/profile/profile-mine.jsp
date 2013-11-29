@@ -1,4 +1,3 @@
-<%@page import="com.inikah.util.PageUtil"%>
 <%@ include file="/html/common/init.jsp" %>
 
 <%
