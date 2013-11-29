@@ -16,7 +16,7 @@
 		<%@ include file="/html/edit/step1-bornon.jspf" %>
 	</aui:column>
 	<aui:column>
-		<aui:select name="motherTongue">
+		<aui:select name="complexion">
 		</aui:select>
 	</aui:column>	
 </aui:row>
@@ -31,17 +31,5 @@
 		<aui:select name="weight">
 			<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
 		</aui:select>
-	</aui:column>	
-</aui:row>
-
-<aui:row>
-	<aui:column>
-		<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>">
-			<aui:validator name="email"/>
-		</aui:input>
-	</aui:column>
-	<aui:column>
-		<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" prefix="+91">
-		</aui:input>
 	</aui:column>	
 </aui:row>
