@@ -16,14 +16,15 @@ package com.inikah.slayer.service.impl;
 
 import java.util.List;
 
+import com.inikah.slayer.model.MMCity;
+import com.inikah.slayer.model.MMRegion;
+import com.inikah.slayer.service.base.MMCityServiceBaseImpl;
+import com.inikah.util.NotifyUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.service.CountryServiceUtil;
-import com.inikah.slayer.model.MMCity;
-import com.inikah.slayer.model.MMRegion;
-import com.inikah.slayer.service.base.MMCityServiceBaseImpl;
 
 /**
  * The implementation of the m m city remote service.
@@ -60,17 +61,17 @@ public class MMCityServiceImpl extends MMCityServiceBaseImpl {
 		
 		long cityId = 0;
 		try {
-			cityId = counterLocalService.increment();
+			cityId = counterLocalService.increment(MMCity.class.getName());
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		mmCity = mmCityPersistence.create(cityId);
-		
 		mmCity.setName(name);
 		mmCity.setRegionId(regionId);
 		
 		try {
 			mmCity = mmCityPersistence.update(mmCity);
+			NotifyUtil.newCityCreated(mmCity);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}

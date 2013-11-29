@@ -18,10 +18,13 @@ import java.util.List;
 
 import com.inikah.slayer.model.MMRegion;
 import com.inikah.slayer.service.base.MMRegionServiceBaseImpl;
+import com.inikah.util.NotifyUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Country;
+import com.liferay.portal.service.CountryServiceUtil;
 
 /**
  * The implementation of the m m region remote service.
@@ -57,7 +60,7 @@ public class MMRegionServiceImpl extends MMRegionServiceBaseImpl {
 		
 		long regionId = 0l;
 		try {
-			regionId = counterLocalService.increment();
+			regionId = counterLocalService.increment(MMRegion.class.getName());
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -75,6 +78,7 @@ public class MMRegionServiceImpl extends MMRegionServiceBaseImpl {
 		
 		try {
 			mmRegion = mmRegionPersistence.update(mmRegion);
+			NotifyUtil.newRegionCreated(mmRegion);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -92,4 +96,20 @@ public class MMRegionServiceImpl extends MMRegionServiceBaseImpl {
 		
 		return regions;
 	}
+	
+	public String getDisplayInfo(long regionId) {
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			MMRegion mmRegion = mmRegionPersistence.fetchByPrimaryKey(regionId);
+			sb.append(mmRegion.getName()).append(StringPool.COMMA).append(StringPool.SPACE);
+						
+			Country country = CountryServiceUtil.fetchCountry(mmRegion.getCountryId());
+			sb.append(country.getName());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
+	}	
 }
