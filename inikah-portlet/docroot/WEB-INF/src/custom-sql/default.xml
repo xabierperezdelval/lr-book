@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findMotherTongue"> 
+		<![CDATA[
+			SELECT 
+				motherTongue AS myKey, 
+				count(motherTongue) AS myValue 
+			FROM 
+				inikah_profile 
+			WHERE bride = ? 
+			GROUP BY myKey;
+		]]>
+	</sql>
+</custom-sql>
+
+
