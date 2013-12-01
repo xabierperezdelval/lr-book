@@ -42,9 +42,7 @@ public class MyKeyValueFinderImpl extends BasePersistenceImpl<MyKeyValue>
 			nextClause = " and " + parentColumn + StringPool.EQUAL + StringPool.QUESTION;
 		} 
 		sql = StringUtil.replace(sql, "[$NEXT_CLAUSE$]", nextClause);
-		
-		System.out.println("sql ==> " + sql);
-		
+				
 		SQLQuery query = session.createSQLQuery(sql);
 		
 		query.addEntity("MyKeyValue", MyKeyValueImpl.class);
