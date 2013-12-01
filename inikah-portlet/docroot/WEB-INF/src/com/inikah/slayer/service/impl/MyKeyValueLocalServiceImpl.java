@@ -16,10 +16,21 @@ package com.inikah.slayer.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import com.inikah.slayer.model.MMRegion;
 import com.inikah.slayer.model.MyKeyValue;
+import com.inikah.slayer.service.MMRegionLocalServiceUtil;
 import com.inikah.slayer.service.base.MyKeyValueLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
+import com.liferay.portal.kernel.util.KeyValuePairComparator;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Country;
+import com.liferay.portal.service.CountryServiceUtil;
 
 /**
  * The implementation of the my key value local service.
@@ -51,5 +62,63 @@ public class MyKeyValueLocalServiceImpl extends MyKeyValueLocalServiceBaseImpl {
 		}
 		
 		return kvPairs;
+	}
+	
+	public List<KeyValuePair> getResidingCountriesForFilter(boolean bride, Locale locale) {
+		List<MyKeyValue> items = myKeyValueFinder.findResidingCountries(bride);
+		
+		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
+		for (MyKeyValue myKeyValue: items) {
+			
+			long countryId = myKeyValue.getMyKey();
+			StringBuilder sb = new StringBuilder();
+			
+			Country country = null;
+			try {
+				country = CountryServiceUtil.fetchCountry(countryId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(country)) continue;
+			
+			sb.append(LanguageUtil.get(locale, country.getName()));
+			sb.append(StringPool.SPACE);
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append(myKeyValue.getMyValue());
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+			kvPairs.add(new KeyValuePair(String.valueOf(countryId), sb.toString()));
+		}
+		
+		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));
+	}
+	
+	public List<KeyValuePair> getResidingRegionsForFilter(boolean bride, long countryId) {
+		List<MyKeyValue> items = myKeyValueFinder.findResidingRegions(bride, countryId);
+		
+		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
+		for (MyKeyValue myKeyValue: items) {
+			
+			long regionId = myKeyValue.getMyKey();
+			StringBuilder sb = new StringBuilder();
+			
+			MMRegion mmRegion = null;
+			try {
+				mmRegion = MMRegionLocalServiceUtil.fetchMMRegion(regionId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(mmRegion)) continue;
+			
+			sb.append(mmRegion.getName());
+			sb.append(StringPool.SPACE);
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append(myKeyValue.getMyValue());
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+			kvPairs.add(new KeyValuePair(String.valueOf(regionId), sb.toString()));
+		}
+		
+		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
 	}
 }

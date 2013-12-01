@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.inikah.slayer.model.MatchCriteria;
@@ -369,5 +370,13 @@ public class ProfileImpl extends ProfileBaseImpl {
 	public boolean hasChildren() {
 		return (!isSingle() && 
 				((getSons() > 0) || (getDaughters() > 0)));
+	}
+	
+	public List<KeyValuePair> getResidingCountriesForFilter(Locale locale) {
+		return MyKeyValueLocalServiceUtil.getResidingCountriesForFilter(!isBride(), locale);
+	}
+	
+	public List<KeyValuePair> getResidingRegionsForFilter(long countryId) {
+		return MyKeyValueLocalServiceUtil.getResidingRegionsForFilter(!isBride(), countryId);
 	}
 }
