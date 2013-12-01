@@ -1,5 +1,7 @@
 package com.inikah.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
+
 public interface ConfigConstants {
 	String MAX_MIND_USER_ID = "max.mind.user.id";
 	
@@ -19,4 +21,6 @@ public interface ConfigConstants {
 	String CLICKATELL_USERNAME = "clickatell.username";
 	String CLICKATELL_PASSWORD = "clickatell.password";
 	String CLICKATELL_API_ID = "clickatell.api.id";
+	
+	boolean UPDATE_XCHAGE_RATES = GetterUtil.getBoolean("update.xchange.rates");
 }

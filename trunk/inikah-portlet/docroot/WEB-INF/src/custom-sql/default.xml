@@ -3,11 +3,11 @@
 	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findMotherTongue"> 
 		<![CDATA[
 			SELECT 
-				motherTongue AS myKey, 
-				count(motherTongue) AS myValue 
+				[$COLUMN_NAME$] AS myKey, 
+				count([$COLUMN_NAME$]) AS myValue 
 			FROM 
 				inikah_profile 
-			WHERE bride = ? 
+			WHERE bride = ? and status = ? [$NEXT_CLAUSE$]
 			GROUP BY myKey;
 		]]>
 	</sql>
