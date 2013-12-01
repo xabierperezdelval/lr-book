@@ -314,9 +314,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 			}
 		}
 		
-		return results;	
-		
-		
+		return ListUtil.sort(results, new KeyValuePairComparator(false, true));
 	}
 	
 	public List<KeyValuePair> getLanguagesSpokenLeft() {
