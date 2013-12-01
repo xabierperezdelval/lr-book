@@ -402,4 +402,9 @@
 			<finder-column name="userId"/>
 		</finder>
 	</entity>
+	
+	<entity name="MyKeyValue" local-service="true" remote-service="false">
+		<column name="myKey" type="long" primary="true"/>
+		<column name="myValue" type="String"/>
+	</entity>
 </service-builder>

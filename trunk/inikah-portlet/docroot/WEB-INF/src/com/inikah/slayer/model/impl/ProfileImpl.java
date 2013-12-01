@@ -26,6 +26,7 @@ import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
+import com.inikah.slayer.service.MyKeyValueLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
@@ -289,16 +290,38 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return ListUtil.sort(items, new KeyValuePairComparator(false, true));
 	}
 	
-	public List<KeyValuePair> getLanguagesSpokenLeft() {
-		List<KeyValuePair> itemsOnLeft = getLanguagesSpokenAsList();
+	public List<KeyValuePair> getLanguagesSpokenForFilter() {
 		
-		List<KeyValuePair> itemsOnRight = getLanguagesSpokenRight();
+		List<KeyValuePair> results = new ArrayList<KeyValuePair>();
 		
-		for (KeyValuePair kvPair: itemsOnRight) {
-			itemsOnLeft.remove(kvPair);
+		List<KeyValuePair> original = getLanguagesSpokenAsList();
+		List<KeyValuePair> actuals = MyKeyValueLocalServiceUtil.getLanguagesSpokenForFilter(!isBride());
+		
+		for (KeyValuePair kvPair1: actuals) {
+			String key1 = kvPair1.getKey();
+			for (KeyValuePair kvPair2: original) {
+				String key2 = kvPair2.getKey();
+				if (key2.equalsIgnoreCase(key1)) {
+					StringBuilder sb = new StringBuilder();
+					sb.append(kvPair2.getValue());
+					sb.append(StringPool.SPACE);
+					sb.append(StringPool.OPEN_PARENTHESIS);
+					sb.append(kvPair1.getValue());
+					sb.append(StringPool.CLOSE_PARENTHESIS);
+					results.add(new KeyValuePair(key1, sb.toString()));
+					break;
+				}
+			}
 		}
 		
-		return itemsOnLeft;
+		return results;	
+		
+		
+	}
+	
+	public List<KeyValuePair> getLanguagesSpokenLeft() {
+		List<KeyValuePair> itemsOnLeft = getLanguagesSpokenForFilter();
+		return ListUtil.remove(itemsOnLeft, getLanguagesSpokenRight());
 	}
 	
 	public List<KeyValuePair> getLanguagesSpokenRight() {
