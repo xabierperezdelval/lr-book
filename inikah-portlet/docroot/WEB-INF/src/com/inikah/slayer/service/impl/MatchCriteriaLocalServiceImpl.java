@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.InteractionLocalServiceUtil;
 import com.inikah.slayer.service.base.MatchCriteriaLocalServiceBaseImpl;
 import com.inikah.util.AgeUtil;
@@ -26,6 +27,7 @@ import com.inikah.util.IConstants;
 import com.inikah.util.MyListUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
@@ -136,12 +138,17 @@ public class MatchCriteriaLocalServiceImpl
 		// marital status
 		String maritalStatusCSV = matchCriteria.getMaritalStatus();
 		if (Validator.isNotNull(maritalStatusCSV)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", MyListUtil.getIntegers(maritalStatusCSV)));
-		}
-		
-		// profiles with kids
-		if (!profile.isSingle()) {
+			List<Integer> maritalStatusList = MyListUtil.getIntegers(maritalStatusCSV);
+			dynamicQuery.add(RestrictionsFactoryUtil.in("maritalStatus", maritalStatusList));
 			
+			long married = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "married");
+			long divorced = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "divorced");
+			long widow = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "widow");
+
+			if ((maritalStatusList.contains(married) || maritalStatusList.contains(divorced) || maritalStatusList.contains(widow)) 
+					&& matchCriteria.isWithChildren()) {
+				dynamicQuery.add(PropertyFactoryUtil.forName("withChildre").eq(Boolean.TRUE));
+			}
 		}
 		
 		// mother tongue

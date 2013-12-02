@@ -37,18 +37,12 @@ public class FilterPortlet extends MVCPortlet {
 		if (Validator.isNull(matchCriteria)) return;
 		
 		// setting Age range
-		int minAge = ParamUtil.getInteger(actionRequest, "minAge");
-		int maxAge = ParamUtil.getInteger(actionRequest, "maxAge");
-		
-		matchCriteria.setMinAge(minAge);
-		matchCriteria.setMaxAge(maxAge);
+		matchCriteria.setMinAge(ParamUtil.getInteger(actionRequest, "minAge"));
+		matchCriteria.setMaxAge(ParamUtil.getInteger(actionRequest, "maxAge"));
 		
 		// setting Height range
-		int minHeight = ParamUtil.getInteger(actionRequest, "minHeight");
-		int maxHeight = ParamUtil.getInteger(actionRequest, "maxHeight");
-		
-		matchCriteria.setMinHeight(minHeight);
-		matchCriteria.setMaxHeight(maxHeight);
+		matchCriteria.setMinHeight(ParamUtil.getInteger(actionRequest, "minHeight"));
+		matchCriteria.setMaxHeight(ParamUtil.getInteger(actionRequest, "maxHeight"));
 		
 		// marital status
 		String[] maritalStatusArray = ParamUtil.getParameterValues(actionRequest, "maritalStatus");
@@ -58,6 +52,9 @@ public class FilterPortlet extends MVCPortlet {
 		String[] motherTongueArray = ParamUtil.getParameterValues(actionRequest, "motherTongue");
 		String motherTongue = StringUtils.join(motherTongueArray, StringPool.COMMA);
 		matchCriteria.setMotherTongue(motherTongue);
+		
+		// profiles with Childen (applicable ONLY for non-single profiles)
+		matchCriteria.setWithChildren(ParamUtil.getBoolean(actionRequest, "withChildren", false));
 		
 		try {
 			matchCriteria = MatchCriteriaLocalServiceUtil.updateMatchCriteria(matchCriteria);

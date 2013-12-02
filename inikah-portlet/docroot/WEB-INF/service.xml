@@ -168,7 +168,7 @@
 				
 		<!-- fields from list master -->
 		<column name="maritalStatus" type="String" />
-		<column name="profileWithKids" type="boolean" />
+		<column name="withChildren" type="boolean" />
 		
 		<column name="motherTongue" type="String" />
 		<column name="motherTongueExcluded" type="boolean" />

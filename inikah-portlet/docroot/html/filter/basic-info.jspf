@@ -40,7 +40,7 @@
 	<label class="control-label" for="marital-status">
 		<liferay-ui:message key="marital-status"/>
 	</label>		
-		
+			
 	<%
 		List<KeyValuePair> kvPairs = MyListUtil.getMaritalStatus(profile.isBride());
 		for (KeyValuePair kvPair: kvPairs) {
@@ -56,3 +56,5 @@
 		}
 	%>		
 </div>
+
+<aui:input type="checkbox" name="withChildren" label="profiles-with-children"/>

@@ -214,7 +214,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		
 		long singleStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "single");
 		long marriedStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "married");
-		long divocedStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "divorced");
+		long divorcedStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "divorced");
 		long widowStatus = BridgeServiceUtil.getListTypeId(IConstants.LIST_MARITAL_STATUS, "widow");
 		
 		if (isSingle() && !isAllowNonSingleProposals()) {
@@ -224,7 +224,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		if (isSingle() && isAllowNonSingleProposals()) {
 			sb.append(singleStatus);
 			sb.append(StringPool.COMMA);
-			sb.append(divocedStatus);
+			sb.append(divorcedStatus);
 			sb.append(StringPool.COMMA);
 			sb.append(widowStatus);
 		}
@@ -234,7 +234,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 				sb.append(marriedStatus);
 				sb.append(StringPool.COMMA);				
 			}
-			sb.append(divocedStatus);
+			sb.append(divorcedStatus);
 			sb.append(StringPool.COMMA);
 			sb.append(widowStatus);
 		}		
@@ -367,11 +367,6 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return matchCriteria;
 	}
 	
-	public boolean hasChildren() {
-		return (!isSingle() && 
-				((getSons() > 0) || (getDaughters() > 0)));
-	}
-	
 	public List<KeyValuePair> getResidingCountriesForFilter(Locale locale) {
 		return MyKeyValueLocalServiceUtil.getResidingCountriesForFilter(!isBride(), locale);
 	}
@@ -383,4 +378,15 @@ public class ProfileImpl extends ProfileBaseImpl {
 	public List<KeyValuePair> getResidingCitiesForFilter(long regionId) {
 		return MyKeyValueLocalServiceUtil.getResidingCitiesForFilter(!isBride(), regionId);
 	}
+	
+	public boolean isWithChildren() {
+		return (!isSingle() && 
+				((getSons() > 0) || (getDaughters() > 0)));
+	}
+
+	public void setWithChildren(boolean withChildren) {
+		this.withChildren = withChildren;
+	}
+
+	private boolean withChildren;
 }
