@@ -31,6 +31,10 @@ public class MyKeyValueFinderImpl extends BasePersistenceImpl<MyKeyValue>
 		return findResults(bride, "residingState", countryId, "residingCountry");
 	}	
 	
+	public List<MyKeyValue> findResidingCities(boolean bride, long regionId) { 
+		return findResults(bride, "residingCity", regionId, "residingState");
+	}	
+	
 	private List<MyKeyValue> findResults(boolean bride, String column, long parentId, String parentColumn) {
 		Session session = openSession();
 		String sql = CustomSQLUtil.get(QUERY);
