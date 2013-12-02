@@ -30,7 +30,6 @@
 		
 		<!-- fields related to "married/widow/divorce" -->
 		<column name="reMarriageReasons" type="String" />
-		<column name="hasChildren" type="boolean" />
 		<column name="sons" type="int" />
 		<column name="daughters" type="int" />		
 
