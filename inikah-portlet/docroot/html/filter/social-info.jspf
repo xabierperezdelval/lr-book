@@ -25,7 +25,11 @@
 																List<KeyValuePair> cities = profile.getResidingCitiesForFilter(Long.valueOf(kvPair1.getKey()));
 																for (KeyValuePair kvPair2: cities) {
 																	%>
-																		{label: '<%= kvPair2.getValue() %>', leaf: true, type: 'task'},
+																		{
+																			label: '<%= kvPair2.getValue() %>', 
+																			leaf: true, 
+																			type: 'task'
+																		},
 																	<%
 																}
 															%>
