@@ -379,4 +379,8 @@ public class ProfileImpl extends ProfileBaseImpl {
 	public List<KeyValuePair> getResidingRegionsForFilter(long countryId) {
 		return MyKeyValueLocalServiceUtil.getResidingRegionsForFilter(!isBride(), countryId);
 	}
+	
+	public List<KeyValuePair> getResidingCitiesForFilter(long regionId) {
+		return MyKeyValueLocalServiceUtil.getResidingCitiesForFilter(!isBride(), regionId);
+	}
 }

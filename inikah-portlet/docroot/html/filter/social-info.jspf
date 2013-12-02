@@ -21,12 +21,14 @@
 												%>
 										        	{
 										            	children: [
-										              		{label: 'Watermelon', leaf: true, type: 'task'},
-										              		{label: 'Apricot', leaf: true, type: 'task'},
-										              		{label: 'Pineapple', leaf: true,  type: 'task'},
-										              		{label: 'Kiwi', leaf: true, type: 'task'},
-										              		{label: 'Orange', leaf: true, type: 'task'},
-										              		{label: 'Pomegranate', leaf: true,  type: 'task'}
+															<%
+																List<KeyValuePair> cities = profile.getResidingCitiesForFilter(Long.valueOf(kvPair1.getKey()));
+																for (KeyValuePair kvPair2: cities) {
+																	%>
+																		{label: '<%= kvPair2.getValue() %>', leaf: true, type: 'task'},
+																	<%
+																}
+															%>
 										            	],
 										            	expanded: false,
 										            	label: '<%= kvPair1.getValue() %>',

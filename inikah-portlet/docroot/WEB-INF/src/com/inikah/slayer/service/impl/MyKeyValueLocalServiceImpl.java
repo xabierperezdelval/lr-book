@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.inikah.slayer.model.MMCity;
 import com.inikah.slayer.model.MMRegion;
 import com.inikah.slayer.model.MyKeyValue;
+import com.inikah.slayer.service.MMCityLocalServiceUtil;
 import com.inikah.slayer.service.MMRegionLocalServiceUtil;
 import com.inikah.slayer.service.base.MyKeyValueLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -117,6 +119,35 @@ public class MyKeyValueLocalServiceImpl extends MyKeyValueLocalServiceBaseImpl {
 			sb.append(myKeyValue.getMyValue());
 			sb.append(StringPool.CLOSE_PARENTHESIS);
 			kvPairs.add(new KeyValuePair(String.valueOf(regionId), sb.toString()));
+		}
+		
+		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
+	}
+	
+	public List<KeyValuePair> getResidingCitiesForFilter(boolean bride, long regionId) {
+		List<MyKeyValue> items = myKeyValueFinder.findResidingCities(bride, regionId);
+		
+		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
+		for (MyKeyValue myKeyValue: items) {
+			
+			long cityId = myKeyValue.getMyKey();
+			StringBuilder sb = new StringBuilder();
+			
+			MMCity mmCity = null;
+			try {
+				mmCity = MMCityLocalServiceUtil.fetchMMCity(cityId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(mmCity)) continue;
+			
+			sb.append(mmCity.getName());
+			sb.append(StringPool.SPACE);
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append(myKeyValue.getMyValue());
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+			kvPairs.add(new KeyValuePair(String.valueOf(cityId), sb.toString()));
 		}
 		
 		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
