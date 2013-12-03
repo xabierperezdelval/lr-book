@@ -54,7 +54,7 @@ public class FilterPortlet extends MVCPortlet {
 		matchCriteria.setMotherTongue(motherTongue);
 		
 		// profiles with Childen (applicable ONLY for non-single profiles)
-		matchCriteria.setWithChildren(ParamUtil.getBoolean(actionRequest, "withChildren", false));
+		matchCriteria.setWithNoChildren(ParamUtil.getBoolean(actionRequest, "withNoChildren", false));
 		
 		try {
 			matchCriteria = MatchCriteriaLocalServiceUtil.updateMatchCriteria(matchCriteria);

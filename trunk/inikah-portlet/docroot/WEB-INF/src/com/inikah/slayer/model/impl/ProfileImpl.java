@@ -379,14 +379,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return MyKeyValueLocalServiceUtil.getResidingCitiesForFilter(!isBride(), regionId);
 	}
 	
-	public boolean isWithChildren() {
-		return (!isSingle() && 
-				((getSons() > 0) || (getDaughters() > 0)));
+	public boolean hasChildren() {
+		return (getSons() > 0 || getDaughters() > 0);
 	}
-
-	public void setWithChildren(boolean withChildren) {
-		this.withChildren = withChildren;
-	}
-
-	private boolean withChildren;
 }

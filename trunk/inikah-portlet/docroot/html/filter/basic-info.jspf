@@ -57,4 +57,4 @@
 	%>		
 </div>
 
-<aui:input type="checkbox" name="withChildren" label="profiles-with-children"/>
+<aui:input type="checkbox" name="withNoChildren" label="exclude-profiles-with-children"/>
