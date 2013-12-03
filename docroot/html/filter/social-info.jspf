@@ -1,0 +1,56 @@
+<%@ include file="/html/filter/mother-tongue.jspf" %>
+
+<div id="myTreeView"></div>
+
+<aui:script>
+	YUI().use(
+		'aui-tree-view',
+	  	function(Y) {
+	    	new Y.TreeViewDD({
+	        	boundingBox: '#myTreeView',
+	        	children: [
+	        		<%
+	        			List<KeyValuePair> countries = profile.getResidingCountriesForFilter(locale);
+	        			for (KeyValuePair kvPair: countries) {
+	   						%>
+					        	{
+ 					            	children: [
+										<%
+											List<KeyValuePair> regions = profile.getResidingRegionsForFilter(Long.valueOf(kvPair.getKey()));
+											for (KeyValuePair kvPair1: regions) {
+												%>
+										        	{
+<%--										            	children: [
+															<%
+																List<KeyValuePair> cities = profile.getResidingCitiesForFilter(Long.valueOf(kvPair1.getKey()));
+																for (KeyValuePair kvPair2: cities) {
+																	%>
+																		{
+																			label: '<%= kvPair2.getValue() %>', 
+																			leaf: true, 
+																			type: 'task'
+																		},
+																	<%
+																}
+															%>
+										            	],--%>
+										            	expanded: false,
+										            	label: '<%= kvPair1.getValue() %>',
+										            	type: 'task'
+										          	},									
+												<% 
+											}
+										%>
+					            	], 
+					            	expanded: false,
+					            	label: '<%= kvPair.getValue() %>',
+					            	type: 'task'
+					          	},   						
+	   						<%     				
+	        			}
+	        		%>
+	        	]
+	      	}).render();
+	  	}
+	);
+</aui:script>
