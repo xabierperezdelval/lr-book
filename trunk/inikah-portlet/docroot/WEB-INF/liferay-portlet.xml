@@ -9,10 +9,9 @@
 		<scheduler-entry>
 			<scheduler-event-listener-class>com.inikah.jobs.UpdateXRates</scheduler-event-listener-class>
 			<trigger>
-				<simple>
-					<simple-trigger-value>1</simple-trigger-value>
-					<time-unit>week</time-unit>
-				</simple>
+				<cron>
+					<cron-trigger-value>0 0 13 * * 6</cron-trigger-value>
+				</cron>
 			</trigger>
 		</scheduler-entry>		
 		<action-url-redirect>true</action-url-redirect>
