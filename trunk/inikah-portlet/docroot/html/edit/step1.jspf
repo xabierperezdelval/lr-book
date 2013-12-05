@@ -16,7 +16,8 @@
 		<%@ include file="/html/edit/step1-bornon.jspf" %>
 	</aui:column>
 	<aui:column>
-		<aui:select name="complexion">
+		<aui:select name="complexion" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+		<%= MyListUtil.getComplexionsList(locale, profile) %>
 		</aui:select>
 	</aui:column>	
 </aui:row>

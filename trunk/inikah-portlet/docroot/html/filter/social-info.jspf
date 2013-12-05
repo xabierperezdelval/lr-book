@@ -12,41 +12,50 @@
 	        	children: [
 	        		<%
 	        			List<KeyValuePair> countries = FilterUtil.getResidingCountries(profile.isBride(), locale);
-	        			for (KeyValuePair kvPair: countries) {
+	        			for (int i=0; i<countries.size(); i++) {
+	        				KeyValuePair kvPair = countries.get(i);	        				
 	   						%>
+	   							<c:if test="<%= (i>0) %>">,</c:if>
 					        	{
 					            	children: [
 										<%
 											List<KeyValuePair> regions = FilterUtil.getResidingRegions(profile.isBride(), kvPair.getKey());
-											for (KeyValuePair kvPair1: regions) {
+											for (int j=0; j<regions.size(); j++) {
+												KeyValuePair kvPair1 = regions.get(j);
 												%>
+													<c:if test="<%= (j>0) %>">,</c:if>
 										        	{
 										            	children: [
 															<%
 																List<KeyValuePair> cities =  FilterUtil.getResidingRegions(profile.isBride(), kvPair1.getKey());
-																for (KeyValuePair kvPair2: cities) {
+																for (int k=0; k<cities.size(); k++) {
+																	KeyValuePair kvPair2 = cities.get(k);
 																	%>
+																		<c:if test="<%= (k>0) %>">,</c:if>
 																		{
+																			id: 'residingCity--<%= kvPair2.getKey() %>',
 																			label: '<%= kvPair2.getValue() %>', 
 																			leaf: true, 
 																			type: 'task'
-																		},
+																		}
 																	<%
 																}
 															%>
 										            	],
 										            	expanded: false,
+										            	id: 'residingRegion--<%= kvPair1.getKey() %>',
 										            	label: '<%= kvPair1.getValue() %>',
 										            	type: 'task'
-										          	},									
+										          	}							
 												<% 
 											}
 										%>
 					            	],
 					            	expanded: false,
+					            	id: 'residingCountry--<%= kvPair.getKey() %>',
 					            	label: '<%= kvPair.getValue() %>',
 					            	type: 'task'
-					          	},   						
+					          	}						
 	   						<%     				
 	        			}
 	        		%>

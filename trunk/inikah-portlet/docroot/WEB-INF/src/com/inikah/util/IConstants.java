@@ -15,6 +15,7 @@ public interface IConstants {
 	
 	String LIST_MARITAL_STATUS = "maritalStatus"; 
 	String LIST_CREATED_FOR = "createdFor";
+	String LIST_COMPLEXION = "complexion";
 	
 	int INT_ACTION_VIEWED = 1;
 	int INT_ACTION_BOOKMARKED = 2;

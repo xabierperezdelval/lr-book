@@ -4,13 +4,13 @@
 	</portlet:renderURL>
 	<aui:script>
 		AUI().ready(function() {
-			AUI().use('aui-dialog', 'aui-io', function(A) {
+			AUI().use('aui-dialog', function(A) {
 				var popup = Liferay.Util.openWindow({
 					dialog: {
 					    centered: true,
 					    modal: true,
-			    		width: 300,
-					    height:250				
+			    		width: 350,
+					    height:500				
 					},
 					title: Liferay.Language.get('enter-user-info'),
 					uri: '<%= updateUserInfoURL %>'
@@ -20,32 +20,38 @@
 	</aui:script>
 </c:if>
 
-Step 2 contents
+<!-- step 2 fields -->
 
-<%--
+<aui:fieldset>
+	<aui:row>
+		<aui:column>
+			<aui:select name="residingCountry"/>
+		</aui:column>
+		<aui:column>
+			<aui:select name="residingRegion"/>
+		</aui:column>
+		<aui:column>
+			<aui:select name="residingCity"/>
+		</aui:column>					
+	</aui:row>
+	<aui:row>
+		<aui:column>
+			<aui:input name="newResidingCountry" disabled="<%= true %>" />
+		</aui:column>
+		<aui:column>
+			<aui:input name="area" />
+		</aui:column>
+		<aui:column>
+			<aui:input name="masjid" />
+		</aui:column>					
+	</aui:row>
+</aui:fieldset>
 
-AUI().ready(function() {
-		if( <%=!mobileVerified%>||<%=!emailVerified%> || <%=!self%>){
-	    AUI().use('aui-dialog', 'aui-io', function(A) {
-	   		 var url = '<%=testPopupURL.toString()%>';
-	   			var abc ;
-   abc= Liferay.Util.openWindow(
-            {
-                dialog: {
-                    title: 'Enter Your Name',
-				    centered: true,
-				    modal: true,
-		    		width: 500,
-				    height:350,
 
-                },
-                               
-                uri: url
-            }
-        );
-		}); 
-		
-	}
-}); 
-
---%>
+<aui:script>
+	AUI().ready(function() {
+		AUI().use(function(A) {
+			alert('i am here...');
+		});
+	});
+</aui:script>
