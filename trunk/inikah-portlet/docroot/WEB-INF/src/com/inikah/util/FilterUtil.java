@@ -20,6 +20,18 @@ public class FilterUtil {
 		return MyKeyValueLocalServiceUtil.getItemsForFilter(!bride, "residingCity", Long.valueOf(regionId), "residingState");
 	}
 	
+	public static List<KeyValuePair> getCountriesOfBirth(boolean bride, Locale locale) {
+		return MyKeyValueLocalServiceUtil.getItemsForFilter(bride, "countryOfBirth", 0l, null);
+	}
+	
+	public static List<KeyValuePair> getRegionsOfBirth(boolean bride, String countryId) {
+		return MyKeyValueLocalServiceUtil.getItemsForFilter(!bride, "stateOfBirth", Long.valueOf(countryId), "residingCountry");
+	}
+	
+	public static List<KeyValuePair> getCitiesOfBirth(boolean bride, String regionId) {
+		return MyKeyValueLocalServiceUtil.getItemsForFilter(!bride, "cityOfBirth", Long.valueOf(regionId), "residingState");
+	}
+	
 	public static List<KeyValuePair> getLanguagesSpoken(boolean bride) {
 		return MyKeyValueLocalServiceUtil.getItemsForFilter(!bride, "motherTongue", 0l, null);
 	}
