@@ -26,5 +26,10 @@ public interface IConstants {
 	int INT_ACTION_CAPTURED_IN_REPORT = 7;
 	int INT_ACTION_VEIWED_CONTACT_INFO = 8;
 	
+	int LOC_TYPE_REGION = 1;
+	int LOC_TYPE_CITY = 2;
+	int LOC_TYPE_AREA = 3;
+	int LOC_TYPE_MASJID = 4;
+	
 	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }

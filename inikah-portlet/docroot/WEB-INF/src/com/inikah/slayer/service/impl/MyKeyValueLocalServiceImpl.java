@@ -18,12 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.inikah.slayer.model.MMCity;
-import com.inikah.slayer.model.MMRegion;
+import com.inikah.slayer.model.Location;
 import com.inikah.slayer.model.MyKeyValue;
-import com.inikah.slayer.service.MMCityLocalServiceUtil;
-import com.inikah.slayer.service.MMRegionLocalServiceUtil;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.base.MyKeyValueLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
@@ -32,7 +31,9 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
+import com.liferay.portal.model.ListType;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.ListTypeServiceUtil;
 
 /**
  * The implementation of the my key value local service.
@@ -55,101 +56,70 @@ public class MyKeyValueLocalServiceImpl extends MyKeyValueLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.MyKeyValueLocalServiceUtil} to access the my key value local service.
 	 */
 	
-	public List<KeyValuePair> getLanguagesSpokenForFilter(boolean bride) {
-		List<MyKeyValue> items = myKeyValueFinder.findMotherTongue(bride);
+	public List<KeyValuePair> getItemsForFilter(boolean bride, String column, long parentId, String parentColumn) {
+		List<MyKeyValue> items = myKeyValueFinder.findResults(bride, column, parentId, parentColumn);
 		
 		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
 		for (MyKeyValue myKeyValue: items) {
-			kvPairs.add(new KeyValuePair(String.valueOf(myKeyValue.getMyKey()), myKeyValue.getMyValue()));
+			
+			long key = myKeyValue.getMyKey();
+			String name = getName(column, key);
+						
+			StringBuilder sb = new StringBuilder(name);
+			sb.append(StringPool.SPACE);
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append(myKeyValue.getMyValue());
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+			kvPairs.add(new KeyValuePair(String.valueOf(key), sb.toString()));
 		}
 		
-		return kvPairs;
+		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
 	}
-	
-	public List<KeyValuePair> getResidingCountriesForFilter(boolean bride, Locale locale) {
-		List<MyKeyValue> items = myKeyValueFinder.findResidingCountries(bride);
+
+	private String getName(String column, long key) {
 		
-		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
-		for (MyKeyValue myKeyValue: items) {
+		String name = StringPool.BLANK;
 			
-			long countryId = myKeyValue.getMyKey();
-			StringBuilder sb = new StringBuilder();
-			
+		if (column.equalsIgnoreCase("residingCountry") || column.equalsIgnoreCase("countryOfBirth")) {
 			Country country = null;
 			try {
-				country = CountryServiceUtil.fetchCountry(countryId);
+				country = CountryServiceUtil.fetchCountry(key);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 			
-			if (Validator.isNull(country)) continue;
-			
-			sb.append(LanguageUtil.get(locale, country.getName()));
-			sb.append(StringPool.SPACE);
-			sb.append(StringPool.OPEN_PARENTHESIS);
-			sb.append(myKeyValue.getMyValue());
-			sb.append(StringPool.CLOSE_PARENTHESIS);
-			kvPairs.add(new KeyValuePair(String.valueOf(countryId), sb.toString()));
-		}
-		
-		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));
-	}
-	
-	public List<KeyValuePair> getResidingRegionsForFilter(boolean bride, long countryId) {
-		List<MyKeyValue> items = myKeyValueFinder.findResidingRegions(bride, countryId);
-		
-		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
-		for (MyKeyValue myKeyValue: items) {
-			
-			long regionId = myKeyValue.getMyKey();
-			StringBuilder sb = new StringBuilder();
-			
-			MMRegion mmRegion = null;
+			if (Validator.isNotNull(country)) {
+				name = country.getName();
+			}
+		} else if (column.equalsIgnoreCase("residingState") 
+				|| column.equalsIgnoreCase("stateOfBirth") 
+				|| column.equalsIgnoreCase("residingCity") 
+				|| column.equalsIgnoreCase("cityOfBirth")) {
+			Location location = null;
 			try {
-				mmRegion = MMRegionLocalServiceUtil.fetchMMRegion(regionId);
+				location = LocationLocalServiceUtil.fetchLocation(key);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 			
-			if (Validator.isNull(mmRegion)) continue;
-			
-			sb.append(mmRegion.getName());
-			sb.append(StringPool.SPACE);
-			sb.append(StringPool.OPEN_PARENTHESIS);
-			sb.append(myKeyValue.getMyValue());
-			sb.append(StringPool.CLOSE_PARENTHESIS);
-			kvPairs.add(new KeyValuePair(String.valueOf(regionId), sb.toString()));
-		}
-		
-		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
-	}
-	
-	public List<KeyValuePair> getResidingCitiesForFilter(boolean bride, long regionId) {
-		List<MyKeyValue> items = myKeyValueFinder.findResidingCities(bride, regionId);
-		
-		List<KeyValuePair> kvPairs = new ArrayList<KeyValuePair>();
-		for (MyKeyValue myKeyValue: items) {
-			
-			long cityId = myKeyValue.getMyKey();
-			StringBuilder sb = new StringBuilder();
-			
-			MMCity mmCity = null;
+			if (Validator.isNotNull(location)) {
+				name = location.getName();
+			}
+		} else if (column.equalsIgnoreCase("motherTongue")) {
+			ListType listType = null;
 			try {
-				mmCity = MMCityLocalServiceUtil.fetchMMCity(cityId);
+				listType = ListTypeServiceUtil.getListType((int)key);
+			} catch (PortalException e) {
+				e.printStackTrace();
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 			
-			if (Validator.isNull(mmCity)) continue;
-			
-			sb.append(mmCity.getName());
-			sb.append(StringPool.SPACE);
-			sb.append(StringPool.OPEN_PARENTHESIS);
-			sb.append(myKeyValue.getMyValue());
-			sb.append(StringPool.CLOSE_PARENTHESIS);
-			kvPairs.add(new KeyValuePair(String.valueOf(cityId), sb.toString()));
+			if (Validator.isNotNull(listType)) {
+				name = LanguageUtil.get(Locale.ENGLISH, listType.getName());
+			}
 		}
-		
-		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
+			
+		return name;
 	}
 }

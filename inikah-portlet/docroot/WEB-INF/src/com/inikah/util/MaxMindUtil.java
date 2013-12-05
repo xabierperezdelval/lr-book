@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import com.inikah.slayer.model.MMCity;
-import com.inikah.slayer.model.MMRegion;
+import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.ConfigServiceUtil;
-import com.inikah.slayer.service.MMCityServiceUtil;
-import com.inikah.slayer.service.MMRegionServiceUtil;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -31,7 +29,7 @@ public class MaxMindUtil {
 		if (Validator.isNull(user)) return;
 		
 		long userId = user.getUserId();
-		String className = MMRegion.class.getName();
+		String className = Location.class.getName();
 		
 		// check if the MaxMind coordinates are already set for this user
 		if (ProfileLocalServiceUtil.maxMindCoordinatesSet(user)) return;
@@ -77,7 +75,7 @@ public class MaxMindUtil {
 		isoCode = omni.getMostSpecificSubdivision().getIsoCode();
 		String name = omni.getMostSpecificSubdivision().getName();
 		
-		MMRegion mmRegion = MMRegionServiceUtil.getRegion(country.getCountryId(), isoCode, name);
+		Location region = LocationLocalServiceUtil.getLocation(country.getCountryId(), isoCode, name, userId);
 		
 		String zip = omni.getPostal().getCode();
 		
@@ -86,17 +84,15 @@ public class MaxMindUtil {
 		}
 		
 		long countryId = country.getCountryId();
-		long regionId = mmRegion.getRegionId();
+		long regionId = region.getLocationId();
 		
-		MMCity mmCity = MMCityServiceUtil.getCity(regionId, omni.getCity().getName());
+		Location city = LocationLocalServiceUtil.getLocation(regionId, omni.getCity().getName(), IConstants.LOC_TYPE_CITY, userId);
 		
 		// latitude, longitude and continent
 		String street1 = String.valueOf(omni.getLocation().getLatitude());
 		String street2 = String.valueOf(omni.getLocation().getLongitude());
 		String street3 = omni.getContinent().getName();
-		
-		String city = String.valueOf(mmCity.getCityId());
-		
+				
 		int typeId = 100;
 		boolean mailing = false;
 		boolean primary = true;
@@ -105,7 +101,7 @@ public class MaxMindUtil {
 		
 		try {
 			AddressLocalServiceUtil.addAddress(userId, className, userId, 
-					street1, street2, street3, city, zip, regionId, countryId, 
+					street1, street2, street3, String.valueOf(city.getLocationId()), zip, regionId, countryId, 
 					typeId, mailing, primary, serviceContext);
 		} catch (PortalException e) {
 			e.printStackTrace();

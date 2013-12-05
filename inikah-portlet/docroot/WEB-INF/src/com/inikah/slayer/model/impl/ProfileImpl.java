@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import com.inikah.slayer.model.MatchCriteria;
@@ -27,9 +26,9 @@ import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
-import com.inikah.slayer.service.MyKeyValueLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.inikah.util.FilterUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
@@ -296,7 +295,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		List<KeyValuePair> results = new ArrayList<KeyValuePair>();
 		
 		List<KeyValuePair> original = getLanguagesSpokenAsList();
-		List<KeyValuePair> actuals = MyKeyValueLocalServiceUtil.getLanguagesSpokenForFilter(!isBride());
+		List<KeyValuePair> actuals = FilterUtil.getLanguagesSpoken(isBride());
 		
 		for (KeyValuePair kvPair1: actuals) {
 			String key1 = kvPair1.getKey();
@@ -365,18 +364,6 @@ public class ProfileImpl extends ProfileBaseImpl {
 			e.printStackTrace();
 		}
 		return matchCriteria;
-	}
-	
-	public List<KeyValuePair> getResidingCountriesForFilter(Locale locale) {
-		return MyKeyValueLocalServiceUtil.getResidingCountriesForFilter(!isBride(), locale);
-	}
-	
-	public List<KeyValuePair> getResidingRegionsForFilter(long countryId) {
-		return MyKeyValueLocalServiceUtil.getResidingRegionsForFilter(!isBride(), countryId);
-	}
-	
-	public List<KeyValuePair> getResidingCitiesForFilter(long regionId) {
-		return MyKeyValueLocalServiceUtil.getResidingCitiesForFilter(!isBride(), regionId);
 	}
 	
 	public boolean hasChildren() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom-sql>
-	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findMotherTongue"> 
+	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findResults"> 
 		<![CDATA[
 			SELECT 
 				[$COLUMN_NAME$] AS myKey, 
@@ -12,5 +12,3 @@
 		]]>
 	</sql>
 </custom-sql>
-
-

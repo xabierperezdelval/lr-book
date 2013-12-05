@@ -17,25 +17,9 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 public class MyKeyValueFinderImpl extends BasePersistenceImpl<MyKeyValue> 
 		implements MyKeyValueFinder {
 	
-	static String QUERY = MyKeyValueFinderImpl.class.getName() + ".findMotherTongue";
-
-	public List<MyKeyValue> findMotherTongue(boolean bride) { 
-		return findResults(bride, "motherTongue", 0l, null);
-	}
+	static String QUERY = MyKeyValueFinderImpl.class.getName() + ".findResults";
 	
-	public List<MyKeyValue> findResidingCountries(boolean bride) { 
-		return findResults(bride, "residingCountry", 0l, null);
-	}
-	
-	public List<MyKeyValue> findResidingRegions(boolean bride, long countryId) { 
-		return findResults(bride, "residingState", countryId, "residingCountry");
-	}	
-	
-	public List<MyKeyValue> findResidingCities(boolean bride, long regionId) { 
-		return findResults(bride, "residingCity", regionId, "residingState");
-	}	
-	
-	private List<MyKeyValue> findResults(boolean bride, String column, long parentId, String parentColumn) {
+	public List<MyKeyValue> findResults(boolean bride, String column, long parentId, String parentColumn) {
 		Session session = openSession();
 		String sql = CustomSQLUtil.get(QUERY);
 		
