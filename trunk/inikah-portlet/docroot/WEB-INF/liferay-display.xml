@@ -11,5 +11,6 @@
 		<portlet id="edit" />
 		<portlet id="matches" />
 		<portlet id="start"></portlet>
+		<portlet id="admin"></portlet>
 	</category>
 </display>
