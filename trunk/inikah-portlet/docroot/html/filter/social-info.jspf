@@ -1,3 +1,4 @@
+<%@page import="com.inikah.util.FilterUtil"%>
 <%@ include file="/html/filter/mother-tongue.jspf" %>
 
 <div id="myTreeView"></div>
@@ -10,19 +11,19 @@
 	        	boundingBox: '#myTreeView',
 	        	children: [
 	        		<%
-	        			List<KeyValuePair> countries = profile.getResidingCountriesForFilter(locale);
+	        			List<KeyValuePair> countries = FilterUtil.getResidingCountries(profile.isBride(), locale);
 	        			for (KeyValuePair kvPair: countries) {
 	   						%>
 					        	{
 					            	children: [
 										<%
-											List<KeyValuePair> regions = profile.getResidingRegionsForFilter(Long.valueOf(kvPair.getKey()));
+											List<KeyValuePair> regions = FilterUtil.getResidingRegions(profile.isBride(), kvPair.getKey());
 											for (KeyValuePair kvPair1: regions) {
 												%>
 										        	{
 										            	children: [
 															<%
-																List<KeyValuePair> cities = profile.getResidingCitiesForFilter(Long.valueOf(kvPair1.getKey()));
+																List<KeyValuePair> cities =  FilterUtil.getResidingRegions(profile.isBride(), kvPair1.getKey());
 																for (KeyValuePair kvPair2: cities) {
 																	%>
 																		{

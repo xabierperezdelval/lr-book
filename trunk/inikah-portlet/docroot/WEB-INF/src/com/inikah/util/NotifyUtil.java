@@ -4,33 +4,21 @@ import java.io.UnsupportedEncodingException;
 
 import javax.mail.internet.InternetAddress;
 
-import com.inikah.slayer.model.MMCity;
-import com.inikah.slayer.model.MMRegion;
+import com.inikah.slayer.model.Location;
 import com.inikah.slayer.model.Profile;
-import com.inikah.slayer.service.MMCityServiceUtil;
-import com.inikah.slayer.service.MMRegionServiceUtil;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 
 public class NotifyUtil {
 	
-	public static void newRegionCreated(MMRegion mmRegion) {
+	public static void newCityCreated(Location location) {
 		
 		MailMessage mailMessage = new MailMessage();
 		mailMessage.setFrom(getFrom());
 		mailMessage.setTo(getAdmin());
 		mailMessage.setSubject("New Region Created: " 
-				+ MMRegionServiceUtil.getDisplayInfo(mmRegion.getRegionId()));
-		MailServiceUtil.sendEmail(mailMessage);
-	}
-	
-	public static void newCityCreated(MMCity mmCity) {
-		
-		MailMessage mailMessage = new MailMessage();
-		mailMessage.setFrom(getFrom());
-		mailMessage.setTo(getAdmin());
-		mailMessage.setSubject("New City: " 
-				+ MMCityServiceUtil.getDisplayInfo(mmCity.getCityId()));		
+				+ LocationLocalServiceUtil.getDisplayInfo(location.getLocationId()));
 		MailServiceUtil.sendEmail(mailMessage);
 	}
 	

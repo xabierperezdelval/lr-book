@@ -120,35 +120,30 @@
 		<reference entity="ListType" package-path="com.liferay.portal"/>
 	</entity>
 	
-	<entity name="MMRegion"  local-service="true" remote-service="true">
-		<column name="regionId" type="long" primary="true"/>
-		<column name="countryId" type="long" />
-		<column name="isoCode" type="String" />
+	<entity name="Location" local-service="true" remote-service="true">
+		<column name="locationId" type="long" primary="true"/>
+		<column name="parentId" type="long" />
 		<column name="name" type="String" />
-		
-		<finder return-type="MMRegion" name="CountryId_isoCode">
-			<finder-column name="countryId" />
-			<finder-column name="isoCode" />
-		</finder>
-		
-		<finder return-type="Collection" name="CountryId">
-			<finder-column name="countryId"/>
-		</finder>
-	</entity>
-	
-	<entity name="MMCity" local-service="true" remote-service="true">
-		<column name="cityId" type="long" primary="true"/>
-		<column name="regionId" type="long" />
-		<column name="name" type="String" />
+		<column name="code" type="String"/>
+		<column name="locType" type="int" /> <!-- region, city, area, masjid -->
+		<column name="active_" type="boolean"/>
 		<column name="userId" type="long"/>
 		
-		<finder return-type="MMCity" name="RegionId_Name">
-			<finder-column name="regionId" />
+		<finder return-type="Location" name="ParentId_Name">
+			<finder-column name="parentId" />
 			<finder-column name="name" />
+			<finder-column name="locType" />
 		</finder>
 		
-		<finder return-type="Collection" name="RegionId">
-			<finder-column name="regionId"/>
+		<finder return-type="Location" name="ParentId_Code">
+			<finder-column name="parentId" />
+			<finder-column name="code" />
+			<finder-column name="locType" />
+		</finder>
+		
+		<finder return-type="Collection" name="ParentId_LocType">
+			<finder-column name="parentId"/>
+			<finder-column name="locType"/>
 		</finder>
 	</entity>
 	
