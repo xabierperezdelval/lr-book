@@ -43,11 +43,9 @@ public class ProfileServiceImpl extends ProfileServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.ProfileServiceUtil} to access the profile remote service.
 	 */
 	
-	public void updateUserInfo(long userId, String userName, boolean female) {
+	public void updateUserInfo(long userId, String userName, boolean female, String occupation, String additionalInfo) {
 		// update user info
-		
-		System.out.println("inside updateUserInfo");
-		
+				
 		User user = null;
 		try {
 			user = userLocalService.fetchUser(userId);
@@ -58,6 +56,9 @@ public class ProfileServiceImpl extends ProfileServiceBaseImpl {
 		if (Validator.isNull(user)) return;
 		
 		user.setFirstName(userName);
+		user.setJobTitle(occupation);
+		user.setComments(additionalInfo);
+		
 		try {
 			userLocalService.updateUser(user);
 		} catch (SystemException e) {

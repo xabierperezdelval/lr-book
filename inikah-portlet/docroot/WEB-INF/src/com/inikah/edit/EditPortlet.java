@@ -28,8 +28,6 @@ public class EditPortlet extends MVCPortlet {
 	
 	public void start(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-
-		System.out.println("inside start method.....");
 		
 		boolean bride = ParamUtil.getBoolean(actionRequest, "bride", false);
 		String profileName = ParamUtil.getString(actionRequest, "profileName", "Dummy");
@@ -113,6 +111,7 @@ public class EditPortlet extends MVCPortlet {
 		
 		profile.setMaritalStatus(ParamUtil.getInteger(actionRequest, "maritalStatus"));
 		profile.setCreatedFor(ParamUtil.getInteger(actionRequest, "createdFor"));
+		profile.setComplexion(ParamUtil.getInteger(actionRequest, "complexion"));
 		profile.setHeight(ParamUtil.getInteger(actionRequest, "height"));
 		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
 		

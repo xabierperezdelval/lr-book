@@ -311,4 +311,8 @@ public class MyListUtil {
 		}		
 		return items;
 	}
+	
+	 public static String getComplexionsList(Locale locale, Profile profile) {
+         return getOptions(locale, profile, IConstants.LIST_COMPLEXION, profile.getComplexion());
+	 }
 }
