@@ -400,5 +400,6 @@
 	<entity name="MyKeyValue" local-service="true" remote-service="false">
 		<column name="myKey" type="long" primary="true"/>
 		<column name="myValue" type="String"/>
+		<column name="myName" type="String"/>
 	</entity>
 </service-builder>

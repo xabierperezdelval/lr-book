@@ -13,17 +13,23 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
+import com.liferay.util.portlet.PortletProps;
 
 public class MyKeyValueFinderImpl extends BasePersistenceImpl<MyKeyValue> 
 		implements MyKeyValueFinder {
 	
 	static String QUERY = MyKeyValueFinderImpl.class.getName() + ".findResults";
-	
+		
 	public List<MyKeyValue> findResults(boolean bride, String column, long parentId, String parentColumn) {
 		Session session = openSession();
 		String sql = CustomSQLUtil.get(QUERY);
 		
-		sql = StringUtil.replace(sql, "[$COLUMN_NAME$]", column);
+		String[] tokens = PortletProps.get("breakup_finder_" + column).split(StringPool.COMMA);
+		
+		String[] tags = {"[$COLUMN_NAME$]", "[$JOIN_TABLE$]", "[$TABLE_PRIM_KEY$]"};
+		String[] vals = {column, tokens[0], tokens[1]};
+		
+		sql = StringUtil.replace(sql, tags, vals);
 		
 		String nextClause = StringPool.BLANK;
 		if (Validator.isNotNull(parentColumn) && parentId > 0l) {

@@ -18,22 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.inikah.slayer.model.Location;
 import com.inikah.slayer.model.MyKeyValue;
-import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.base.MyKeyValueLocalServiceBaseImpl;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.KeyValuePairComparator;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Country;
-import com.liferay.portal.model.ListType;
-import com.liferay.portal.service.CountryServiceUtil;
-import com.liferay.portal.service.ListTypeServiceUtil;
+import com.liferay.portal.kernel.util.TextFormatter;
 
 /**
  * The implementation of the my key value local service.
@@ -63,7 +55,11 @@ public class MyKeyValueLocalServiceImpl extends MyKeyValueLocalServiceBaseImpl {
 		for (MyKeyValue myKeyValue: items) {
 			
 			long key = myKeyValue.getMyKey();
-			String name = getName(column, key);
+			
+			String name = LanguageUtil.get(Locale.ENGLISH, myKeyValue.getMyName());
+			if (column.contains("ountry")) {
+				name = TextFormatter.formatName(name);
+			}
 						
 			StringBuilder sb = new StringBuilder(name);
 			sb.append(StringPool.SPACE);
@@ -74,52 +70,5 @@ public class MyKeyValueLocalServiceImpl extends MyKeyValueLocalServiceBaseImpl {
 		}
 		
 		return ListUtil.sort(kvPairs, new KeyValuePairComparator(false, true));		
-	}
-
-	private String getName(String column, long key) {
-		
-		String name = StringPool.BLANK;
-			
-		if (column.equalsIgnoreCase("residingCountry") || column.equalsIgnoreCase("countryOfBirth")) {
-			Country country = null;
-			try {
-				country = CountryServiceUtil.fetchCountry(key);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			
-			if (Validator.isNotNull(country)) {
-				name = country.getName();
-			}
-		} else if (column.equalsIgnoreCase("residingState") 
-				|| column.equalsIgnoreCase("stateOfBirth") 
-				|| column.equalsIgnoreCase("residingCity") 
-				|| column.equalsIgnoreCase("cityOfBirth")) {
-			Location location = null;
-			try {
-				location = LocationLocalServiceUtil.fetchLocation(key);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			
-			if (Validator.isNotNull(location)) {
-				name = location.getName();
-			}
-		} else if (column.equalsIgnoreCase("motherTongue")) {
-			ListType listType = null;
-			try {
-				listType = ListTypeServiceUtil.getListType((int)key);
-			} catch (PortalException e) {
-				e.printStackTrace();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			
-			if (Validator.isNotNull(listType)) {
-				name = LanguageUtil.get(Locale.ENGLISH, listType.getName());
-			}
-		}
-			
-		return name;
 	}
 }
