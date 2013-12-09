@@ -25,14 +25,18 @@
 	<aui:row>
 		<aui:column>
 			<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-				<%= MyListUtil.getCountriesList(profile.getResidingCountry()) %>
+				<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
 			</aui:select>
 		</aui:column>
 		<aui:column>
-			<aui:select name="residingRegion"/>
+			<aui:select name="residingState" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+				<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
+			</aui:select>
 		</aui:column>
 		<aui:column>
-			<aui:select name="residingCity"/>
+			<aui:select name="residingCity" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+				<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
+			</aui:select>
 		</aui:column>					
 	</aui:row>
 	<aui:row>

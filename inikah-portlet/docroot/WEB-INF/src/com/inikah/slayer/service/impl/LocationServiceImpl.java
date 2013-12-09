@@ -56,4 +56,8 @@ public class LocationServiceImpl extends LocationServiceBaseImpl {
 	public List<Location> getMasaajid(long cityId) {
 		return locationLocalService.getLocations(cityId, IConstants.LOC_TYPE_MASJID);
 	}
+	
+	public List<Location> getLocations(long parentId, int locType) {
+		return locationLocalService.getLocations(parentId, locType);
+	}
 }
