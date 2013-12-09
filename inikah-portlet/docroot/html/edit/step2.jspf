@@ -21,11 +21,12 @@
 </c:if>
 
 <!-- step 2 fields -->
-
 <aui:fieldset>
 	<aui:row>
 		<aui:column>
-			<aui:select name="residingCountry"/>
+			<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+				
+			</aui:select>
 		</aui:column>
 		<aui:column>
 			<aui:select name="residingRegion"/>

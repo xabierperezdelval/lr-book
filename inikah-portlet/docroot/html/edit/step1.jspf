@@ -17,7 +17,7 @@
 	</aui:column>
 	<aui:column>
 		<aui:select name="complexion" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-		<%= MyListUtil.getComplexionsList(locale, profile) %>
+			<%= MyListUtil.getComplexionsList(locale, profile) %>
 		</aui:select>
 	</aui:column>	
 </aui:row>
