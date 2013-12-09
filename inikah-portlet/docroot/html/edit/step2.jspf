@@ -25,7 +25,7 @@
 	<aui:row>
 		<aui:column>
 			<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-				
+				<%= MyListUtil.getCountriesList(profile.getResidingCountry()) %>
 			</aui:select>
 		</aui:column>
 		<aui:column>
@@ -47,12 +47,3 @@
 		</aui:column>					
 	</aui:row>
 </aui:fieldset>
-
-
-<aui:script>
-	AUI().ready(function() {
-		AUI().use(function(A) {
-			alert('i am here...');
-		});
-	});
-</aui:script>
