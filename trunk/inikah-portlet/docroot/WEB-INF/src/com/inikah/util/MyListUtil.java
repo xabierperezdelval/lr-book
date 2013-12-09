@@ -14,8 +14,11 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Country;
 import com.liferay.portal.model.ListType;
+import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
 
 public class MyListUtil {
@@ -315,4 +318,33 @@ public class MyListUtil {
 	 public static String getComplexionsList(Locale locale, Profile profile) {
          return getOptions(locale, profile, IConstants.LIST_COMPLEXION, profile.getComplexion());
 	 }
+	 
+	public static String getCountriesList(long currValue) {
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			List<Country> countries = CountryServiceUtil.getCountries(false);
+			
+			for (Country country: countries) {
+				long countryId = country.getCountryId();
+				sb.append("<option value=");
+				sb.append(StringPool.QUOTE);
+				sb.append(countryId);
+				sb.append(StringPool.QUOTE);
+				
+				if (countryId == currValue) {
+					sb.append(StringPool.SPACE);
+					sb.append("selected");
+				}
+				
+				sb.append(">");
+				sb.append(TextFormatter.formatName(country.getName()));
+				sb.append("</option>");
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();				
+	}	 
 }
