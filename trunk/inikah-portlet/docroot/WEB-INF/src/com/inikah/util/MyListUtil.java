@@ -6,8 +6,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.inikah.slayer.model.Location;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.LocationServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -319,7 +321,7 @@ public class MyListUtil {
          return getOptions(locale, profile, IConstants.LIST_COMPLEXION, profile.getComplexion());
 	 }
 	 
-	public static String getCountriesList(long currValue) {
+	public static String getCountries(long currValue) {
 		StringBuilder sb = new StringBuilder();
 		
 		try {
@@ -346,5 +348,30 @@ public class MyListUtil {
 		}
 		
 		return sb.toString();				
-	}	 
+	}
+	
+	public static String getLocations(long currValue, long parentId, int locType) {
+		StringBuilder sb = new StringBuilder();
+
+		List<Location> locations = LocationServiceUtil.getLocations(parentId, locType);
+		
+		for (Location location: locations) {
+			long locationId = location.getLocationId();
+			sb.append("<option value=");
+			sb.append(StringPool.QUOTE);
+			sb.append(locationId);
+			sb.append(StringPool.QUOTE);
+			
+			if (locationId == currValue) {
+				sb.append(StringPool.SPACE);
+				sb.append("selected");
+			}
+			
+			sb.append(">");
+			sb.append(location.getName());
+			sb.append("</option>");
+		}
+		
+		return sb.toString();				
+	}
 }
