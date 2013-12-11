@@ -22,6 +22,8 @@
 
 <!-- step 2 fields -->
 
+<%-- required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>" --%>
+
 <aui:fieldset>
 
 	<aui:column>
@@ -30,12 +32,12 @@
 			<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
 		</aui:select>	
 		
-		<aui:select name="stateOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+		<aui:select name="stateOfBirth"
 				onChange="javascript:cascade2(this, 'cityOfBirth');">
 			<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
 		</aui:select>
 		
-		<aui:select name="cityOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+		<aui:select name="cityOfBirth"
 				onChange="javascript:cascade3(this, 'newCityOfBirth');">
 			<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
 		</aui:select>	

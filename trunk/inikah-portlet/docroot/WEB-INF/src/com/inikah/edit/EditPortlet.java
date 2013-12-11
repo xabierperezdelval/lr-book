@@ -8,6 +8,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -126,7 +127,23 @@ public class EditPortlet extends MVCPortlet {
 	}
 
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
-		// TODO Auto-generated method stub
+		
+		profile.setResidingCountry(ParamUtil.getLong(actionRequest, "residingCountry"));
+		
+		long regionId = ParamUtil.getLong(actionRequest, "residingState");
+		profile.setResidingState(regionId);
+		
+		long residingCity = ParamUtil.getLong(actionRequest, "residingCity", -1l);
+		
+		if (residingCity == -1l) {
+			long userId = PortalUtil.getUserId(actionRequest);
+			String newResidingCity = ParamUtil.getString(actionRequest, "newResidingCity");
+			residingCity = LocationLocalServiceUtil.insertCity(regionId, newResidingCity, userId);
+		}
+		
+		System.out.println(residingCity + " @@@@@@@@@@@");
+		
+		profile.setResidingCity(residingCity);
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP1_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP2_DONE);

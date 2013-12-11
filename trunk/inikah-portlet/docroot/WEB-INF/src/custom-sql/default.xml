@@ -15,6 +15,7 @@
 				AND status = ? 
 				[$NEXT_CLAUSE$]
 			GROUP BY myKey
+			ORDER BY B.name
 		]]>
 	</sql>
 </custom-sql>
