@@ -1,4 +1,3 @@
-<%@page import="com.inikah.slayer.service.LocationLocalServiceUtil"%>
 <aui:fieldset>
 	<aui:column>
 		<aui:select name="maritalStatus" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
