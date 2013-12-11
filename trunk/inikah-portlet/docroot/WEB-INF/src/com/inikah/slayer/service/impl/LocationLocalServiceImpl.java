@@ -17,7 +17,7 @@ package com.inikah.slayer.service.impl;
 import java.util.List;
 
 import org.apache.commons.codec.EncoderException;
-import org.apache.commons.codec.language.RefinedSoundex;
+import org.apache.commons.codec.language.Soundex;
 
 import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
@@ -169,12 +169,14 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		for (Location city: cities) {
 			int diff = 0;
 			try {
-				diff = RefinedSoundex.US_ENGLISH.difference(city.getName(), name);
+				diff = Soundex.US_ENGLISH.difference(city.getName(), name);
+				
+				System.out.println(diff + ":" + city.getName() + ":" + name);
 			} catch (EncoderException e) {
 				e.printStackTrace();
 			}
 			
-			if (diff >= 3) {
+			if (diff == 4) {
 				cityId = city.getLocationId();
 				break;
 			}
