@@ -103,6 +103,7 @@ public class EditPortlet extends MVCPortlet {
 	
 	private void saveStep1(ActionRequest actionRequest, Profile profile, User user) {
 		
+		long userId = PortalUtil.getUserId(actionRequest);
 		int bornMonth = ParamUtil.getInteger(actionRequest, "bornMonth");
 		int bornYear = ParamUtil.getInteger(actionRequest, "bornYear");
 		
@@ -121,29 +122,49 @@ public class EditPortlet extends MVCPortlet {
 		profile.setVerificationCode(sendVerificationCode(mobileNumber));
 		profile.setAllowNonSingleProposals(!profile.isSingle());
 		
+		// setting locations
+		setLocation(actionRequest, profile, userId, "BIRTH");	
+		setLocation(actionRequest, profile, userId, "LIVING");	
+		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_CREATED) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP1_DONE);
 		}
 	}
 
-	private void saveStep2(ActionRequest actionRequest, Profile profile) {
+	private void setLocation(ActionRequest actionRequest, Profile profile,
+			long userId, String type) {
 		
-		profile.setResidingCountry(ParamUtil.getLong(actionRequest, "residingCountry"));
+		String countryFld = "countryOfBirth";
+		String stateFld = "stateOfBirth";
+		String cityFld = "cityOfBirth";
 		
-		long regionId = ParamUtil.getLong(actionRequest, "residingState");
-		profile.setResidingState(regionId);
-		
-		long residingCity = ParamUtil.getLong(actionRequest, "residingCity", -1l);
-		
-		if (residingCity == -1l) {
-			long userId = PortalUtil.getUserId(actionRequest);
-			String newResidingCity = ParamUtil.getString(actionRequest, "newResidingCity");
-			residingCity = LocationLocalServiceUtil.insertCity(regionId, newResidingCity, userId);
+		if (type.equalsIgnoreCase("LIVING")) {
+			countryFld = "residingCountry";
+			stateFld = "residingState";
+			cityFld = "residingCity";			
 		}
 		
-		System.out.println(residingCity + " @@@@@@@@@@@");
+		long countryId = ParamUtil.getLong(actionRequest, countryFld);
+		long regionId = ParamUtil.getLong(actionRequest, stateFld);
+		long cityId = ParamUtil.getLong(actionRequest, cityFld, -1l);
 		
-		profile.setResidingCity(residingCity);
+		if (cityId == -1l) {
+			String cityText = ParamUtil.getString(actionRequest, "new" + cityFld);
+			cityId = LocationLocalServiceUtil.insertCity(regionId, cityText, userId);
+		}		
+		
+		if (type.equalsIgnoreCase("BIRTH")) {
+			profile.setCountryOfBirth(countryId);
+			profile.setStateOfBirth(regionId);
+			profile.setCityOfBirth(cityId);
+		} else {
+			profile.setResidingCountry(countryId);
+			profile.setResidingState(regionId);
+			profile.setResidingCity(cityId);
+		}
+	}
+
+	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP1_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP2_DONE);
