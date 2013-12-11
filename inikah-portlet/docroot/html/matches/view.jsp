@@ -11,15 +11,18 @@
 		total="<%= matchResults.size() %>"
 		results="<%= ListUtil.subList(matchResults, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
 		
-	<liferay-ui:search-container-row className="com.inikah.slayer.model.Profile" modelVar="matches" >
-		
+	<liferay-ui:search-container-row className="com.inikah.slayer.model.Profile" modelVar="match">
+		<%--
 		<liferay-ui:search-container-column-text name="Profile-Id" property="profileId">
-			<%= matches.getProfileId() %>			
+			<%= match.getProfileId() %>			
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="Name" property="profileName">
-			<%= matches.getProfileName() %>			
+			<%= match.getProfileName() %>			
 		</liferay-ui:search-container-column-text>
+		 --%>
+		
+		<liferay-ui:search-container-column-jsp path="/html/matches/match.jsp"/>
 	</liferay-ui:search-container-row>
 	
 	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />

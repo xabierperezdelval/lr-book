@@ -169,9 +169,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		for (Location city: cities) {
 			int diff = 0;
 			try {
-				diff = Soundex.US_ENGLISH.difference(city.getName(), name);
-				
-				System.out.println(diff + ":" + city.getName() + ":" + name);
+				diff = Soundex.US_ENGLISH.difference(city.getName(), name);				
 			} catch (EncoderException e) {
 				e.printStackTrace();
 			}
