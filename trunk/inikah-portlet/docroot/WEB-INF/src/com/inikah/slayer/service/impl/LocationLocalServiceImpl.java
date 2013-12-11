@@ -20,6 +20,7 @@ import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.Soundex;
 
 import com.inikah.slayer.model.Location;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.NotifyUtil;
@@ -27,8 +28,11 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * The implementation of the location local service.
@@ -153,6 +157,23 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		return sb.toString();
 	}
 	
+	public String getUserLocation(long userId) {
+		long cityId = 1l;
+		try {
+			User user = UserLocalServiceUtil.fetchUser(userId);
+			
+			Address address = ProfileLocalServiceUtil.getMaxMindAddress(user);
+			
+			if (Validator.isNotNull(address)) {
+				cityId = Long.valueOf(address.getCity());
+			}			
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return getDisplayInfo(cityId);
+	}
+	
 	public long insertCity(long regionId, String name, long userId) {
 		
 		long cityId = 0l;
@@ -165,7 +186,6 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		}
 		
 		// check for soundex
-		
 		for (Location city: cities) {
 			int diff = 0;
 			try {
