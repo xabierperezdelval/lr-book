@@ -93,7 +93,7 @@ public class MyListUtil {
 		return getOptions(locale, profile, IConstants.LIST_MARITAL_STATUS, profile.getMaritalStatus());
 	}
 
-	private static String getOptions(Locale locale, Profile profile, String suffix, long currentValue) {
+	private static String getOptions(Locale locale, Profile profile, String suffix, long currValue) {
 		
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -115,16 +115,6 @@ public class MyListUtil {
 
 				long listTypeId = listType.getListTypeId();
 				
-				sb.append("<option value=");
-				sb.append(StringPool.QUOTE);
-				sb.append(listTypeId);
-				sb.append(StringPool.QUOTE);
-				if (listTypeId == currentValue) {
-					sb.append(StringPool.SPACE);
-					sb.append("selected");
-				}
-				sb.append(">");
-				
 				String value = LanguageUtil.get(locale, listType.getName());
 				if (suffix.equalsIgnoreCase(IConstants.LIST_CREATED_FOR)) {
 					String[] parts = value.split(StringPool.COLON);
@@ -133,8 +123,7 @@ public class MyListUtil {
 					}
 				} 
 				
-				sb.append(value);
-				sb.append("</option>");
+				sb.append(getOption(currValue, listTypeId, value));
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -229,19 +218,7 @@ public class MyListUtil {
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i=140; i<=190; i++) {
-			sb.append("<option value=");
-			sb.append(StringPool.QUOTE);
-			sb.append(i);
-			sb.append(StringPool.QUOTE);
-			
-			if (i == currValue) {
-				sb.append(StringPool.SPACE);
-				sb.append("selected");
-			}
-			
-			sb.append(">");
-			sb.append(getHeightText(i, false));
-			sb.append("</option>");
+			sb.append(getOption(currValue, i, getHeightText(i, false)));
 		}
 		
 		return sb.toString();
