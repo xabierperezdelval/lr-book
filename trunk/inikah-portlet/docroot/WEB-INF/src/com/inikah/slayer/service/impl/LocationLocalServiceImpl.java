@@ -16,6 +16,9 @@ package com.inikah.slayer.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.language.RefinedSoundex;
+
 import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
@@ -154,7 +157,6 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		long cityId = 0l;
 		
-		/*
 		List<Location> cities = null;
 		try {
 			cities = locationPersistence.findByParentId_LocType(regionId, IConstants.LOC_TYPE_CITY);
@@ -167,19 +169,16 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		for (Location city: cities) {
 			int diff = 0;
 			try {
-				diff = (new Soundex(Soundex.US_ENGLISH_MAPPING_STRING)).difference(city.getName(), name);
-				
-				System.out.println(city.getName() + ":" + name + ":" + diff);
+				diff = RefinedSoundex.US_ENGLISH.difference(city.getName(), name);
 			} catch (EncoderException e) {
 				e.printStackTrace();
 			}
 			
-			if (diff <= 2) {
+			if (diff >= 3) {
 				cityId = city.getLocationId();
 				break;
 			}
 		}
-		*/
 		
 		if (cityId == 0l) {
 			try {
