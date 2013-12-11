@@ -45,6 +45,7 @@
 
 <%@page import="com.inikah.slayer.service.BridgeServiceUtil"%>
 <%@page import="com.inikah.slayer.service.ProfileLocalServiceUtil"%>
+<%@page import="com.inikah.slayer.service.LocationLocalServiceUtil"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
