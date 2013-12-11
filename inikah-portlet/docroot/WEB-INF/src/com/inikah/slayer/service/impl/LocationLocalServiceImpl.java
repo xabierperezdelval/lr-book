@@ -148,5 +148,60 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		}
 		
 		return sb.toString();
-	}		
+	}
+	
+	public long insertCity(long regionId, String name, long userId) {
+		
+		long cityId = 0l;
+		
+		/*
+		List<Location> cities = null;
+		try {
+			cities = locationPersistence.findByParentId_LocType(regionId, IConstants.LOC_TYPE_CITY);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		// check for soundex
+		
+		for (Location city: cities) {
+			int diff = 0;
+			try {
+				diff = (new Soundex(Soundex.US_ENGLISH_MAPPING_STRING)).difference(city.getName(), name);
+				
+				System.out.println(city.getName() + ":" + name + ":" + diff);
+			} catch (EncoderException e) {
+				e.printStackTrace();
+			}
+			
+			if (diff <= 2) {
+				cityId = city.getLocationId();
+				break;
+			}
+		}
+		*/
+		
+		if (cityId == 0l) {
+			try {
+				cityId = counterLocalService.increment(Location.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			Location city = createLocation(cityId);
+			city.setName(name);
+			city.setUserId(userId);
+			city.setLocType(IConstants.LOC_TYPE_CITY);
+			city.setParentId(regionId);
+			city.setActive_(false);
+			
+			try {
+				addLocation(city);
+				NotifyUtil.newCityCreated(city);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return cityId;
+	}
 }
