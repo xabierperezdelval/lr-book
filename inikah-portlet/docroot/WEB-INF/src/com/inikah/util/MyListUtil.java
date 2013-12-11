@@ -251,22 +251,31 @@ public class MyListUtil {
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i=30; i<=120; i++) {
-			sb.append("<option value=");
-			sb.append(StringPool.QUOTE);
-			sb.append(i);
-			sb.append(StringPool.QUOTE);
-			
-			if (i == currValue) {
-				sb.append(StringPool.SPACE);
-				sb.append("selected");
-			}
-			
-			sb.append(">");
-			sb.append(getWeightText(i, false));
-			sb.append("</option>");
+			sb.append(getOption(currValue, i, getWeightText(i, false)));
 		}
 		
 		return sb.toString();				
+	}
+
+	private static String getOption(long currValue, long i, String text) {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<option value=");
+		sb.append(StringPool.QUOTE);
+		sb.append(i);
+		sb.append(StringPool.QUOTE);
+		
+		if (i == currValue) {
+			sb.append(StringPool.SPACE);
+			sb.append("selected");
+		}
+		
+		sb.append(">");
+		sb.append(text);
+		sb.append("</option>");
+		
+		return sb.toString();
 	}
 	
 	public static String getChecked(String csv, String listTypeId) {
@@ -328,20 +337,10 @@ public class MyListUtil {
 			List<Country> countries = CountryServiceUtil.getCountries(false);
 			
 			for (Country country: countries) {
+				
 				long countryId = country.getCountryId();
-				sb.append("<option value=");
-				sb.append(StringPool.QUOTE);
-				sb.append(countryId);
-				sb.append(StringPool.QUOTE);
 				
-				if (countryId == currValue) {
-					sb.append(StringPool.SPACE);
-					sb.append("selected");
-				}
-				
-				sb.append(">");
-				sb.append(TextFormatter.formatName(country.getName()));
-				sb.append("</option>");
+				sb.append(getOption(currValue, countryId, TextFormatter.formatName(country.getName())));
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -350,28 +349,22 @@ public class MyListUtil {
 		return sb.toString();				
 	}
 	
-	public static String getLocations(long currValue, long parentId, int locType) {
+	public static String getLocations(long parentId, long currValue, int locType) {
 		StringBuilder sb = new StringBuilder();
 
 		List<Location> locations = LocationServiceUtil.getLocations(parentId, locType);
-		
+				
 		for (Location location: locations) {
 			long locationId = location.getLocationId();
-			sb.append("<option value=");
-			sb.append(StringPool.QUOTE);
-			sb.append(locationId);
-			sb.append(StringPool.QUOTE);
 			
-			if (locationId == currValue) {
-				sb.append(StringPool.SPACE);
-				sb.append("selected");
-			}
-			
-			sb.append(">");
-			sb.append(location.getName());
-			sb.append("</option>");
+			sb.append(getOption(currValue, locationId, location.getName()));
+		}
+		
+		if (locType == IConstants.LOC_TYPE_CITY) {
+			sb.append(getOption(0, -1, "-- New City --"));
 		}
 		
 		return sb.toString();				
 	}
+	
 }
