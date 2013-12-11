@@ -21,33 +21,129 @@
 </c:if>
 
 <!-- step 2 fields -->
+
 <aui:fieldset>
-	<aui:row>
-		<aui:column>
-			<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-				<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
-			</aui:select>
-		</aui:column>
-		<aui:column>
-			<aui:select name="residingState" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-				<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
-			</aui:select>
-		</aui:column>
-		<aui:column>
-			<aui:select name="residingCity" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-				<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
-			</aui:select>
-		</aui:column>					
-	</aui:row>
-	<aui:row>
-		<aui:column>
-			<aui:input name="newResidingCountry" disabled="<%= true %>" />
-		</aui:column>
-		<aui:column>
-			<aui:input name="area" />
-		</aui:column>
-		<aui:column>
-			<aui:input name="masjid" />
-		</aui:column>					
-	</aui:row>
+
+	<aui:column>
+		<aui:select name="countryOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+				onChange="javascript:cascade1(this, 'stateOfBirth', 'cityOfBirth');">
+			<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
+		</aui:select>	
+		
+		<aui:select name="stateOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+				onChange="javascript:cascade2(this, 'cityOfBirth');">
+			<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
+		</aui:select>
+		
+		<aui:select name="cityOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+				onChange="javascript:cascade3(this, 'newCityOfBirth');">
+			<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
+		</aui:select>	
+		
+		<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
+			<aui:input name="newCityOfBirth" />
+		</div>	
+	</aui:column>
+	
+	<aui:column>
+		<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>" 
+				onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
+			<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
+		</aui:select>
+		
+		<aui:select name="residingState" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+				onChange="javascript:cascade2(this, 'residingCity');">
+			<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
+		</aui:select>
+		
+		<aui:select name="residingCity" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+				onChange="javascript:cascade3(this, 'newResidingCity');">
+			<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
+		</aui:select>
+		
+		<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
+			<aui:input name="newResidingCity" />
+		</div>
+		
+	</aui:column>
+	
 </aui:fieldset>
+
+<script type="text/javascript">
+	function cascade1(obj, fld1, fld2) {
+		var index = obj.selectedIndex;
+		var child = document.getElementById("<portlet:namespace/>" + fld1);
+		var grandChild = document.getElementById("<portlet:namespace/>" + fld2);
+		
+		if (index > 0) {
+			var value = obj.options[index].value;
+			Liferay.Service(
+	  			'/inikah-portlet.location/get-regions',
+	  			{
+	    			countryId: value
+	  			},
+	  			function(data) {
+	  				child.length = data.length + 1;
+	  				child.selectedIndex = 0;
+	  				child.options[0] = new Option("-- select --", "");
+	  				for (var i=0; i<(data.length); i++) {
+	  					var location = data[i];
+	  					child.options[i+1] = new Option(location.name, location.locationId);
+	  				}
+	  				
+	  				clear(grandChild);
+	  			}
+			);			
+		} else {
+			clear(child);
+			clear(grandChild);
+		}
+	}
+	
+	function cascade2(obj, fld1) {
+		var index = obj.selectedIndex;
+		var child = document.getElementById("<portlet:namespace/>" + fld1);
+		
+		if (index > 0) {
+			var value = obj.options[index].value;
+			Liferay.Service(
+	  			'/inikah-portlet.location/get-cities',
+	  			{
+	    			regionId: value
+	  			},
+	  			function(data) {
+	  				child.length = data.length + 1;
+	  				child.selectedIndex = 0;
+	  				child.options[0] = new Option("-- select --", "");
+	  				for (var i=0; i<(data.length); i++) {
+	  					var location = data[i];
+	  					child.options[i+1] = new Option(location.name, location.locationId);
+	  				}
+	  				child.options[data.length + 1] = new Option("-- New City --", "");
+	  			}
+			);			
+		} else {
+			clear(child);
+		}
+	}
+	
+	function cascade3(obj, fld) {
+		var index = obj.selectedIndex;
+		var value = obj.options[index].value;
+		var div = document.getElementById("<portlet:namespace/>"+ fld +"Div");
+		var fld = document.getElementById("<portlet:namespace/>" + fld);
+				
+		if (value == -1) {
+			div.style.display = 'block';
+			fld.focus();
+		} else {
+			div.style.display = 'none';		
+		}
+	}	
+	
+	function clear(fld) {
+		fld.length = 1;
+		fld.selectedIndex = 0;
+		fld.options[0] = new Option("-- select --", "");
+	}
+</script>
