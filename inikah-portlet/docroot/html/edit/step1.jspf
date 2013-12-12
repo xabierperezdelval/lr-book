@@ -1,80 +1,86 @@
-<aui:fieldset>
-	<aui:column>
-		<aui:select name="maritalStatus" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-			<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
-		</aui:select>
-		
-		<%@ include file="/html/edit/step1-bornon.jspf" %>
-		
-		<aui:select name="height">
-			<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
-		</aui:select>					
-	</aui:column>
+<liferay-ui:panel-container accordion="<%= true %>">
+	<liferay-ui:panel title="basic-info" extended="<%= true %>" collapsible="<%= true %>" >
+		<aui:fieldset>
+			<aui:column>
+				<aui:select name="maritalStatus" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+					<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
+				</aui:select>
+				
+				<%@ include file="/html/edit/step1-bornon.jspf" %>
+				
+				<aui:select name="height">
+					<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
+				</aui:select>					
+			</aui:column>
+			
+			<aui:column>
+				<aui:select name="createdFor" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+					<%= MyListUtil.getCreatedFor(locale, profile) %>
+				</aui:select>	
+				
+				<aui:select name="complexion" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
+					<%= MyListUtil.getComplexionsList(locale, profile) %>
+				</aui:select>	
+				
+				<aui:select name="weight">
+					<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
+				</aui:select>			
+			</aui:column>
+		</aui:fieldset>
+	</liferay-ui:panel>
 	
-	<aui:column>
-		<aui:select name="createdFor" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-			<%= MyListUtil.getCreatedFor(locale, profile) %>
-		</aui:select>	
-		
-		<aui:select name="complexion" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-			<%= MyListUtil.getComplexionsList(locale, profile) %>
-		</aui:select>	
-		
-		<aui:select name="weight">
-			<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
-		</aui:select>			
-	</aui:column>
-</aui:fieldset>
+	<liferay-ui:panel title="location-info" extended="<%= true %>" collapsible="<%= true %>">
 
-
-<div>
-	You are currently accessing from: <b><%= LocationLocalServiceUtil.getUserLocation(user.getUserId()) %></b>.
-	<br/> Please confirm OR change <b>BIRTH</b> and <b>LIVING</b> locations.
-</div>
-
-<aui:fieldset>
-	<aui:column>
-		<aui:select name="countryOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-				onChange="javascript:cascade1(this, 'stateOfBirth', 'cityOfBirth');">
-			<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
-		</aui:select>	
-		
-		<aui:select name="stateOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-				onChange="javascript:cascade2(this, 'cityOfBirth');">
-			<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
-		</aui:select>
-		
-		<aui:select name="cityOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-				onChange="javascript:cascade3(this, 'newCityOfBirth');">
-			<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
-		</aui:select>	
-		
-		<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
-			<aui:input name="newCityOfBirth" />
-		</div>	
-	</aui:column>
-	
-	<aui:column>
-		<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>" 
-				onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
-			<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
-		</aui:select>
-		
-		<aui:select name="residingState" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-				onChange="javascript:cascade2(this, 'residingCity');">
-			<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
-		</aui:select>
-		
-		<aui:select name="residingCity" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-				onChange="javascript:cascade3(this, 'newResidingCity');">
-			<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
-		</aui:select>
-		
-		<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
-			<aui:input name="newResidingCity" />
+		<div>
+			You are currently accessing from: <b><%= LocationLocalServiceUtil.getUserLocation(user.getUserId()) %></b>.
+			<br/> Please confirm OR change <b>BIRTH</b> and <b>RESIDING</b> locations.		
 		</div>
-	</aui:column>
-</aui:fieldset>
+		
+		<aui:fieldset>
+			<aui:column>
+				<aui:select name="countryOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+						onChange="javascript:cascade1(this, 'stateOfBirth', 'cityOfBirth');">
+					<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
+				</aui:select>	
+				
+				<aui:select name="stateOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+						onChange="javascript:cascade2(this, 'cityOfBirth');">
+					<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
+				</aui:select>
+				
+				<aui:select name="cityOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+						onChange="javascript:cascade3(this, 'newCityOfBirth');">
+					<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
+				</aui:select>	
+				
+				<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
+					<aui:input name="newCityOfBirth" />
+				</div>	
+			</aui:column>
+			
+			<aui:column>
+				<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>" 
+						onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
+					<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
+				</aui:select>
+				
+				<aui:select name="residingState" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+						onChange="javascript:cascade2(this, 'residingCity');">
+					<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
+				</aui:select>
+				
+				<aui:select name="residingCity" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
+						onChange="javascript:cascade3(this, 'newResidingCity');">
+					<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
+				</aui:select>
+				
+				<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
+					<aui:input name="newResidingCity" />
+				</div>
+			</aui:column>
+		</aui:fieldset>
+	</liferay-ui:panel>	
+</liferay-ui:panel-container>	
 
 <script type="text/javascript">
 	function cascade1(obj, fld1, fld2) {
