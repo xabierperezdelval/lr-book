@@ -38,7 +38,9 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Country;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
 
@@ -368,5 +370,29 @@ public class ProfileImpl extends ProfileBaseImpl {
 	
 	public boolean hasChildren() {
 		return (getSons() > 0 || getDaughters() > 0);
+	}
+	
+	public List<String> getIDDCodes() {
+		List<String> iddCodes = new ArrayList<String>();
+		
+		long residingCountryId = getResidingCountry();
+		
+		List<Long> countryIds = new ArrayList<Long>();
+		countryIds.add(residingCountryId);
+		
+		if (!countryIds.contains(getUserCountryId())) {
+			countryIds.add(getUserCountryId());
+		}
+		
+		for (Long countryId: countryIds) {
+			try {
+				Country country = CountryServiceUtil.fetchCountry(countryId);
+				iddCodes.add(country.getIdd());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return iddCodes;
 	}
 }
