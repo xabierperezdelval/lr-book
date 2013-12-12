@@ -344,4 +344,15 @@ public class MyListUtil {
 		return sb.toString();				
 	}
 	
+	public static String getLanguagesSpoken(Profile profile) {
+		StringBuilder sb = new StringBuilder();
+		
+		List<KeyValuePair> allowedLanguages = profile.getLanguagesSpokenAsList();
+		
+		for (KeyValuePair language: allowedLanguages) {
+			sb.append(getOption(profile.getMotherTongue(), Long.valueOf(language.getKey()), language.getValue()));
+		}
+		
+		return sb.toString();	
+	}
 }
