@@ -21,3 +21,96 @@
 </c:if>
 
 <!-- step 2 fields -->
+
+<liferay-ui:panel-container accordion="<%= true %>">
+	<liferay-ui:panel title="social-info" extended="<%= true %>" collapsible="<%= true %>" >
+		<aui:fieldset>
+			<aui:column>
+				<aui:input name="area" value=""/>
+				<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>"/>
+				<aui:select name="motherTongue">
+					<%= MyListUtil.getLanguagesSpoken(profile) %>
+				</aui:select>
+			</aui:column>
+			<aui:column>
+				<aui:input name="masjid" value=""/>
+				
+				<%
+					List<String> iddCodes = profile.getIDDCodes();
+					boolean singleIdd = (iddCodes.size() == 1);
+				%>
+				<c:choose>
+					<c:when test="<%= singleIdd %>">
+						<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" prefix="+<%= iddCodes.get(0) %>"/>
+					</c:when>
+					<c:otherwise>
+						<aui:select name="iddCode"/>
+						<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" />
+					</c:otherwise>
+				</c:choose>
+				
+				<aui:select name="canSpeak" multiple="true">
+					<%= MyListUtil.getLanguagesSpoken(profile) %>
+				</aui:select>
+			</aui:column>			
+		</aui:fieldset>
+	</liferay-ui:panel>
+	
+	<c:if test="<%= !profile.isSingle() %>">
+		<liferay-ui:panel title="non-single" extended="<%= true %>" collapsible="<%= true %>" >
+			<aui:row>
+				<aui:column cssClass="mini-selection">
+					<aui:select name="sons" />
+				</aui:column>
+				<aui:column cssClass="mini-selection">
+					<aui:select name="daughters" />
+				</aui:column>
+				<c:if test="<%= !profile.isBride() && profile.isMarried() %>">
+					<aui:column>
+							<aui:select name="remarriageReason" />
+					</aui:column>	
+				</c:if>		
+			</aui:row>
+		</liferay-ui:panel>		
+	</c:if>
+	
+	<liferay-ui:panel title="education-info" extended="<%= true %>" collapsible="<%= true %>" >
+		<aui:fieldset>
+			<aui:column>
+				<aui:select name="education"/>
+				<div hidden="true">hidden div</div>
+				<aui:input name="schoolAttended"/>
+			</aui:column>
+			<aui:column>
+				<aui:input type="textarea" name="educationDetails"/>
+			</aui:column>
+		</aui:fieldset>
+	</liferay-ui:panel>
+	
+	<liferay-ui:panel title="islamic-education" extended="<%= true %>" collapsible="<%= true %>" >
+		<aui:fieldset>
+			<aui:column>
+				<aui:select name="education"/>
+				<div hidden="true">hidden div</div>
+				<aui:input name="schoolAttended"/>
+			</aui:column>
+			<aui:column>
+				<aui:input type="textarea" name="educationDetails"/>
+			</aui:column>
+		</aui:fieldset>	
+	</liferay-ui:panel>	
+	
+	<liferay-ui:panel title="occupation" extended="<%= true %>" collapsible="<%= true %>" >
+		<aui:fieldset>
+			<aui:column>
+				<aui:select name="occupation"/>
+				<div hidden="true">hidden div</div>
+				<aui:input name="whereWorking"/>
+			</aui:column>
+			<aui:column>
+				<aui:input type="textarea" name="educationDetails"/>
+				<aui:input name="salary"/>
+			</aui:column>
+		</aui:fieldset>
+	</liferay-ui:panel>		
+</liferay-ui:panel-container>	
