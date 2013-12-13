@@ -3,6 +3,7 @@
 
 <%
 	List<Profile> matchResults = MatchCriteriaLocalServiceUtil.getMatches(profile.getProfileId());
+	System.out.println("@@@@ " + PortalUtil.getPathMain());
 %>
 
 <liferay-ui:search-container delta="7" emptyResultsMessage="You don't have any matches">
@@ -27,3 +28,14 @@
 	
 	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 </liferay-ui:search-container>
+
+<script type="text/javascript">
+	function expandDiv(profileId) {
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('matches_WAR_inikahportlet');
+		ajaxURL.setParameter("jspPage", "/html/matches/detail.jsp");
+		ajaxURL.setParameter("matchingProfileId", profileId);
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		AUI().one('#' + profileId + '_details').load('<%= themeDisplay.getURLPortal() %>'+ajaxURL);
+	}
+</script>
