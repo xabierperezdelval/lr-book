@@ -7,17 +7,11 @@
 
 <%= match.getProfileName() %> 
 
+<portlet:renderURL var="ajaxURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+	<portlet:param name="jspPage" value="/html/matches/detail.jsp"/>
+	<portlet:param name="matchingProfileId" value="<%= String.valueOf(match.getProfileId()) %>"/>
+</portlet:renderURL>
+
 <a href="javascript:void();" onclick="javascript:expandDiv(<%= match.getProfileId() %>);"><liferay-ui:message key="show-details"/></a>
 
-<div id="<%= match.getProfileId() %>_details" hidden="<%= true %>">
-	Show here the details....
-</div>
-
-<script type="text/javascript">
-	function expandDiv(profileId) {
-		var div = document.getElementById(profileId + "_details");
-		alert(div);
-		
-		div.style.display = 'block';
-	}
-</script>
+<div id="<%= match.getProfileId() %>_details"></div>
