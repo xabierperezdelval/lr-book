@@ -3,7 +3,6 @@
 
 <%
 	List<Profile> matchResults = MatchCriteriaLocalServiceUtil.getMatches(profile.getProfileId());
-	System.out.println("@@@@ " + PortalUtil.getPathMain());
 %>
 
 <liferay-ui:search-container delta="7" emptyResultsMessage="You don't have any matches">
@@ -13,16 +12,6 @@
 		results="<%= ListUtil.subList(matchResults, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
 		
 	<liferay-ui:search-container-row className="com.inikah.slayer.model.Profile" modelVar="match">
-		<%--
-		<liferay-ui:search-container-column-text name="Profile-Id" property="profileId">
-			<%= match.getProfileId() %>			
-		</liferay-ui:search-container-column-text>
-		
-		<liferay-ui:search-container-column-text name="Name" property="profileName">
-			<%= match.getProfileName() %>			
-		</liferay-ui:search-container-column-text>
-		 --%>
-		
 		<liferay-ui:search-container-column-jsp path="/html/matches/match.jsp"/>
 	</liferay-ui:search-container-row>
 	
