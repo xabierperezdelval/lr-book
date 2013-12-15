@@ -115,6 +115,22 @@
 		<reference entity="Address" package-path="com.liferay.portal" />
 	</entity>
 	
+	<entity name="Photo" remote-service="false" local-service="true">
+		<column name="imageId" type="long" primary="true"/>
+		<column name="profileId" type="long"/>
+		<column name="description" type="String"/>
+		<column name="imageType" type="int"/>
+		<column name="approved" type="boolean"/>
+		<column name="uploadDate" type="Date"/>
+		
+		<finder return-type="Photo" name="ProfileId_ImageType">
+			<finder-column name="profileId"/>
+			<finder-column name="imageType"/>
+		</finder>
+		
+		<reference entity="Image" package-path="com.liferay.portal" />
+	</entity>
+	
 	<entity name="Bridge"  local-service="false" remote-service="true">
 		<reference entity="Country" package-path="com.liferay.portal"/>
 		<reference entity="ListType" package-path="com.liferay.portal"/>
