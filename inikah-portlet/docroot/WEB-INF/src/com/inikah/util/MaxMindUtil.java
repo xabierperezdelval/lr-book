@@ -20,7 +20,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.maxmind.geoip2.WebServiceClient;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.maxmind.geoip2.model.Omni;
+import com.maxmind.geoip2.model.OmniResponse;;
 
 public class MaxMindUtil {
 
@@ -55,29 +55,29 @@ public class MaxMindUtil {
 		
 		if (Validator.isNull(inetAddress)) return;
 		
-		Omni omni = null;
+		OmniResponse omniResponse = null;
 		try {
-			omni = client.omni(inetAddress);
+			omniResponse = client.omni(inetAddress);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (GeoIp2Exception e) {
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNull(omni)) return;
+		if (Validator.isNull(omniResponse)) return;
 		
-		String isoCode = omni.getCountry().getIsoCode();
+		String isoCode = omniResponse.getCountry().getIsoCode();
 
 		Country country = BridgeServiceUtil.getCountry(isoCode);
 		
 		if (Validator.isNull(country)) return;
 		
-		isoCode = omni.getMostSpecificSubdivision().getIsoCode();
-		String name = omni.getMostSpecificSubdivision().getName();
+		isoCode = omniResponse.getMostSpecificSubdivision().getIsoCode();
+		String name = omniResponse.getMostSpecificSubdivision().getName();
 		
 		Location region = LocationLocalServiceUtil.getLocation(country.getCountryId(), isoCode, name, userId);
 		
-		String zip = omni.getPostal().getCode();
+		String zip = omniResponse.getPostal().getCode();
 		
 		if (Validator.isNull(zip)) {
 			zip = "NO-ZIP";
@@ -86,12 +86,12 @@ public class MaxMindUtil {
 		long countryId = country.getCountryId();
 		long regionId = region.getLocationId();
 		
-		Location city = LocationLocalServiceUtil.getLocation(regionId, omni.getCity().getName(), IConstants.LOC_TYPE_CITY, userId);
+		Location city = LocationLocalServiceUtil.getLocation(regionId, omniResponse.getCity().getName(), IConstants.LOC_TYPE_CITY, userId);
 		
 		// latitude, longitude and continent
-		String street1 = String.valueOf(omni.getLocation().getLatitude());
-		String street2 = String.valueOf(omni.getLocation().getLongitude());
-		String street3 = omni.getContinent().getName();
+		String street1 = String.valueOf(omniResponse.getLocation().getLatitude());
+		String street2 = String.valueOf(omniResponse.getLocation().getLongitude());
+		String street3 = omniResponse.getContinent().getName();
 				
 		int typeId = 100;
 		boolean mailing = false;
@@ -110,7 +110,7 @@ public class MaxMindUtil {
 		}
 		
 		// check queries remaining...
-		int queriesRemaining = omni.getMaxMind().getQueriesRemaining();
+		int queriesRemaining = omniResponse.getMaxMind().getQueriesRemaining();
 		if (queriesRemaining < 50) {
 			// email Ahmed Hasan
 		}
