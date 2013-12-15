@@ -14,6 +14,8 @@
 
 package com.inikah.slayer.service.impl;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +63,11 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 	Cloudinary cloudinary;
 	
 	public PhotoLocalServiceImpl() {
-		cloudinary = new Cloudinary("cloudinary://684163674418368:p0TvTj4jm0cR6NJGa-N-IRkaTnw@inikah-com");
+		Map config = new HashMap();
+		config.put("cloud_name", "inikah-com");
+		config.put("api_key", "684163674418368");
+		config.put("api_secret", "p0TvTj4jm0cR6NJGa-N-IRkaTnw");
+		cloudinary = new Cloudinary(config);		
 	}
 	
 	public Photo upload(long imageId, long profileId, File file, String description) {
