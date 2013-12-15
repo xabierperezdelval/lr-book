@@ -233,7 +233,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		URL url = null;
 		try {
-			url = new URL("http://res.cloudinary.com/inikah-com/image/upload/w_90,h_100,c_thumb,g_face/" + publicId);
+			url = new URL("http://res.cloudinary.com/inikah-com/image/upload/w_80,h_100,c_thumb,g_face/" + publicId);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
