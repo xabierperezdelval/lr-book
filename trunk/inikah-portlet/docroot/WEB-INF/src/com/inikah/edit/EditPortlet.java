@@ -1,18 +1,26 @@
 package com.inikah.edit;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -21,6 +29,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.slayer.service.PhotoLocalServiceUtil;
 
 /**
  * Portlet implementation class ManagePortlet
@@ -195,4 +204,44 @@ public class EditPortlet extends MVCPortlet {
 		
 		return verificationCode;
 	}
+	
+	public void uploadImage(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+
+		long profileId = ParamUtil.getLong(actionRequest, "profileId", 100l);
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		
+		for (int i=1; i<=4; i++) {
+			File profilePhoto = uploadPortletRequest.getFile("profilePhoto_" + i);
+			
+			if (profilePhoto.length() > 0) {
+				long imageId = ParamUtil.getLong(uploadPortletRequest, "imageId_"+i, 0l);
+				String description = ParamUtil.getString(uploadPortletRequest, "description_"+i);
+				PhotoLocalServiceUtil.upload(imageId, profileId, profilePhoto, description);
+			}
+		}
+	}
+	
+	public void serveResource(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException,
+			PortletException {
+		
+		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
+		
+		if (cmd.equalsIgnoreCase("servePhoto")) {
+			long imageId = ParamUtil.getLong(resourceRequest, "imageId");
+			byte[] bytes = PhotoLocalServiceUtil.getThumbnail(imageId);
+			HttpServletResponse response = PortalUtil
+					.getHttpServletResponse(resourceResponse);
+			ServletResponseUtil.write(response, bytes);
+		}
+	}
+	
+	public void makeThumbnail(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		long imageId = ParamUtil.getLong(actionRequest, "imageId");
+
+		long thumbnailId = PhotoLocalServiceUtil.createThumbnail(imageId);
+	}	
 }
