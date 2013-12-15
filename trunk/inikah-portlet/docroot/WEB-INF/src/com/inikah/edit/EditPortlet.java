@@ -29,7 +29,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import com.slayer.service.PhotoLocalServiceUtil;
+import com.inikah.slayer.service.PhotoLocalServiceUtil;
 
 /**
  * Portlet implementation class ManagePortlet
