@@ -18,9 +18,16 @@ public interface ConfigConstants {
 	String PAYPAL_OAUTH_CLIENTID = "oauth.clientId";
 	String PAYPAL_OAUTH_SECRET = "oauth.secret";	
 	
+	// clickatell (for SMS)
 	String CLICKATELL_USERNAME = "clickatell.username";
 	String CLICKATELL_PASSWORD = "clickatell.password";
 	String CLICKATELL_API_ID = "clickatell.api.id";
 	
+	// openxchangerates.org
 	boolean UPDATE_XCHAGE_RATES = GetterUtil.getBoolean("update.xchange.rates");
+	
+	// Cloudinary (for thumbnail conversion)
+	String CLDY_CLOUD_NAME = "cloudinary.cloud.name";
+	String CLDY_API_KEY = "cloudinary.api.key";
+	String CLDY_API_SECRET = "cloudinary.api.secret";
 }
