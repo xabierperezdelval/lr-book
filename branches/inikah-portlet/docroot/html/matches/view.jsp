@@ -1,28 +1,39 @@
 <%@ include file="/html/matches/init.jsp" %>
+<%@page import="com.inikah.slayer.service.MatchCriteriaLocalServiceUtil"%>
 
 <%
-	long profileId = ParamUtil.getLong(request, "profileId");
-	List<Profile> matchResults = MatchCriteriaLocalServiceUtil.getMatches(profileId);
+	List<Profile> matchResults = MatchCriteriaLocalServiceUtil.getMatches(profile.getProfileId());
 %>
 
-
-
-<liferay-ui:search-container delta="10" emptyResultsMessage="You don't have any profiles yet">
+<liferay-ui:search-container delta="7" emptyResultsMessage="You don't have any matches">
 
 	<liferay-ui:search-container-results 
-	total="<%= matchResults.size() %>"
+		total="<%= matchResults.size() %>"
 		results="<%= ListUtil.subList(matchResults, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
 		
-	<liferay-ui:search-container-row className="com.inikah.slayer.model.Profile" modelVar="matches" >
-		
-		<liferay-ui:search-container-column-text name="Profile-Id" property="profileId">
-			<%= matches.getProfileId() %>			
-		</liferay-ui:search-container-column-text>
-		
-		<liferay-ui:search-container-column-text name="Name" property="profileName">
-			<%= matches.getProfileName() %>			
-		</liferay-ui:search-container-column-text>
+	<liferay-ui:search-container-row className="com.inikah.slayer.model.Profile" modelVar="match">
+		<liferay-ui:search-container-column-jsp path="/html/matches/match.jsp"/>
 	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 	
+	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 </liferay-ui:search-container>
+
+<script type="text/javascript">
+	function expandDiv(profileId) {
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('matches_WAR_inikahportlet');
+		ajaxURL.setParameter("jspPage", "/html/matches/detail.jsp");
+		ajaxURL.setParameter("matchingProfileId", profileId);
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');		
+		var nodeObject = AUI().one('div.current');		
+		if(nodeObject){
+			AUI().one(nodeObject).hide(true);			
+			nodeObject.replaceClass('current','profile-details');			
+		}
+		AUI().one('#' + profileId + '_details').show(true);
+		AUI().one('#' + profileId + '_details').load('<%= themeDisplay.getURLPortal() %>'+ajaxURL);		
+		AUI().one('#' + profileId + '_details').replaceClass('profile-details', 'current');
+
+	}
+	
+</script>
