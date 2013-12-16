@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.CharPool"%>
 <c:if test="<%= !editMode && !profile.isCreatedForSelf() && profile.isFirst() %>">
 	<portlet:renderURL var="updateUserInfoURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="jspPage" value="/html/edit/userinfo.jsp" />
@@ -41,7 +42,7 @@
 				%>
 				<c:choose>
 					<c:when test="<%= singleIdd %>">
-						<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" prefix="+<%= iddCodes.get(0) %>"/>
+						<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" prefix="<%= CharPool.PLUS + iddCodes.get(0) %>"/>
 					</c:when>
 					<c:otherwise>
 						<aui:select name="iddCode"/>
