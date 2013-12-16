@@ -39,7 +39,6 @@ import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.paypal.exception.ClientActionRequiredException;
 import com.paypal.exception.HttpErrorException;
@@ -122,7 +121,7 @@ public class PayPalUtil {
 		setExpressCheckoutReq.setSetExpressCheckoutRequest(setExpressCheckoutRequest);
 		
 		try {
-			SetExpressCheckoutResponseType setExpressCheckoutResponse = getService().setExpressCheckout(setExpressCheckoutReq);
+			SetExpressCheckoutResponseType setExpressCheckoutResponse = service.setExpressCheckout(setExpressCheckoutReq);
 			token = setExpressCheckoutResponse.getToken();
 		} catch (SSLConfigurationException e) {
 			e.printStackTrace();
@@ -186,7 +185,7 @@ public class PayPalUtil {
 		doExpressCheckoutPaymentReq.setDoExpressCheckoutPaymentRequest(doExpressCheckoutPaymentRequest);
 
 		try {
-			DoExpressCheckoutPaymentResponseType doExpressCheckoutPaymentResponse = getService().doExpressCheckoutPayment(doExpressCheckoutPaymentReq);
+			DoExpressCheckoutPaymentResponseType doExpressCheckoutPaymentResponse = service.doExpressCheckoutPayment(doExpressCheckoutPaymentReq);
 			acknowlegment = doExpressCheckoutPaymentResponse.getAck().toString();
 		} catch (SSLConfigurationException e) {
 			e.printStackTrace();
@@ -215,25 +214,20 @@ public class PayPalUtil {
 		return acknowlegment;
 	}
 	
-	static PayPalAPIInterfaceServiceService service = null;
+	static PayPalAPIInterfaceServiceService service;
 	
-	private static PayPalAPIInterfaceServiceService getService() {
+	static {
+		Map<String, String> sdkConfig = new HashMap<String, String>();
 		
-		if (Validator.isNull(service)) {
-			Map<String, String> sdkConfig = new HashMap<String, String>();
-			
-			String paypalEnvironment = ConfigServiceUtil.get(ConfigConstants.PAYPAL_ENVIRONMENT);
-			
-			sdkConfig.put("mode", paypalEnvironment);
-			sdkConfig.put("acct1.UserName", 
-					ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
-			sdkConfig.put("acct1.Password", 
-					ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
-			sdkConfig.put("acct1.Signature",
-					ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
-			service = new PayPalAPIInterfaceServiceService(sdkConfig);			
-		}
+		String paypalEnvironment = ConfigServiceUtil.get(ConfigConstants.PAYPAL_ENVIRONMENT);
 		
-		return service;
+		sdkConfig.put("mode", paypalEnvironment);
+		sdkConfig.put("acct1.UserName", 
+				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
+		sdkConfig.put("acct1.Password", 
+				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
+		sdkConfig.put("acct1.Signature",
+				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
+		service = new PayPalAPIInterfaceServiceService(sdkConfig);			
 	}	
 }
