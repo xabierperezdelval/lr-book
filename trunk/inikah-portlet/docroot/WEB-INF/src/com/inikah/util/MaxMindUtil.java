@@ -20,22 +20,16 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.maxmind.geoip2.WebServiceClient;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.maxmind.geoip2.model.OmniResponse;;
+import com.maxmind.geoip2.model.OmniResponse;
 
 public class MaxMindUtil {
 	
-	static WebServiceClient client = null;
+	static WebServiceClient client;
 	
-	static WebServiceClient getClient() {
-		
-		if (Validator.isNull(client)) {
-			int maxMindUserId = GetterUtil.getInteger(ConfigServiceUtil.get(ConfigConstants.MAX_MIND_USER_ID));
-			String maxMindLicenseKey = ConfigServiceUtil.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
-			
-			client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();			
-		}
-		
-		return client;
+	static {
+		int maxMindUserId = GetterUtil.getInteger(ConfigServiceUtil.get(ConfigConstants.MAX_MIND_USER_ID));
+		String maxMindLicenseKey = ConfigServiceUtil.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
+		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();			
 	}
 
 	public static void setCoordinates(User user) {
@@ -64,7 +58,7 @@ public class MaxMindUtil {
 		
 		OmniResponse omniResponse = null;
 		try {
-			omniResponse = getClient().omni(inetAddress);
+			omniResponse = client.omni(inetAddress);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (GeoIp2Exception e) {
