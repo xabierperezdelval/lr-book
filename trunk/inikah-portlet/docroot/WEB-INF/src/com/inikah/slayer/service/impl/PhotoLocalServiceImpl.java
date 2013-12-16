@@ -19,15 +19,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
 import com.cloudinary.Cloudinary;
 import com.inikah.slayer.model.Photo;
-import com.inikah.slayer.service.ConfigServiceUtil;
 import com.inikah.slayer.service.base.PhotoLocalServiceBaseImpl;
+import com.inikah.util.CloudinaryUtil;
 import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -61,19 +59,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.PhotoLocalServiceUtil} to access the photo local service.
 	 */
-	
-	String cloudName = null;
-	Cloudinary cloudinary = null;
-	
-	public PhotoLocalServiceImpl() {
-		cloudName = ConfigServiceUtil.get(ConfigConstants.CLDY_CLOUD_NAME);
-		Map<String, String> config = new HashMap<String, String>();
-		config.put("cloud_name", cloudName);
-		config.put("api_key", ConfigServiceUtil.get(ConfigConstants.CLDY_API_KEY));
-		config.put("api_secret", ConfigServiceUtil.get(ConfigConstants.CLDY_API_SECRET));
-		cloudinary = new Cloudinary(config);		
-	}
-	
+		
 	public Photo upload(long imageId, long profileId, File file, String description) {
 		
 		Photo photo = null;
@@ -214,7 +200,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		String publicId = "T" + String.format("%07d", imageId);
 		try {
-			cloudinary.uploader().upload(file, Cloudinary.asMap("public_id", publicId));
+			CloudinaryUtil.getService().uploader().upload(file, Cloudinary.asMap("public_id", publicId));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -222,7 +208,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		long thumbnailId = storeThumbnail(imageId, profileId, companyId, repositoryId);
 		
 		try {
-			cloudinary.uploader().destroy(publicId, Cloudinary.asMap("public_id", publicId));
+			CloudinaryUtil.getService().uploader().destroy(publicId, Cloudinary.asMap("public_id", publicId));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -243,7 +229,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		URL url = null;
 		try {
-			url = new URL("http://res.cloudinary.com/" + cloudName + "/image/upload/w_80,h_100,c_thumb,g_face/" + publicId);
+			url = new URL("http://res.cloudinary.com/" + configService.get(ConfigConstants.CLDY_CLOUD_NAME) + "/image/upload/w_80,h_100,c_thumb,g_face/" + publicId);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
