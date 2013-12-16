@@ -23,6 +23,20 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.OmniResponse;;
 
 public class MaxMindUtil {
+	
+	static WebServiceClient client = null;
+	
+	static WebServiceClient getClient() {
+		
+		if (Validator.isNull(client)) {
+			int maxMindUserId = GetterUtil.getInteger(ConfigServiceUtil.get(ConfigConstants.MAX_MIND_USER_ID));
+			String maxMindLicenseKey = ConfigServiceUtil.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
+			
+			client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();			
+		}
+		
+		return client;
+	}
 
 	public static void setCoordinates(User user) {
 
@@ -33,13 +47,6 @@ public class MaxMindUtil {
 		
 		// check if the MaxMind coordinates are already set for this user
 		if (ProfileLocalServiceUtil.maxMindCoordinatesSet(user)) return;
-		
-		
-		int maxMindUserId = GetterUtil.getInteger(ConfigServiceUtil.get(ConfigConstants.MAX_MIND_USER_ID));
-		String maxMindLicenseKey = ConfigServiceUtil.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
-		
-		WebServiceClient client = 
-			new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
 		
 		String ipAddress = user.getLastLoginIP();
 		if (Validator.isNull(ipAddress) || ipAddress.equals("127.0.0.1")) {
@@ -57,7 +64,7 @@ public class MaxMindUtil {
 		
 		OmniResponse omniResponse = null;
 		try {
-			omniResponse = client.omni(inetAddress);
+			omniResponse = getClient().omni(inetAddress);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (GeoIp2Exception e) {
