@@ -14,18 +14,21 @@
 
 package com.inikah.slayer.service.impl;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
 import com.cloudinary.Cloudinary;
+import com.inikah.slayer.model.Photo;
+import com.inikah.slayer.service.ConfigServiceUtil;
 import com.inikah.slayer.service.base.PhotoLocalServiceBaseImpl;
+import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
@@ -37,7 +40,6 @@ import com.liferay.portal.model.Image;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
-import com.inikah.slayer.model.Photo;
 
 /**
  * The implementation of the photo local service.
@@ -60,13 +62,15 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.PhotoLocalServiceUtil} to access the photo local service.
 	 */
 	
-	Cloudinary cloudinary;
+	String cloudName = null;
+	Cloudinary cloudinary = null;
 	
 	public PhotoLocalServiceImpl() {
-		Map config = new HashMap();
-		config.put("cloud_name", "inikah-com");
-		config.put("api_key", "684163674418368");
-		config.put("api_secret", "p0TvTj4jm0cR6NJGa-N-IRkaTnw");
+		cloudName = ConfigServiceUtil.get(ConfigConstants.CLDY_CLOUD_NAME);
+		Map<String, String> config = new HashMap<String, String>();
+		config.put("cloud_name", cloudName);
+		config.put("api_key", ConfigServiceUtil.get(ConfigConstants.CLDY_API_KEY));
+		config.put("api_secret", ConfigServiceUtil.get(ConfigConstants.CLDY_API_SECRET));
 		cloudinary = new Cloudinary(config);		
 	}
 	
@@ -239,7 +243,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		URL url = null;
 		try {
-			url = new URL("http://res.cloudinary.com/inikah-com/image/upload/w_80,h_100,c_thumb,g_face/" + publicId);
+			url = new URL("http://res.cloudinary.com/" + cloudName + "/image/upload/w_80,h_100,c_thumb,g_face/" + publicId);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
