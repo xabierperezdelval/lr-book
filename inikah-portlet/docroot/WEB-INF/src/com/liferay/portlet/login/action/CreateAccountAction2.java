@@ -75,7 +75,6 @@ public class CreateAccountAction2  extends BaseStrutsPortletAction  {
 			e.printStackTrace();
 		}
 		
-		System.out.println("going to call init...");
 		ProfileLocalServiceUtil.init(bride, emailAddress, profileName, creatingForSelf, serviceContext);
 	}
 
