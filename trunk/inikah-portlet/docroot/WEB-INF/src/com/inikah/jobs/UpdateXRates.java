@@ -10,6 +10,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
 import com.inikah.slayer.model.Currency;
+import com.inikah.slayer.service.ConfigServiceUtil;
 import com.inikah.slayer.service.CurrencyLocalServiceUtil;
 import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -22,7 +23,6 @@ import com.liferay.portal.kernel.util.StringPool;
 
 public class UpdateXRates extends BaseMessageListener {
 	
-
 	@Override
 	protected void doReceive(Message arg) throws Exception {
 		
@@ -31,11 +31,9 @@ public class UpdateXRates extends BaseMessageListener {
 
 	private void update() {
 		
-		if (!ConfigConstants.UPDATE_XCHAGE_RATES) return;
-		
-		System.out.println("going to update the Exchange Rates...xxx");
-		
-		String appId = "d87f7d237e0b4a58bf5e85c40b777cb0";
+		if (!ConfigConstants.OPENXCHAGE_UPDATE) return;
+				
+		String appId = ConfigServiceUtil.get(ConfigConstants.OPENXCHAGE_API_ID);
 		String url = "http://openexchangerates.org/api/latest.json?app_id="+ appId;
 	
 		HttpClient client = new HttpClient();

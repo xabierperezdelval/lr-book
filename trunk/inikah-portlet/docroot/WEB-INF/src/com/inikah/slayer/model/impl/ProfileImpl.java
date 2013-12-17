@@ -168,10 +168,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 	}
 	
 	public double getPrice(long planId) {
-		
-		long userCountryId = getUserCountryId() ;
-		
-		
+		long userCountryId = getUserCountryId();
 		return 10.0d;
 	}
 	
