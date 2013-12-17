@@ -34,7 +34,7 @@ import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 
-import com.inikah.slayer.service.ConfigServiceUtil;
+import com.inikah.util.AppConfig;
 import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -59,7 +59,7 @@ public class PayPalUtil {
 		// add paypal charges
 		itemAmount += (0.044 * itemAmount) + 0.30d;
 		
-		String paypalEnvironment = ConfigServiceUtil.get(ConfigConstants.PAYPAL_ENVIRONMENT);
+		String paypalEnvironment = AppConfig.get(ConfigConstants.PAYPAL_ENVIRONMENT);
 		boolean sandbox = paypalEnvironment.equalsIgnoreCase(ConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
 		
 		PaymentDetailsType paymentDetails = new PaymentDetailsType();
@@ -219,15 +219,15 @@ public class PayPalUtil {
 	static {
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		
-		String paypalEnvironment = ConfigServiceUtil.get(ConfigConstants.PAYPAL_ENVIRONMENT);
+		String paypalEnvironment = AppConfig.get(ConfigConstants.PAYPAL_ENVIRONMENT);
 		
 		sdkConfig.put("mode", paypalEnvironment);
 		sdkConfig.put("acct1.UserName", 
-				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
+				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
 		sdkConfig.put("acct1.Password", 
-				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
+				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
 		sdkConfig.put("acct1.Signature",
-				ConfigServiceUtil.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
+				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
 		service = new PayPalAPIInterfaceServiceService(sdkConfig);			
 	}	
 }

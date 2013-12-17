@@ -7,7 +7,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-import com.inikah.slayer.service.ConfigServiceUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -17,9 +16,9 @@ public class SMSUtil {
 						
 		String [] oldSubs = {"[$USERNAME$]", "[$PASSWORD$]", "[$API_ID$]", "[$TO$]", "[$MESSAGE$]"};
 		String [] newSubs = {
-				ConfigServiceUtil.get(ConfigConstants.CLICKATELL_USERNAME), 
-				ConfigServiceUtil.get(ConfigConstants.CLICKATELL_PASSWORD), 
-				ConfigServiceUtil.get(ConfigConstants.CLICKATELL_API_ID),
+				AppConfig.get(ConfigConstants.CLICKATELL_USERNAME), 
+				AppConfig.get(ConfigConstants.CLICKATELL_PASSWORD), 
+				AppConfig.get(ConfigConstants.CLICKATELL_API_ID),
 				mobileNumber, 
 				HttpUtil.encodeURL("Your Vefication Code: " + verificationCode)
 		};

@@ -6,7 +6,6 @@ import java.net.UnknownHostException;
 
 import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.BridgeServiceUtil;
-import com.inikah.slayer.service.ConfigServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -27,8 +26,8 @@ public class MaxMindUtil {
 	static WebServiceClient client;
 	
 	static {
-		int maxMindUserId = GetterUtil.getInteger(ConfigServiceUtil.get(ConfigConstants.MAX_MIND_USER_ID));
-		String maxMindLicenseKey = ConfigServiceUtil.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
+		int maxMindUserId = GetterUtil.getInteger(AppConfig.get(ConfigConstants.MAX_MIND_USER_ID));
+		String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
 		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();			
 	}
 

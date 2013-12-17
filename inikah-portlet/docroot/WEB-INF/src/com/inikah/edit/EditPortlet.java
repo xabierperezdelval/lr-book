@@ -12,8 +12,8 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import com.inikah.slayer.model.Profile;
-import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
+import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -29,7 +29,6 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import com.inikah.slayer.service.PhotoLocalServiceUtil;
 
 /**
  * Portlet implementation class ManagePortlet
@@ -238,10 +237,10 @@ public class EditPortlet extends MVCPortlet {
 	}
 	
 	public void makeThumbnail(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
+			ActionResponse actionResponse) throws IOException {
 		
 		long imageId = ParamUtil.getLong(actionRequest, "imageId");
-
-		long thumbnailId = PhotoLocalServiceUtil.createThumbnail(imageId);
+		
+		PhotoLocalServiceUtil.createThumbnail(imageId);
 	}	
 }
