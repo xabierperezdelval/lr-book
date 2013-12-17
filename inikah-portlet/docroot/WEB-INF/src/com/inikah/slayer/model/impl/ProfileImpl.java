@@ -23,10 +23,12 @@ import java.util.Map;
 
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.MyLanguage;
+import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
+import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.FilterUtil;
 import com.inikah.util.IConstants;
@@ -42,6 +44,8 @@ import com.liferay.portal.model.Country;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.webserver.WebServerServletTokenUtil;
 
 
 /**
@@ -391,5 +395,31 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return iddCodes;
+	}
+	
+	public String getThumbnailURL(ThemeDisplay themeDisplay) {
+		
+		String thumbnailURL = 
+				themeDisplay.getPathThemeImages() + "/inikah/" + 
+				(isBride()? "bride.png" : "groom.png");
+		
+		long thumbnailId = PhotoLocalServiceUtil.getThumbnailId(getProfileId());
+		
+		if (thumbnailId > 0l) {
+			StringBuilder sb = new StringBuilder()
+				.append(themeDisplay.getPathImage())
+				.append("/photo/?img_id=")
+				.append(thumbnailId)
+				.append("&t=")
+				.append(WebServerServletTokenUtil.getToken(thumbnailId));			
+			
+			thumbnailURL = sb.toString();
+		}
+		
+		return thumbnailURL;
+	}
+	
+	public List<Photo> getPhotos() {
+		return PhotoLocalServiceUtil.getPhotos(getProfileId());
 	}
 }

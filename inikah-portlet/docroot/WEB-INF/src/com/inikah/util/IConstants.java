@@ -32,5 +32,9 @@ public interface IConstants {
 	int LOC_TYPE_AREA = 3;
 	int LOC_TYPE_MASJID = 4;
 	
+	int IMAGE_TYPE_PHOTO = 1;
+	int IMAGE_TYPE_FACE = 2;
+	int IMAGE_TYPE_DOCUMENT = 3;
+	
 	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }
