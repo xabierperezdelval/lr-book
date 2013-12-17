@@ -123,7 +123,7 @@
 		<column name="approved" type="boolean"/>
 		<column name="uploadDate" type="Date"/>
 		
-		<finder return-type="Photo" name="ProfileId_ImageType">
+		<finder return-type="Collection" name="ProfileId_ImageType">
 			<finder-column name="profileId"/>
 			<finder-column name="imageType"/>
 		</finder>

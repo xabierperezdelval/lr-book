@@ -19,14 +19,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
 import com.cloudinary.Cloudinary;
 import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.service.base.PhotoLocalServiceBaseImpl;
+import com.inikah.util.AppConfig;
 import com.inikah.util.CloudinaryUtil;
 import com.inikah.util.ConfigConstants;
+import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
@@ -97,7 +100,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		photo.setUploadDate(new java.util.Date());
 		photo.setProfileId(profileId);
 		photo.setDescription(description);
-		photo.setImageType(1);
+		photo.setImageType(IConstants.IMAGE_TYPE_PHOTO);
 		
 		try {
 			updatePhoto(photo);
@@ -229,7 +232,10 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		URL url = null;
 		try {
-			url = new URL("http://res.cloudinary.com/" + configService.get(ConfigConstants.CLDY_CLOUD_NAME) + "/image/upload/w_80,h_100,c_thumb,g_face/" + publicId);
+			url = new URL("http://res.cloudinary.com/" 
+					+ AppConfig.get(ConfigConstants.CLDY_CLOUD_NAME) 
+					+ "/image/upload/w_80,h_100,c_thumb,g_face/" 
+					+ publicId);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -256,7 +262,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			ImageLocalServiceUtil.updateImage(thumbnailId, file);
 			
 			Photo photo = createPhoto(thumbnailId);
-			photo.setImageType(2);
+			photo.setImageType(IConstants.IMAGE_TYPE_FACE);
 			photo.setApproved(true);
 			photo.setUploadDate(new java.util.Date());
 			photo.setProfileId(profileId);
@@ -272,4 +278,34 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		return thumbnailId;
 	}	
+	
+	public long getThumbnailId(long profileId) {
+		long thumbnailId = 0l;
+		
+		try {
+			List<Photo> photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMAGE_TYPE_FACE);
+			
+			for (Photo photo: photos) {
+				thumbnailId = photo.getImageId();
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return thumbnailId;
+	}
+	
+	public List<Photo> getPhotos(long profileId) {
+		
+		List<Photo> photos = null;
+		
+		try {
+			photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMAGE_TYPE_PHOTO);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
+		
+		return photos;		
+	}
 }
