@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.CharPool"%>
 <c:if test="<%= !editMode && !profile.isCreatedForSelf() && profile.isFirst() %>">
 	<portlet:renderURL var="updateUserInfoURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="jspPage" value="/html/edit/userinfo.jsp" />
@@ -22,96 +21,218 @@
 </c:if>
 
 <!-- step 2 fields -->
+<%
+	List<String> iddCodes = profile.getIDDCodes();
+	boolean singleIdd = (iddCodes.size() == 1);
+%>
 
 <liferay-ui:panel-container accordion="<%= true %>">
 	<liferay-ui:panel title="social-info" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset>
+		<aui:fieldset >
 			<aui:column>
-				<aui:input name="area" value=""/>
-				<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>"/>
-				<aui:select name="motherTongue">
+				<aui:input name="area" value="<%= profile.getResidingArea()  %>" required="true"/>
+				<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>" required="true"/>
+				<aui:select name="motherTongue" required="true">
 					<%= MyListUtil.getLanguagesSpoken(profile) %>
 				</aui:select>
 			</aui:column>
-			<aui:column>
-				<aui:input name="masjid" value=""/>
-				
-				<%
-					List<String> iddCodes = profile.getIDDCodes();
-					boolean singleIdd = (iddCodes.size() == 1);
-				%>
-				<c:choose>
+			
+			<aui:column >
+				<aui:input name="masjid" value="<%= profile.getNearbyMasjid() %>" required="true"/>
+				<c:choose>			
 					<c:when test="<%= singleIdd %>">
-						<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" prefix="<%= CharPool.PLUS + iddCodes.get(0) %>"/>
+						<aui:input name="mobileNumber" value="" prefix="<%= CharPool.PLUS+ iddCodes.get(0) %>"/>
 					</c:when>
 					<c:otherwise>
-						<aui:select name="iddCode"/>
-						<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" />
+						<aui:column cssClass="iddCode-selection">
+							<aui:select name="iddCode"/>
+						</aui:column>
+						<aui:column cssClass="iddCode-selection" >
+							<aui:input name="mobileNumber" value=""/>
+						</aui:column>
 					</c:otherwise>
 				</c:choose>
 				
 				<aui:select name="canSpeak" multiple="true">
-					<%= MyListUtil.getLanguagesSpoken(profile) %>
+					<%= MyListUtil.getCanSpeakList(profile) %>
 				</aui:select>
 			</aui:column>			
 		</aui:fieldset>
 	</liferay-ui:panel>
-	
+
 	<c:if test="<%= !profile.isSingle() %>">
 		<liferay-ui:panel title="non-single" extended="<%= true %>" collapsible="<%= true %>" >
-			<aui:row>
-				<aui:column cssClass="mini-selection">
-					<aui:select name="sons" />
+		<aui:fieldset >
+			<aui:row >
+				<aui:column cssClass="iddCode-selection">
+					<aui:select name="sons" required="true">
+						<%= MyListUtil.getChildrenList(profile.getSons()) %>
+					</aui:select>
 				</aui:column>
-				<aui:column cssClass="mini-selection">
-					<aui:select name="daughters" />
+				<aui:column cssClass="iddCode-selection">
+					<aui:select name="daughters" required="true">
+						<%= MyListUtil.getChildrenList(profile.getDaughters()) %>
+					</aui:select>
 				</aui:column>
 				<c:if test="<%= !profile.isBride() && profile.isMarried() %>">
 					<aui:column>
-							<aui:select name="remarriageReason" />
+						<aui:select name="remarriageReason" required="true">
+							<%= MyListUtil.getRemarriageReason(locale, profile) %>
+						</aui:select>
 					</aui:column>	
 				</c:if>		
 			</aui:row>
-		</liferay-ui:panel>		
+		</aui:fieldset>
+		</liferay-ui:panel>	
 	</c:if>
-	
+
+<!--======================  EDUCATION ========================= -->
+
 	<liferay-ui:panel title="education-info" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset>
-			<aui:column>
-				<aui:select name="education"/>
-				<div hidden="true">hidden div</div>
-				<aui:input name="schoolAttended"/>
-			</aui:column>
-			<aui:column>
-				<aui:input type="textarea" name="educationDetails"/>
-			</aui:column>
+		<aui:fieldset cssClass="min">
+			<aui:row>
+				<aui:column>
+					<aui:select name="education" onChange="javascript:cascade(this,'specifyEducation');" required="true">
+						<%=MyListUtil.getEducationList(locale, profile)%>
+					</aui:select>
+					
+				</aui:column>
+				<aui:column>
+					<div <% if(Validator.isNull(profile.getEducationOther()))
+						{%>
+						hidden="true"
+						<%} %>
+						id="<portlet:namespace/>specifyEducationDiv" required="true">
+						<aui:input name="specifyEducation" value="<%= profile.getEducationOther() %>" />
+					</div>
+				</aui:column>
+			</aui:row>
+			<aui:row>
+				<aui:column>
+					<aui:input name="schoolAttended" value="" required="true"/>
+				</aui:column>
+				<aui:column>	
+					<aui:input type="textarea" name="educationDetails" value="<%= profile.getEducationDetail() %>" required="true"/>
+					<span id="<portlet:namespace />100CountForEducationDetails"></span> character(s) remaining.	
+				</aui:column>	
+			</aui:row>
 		</aui:fieldset>
 	</liferay-ui:panel>
+
+<!--======================   ISLAMIC EDUCATION     ========================= -->
 	
-	<liferay-ui:panel title="islamic-education" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset>
-			<aui:column>
-				<aui:select name="education"/>
-				<div hidden="true">hidden div</div>
-				<aui:input name="schoolAttended"/>
-			</aui:column>
-			<aui:column>
-				<aui:input type="textarea" name="educationDetails"/>
-			</aui:column>
-		</aui:fieldset>	
+	<liferay-ui:panel title="islamic-education" extended="<%= true %>" collapsible="<%= true %>">
+				<aui:fieldset cssClass="min">
+			<aui:row>
+				<aui:column>
+				<aui:select name="religiousEducation"  onChange="javascript:cascade(this,'specifyReligiousEducation');" required="true">
+				<%=MyListUtil.getReligiousEducationList(locale, profile)%>
+					</aui:select>
+				</aui:column>
+				<aui:column>
+					<div <% if(Validator.isNull(profile.getReligiousEducationOther()))
+						{%>
+						hidden="true"
+						<%} %> id="<portlet:namespace/>specifyReligiousEducationDiv" required="true">
+						<aui:input name="specifyReligiousEducation" value="<%= profile.getReligiousEducationOther() %>" required="true"/>
+					</div>
+				</aui:column>
+			</aui:row>
+			<aui:row>
+				<aui:column>
+					<aui:input name="religiousSchoolAttended" value="" required="true"/>
+				</aui:column>
+				<aui:column>	
+					<aui:input type="textarea" name="religiousEducationDetails" value="<%= profile.getReligiousEducationDetail() %>" required="true"/>
+					<span id="<portlet:namespace />100CountForRelEducationDetails"></span> character(s) remaining.	
+				</aui:column>	
+			</aui:row>
+		</aui:fieldset>
 	</liferay-ui:panel>	
+
 	
-	<liferay-ui:panel title="occupation" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset>
-			<aui:column>
-				<aui:select name="occupation"/>
-				<div hidden="true">hidden div</div>
-				<aui:input name="whereWorking"/>
-			</aui:column>
-			<aui:column>
-				<aui:input type="textarea" name="educationDetails"/>
-				<aui:input name="salary"/>
-			</aui:column>
+	<liferay-ui:panel title="occupation" extended="<%= true %>" collapsible="<%= true %>" >		
+		<aui:fieldset cssClass="min">
+			<aui:row>
+				<aui:column>
+					<aui:select name="occupation" onChange="javascript:cascade(this,'specifyOccupation');" required="true">
+						<%=MyListUtil.getProfessionList(locale, profile)%>
+					</aui:select>
+				</aui:column>
+				<aui:column>
+					<div hidden="true" id="<portlet:namespace/>specifyOccupationDiv">
+						<aui:input name="specifyOccupation" value="" required="true"/>
+					</div>
+				</aui:column>
+			</aui:row>
+			<aui:row>
+				<aui:column>
+					<aui:input name="whereWorking" value="<%= profile.getOrganization() %>" required="true"/>
+				</aui:column>
+				<aui:column>	
+					<aui:input type="textarea" name="occupationDetails" value="<%= profile.getProfessionDetail() %>" required="true"/>
+					<span id="<portlet:namespace />100CountForOccupationDetails"></span> character(s) remaining.	
+				</aui:column>	
+			</aui:row>
+			<aui:row>
+				<aui:column cssClass="salary-selection">
+					<aui:select name="incomeFrequency" >
+						<%= MyListUtil.getIncomeFrequency(locale,profile)%>
+					</aui:select>
+				</aui:column>
+				<aui:column cssClass="iddCode-selection">
+				<%--
+				<c:choose>
+					<c:when test="<%= profile.getCountryOfBirth() == profile.getResidingCountry() %>">
+ 						<aui:input name="currency" disabled="true" value="<%=CurrencyLocalServiceUtil.getCurrency(profile.getCountryOfBirth()).getCurrencyCode()%>"></aui:input>
+					</c:when>
+					<c:otherwise>
+						<aui:select name="currency"><%=MyListUtil.getCurrencyList(locale, profile)%></aui:select>
+					</c:otherwise>
+				</c:choose>	
+				 --%>
+				</aui:column>
+				<aui:column>
+					<aui:input name="salary" value="<%= profile.getIncome() %>"/>
+				</aui:column>
+			</aui:row>
+
 		</aui:fieldset>
 	</liferay-ui:panel>		
-</liferay-ui:panel-container>	
+</liferay-ui:panel-container>
+
+<script type="text/javascript">
+	function cascade(obj,fld) {
+		var index = obj.selectedIndex;
+		var value = obj.options[index].text;
+		var div = document.getElementById("<portlet:namespace/>"+ fld +"Div");
+		var fld = document.getElementById("<portlet:namespace/>" + fld);
+		if (value == 'Other'){
+			div.style.display = 'block';
+			fld.focus();
+		} else {
+			div.style.display = 'none';		
+		}
+	}
+
+	//---------char count of 100 for education details------------
+	YUI().use('aui-char-counter', function(Y) {
+   		new Y.CharCounter({
+       		input: '#<portlet:namespace/>educationDetails',
+       		counter: '#<portlet:namespace/>100CountForEducationDetails',
+       		maxLength: 100
+			});
+   		
+   		new Y.CharCounter({
+   	        input: '#<portlet:namespace/>religiousEducationDetails',
+   	        counter: '#<portlet:namespace/>100CountForRelEducationDetails',
+   	        maxLength: 100
+  			});
+   
+   		new Y.CharCounter({
+ 	        	input: '#<portlet:namespace/>occupationDetails',
+ 	        	counter: '#<portlet:namespace/>100CountForOccupationDetails',
+ 	        	maxLength: 100
+			});    	        
+    });
+</script>

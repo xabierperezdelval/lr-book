@@ -34,6 +34,7 @@
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="com.liferay.portal.kernel.util.CharPool"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 
 <%@page import="com.liferay.portal.model.ListType"%>
@@ -46,6 +47,7 @@
 <%@page import="com.inikah.slayer.service.BridgeServiceUtil"%>
 <%@page import="com.inikah.slayer.service.ProfileLocalServiceUtil"%>
 <%@page import="com.inikah.slayer.service.LocationLocalServiceUtil"%>
+<%@page import="com.inikah.slayer.service.CurrencyLocalServiceUtil"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>

@@ -26,3 +26,33 @@
 	text-align: center;
 	margin-right: 10px;
 }
+
+/* --------------- */
+
+.iddCode-selection select {
+	width:70px;    
+}
+
+.iddCode-selection input {
+	width:110px;
+}
+.salary-selection select {
+    width:135px;    
+}
+.salary-selection input {
+	width:120px;
+}
+
+.salary-selection div {
+	margin-bottom:0px;
+}
+
+/* -----div padding ------*/
+.aui .min .control-group {
+	margin-bottom: 0;
+}
+
+/* -----disable popup close button ------*/
+.currencyCss{
+	width:10px;
+}
