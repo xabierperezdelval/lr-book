@@ -1,4 +1,4 @@
-package com.inikah.payment;
+package com.inikah.util;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -34,8 +34,6 @@ import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 
-import com.inikah.util.AppConfig;
-import com.inikah.util.ConfigConstants;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;

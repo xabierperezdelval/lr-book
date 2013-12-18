@@ -36,5 +36,7 @@ public interface IConstants {
 	int IMAGE_TYPE_FACE = 2;
 	int IMAGE_TYPE_DOCUMENT = 3;
 	
+	String PAY_MODE_CHEQUE_DD = "chequeDD";
+	
 	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }
