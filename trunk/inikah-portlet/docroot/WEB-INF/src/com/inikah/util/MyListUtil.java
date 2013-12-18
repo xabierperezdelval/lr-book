@@ -173,7 +173,11 @@ public class MyListUtil {
 		int end = curYear - 12;
 		
 		for (int i=end; i>start; i--) {
-			int currValue = Integer.valueOf(String.valueOf(bornOn).substring(0,4));			
+			int currValue = 0;
+			
+			if (bornOn > 0) {
+				currValue = Integer.valueOf(String.valueOf(bornOn).substring(0,4));
+			}
 			sb.append(getOption(currValue, i, String.valueOf(i)));
 		}	
 		
