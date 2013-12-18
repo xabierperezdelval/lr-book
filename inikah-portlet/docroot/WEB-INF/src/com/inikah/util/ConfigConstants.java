@@ -23,7 +23,7 @@ public interface ConfigConstants {
 	String CLICKATELL_API_ID = "clickatell.api.id";
 	
 	// openxchangerates.org
-	boolean OPENXCHAGE_UPDATE = GetterUtil.getBoolean("openxchange.update");
+	boolean OPENXCHAGE_UPDATE = GetterUtil.getBoolean(AppConfig.get("openxchange.update"));
 	String OPENXCHAGE_API_ID = "openxchange.api.id";
 	
 	// Cloudinary (for thumbnail conversion)
