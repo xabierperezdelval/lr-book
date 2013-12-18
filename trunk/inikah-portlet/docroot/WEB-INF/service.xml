@@ -29,7 +29,7 @@
 		<column name="bornOn" type="int" />
 		
 		<!-- fields related to "married/widow/divorce" -->
-		<column name="reMarriageReasons" type="String" />
+		<column name="reMarriageReason" type="int" />
 		<column name="sons" type="int" />
 		<column name="daughters" type="int" />		
 
@@ -54,14 +54,21 @@
 
 		<!-- Education/Occupation Information -->
 		<column name="education" type="int" />
+		<column name="educationOther" type="String" />
 		<column name="educationDetail" type="String" />
+		<column name="educationSchool" type="String" />
 		<column name="religiousEducation" type="int" />
+		<column name="religiousEducationOther" type="String" />
 		<column name="religiousEducationDetail" type="String" />
+		<column name="religiousEducationSchool" type="String" />
 		<column name="profession" type="int" />
+		<column name="professionOther" type="String" />
 		<column name="professionDetail" type="String" />
 		<column name="organization" type="String" />
 		<column name="currency" type="int" />
-		<column name="monthlyIncome" type="int" />
+		<column name="income" type="int" />
+		<column name="incomeFrequency" type="int" />
+		<column name="payZakath" type="boolean" />
 
 		<!-- Family Details -->
 		<column name="countryOfBirth" type="long" />
@@ -113,6 +120,8 @@
 		</finder>
 		
 		<reference entity="Address" package-path="com.liferay.portal" />
+		<reference entity="Phone" package-path="com.liferay.portal" />
+		<reference entity="EmailAddress" package-path="com.liferay.portal" />
 	</entity>
 	
 	<entity name="Photo" remote-service="false" local-service="true">

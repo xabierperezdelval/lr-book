@@ -16,7 +16,12 @@ public interface IConstants {
 	String LIST_MARITAL_STATUS = "maritalStatus"; 
 	String LIST_CREATED_FOR = "createdFor";
 	String LIST_COMPLEXION = "complexion";
-	
+	String LIST_REMARRIAGE_REASON = "remarriageReason";
+	String LIST_EDUCATION = "education";
+	String LIST_RELIGIOUS_EDUCATION = "religiousEducation";
+	String LIST_PROFESSION ="profession";
+	String LIST_INCOME_FREQUENCY = "incomeFrequency";
+
 	int INT_ACTION_VIEWED = 1;
 	int INT_ACTION_BOOKMARKED = 2;
 	int INT_ACTION_PROSPOSED = 3;
@@ -37,6 +42,8 @@ public interface IConstants {
 	int IMAGE_TYPE_DOCUMENT = 3;
 	
 	String PAY_MODE_CHEQUE_DD = "chequeDD";
+	
+	int PHONE_VERIFIED = 1;
 	
 	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }

@@ -2,6 +2,7 @@ package com.inikah.util;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -170,20 +171,10 @@ public class MyListUtil {
 		int curYear = Calendar.getInstance().get(Calendar.YEAR);
 		int start = curYear - 70;
 		int end = curYear - 12;
+		
 		for (int i=end; i>start; i--) {
-			sb.append("<option value=");
-			sb.append(StringPool.QUOTE);
-			sb.append(i);
-			sb.append(StringPool.QUOTE);
-			
-			if (bornOn > 0 && (Integer.valueOf(String.valueOf(bornOn).substring(0,4)) == i)) {
-				 sb.append(StringPool.SPACE);
-				 sb.append("selected");
-			}
-			
-			sb.append(">");
-			sb.append(i);
-			sb.append("</option>");
+			int currValue = Integer.valueOf(String.valueOf(bornOn).substring(0,4));			
+			sb.append(getOption(currValue, i, String.valueOf(i)));
 		}	
 		
 		return sb.toString();
@@ -196,19 +187,7 @@ public class MyListUtil {
 		int maxLimit = bride? 70 : 60;
 		
 		for (int i=minLimit; i<=maxLimit; i++) {
-			sb.append("<option value=");
-			sb.append(StringPool.QUOTE);
-			sb.append(i);
-			sb.append(StringPool.QUOTE);
-			
-			if (i == age) {
-				sb.append(StringPool.SPACE);
-				sb.append("selected");
-			}
-			
-			sb.append(">");
-			sb.append(i);
-			sb.append("</option>");
+			sb.append(getOption(age, i, String.valueOf(i)));
 		}
 		
 		return sb.toString();
@@ -353,6 +332,121 @@ public class MyListUtil {
 			sb.append(getOption(profile.getMotherTongue(), Long.valueOf(language.getKey()), language.getValue()));
 		}
 		
+		return sb.toString();
+	}
+	
+	public static String getCanSpeakList(Profile profile) {
+		StringBuilder sb = new StringBuilder();
+		
+		List<KeyValuePair> allowedLanguages = profile.getLanguagesSpokenAsList();
+		
+		String canSpeak = profile.getCanSpeak();
+		
+		List<String> parts = null;
+		if (Validator.isNotNull(canSpeak)) {
+			parts = Arrays.asList(canSpeak.split(StringPool.COMMA));
+		}
+		
+		for (KeyValuePair language: allowedLanguages) {
+			if (Long.valueOf(language.getKey()) == profile.getMotherTongue()) continue;
+			
+			long _canSpeak = 0l;
+			if (Validator.isNotNull(parts)) {
+				if (parts.contains(language.getKey())) {
+					_canSpeak = Long.valueOf(language.getKey());
+				}
+			}
+			
+			sb.append(getOption(_canSpeak, Long.valueOf(language.getKey()), language.getValue()));
+		}
+		
 		return sb.toString();	
 	}
+	
+	public static String getIDDoptions(String currValue , List<String> iddCodes)
+	{	 StringBuilder sb = new StringBuilder();
+		for(int i=0;i<iddCodes.size();i++)
+		{ 
+			sb.append("<option value=");
+			sb.append(StringPool.QUOTE);
+			sb.append(iddCodes.get(i));
+			sb.append(StringPool.QUOTE);
+			
+			if (currValue.equalsIgnoreCase(iddCodes.get(i))) {
+				sb.append(StringPool.SPACE);
+				sb.append("selected");
+			}
+			
+			sb.append(">");
+			sb.append(iddCodes.get(i));
+			sb.append("</option>");
+			
+			
+		}return sb.toString();
+	}
+	
+	public static String getChildrenList(int currValue) {
+     	StringBuilder sb = new StringBuilder();
+          
+		for (int i = 0; i <= 9; i++) {
+			sb.append(getOption(currValue, i, String.valueOf(i)));
+		}
+
+		return sb.toString();      
+     }
+	 
+	 public static String getRemarriageReason(Locale locale, Profile profile){
+		 return getOptions(locale, profile, IConstants.LIST_REMARRIAGE_REASON, profile.getReMarriageReason());
+     }
+	 
+	 public static String getEducationList(Locale locale, Profile profile) {
+		 return getOptions(locale, profile, IConstants.LIST_EDUCATION, profile.getEducation());
+     }
+     
+	 public static String getReligiousEducationList(Locale locale, Profile profile) {
+		 return getOptions(locale, profile, IConstants.LIST_RELIGIOUS_EDUCATION, profile.getReligiousEducation());
+     }
+	 
+     public static String getProfessionList(Locale locale, Profile profile) {
+		return getOptions(locale, profile, IConstants.LIST_PROFESSION, profile.getProfession());
+     }
+     
+     public static String getIncomeFrequency(Locale locale, Profile profile) {
+			return getOptions(locale, profile, IConstants.LIST_INCOME_FREQUENCY, profile.getIncomeFrequency());
+     }
+     
+     /*
+     public static String getCurrencyList(Locale locale, Profile profile) {
+     	StringBuilder sb = new StringBuilder();
+     	String country1=null,country2=null;
+     	
+				try {
+					country1=CurrencyLocalServiceUtil.getCurrency(profile.getResidingCountry()).getCurrencyCode();
+					country2=CurrencyLocalServiceUtil.getCurrency(profile.getCountryOfBirth()).getCurrencyCode();
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+
+      	String currencyCode[] = {country1,country2};
+       long country[]={profile.getResidingCountry(),profile.getCountryOfBirth()}; 
+      			for(int i=0;i<currencyCode.length;i++)
+			{
+		sb.append("<option value=");
+		sb.append(StringPool.QUOTE);
+		sb.append(country[i]);
+		sb.append(StringPool.QUOTE);
+		if (country[i] == profile.getCurrency()) {
+			sb.append(StringPool.SPACE);
+			sb.append("selected");
+		}
+		sb.append(">");
+		sb.append(currencyCode[i]);
+		sb.append("</option>");
+		}
+         return sb.toString();
+     	
+     } 
+     */
 }

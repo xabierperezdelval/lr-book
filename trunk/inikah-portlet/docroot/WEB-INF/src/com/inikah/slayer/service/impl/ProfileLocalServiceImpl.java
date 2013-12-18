@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.ServiceContext;
@@ -258,5 +259,20 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	public boolean maxMindCoordinatesSet(User user) {		
 		
 		return Validator.isNotNull(getMaxMindAddress(user));
+	}
+	
+	public Phone addPhone(long classPK, String idd, String number, ServiceContext serviceContext, boolean primary) {
+		
+		Phone phone = null;
+		
+		try {
+			phone = phoneLocalService.addPhone(serviceContext.getUserId(), Profile.class.getName(), classPK, number, idd, 0, primary, serviceContext);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return phone;
 	}
 }

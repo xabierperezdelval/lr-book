@@ -174,6 +174,9 @@ public class EditPortlet extends MVCPortlet {
 
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
+		profile.setResidingArea(ParamUtil.getString(actionRequest, "residingArea"));
+		
+		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP1_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP2_DONE);
 		}

@@ -306,6 +306,6 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}		
 		
-		return photos;		
+		return photos;
 	}
 }
