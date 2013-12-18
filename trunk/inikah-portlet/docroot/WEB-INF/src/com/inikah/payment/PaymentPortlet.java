@@ -13,6 +13,8 @@ import com.inikah.slayer.model.Payment;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.inikah.util.IConstants;
+import com.inikah.util.PayPalUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -82,7 +84,7 @@ public class PaymentPortlet extends MVCPortlet {
 		if (Validator.isNotNull(payment)) {
 			String paymentMode = ParamUtil.getString(actionRequest, "paymentMode");
 			
-			if (paymentMode.equalsIgnoreCase(PaymentConstants.MODE_CHEQUE_DD)) {
+			if (paymentMode.equalsIgnoreCase(IConstants.PAY_MODE_CHEQUE_DD)) {
 				
 			}
 		}
