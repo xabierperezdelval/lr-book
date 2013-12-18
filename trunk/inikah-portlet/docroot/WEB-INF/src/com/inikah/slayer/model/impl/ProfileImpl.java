@@ -21,11 +21,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.inikah.slayer.model.Currency;
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.CurrencyLocalServiceUtil;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.PhotoLocalServiceUtil;
@@ -424,5 +426,21 @@ public class ProfileImpl extends ProfileBaseImpl {
 	
 	public List<Photo> getPhotos() {
 		return PhotoLocalServiceUtil.getPhotos(getProfileId());
+	}
+	
+	public String getCurrencyCode() {
+		
+		String currencyCode = StringPool.BLANK;
+		try {
+			Currency currency = CurrencyLocalServiceUtil.fetchCurrency(getResidingCountry());
+			
+			if (Validator.isNotNull(currency)) {
+				currencyCode = currency.getCurrencyCode();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return currencyCode;
 	}
 }

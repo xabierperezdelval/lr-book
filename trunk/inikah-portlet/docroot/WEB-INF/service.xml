@@ -65,7 +65,6 @@
 		<column name="professionOther" type="String" />
 		<column name="professionDetail" type="String" />
 		<column name="organization" type="String" />
-		<column name="currency" type="int" />
 		<column name="income" type="int" />
 		<column name="incomeFrequency" type="int" />
 		<column name="payZakath" type="boolean" />
