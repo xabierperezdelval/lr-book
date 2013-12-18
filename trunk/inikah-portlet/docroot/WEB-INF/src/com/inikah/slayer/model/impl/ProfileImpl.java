@@ -388,6 +388,9 @@ public class ProfileImpl extends ProfileBaseImpl {
 		for (Long countryId: countryIds) {
 			try {
 				Country country = CountryServiceUtil.fetchCountry(countryId);
+				
+				if (Validator.isNull(country)) continue;
+					
 				iddCodes.add(country.getIdd());
 			} catch (SystemException e) {
 				e.printStackTrace();
