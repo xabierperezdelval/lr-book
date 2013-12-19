@@ -162,7 +162,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		try {
 			User user = UserLocalServiceUtil.fetchUser(userId);
 			
-			Address address = ProfileLocalServiceUtil.getMaxMindAddress(user);
+			Address address = bridgeLocalService.getLocation(user);
 			
 			if (Validator.isNotNull(address)) {
 				cityId = Long.valueOf(address.getCity());
