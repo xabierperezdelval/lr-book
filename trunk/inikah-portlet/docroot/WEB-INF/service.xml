@@ -117,10 +117,6 @@
 			<finder-column name="userId"/>
 			<finder-column name="createdFor"/>
 		</finder>
-		
-		<reference entity="Address" package-path="com.liferay.portal" />
-		<reference entity="Phone" package-path="com.liferay.portal" />
-		<reference entity="EmailAddress" package-path="com.liferay.portal" />
 	</entity>
 	
 	<entity name="Photo" remote-service="false" local-service="true">
@@ -142,6 +138,9 @@
 	<entity name="Bridge"  local-service="false" remote-service="true">
 		<reference entity="Country" package-path="com.liferay.portal"/>
 		<reference entity="ListType" package-path="com.liferay.portal"/>
+		<reference entity="Address" package-path="com.liferay.portal"/>
+		<reference entity="Phone" package-path="com.liferay.portal"/>
+		<reference entity="EmailAddress" package-path="com.liferay.portal"/>
 	</entity>
 	
 	<entity name="Location" local-service="true" remote-service="true">
