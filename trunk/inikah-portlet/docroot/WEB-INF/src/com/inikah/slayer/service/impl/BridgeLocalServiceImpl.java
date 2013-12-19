@@ -16,6 +16,7 @@ package com.inikah.slayer.service.impl;
 
 import java.util.List;
 
+import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.base.BridgeLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.SMSUtil;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
@@ -227,4 +229,34 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		return phones;
 	}
+	
+	/**
+	 * 
+	 */
+	public Address getLocation(User user) {
+		
+		Address address = null;
+		
+		try {
+			List<Address> addresses = 
+					addressLocalService.getAddresses(
+							user.getCompanyId(), Location.class.getName(), user.getUserId());
+			
+			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
+				address = addresses.get(0);
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return address;
+	}
+	
+	/**
+	 * 
+	 */
+	public boolean isLocationSet(User user) {		
+		return Validator.isNotNull(getLocation(user));
+	}
+	
 }

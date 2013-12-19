@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
-import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -39,7 +39,7 @@ public class MaxMindUtil {
 		String className = Location.class.getName();
 		
 		// check if the MaxMind coordinates are already set for this user
-		if (ProfileLocalServiceUtil.maxMindCoordinatesSet(user)) return;
+		if (BridgeLocalServiceUtil.isLocationSet(user)) return;
 		
 		String ipAddress = user.getLastLoginIP();
 		if (Validator.isNull(ipAddress) || ipAddress.equals("127.0.0.1")) {
