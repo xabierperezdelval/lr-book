@@ -56,9 +56,9 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		boolean alreadyVerified = false;
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Phone.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("number", number));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("number_", number));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("extension", extension));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("type", IConstants.PHONE_VERIFIED));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", IConstants.PHONE_VERIFIED));
 		
 		try {
 			@SuppressWarnings("unchecked")
