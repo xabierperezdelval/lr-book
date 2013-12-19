@@ -54,19 +54,8 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 	
 	public long addPhone(long userId, String className, long classPK, String number, String extension, boolean primary) {
 		
-		boolean alreadyVerified = false;
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Phone.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("number_", number));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("extension", extension));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", IConstants.PHONE_VERIFIED));
-		
-		try {
-			@SuppressWarnings("unchecked")
-			List<Phone> phones = phoneLocalService.dynamicQuery(dynamicQuery);
-			alreadyVerified = (Validator.isNotNull(phones) && phones.size() > 0);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		List<Phone> phones = getPhones(0l, number, extension);
+		boolean alreadyVerified = (Validator.isNotNull(phones) && phones.size() > 0);
 		
 		long phoneId = 0l;
 		try {
@@ -113,9 +102,10 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		}
 		
 		boolean verified = (Validator.isNotNull(phone) 
-				&& phone.getUserName().equalsIgnoreCase(verificationCode));
+				&& phone.getUserName().equalsIgnoreCase(verificationCode)
+				&& phone.getTypeId() == IConstants.PHONE_VERIFIED);
 		
-		if (verified && phone.getTypeId() != IConstants.PHONE_VERIFIED) {
+		if (!verified) {
 			phone.setTypeId(IConstants.PHONE_VERIFIED);
 			
 			try {
@@ -123,6 +113,19 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+			
+			// get all other phones like this and set verified
+			List<Phone> phones = getPhones(phoneId, number, extension);
+			for (Phone fone: phones) {
+				fone.setTypeId(IConstants.PHONE_VERIFIED);
+				
+				try {
+					phoneLocalService.updatePhone(fone);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 		
 		return verified;
@@ -198,5 +201,30 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		}
 		
 		return verified;
-	}	
+	}
+	
+	private List<Phone> getPhones(long phoneId, number, extension) {
+		
+		List<Phone> phones = null;
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Phone.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("number_", number));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("extension", extension));
+		
+		if (phoneId > 0l) {
+			dynamicQuery.add(RestrictionsFactoryUtil.ne("typeId", IConstants.PHONE_VERIFIED));
+			dynamicQuery.add(RestrictionsFactoryUtil.ne("phoneId", phoneId));
+		} else {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", IConstants.PHONE_VERIFIED));
+		}
+		
+		try {
+			@SuppressWarnings("unchecked")
+			phones = phoneLocalService.dynamicQuery(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}	
+		
+		return phones;
+	}
 }
