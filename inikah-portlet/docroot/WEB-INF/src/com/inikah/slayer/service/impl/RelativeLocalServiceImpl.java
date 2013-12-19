@@ -16,9 +16,7 @@ package com.inikah.slayer.service.impl;
 
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeLocalServiceBaseImpl;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -75,21 +73,11 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		try {
-			phoneLocalService.addPhone(userId, Relative.class.getName(), relative.getRelativeId(), phone, StringPool.BLANK, 0, true, serviceContext);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		long classPK = relative.getRelativeId();
+		String className = Relative.class.getName();
 		
-		try {
-			emailAddressLocalService.addEmailAddress(userId, Relative.class.getName(), relative.getRelativeId(), emailAddress, 0, true, serviceContext);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		bridgeLocalService.addPhone(userId, className, classPK, phone, "91", true);
+		bridgeLocalService.addEmail(userId, className, classPK, emailAddress, true);
 		
 		return relative;
 	}
