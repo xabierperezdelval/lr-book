@@ -258,5 +258,4 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 	public boolean isLocationSet(User user) {		
 		return Validator.isNotNull(getLocation(user));
 	}
-	
 }
