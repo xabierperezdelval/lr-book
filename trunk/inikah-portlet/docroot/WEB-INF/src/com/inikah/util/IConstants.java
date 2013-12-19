@@ -43,7 +43,8 @@ public interface IConstants {
 	
 	String PAY_MODE_CHEQUE_DD = "chequeDD";
 	
-	int PHONE_VERIFIED = 1;
+	int PHONE_UNVERIFIED = 777;
+	int PHONE_VERIFIED = 999;
 	
 	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }
