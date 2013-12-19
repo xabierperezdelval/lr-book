@@ -426,4 +426,23 @@
 		<column name="myValue" type="String"/>
 		<column name="myName" type="String"/>
 	</entity>
+	
+	<entity name="Relative" remote-service="true" local-service="true">
+		<column name="relativeId" type="long" primary="true"/>
+		<column name="profileId" type="long"/>
+		<column name="name" type="String"/>
+		<column name="married" type="boolean"/>
+		<column name="passedAway" type="boolean"/>
+		<column name="category" type="int"/> <!-- 0-Family Member, 1-Friend, 2-Reference -->
+		<column name="relationship" type="int"/>
+		<column name="occupation" type="int"/>
+		<column name="occupationOther" type="String"/>
+		<column name="comments" type="String"/>
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		<column name="owner" type="boolean"/>
+	
+		<reference entity="Phone" package-path="com.liferay.portal"/>	
+		<reference entity="EmailAddress" package-path="com.liferay.portal"/>
+	</entity>
 </service-builder>
