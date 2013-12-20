@@ -117,7 +117,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			}
 			
 			// get all other phones like this and set verified
-			List<Phone> phones = getPhones(phoneId, number, extension);
+			List<Phone> phones = getPhones(phoneId, phone.getNumber(), phone.getExtension());
 			for (Phone fone: phones) {
 				fone.setTypeId(IConstants.PHONE_VERIFIED);
 				
@@ -204,8 +204,8 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		return verified;
 	}
-	
-	private List<Phone> getPhones(long phoneId, number, extension) {
+		
+	private List<Phone> getPhones(long phoneId, String number, String extension) {
 		
 		List<Phone> phones = null;
 		
@@ -221,7 +221,6 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		}
 		
 		try {
-			@SuppressWarnings("unchecked")
 			phones = phoneLocalService.dynamicQuery(dynamicQuery);
 		} catch (SystemException e) {
 			e.printStackTrace();
