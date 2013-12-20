@@ -17,6 +17,7 @@ package com.inikah.slayer.service.impl;
 import java.util.List;
 
 import com.inikah.slayer.model.Location;
+import com.inikah.slayer.service.base.BridgeLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.SMSUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -159,7 +160,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		long emailAddressId = 0l;
 		try {
-			EmailAddress emailAddress = EmailAddressLocalServiceUtil
+			EmailAddress emailAddress = emailAddressLocalService
 					.addEmailAddress(userId, className, classPK, address,
 							IConstants.PHONE_UNVERIFIED, primary, null);
 			emailAddressId = emailAddress.getEmailAddressId();
@@ -206,6 +207,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		return verified;
 	}
 		
+	@SuppressWarnings("unchecked")
 	private List<Phone> getPhones(long phoneId, String number, String extension) {
 		
 		List<Phone> phones = null;
