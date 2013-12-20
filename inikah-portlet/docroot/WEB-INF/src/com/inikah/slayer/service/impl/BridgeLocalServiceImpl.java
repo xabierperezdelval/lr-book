@@ -30,10 +30,6 @@ import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.AddressLocalServiceUtil;
-import com.liferay.portal.service.EmailAddressLocalServiceUtil;
-import com.liferay.portal.service.PhoneLocalServiceUtil;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.util.PwdGenerator;
 
 /**
@@ -64,7 +60,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		long phoneId = 0l;
 		try {
-			Phone phone = PhoneLocalServiceUtil.addPhone(userId, className, classPK, number, extension, IConstants.PHONE_UNVERIFIED, primary, null);
+			Phone phone = phoneLocalService.addPhone(userId, className, classPK, number, extension, IConstants.PHONE_UNVERIFIED, primary, null);
 			phoneId = phone.getPhoneId();
 			
 			phone.setUserName(PwdGenerator.getPinNumber());
@@ -72,7 +68,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 				phone.setTypeId(IConstants.PHONE_VERIFIED);
 			}
 			
-			phone = PhoneLocalServiceUtil.updatePhone(phone);
+			phone = phoneLocalService.updatePhone(phone);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -86,7 +82,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		Phone phone = null;
 		try {
-			phone = PhoneLocalServiceUtil.fetchPhone(phoneId);
+			phone = phoneLocalService.fetchPhone(phoneId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -101,7 +97,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		Phone phone = null;
 		try {
-			phone = PhoneLocalServiceUtil.fetchPhone(phoneId);
+			phone = phoneLocalService.fetchPhone(phoneId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -114,7 +110,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			phone.setTypeId(IConstants.PHONE_VERIFIED);
 			
 			try {
-				PhoneLocalServiceUtil.updatePhone(phone);
+				phoneLocalService.updatePhone(phone);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -125,7 +121,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 				fone.setTypeId(IConstants.PHONE_VERIFIED);
 				
 				try {
-					PhoneLocalServiceUtil.updatePhone(fone);
+					phoneLocalService.updatePhone(fone);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
@@ -145,7 +141,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		if (!alreadyVerified) {
 			try {
-				User user = UserLocalServiceUtil.fetchUser(userId);
+				User user = userLocalService.fetchUser(userId);
 				alreadyVerified = (Validator.isNotNull(user) 
 						&& (user.getEmailAddress().equalsIgnoreCase(address) || user.getEmailAddressVerified()));
 			} catch (SystemException e) {
@@ -155,7 +151,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		try {
 			@SuppressWarnings("unchecked")
-			List<EmailAddress> emails = EmailAddressLocalServiceUtil.dynamicQuery(dynamicQuery);
+			List<EmailAddress> emails = emailAddressLocalService.dynamicQuery(dynamicQuery);
 			alreadyVerified = (Validator.isNotNull(emails) && emails.size() > 0);
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -175,7 +171,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 				// send verification email
 			}
 			
-			emailAddress = EmailAddressLocalServiceUtil.updateEmailAddress(emailAddress);
+			emailAddress = emailAddressLocalService.updateEmailAddress(emailAddress);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -189,7 +185,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		EmailAddress emailAddress = null;
 		try {
-			emailAddress = EmailAddressLocalServiceUtil.fetchEmailAddress(emailAddressId);
+			emailAddress = emailAddressLocalService.fetchEmailAddress(emailAddressId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -201,7 +197,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			emailAddress.setTypeId(IConstants.PHONE_VERIFIED);
 			
 			try {
-				EmailAddressLocalServiceUtil.updateEmailAddress(emailAddress);
+				emailAddressLocalService.updateEmailAddress(emailAddress);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -226,7 +222,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		}
 		
 		try {
-			phones = PhoneLocalServiceUtil.dynamicQuery(dynamicQuery);
+			phones = phoneLocalService.dynamicQuery(dynamicQuery);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}	
@@ -243,7 +239,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		try {
 			List<Address> addresses = 
-					AddressLocalServiceUtil.getAddresses(
+					addressLocalService.getAddresses(
 							user.getCompanyId(), Location.class.getName(), user.getUserId());
 			
 			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
