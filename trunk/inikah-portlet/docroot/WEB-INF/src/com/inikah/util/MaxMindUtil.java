@@ -30,6 +30,8 @@ public class MaxMindUtil {
 		String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
 		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
 		
+		System.out.println("maxMindUserId ==> " + maxMindUserId);
+		System.out.println("maxMindLicenseKey ==> " + maxMindLicenseKey);
 		System.out.println("Maxmind client ==> " + client);
 	}
 
