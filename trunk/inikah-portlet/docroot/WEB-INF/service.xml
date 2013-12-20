@@ -135,7 +135,7 @@
 		<reference entity="Image" package-path="com.liferay.portal" />
 	</entity>
 	
-	<entity name="Bridge"  local-service="false" remote-service="true">
+	<entity name="Bridge"  local-service="true" remote-service="true">
 		<reference entity="Country" package-path="com.liferay.portal"/>
 		<reference entity="ListType" package-path="com.liferay.portal"/>
 		<reference entity="Address" package-path="com.liferay.portal"/>
