@@ -5,9 +5,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import com.inikah.slayer.model.Location;
+import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
-import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -23,16 +23,18 @@ import com.maxmind.geoip2.model.OmniResponse;
 
 public class MaxMindUtil {
 	
-	static WebServiceClient client;
+	static WebServiceClient client = null;
 	
-	static {
-		int maxMindUserId = GetterUtil.getInteger(AppConfig.get(ConfigConstants.MAX_MIND_USER_ID));
-		String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
-		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
+	private static WebServiceClient getClient() {
 		
-		System.out.println("maxMindUserId ==> " + maxMindUserId);
-		System.out.println("maxMindLicenseKey ==> " + maxMindLicenseKey);
+		if (Validator.isNull(client)) {
+			int maxMindUserId = GetterUtil.getInteger(AppConfig.get(ConfigConstants.MAX_MIND_USER_ID));
+			String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
+			client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
+		}
+		
 		System.out.println("Maxmind client ==> " + client);
+		return client;
 	}
 
 	public static void setCoordinates(User user) {
@@ -61,7 +63,7 @@ public class MaxMindUtil {
 		
 		OmniResponse omniResponse = null;
 		try {
-			omniResponse = client.omni(inetAddress);
+			omniResponse = getClient().omni(inetAddress);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (GeoIp2Exception e) {
