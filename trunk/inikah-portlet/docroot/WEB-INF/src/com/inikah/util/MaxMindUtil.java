@@ -28,7 +28,9 @@ public class MaxMindUtil {
 	static {
 		int maxMindUserId = GetterUtil.getInteger(AppConfig.get(ConfigConstants.MAX_MIND_USER_ID));
 		String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
-		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();			
+		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
+		
+		System.out.println("Maxmind client ==> " + client);
 	}
 
 	public static void setCoordinates(User user) {
