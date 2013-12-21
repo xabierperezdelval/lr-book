@@ -26,9 +26,9 @@ import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.model.Profile;
-import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.CurrencyLocalServiceUtil;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.PhotoLocalServiceUtil;
@@ -152,7 +152,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 	 */
 	public void setDefaultLocation(User user) {
 		// set other attributes for the profile before updating it
-		Address address = BridgeLocalServiceUtil.getLocation(user);
+		Address address = LocationLocalServiceUtil.getLocation(user);
 		
 		if (Validator.isNotNull(address)) {
 			
@@ -184,7 +184,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		try {
 			User user = UserLocalServiceUtil.fetchUser(getUserId());
 			
-			Address address = BridgeLocalServiceUtil.getLocation(user);
+			Address address = LocationLocalServiceUtil.getLocation(user);
 			
 			if (Validator.isNotNull(address)) {
 				countryId = address.getCountryId();

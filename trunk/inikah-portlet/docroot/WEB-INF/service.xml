@@ -138,7 +138,6 @@
 	<entity name="Bridge"  local-service="true" remote-service="true">
 		<reference entity="Country" package-path="com.liferay.portal"/>
 		<reference entity="ListType" package-path="com.liferay.portal"/>
-		<reference entity="Address" package-path="com.liferay.portal"/>
 		<reference entity="Phone" package-path="com.liferay.portal"/>
 		<reference entity="EmailAddress" package-path="com.liferay.portal"/>
 	</entity>
@@ -168,6 +167,8 @@
 			<finder-column name="parentId"/>
 			<finder-column name="locType"/>
 		</finder>
+		
+		<reference entity="Address" package-path="com.liferay.portal"/>
 	</entity>
 	
 	<entity name="MatchCriteria" local-service="true" remote-service="false" >

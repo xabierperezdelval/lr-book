@@ -23,7 +23,12 @@ import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.NotifyUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -160,7 +165,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		try {
 			User user = UserLocalServiceUtil.fetchUser(userId);
 			
-			Address address = bridgeLocalService.getLocation(user);
+			Address address = getLocation(user);
 			
 			if (Validator.isNotNull(address)) {
 				cityId = Long.valueOf(address.getCity());
@@ -217,8 +222,86 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+		}	
+		return cityId;
+	}
+	
+	/**
+	 * 
+	 */
+	public Address getLocation(User user) {
+		
+		Address address = null;
+		try {
+			List<Address> addresses = 
+					addressLocalService.getAddresses(
+							user.getCompanyId(), Location.class.getName(), user.getUserId());
+			
+			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
+				address = addresses.get(addresses.size()-1);
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 		
-		return cityId;
+		return address;
+	}
+	
+	/**
+	 * 
+	 */
+	public boolean isLocationSet(User user) {
+		
+		long userId = user.getUserId();
+		boolean locationSet = false;
+		String ipAddress = user.getLastLoginIP();
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Address.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("zip", ipAddress));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("className", Location.class.getName()));
+		
+		Address existing = null;
+		try {
+			@SuppressWarnings("unchecked")
+			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
+			
+			for (Address address: addresses) {
+				existing = address;
+				if (address.getClassPK() == userId) {
+					locationSet = true;
+					break;
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (!locationSet && Validator.isNotNull(existing)) {
+			insertAddress(userId, existing.getStreet1(), existing.getStreet2(),
+					existing.getStreet3(), Long.valueOf(existing.getCity()),
+					existing.getRegionId(), existing.getCountryId(), ipAddress);
+			locationSet = true;
+		}
+		
+		return locationSet;
+	}
+	
+	public Address insertAddress(long userId, String street1, String street2,
+			String street3, long cityId, long regionId,
+			long countryId, String ipAddress) {
+		
+		Address address = null;
+		try {
+			address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
+					street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
+					999, false, true, null);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
+		
+		return address;
 	}
 }
