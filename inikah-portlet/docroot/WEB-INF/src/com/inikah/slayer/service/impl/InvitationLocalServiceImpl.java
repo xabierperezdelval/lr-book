@@ -18,11 +18,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.inikah.invite.InviteConstants;
-import com.inikah.slayer.NoSuchInvitationException;
 import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.service.base.InvitationLocalServiceBaseImpl;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -158,8 +161,26 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		if (Validator.isNotNull(noInvitationCheck) 
 				&& noInvitationCheck.equalsIgnoreCase("no-invitation-check")) return;
 		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Invitation.class, PortletClassLoaderUtil.getClassLoader());
+		
 		String emailAddress = user.getEmailAddress();
-		Invitation invitation = null;
+		dynamicQuery.add(RestrictionsFactoryUtil.or(
+				RestrictionsFactoryUtil.eq("inviteeEmail", emailAddress),
+				RestrictionsFactoryUtil.eq("registeredEmail", emailAddress)));
+		
+		Invitation invitation = null; 
+		try {
+			@SuppressWarnings("unchecked")
+			List<Invitation> records = dynamicQuery(dynamicQuery);
+			for (Invitation _invitation: records) {
+				invitation = _invitation;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		/*
 		try {
 			invitation = invitationPersistence.findByInviteeEmail(emailAddress);
 		} catch (NoSuchInvitationException e) {
@@ -173,6 +194,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		if (Validator.isNull(invitation)) return;
 		
