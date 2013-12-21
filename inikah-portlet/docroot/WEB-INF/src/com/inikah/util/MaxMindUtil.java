@@ -23,21 +23,12 @@ import com.maxmind.geoip2.model.OmniResponse;
 
 public class MaxMindUtil {
 	
-	static WebServiceClient client = null;
+	static WebServiceClient client;
 	
-	private static WebServiceClient getClient() {
-		
-		if (Validator.isNull(client)) {
-			int maxMindUserId = GetterUtil.getInteger(AppConfig.get(ConfigConstants.MAX_MIND_USER_ID));
-			String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
-			client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
-			
-			System.out.println("maxMindUserId ==>" + maxMindUserId);
-			System.out.println("maxMindLicenseKey ==>" + maxMindLicenseKey);
-		}
-		
-		System.out.println("Maxmind client ==> " + client);
-		return client;
+	static {
+		int maxMindUserId = GetterUtil.getInteger(AppConfig.get(ConfigConstants.MAX_MIND_USER_ID));
+		String maxMindLicenseKey = AppConfig.get(ConfigConstants.MAX_MIND_LICENSE_KEY);
+		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
 	}
 
 	public static void setCoordinates(User user) {
@@ -66,7 +57,7 @@ public class MaxMindUtil {
 		
 		OmniResponse omniResponse = null;
 		try {
-			omniResponse = getClient().omni(inetAddress);
+			omniResponse = client.omni(inetAddress);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (GeoIp2Exception e) {
