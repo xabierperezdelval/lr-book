@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
@@ -259,7 +260,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 				Address.class, PortalClassLoaderUtil.getClassLoader());
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("zip", ipAddress));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("className", Location.class.getName()));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
+				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
 		
 		Address existing = null;
 		try {
