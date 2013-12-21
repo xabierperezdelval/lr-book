@@ -20,7 +20,6 @@ import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.Soundex;
 
 import com.inikah.slayer.model.Location;
-import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.NotifyUtil;
@@ -77,6 +76,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		location.setParentId(parentId);
 		location.setName(name);
 		location.setLocType(locType);
+		location.setUserId(userId);
+		location.setActive_(true);
 		
 		try {
 			location = locationPersistence.update(location);
@@ -112,12 +113,9 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		location.setCode(code);
 		location.setLocType(IConstants.LOC_TYPE_REGION);
 		location.setUserId(userId);
-		location.setName(name);
+		location.setName(StringUtil.replace(name, "State Of ", StringPool.BLANK));
+		location.setActive_(true);
 		
-		if (name.startsWith("State Of")) {
-			name = StringUtil.replace(name, "State Of ", StringPool.BLANK);
-		}
-
 		try {
 			location = locationPersistence.update(location);
 		} catch (SystemException e) {
