@@ -282,9 +282,18 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		}
 		
 		if (!locationSet && Validator.isNotNull(existing)) {
-			insertAddress(userId, existing.getStreet1(), existing.getStreet2(),
+			existing = insertAddress(userId, existing.getStreet1(), existing.getStreet2(),
 					existing.getStreet3(), Long.valueOf(existing.getCity()),
 					existing.getRegionId(), existing.getCountryId(), ipAddress);
+			
+			existing.setUserName(user.getFullName());
+			
+			try {
+				addressLocalService.updateAddress(existing);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
 			locationSet = true;
 		}
 		
