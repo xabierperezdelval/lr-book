@@ -305,16 +305,39 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			long countryId, String ipAddress) {
 		
 		Address address = null;
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Address.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
+				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classPK", userId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("city", cityId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("regionId", regionId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("countryId", countryId));
+		
 		try {
-			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-			address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
-					street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
-					999, false, true, serviceContext);
-		} catch (PortalException e) {
-			e.printStackTrace();
+			@SuppressWarnings("unchecked")
+			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
+			for (Address _address: addresses) {
+				address = _address;
+				break;
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}		
+		}
+		
+		if (Validator.isNotNull(address)) {
+			try {
+				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
+						street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
+						999, false, true, serviceContext);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}					
+		}
 		
 		return address;
 	}
