@@ -13,6 +13,15 @@
 					<cron-trigger-value>0 0 13 * * 6</cron-trigger-value>
 				</cron>
 			</trigger>
+		</scheduler-entry>
+		
+		<scheduler-entry>
+			<scheduler-event-listener-class>com.inikah.jobs.NotifyOldUsers</scheduler-event-listener-class>
+			<trigger>
+				<cron>
+					<cron-trigger-value>0 0 14 * * 1</cron-trigger-value>
+				</cron>
+			</trigger>
 		</scheduler-entry>		
 		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
