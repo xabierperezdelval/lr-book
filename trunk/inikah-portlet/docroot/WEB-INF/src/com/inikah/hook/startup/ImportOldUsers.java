@@ -116,7 +116,6 @@ public class ImportOldUsers extends SimpleAction {
 			
 			String lastLoginDate = parts[5];
 			if (Validator.isNotNull(lastLoginDate)) {
-				
 				try {
 					user.setLastLoginDate(dateFormat.parse(lastLoginDate));
 				} catch (ParseException e) {
