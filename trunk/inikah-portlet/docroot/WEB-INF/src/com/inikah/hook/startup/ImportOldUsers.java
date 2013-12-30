@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -31,11 +32,13 @@ public class ImportOldUsers extends SimpleAction {
 		
 		File file = new File("old-users.csv");
 		
-		InputStream inputStream;
+		_log.debug("file ==> " + file.getAbsolutePath());
+		
+		InputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			_log.debug("File not found...Existing....");
 			return;
 		}
 				
@@ -70,7 +73,7 @@ public class ImportOldUsers extends SimpleAction {
 		boolean autoPassword = false;
 		String password = parts[2];
 		boolean autoScreenName = true;
-		String screenName = null;
+		String screenName = StringPool.BLANK;
 		String emailAddress = parts[1];
 		long facebookId = 0l;
 		String openId = StringPool.BLANK;
@@ -80,9 +83,9 @@ public class ImportOldUsers extends SimpleAction {
 		int prefixId = 0;
 		int suffixId = 0;
 		boolean male = parts[6].equalsIgnoreCase("1");
-		int birthdayMonth = 0;
-		int birthdayDay = 0;
-		int birthdayYear = 0;
+		int birthdayMonth = 1;
+		int birthdayDay = 1;
+		int birthdayYear = 2000;
 		String jobTitle = StringPool.BLANK;
 		long[] groupIds = null;
 		long[] organizationIds = null;
@@ -97,7 +100,7 @@ public class ImportOldUsers extends SimpleAction {
 		try {
 			User user = UserLocalServiceUtil.addUser(creatorUserId, companyId,
 					autoPassword, password, password, autoScreenName, screenName,
-					emailAddress, facebookId, openId, Locale.ENGLISH, firstName,
+					emailAddress, facebookId, openId, Locale.US, firstName,
 					middleName, lastName, prefixId, suffixId, male, birthdayMonth,
 					birthdayDay, birthdayYear, jobTitle, groupIds, organizationIds,
 					roleIds, userGroupIds, sendEmail, serviceContext);
@@ -121,20 +124,32 @@ public class ImportOldUsers extends SimpleAction {
 				}				
 			}
 			
-			user.setGreeting(parts[2]);
+			user.setLastName(parts[2]);
+			user.setPasswordReset(false);
+			user.setOpenId("no-invitation-check");
+			user.setJobTitle("mail-not-sent");
 			
 			user = UserLocalServiceUtil.updateUser(user);
 			
 			_log.debug("User successfully created ==> " + user);
 			
+			String mobile = parts[4];
+			
+			if (Validator.isNotNull(mobile) && mobile.startsWith("091")) {
+				String[] tokens = mobile.split(StringPool.DASH);
+				if (tokens.length == 2 && tokens[1].length() == 10) {
+					BridgeLocalServiceUtil.addPhone(user.getUserId(), User.class.getName(), user.getUserId(), tokens[1], "91", true);
+				}
+			}
+			
 		} catch (PortalException e) {
-			e.printStackTrace();
+			_log.error(e.getMessage());
 		} catch (SystemException e) {
-			e.printStackTrace();
+			_log.error(e.getMessage());
 		}
-		
 	}
 
+	
 	private static Log _log = LogFactoryUtil.getLog(
 			LanguageConfig.class);
 }
