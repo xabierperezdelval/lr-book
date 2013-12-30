@@ -1,6 +1,7 @@
 package com.inikah.util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 
@@ -8,7 +9,18 @@ import com.inikah.slayer.model.Location;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portlet.journal.model.JournalArticle;
+import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 
 public class NotifyUtil {
 	
@@ -46,5 +58,36 @@ public class NotifyUtil {
 			e.printStackTrace();
 		}
 		return addr;
-	}	
+	}
+	
+	public static String getEmailTemplate(String articleId) {
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		
+		String emailTemplate = StringPool.BLANK;
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				JournalArticle.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("articleId", articleId));
+		dynamicQuery.addOrder(OrderFactoryUtil.desc("version"));
+
+		try {
+			@SuppressWarnings("unchecked")
+			List<JournalArticle> articles = JournalArticleLocalServiceUtil.dynamicQuery(dynamicQuery);
+			
+			for (JournalArticle journalArticle: articles) {
+				try {
+					emailTemplate = JournalArticleLocalServiceUtil.getArticleContent(
+							journalArticle, null, null, "en_US", null);
+					break;
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return emailTemplate;
+	}
 }
