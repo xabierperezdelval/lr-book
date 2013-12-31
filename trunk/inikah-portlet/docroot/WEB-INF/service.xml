@@ -350,8 +350,6 @@
 		<finder return-type="Collection" name="CountryId">
 			<finder-column name="countryId"/>
 		</finder>
-		
-		
 	</entity>	
 	
 	<entity name="Plan" local-service="true" remote-service="false" cache-enabled="false">
