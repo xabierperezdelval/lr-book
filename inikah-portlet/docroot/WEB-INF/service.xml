@@ -40,12 +40,6 @@
 		<column name="motherTongue" type="int" />
 
 		<!-- Contact Information -->
-		<column name="emailAddress" type="String" />
-		<column name="emailAddressVerified" type="boolean" />
-		<column name="mobileNumber" type="String" />
-		<column name="mobileNumberVerified" type="boolean" />
-		<column name="verificationCode" type="String"/>
-		<column name="alternateMobile" type="String" />
 		<column name="residingCountry" type="long" />
 		<column name="residingState" type="long" />
 		<column name="residingCity" type="long" />
@@ -435,6 +429,7 @@
 		<column name="passedAway" type="boolean"/>
 		<column name="category" type="int"/> <!-- 0-Family Member, 1-Friend, 2-Reference -->
 		<column name="relationship" type="int"/>
+		<column name="age" type="int" />
 		<column name="occupation" type="int"/>
 		<column name="occupationOther" type="String"/>
 		<column name="comments" type="String"/>
