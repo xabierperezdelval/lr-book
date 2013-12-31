@@ -40,6 +40,7 @@
 		<column name="motherTongue" type="int" />
 
 		<!-- Contact Information -->
+		<column name="emailAddress" type="long" />
 		<column name="residingCountry" type="long" />
 		<column name="residingState" type="long" />
 		<column name="residingCity" type="long" />
