@@ -63,7 +63,7 @@ public class ImportOldUsers extends SimpleAction {
 			e.printStackTrace();
 		}
 		
-		//file.delete();
+		file.delete();
 	}
 	
 	private void insertOldUser(long companyId, long creatorUserId, String line) {
