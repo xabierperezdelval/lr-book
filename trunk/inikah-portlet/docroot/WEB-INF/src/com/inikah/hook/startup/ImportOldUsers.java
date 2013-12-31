@@ -147,7 +147,6 @@ public class ImportOldUsers extends SimpleAction {
 			_log.error(e.getMessage());
 		}
 	}
-
 	
 	private static Log _log = LogFactoryUtil.getLog(
 			LanguageConfig.class);
