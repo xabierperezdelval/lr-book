@@ -434,8 +434,5 @@
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		<column name="owner" type="boolean"/>
-	
-		<reference entity="Phone" package-path="com.liferay.portal"/>	
-		<reference entity="EmailAddress" package-path="com.liferay.portal"/>
 	</entity>
 </service-builder>
