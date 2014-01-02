@@ -16,7 +16,6 @@ package com.inikah.slayer.service.impl;
 
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeServiceBaseImpl;
-import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the relative remote service.
@@ -42,10 +41,20 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 	public Relative addRelative(long userId, long profileId, String name, boolean married,
 			boolean passedAway, String phone, String emailAddress,
 			int category, int occupation, String occupationOther,
-			String comments, boolean owner, int relationship, ServiceContext serviceContext) {
+			String comments, boolean owner, int relationship, int age) {
 		
 		return relativeLocalService.addRelative(userId, profileId, name,
 				married, passedAway, phone, emailAddress, category, occupation,
-				occupationOther, comments, owner, relationship, serviceContext);
+				occupationOther, comments, owner, relationship, age);
+	}
+	
+	public Relative updateRelative(long relativeId, String name, boolean married,
+			boolean passedAway, String phone, String emailAddress,
+			int category, int occupation, String occupationOther,
+			String comments, boolean owner, int relationship, int age) {
+		
+		return relativeLocalService.updateRelative(relativeId, name,
+				married, passedAway, phone, emailAddress, category, occupation,
+				occupationOther, comments, owner, relationship, age);
 	}
 }

@@ -17,7 +17,6 @@ package com.inikah.slayer.service.impl;
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the relative local service.
@@ -43,7 +42,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 	public Relative addRelative(long userId, long profileId, String name, boolean married,
 			boolean passedAway, String phone, String emailAddress,
 			int category, int occupation, String occupationOther,
-			String comments, boolean owner, int relationship, ServiceContext serviceContext) {
+			String comments, boolean owner, int relationship, int age) {
 	
 		long relativeId = 0l;
 		try {
@@ -64,6 +63,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		relative.setPassedAway(passedAway);
 		relative.setProfileId(profileId);
 		relative.setMarried(married);
+		relative.setAge(age);
 		
 		relative.setCreateDate(new java.util.Date());
 		
@@ -81,4 +81,44 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		
 		return relative;
 	}
+	
+	public Relative updateRelative(long relativeId, String name, boolean married,
+			boolean passedAway, String phone, String emailAddress,
+			int category, int occupation, String occupationOther,
+			String comments, boolean owner, int relationship, int age) {
+		
+		Relative relative = null;
+		try {
+			relative = fetchRelative(relativeId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		relative.setCategory(category);
+		relative.setName(name);
+		relative.setComments(comments);
+		relative.setRelationship(relationship);
+		relative.setOccupation(occupation);
+		relative.setOccupationOther(occupationOther);
+		relative.setOwner(owner);
+		relative.setPassedAway(passedAway);
+		relative.setMarried(married);
+		relative.setAge(age);
+		
+		relative.setModifiedDate(new java.util.Date());
+		
+		try {
+			relative = updateRelative(relative);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		long classPK = relative.getRelativeId();
+		String className = Relative.class.getName();
+		
+		bridgeLocalService.updatePhone(className, classPK, phone, "91", true);
+		//bridgeLocalService.updateEmail(className, classPK, emailAddress, true);
+		
+		return relative;
+	}	
 }
