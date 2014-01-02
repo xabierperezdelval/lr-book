@@ -29,6 +29,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.util.PwdGenerator;
 
 /**
@@ -57,9 +61,11 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		List<Phone> phones = getPhones(0l, number, extension);
 		boolean alreadyVerified = (Validator.isNotNull(phones) && phones.size() > 0);
 		
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		
 		long phoneId = 0l;
 		try {
-			Phone phone = phoneLocalService.addPhone(userId, className, classPK, number, extension, IConstants.PHONE_UNVERIFIED, primary, null);
+			Phone phone = phoneLocalService.addPhone(userId, className, classPK, number, extension, IConstants.PHONE_UNVERIFIED, primary, serviceContext);
 			phoneId = phone.getPhoneId();
 			
 			phone.setUserName(PwdGenerator.getPinNumber());
@@ -133,10 +139,13 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 	
 	public long addEmail(long userId, String className, long classPK, String address, boolean primary) {
 		
+		long classNameId = ClassNameLocalServiceUtil.getClassNameId(className);
+		
 		boolean alreadyVerified = false;
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(EmailAddress.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId", classNameId));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("address", address));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("type", IConstants.PHONE_VERIFIED));
+		//dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", 10009));
 		
 		if (!alreadyVerified) {
 			try {
@@ -157,15 +166,18 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		}
 		
 		long emailAddressId = 0l;
+		
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		
 		try {
 			EmailAddress emailAddress = emailAddressLocalService
 					.addEmailAddress(userId, className, classPK, address,
-							IConstants.PHONE_UNVERIFIED, primary, null);
+							11005, primary, serviceContext);
 			emailAddressId = emailAddress.getEmailAddressId();
 			
 			emailAddress.setUserName(PwdGenerator.getPinNumber());
 			if (alreadyVerified) {
-				emailAddress.setTypeId(IConstants.PHONE_VERIFIED);
+				emailAddress.setTypeId(11006);
 			} else {
 				// send verification email
 			}
@@ -192,8 +204,8 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		boolean verified = (Validator.isNotNull(emailAddress) 
 				&& emailAddress.getUserName().equalsIgnoreCase(verificationCode));
 		
-		if (verified && emailAddress.getTypeId() != IConstants.PHONE_VERIFIED) {
-			emailAddress.setTypeId(IConstants.PHONE_VERIFIED);
+		if (verified && emailAddress.getTypeId() != 11006) {
+			emailAddress.setTypeId(11006);
 			
 			try {
 				emailAddressLocalService.updateEmailAddress(emailAddress);
@@ -211,7 +223,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		List<Phone> phones = null;
 		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Phone.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("number_", number));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("number", number));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("extension", extension));
 		
 		if (phoneId > 0l) {
@@ -228,5 +240,34 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		}	
 		
 		return phones;
+	}
+	
+	public void updatePhone(String className, long classPK, String number, String extension, boolean primary) {
+		
+		Phone phone = null;
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		long classNameId = ClassNameLocalServiceUtil.getClassNameId(className);
+		try {
+			List<Phone> phones = phonePersistence.findByC_C_C(companyId, classNameId, classPK);
+			for (Phone _phone: phones) {
+				phone = _phone;
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(phone)) return;
+		
+		phone.setNumber(number);
+		phone.setExtension(extension);
+		phone.setPrimary(primary);
+		
+		try {
+			phoneLocalService.updatePhone(phone);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 }
