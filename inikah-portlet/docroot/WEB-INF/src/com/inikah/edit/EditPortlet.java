@@ -189,7 +189,6 @@ public class EditPortlet extends MVCPortlet {
 	}
 	
 	private void saveStep4(ActionRequest actionRequest, Profile profile) {
-		// TODO Auto-generated method stub
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
