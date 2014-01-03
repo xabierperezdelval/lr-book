@@ -126,8 +126,8 @@ public class EditPortlet extends MVCPortlet {
 		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
 		
 		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
-		profile.setMobileNumber(mobileNumber);
-		profile.setVerificationCode(sendVerificationCode(mobileNumber));
+		//profile.setMobileNumber(mobileNumber);
+		//profile.setVerificationCode(sendVerificationCode(mobileNumber));
 		profile.setAllowNonSingleProposals(!profile.isSingle());
 		
 		// setting locations

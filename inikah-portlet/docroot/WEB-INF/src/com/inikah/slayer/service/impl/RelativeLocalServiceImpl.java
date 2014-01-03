@@ -63,6 +63,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		relative.setPassedAway(passedAway);
 		relative.setProfileId(profileId);
 		relative.setMarried(married);
+		relative.setEmailAddress(emailAddress);
 		relative.setAge(age);
 		
 		relative.setCreateDate(new java.util.Date());
@@ -77,7 +78,6 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		String className = Relative.class.getName();
 		
 		bridgeLocalService.addPhone(userId, className, classPK, phone, "91", true);
-		bridgeLocalService.addEmail(userId, className, classPK, emailAddress, true);
 		
 		return relative;
 	}
@@ -117,7 +117,6 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		String className = Relative.class.getName();
 		
 		bridgeLocalService.updatePhone(className, classPK, phone, "91", true);
-		//bridgeLocalService.updateEmail(className, classPK, emailAddress, true);
 		
 		return relative;
 	}	
