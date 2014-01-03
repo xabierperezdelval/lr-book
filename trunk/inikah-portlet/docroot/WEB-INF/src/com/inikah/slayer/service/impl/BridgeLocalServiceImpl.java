@@ -26,9 +26,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Phone;
-import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -131,91 +129,11 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 					e.printStackTrace();
 				}
 			}
-			
 		}
 		
 		return verified;
 	}
 	
-	public long addEmail(long userId, String className, long classPK, String address, boolean primary) {
-		
-		long classNameId = ClassNameLocalServiceUtil.getClassNameId(className);
-		
-		boolean alreadyVerified = false;
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(EmailAddress.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId", classNameId));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("address", address));
-		//dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", 10009));
-		
-		if (!alreadyVerified) {
-			try {
-				User user = userLocalService.fetchUser(userId);
-				alreadyVerified = (Validator.isNotNull(user) 
-						&& (user.getEmailAddress().equalsIgnoreCase(address) || user.getEmailAddressVerified()));
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		try {
-			@SuppressWarnings("unchecked")
-			List<EmailAddress> emails = emailAddressLocalService.dynamicQuery(dynamicQuery);
-			alreadyVerified = (Validator.isNotNull(emails) && emails.size() > 0);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		long emailAddressId = 0l;
-		
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-		
-		try {
-			EmailAddress emailAddress = emailAddressLocalService
-					.addEmailAddress(userId, className, classPK, address,
-							11005, primary, serviceContext);
-			emailAddressId = emailAddress.getEmailAddressId();
-			
-			emailAddress.setUserName(PwdGenerator.getPinNumber());
-			if (alreadyVerified) {
-				emailAddress.setTypeId(11006);
-			} else {
-				// send verification email
-			}
-			
-			emailAddress = emailAddressLocalService.updateEmailAddress(emailAddress);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return emailAddressId;
-	}
-	
-	public boolean verifyEmail(long emailAddressId, String verificationCode) {
-		
-		EmailAddress emailAddress = null;
-		try {
-			emailAddress = emailAddressLocalService.fetchEmailAddress(emailAddressId);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		boolean verified = (Validator.isNotNull(emailAddress) 
-				&& emailAddress.getUserName().equalsIgnoreCase(verificationCode));
-		
-		if (verified && emailAddress.getTypeId() != 11006) {
-			emailAddress.setTypeId(11006);
-			
-			try {
-				emailAddressLocalService.updateEmailAddress(emailAddress);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return verified;
-	}
 		
 	@SuppressWarnings("unchecked")
 	private List<Phone> getPhones(long phoneId, String number, String extension) {

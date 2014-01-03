@@ -429,6 +429,7 @@
 		<column name="category" type="int"/> <!-- 0-Family Member, 1-Friend, 2-Reference -->
 		<column name="relationship" type="int"/>
 		<column name="age" type="int" />
+		<column name="emailAddress" type="String"/>
 		<column name="occupation" type="int"/>
 		<column name="occupationOther" type="String"/>
 		<column name="comments" type="String"/>
