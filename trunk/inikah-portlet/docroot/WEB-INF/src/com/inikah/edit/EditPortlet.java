@@ -12,6 +12,7 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
@@ -27,7 +28,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -126,8 +126,7 @@ public class EditPortlet extends MVCPortlet {
 		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
 		
 		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
-		//profile.setMobileNumber(mobileNumber);
-		//profile.setVerificationCode(sendVerificationCode(mobileNumber));
+		BridgeLocalServiceUtil.addPhone(userId, Profile.class.getName(), profile.getProfileId(), mobileNumber, "91", true);
 		profile.setAllowNonSingleProposals(!profile.isSingle());
 		
 		// setting locations
@@ -195,16 +194,6 @@ public class EditPortlet extends MVCPortlet {
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
 		}
-	}
-	
-	private String sendVerificationCode(String mobileNumber) {
-		// TODO Auto-generated method stub
-		
-		String verificationCode = PwdGenerator.getPinNumber();
-		
-		//SMSUtil.sendVerificationCode("91" + mobileNumber, verificationCode);
-		
-		return verificationCode;
 	}
 	
 	public void uploadImage(ActionRequest actionRequest,
