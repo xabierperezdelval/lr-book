@@ -30,137 +30,20 @@
 
 	<c:if test="<%= !profile.isSingle() %>">
 		<liferay-ui:panel title="non-single" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset >
-			<aui:row >
-				<aui:column cssClass="iddCode-selection">
-					<aui:select name="sons" required="true">
-						<%= MyListUtil.getChildrenList(profile.getSons()) %>
-					</aui:select>
-				</aui:column>
-				<aui:column cssClass="iddCode-selection">
-					<aui:select name="daughters" required="true">
-						<%= MyListUtil.getChildrenList(profile.getDaughters()) %>
-					</aui:select>
-				</aui:column>
-				<c:if test="<%= !profile.isBride() && profile.isMarried() %>">
-					<aui:column>
-						<aui:select name="remarriageReason" required="true">
-							<%= MyListUtil.getRemarriageReason(locale, profile) %>
-						</aui:select>
-					</aui:column>	
-				</c:if>		
-			</aui:row>
-		</aui:fieldset>
+			<%@ include file="/html/edit/step2-non-single.jspf" %>
 		</liferay-ui:panel>	
 	</c:if>
 
 	<liferay-ui:panel title="education-info" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset cssClass="min">
-			<aui:row>
-				<aui:column>
-					<aui:select name="education" onChange="javascript:cascade(this,'specifyEducation');" required="true">
-						<%= MyListUtil.getEducationList(locale, profile)%>
-					</aui:select>
-					
-				</aui:column>
-				<aui:column>
-					<div <% if(Validator.isNull(profile.getEducationOther()))
-						{%>
-						hidden="true"
-						<%} %>
-						id="<portlet:namespace/>specifyEducationDiv" required="true">
-						<aui:input name="specifyEducation" value="<%= profile.getEducationOther() %>" />
-					</div>
-				</aui:column>
-			</aui:row>
-			<aui:row>
-				<aui:column>
-					<aui:input name="schoolAttended" value="" required="true"/>
-				</aui:column>
-				<aui:column>	
-					<aui:input type="textarea" name="educationDetails" value="<%= profile.getEducationDetail() %>" required="true"/>
-					<span id="<portlet:namespace />100CountForEducationDetails"></span> character(s) remaining.	
-				</aui:column>	
-			</aui:row>
-		</aui:fieldset>
+		<%@ include file="/html/edit/step2-education-info.jspf" %>
 	</liferay-ui:panel>
 	
 	<liferay-ui:panel title="islamic-education" extended="<%= true %>" collapsible="<%= true %>">
-				<aui:fieldset cssClass="min">
-			<aui:row>
-				<aui:column>
-				<aui:select name="religiousEducation"  onChange="javascript:cascade(this,'specifyReligiousEducation');" required="true">
-				<%=MyListUtil.getReligiousEducationList(locale, profile)%>
-					</aui:select>
-				</aui:column>
-				<aui:column>
-					<div <% if(Validator.isNull(profile.getReligiousEducationOther()))
-						{%>
-						hidden="true"
-						<%} %> id="<portlet:namespace/>specifyReligiousEducationDiv" required="true">
-						<aui:input name="specifyReligiousEducation" value="<%= profile.getReligiousEducationOther() %>" required="true"/>
-					</div>
-				</aui:column>
-			</aui:row>
-			<aui:row>
-				<aui:column>
-					<aui:input name="religiousSchoolAttended" value="" required="true"/>
-				</aui:column>
-				<aui:column>	
-					<aui:input type="textarea" name="religiousEducationDetails" value="<%= profile.getReligiousEducationDetail() %>" required="true"/>
-					<span id="<portlet:namespace />100CountForRelEducationDetails"></span> character(s) remaining.	
-				</aui:column>	
-			</aui:row>
-		</aui:fieldset>
+		<%@ include file="/html/edit/step2-islamic-education.jspf" %>
 	</liferay-ui:panel>	
 
-	<liferay-ui:panel title="occupation" extended="<%= true %>" collapsible="<%= true %>" >		
-		<aui:fieldset cssClass="min">
-			<aui:row>
-				<aui:column>
-					<aui:select name="occupation" onChange="javascript:cascade(this,'specifyOccupation');" required="true">
-						<%= MyListUtil.getProfessionList(locale, profile) %>
-					</aui:select>
-				</aui:column>
-				<aui:column>
-					<div hidden="true" id="<portlet:namespace/>specifyOccupationDiv">
-						<aui:input name="specifyOccupation" value="" required="true"/>
-					</div>
-				</aui:column>
-			</aui:row>
-			<aui:row>
-				<aui:column>
-					<aui:input name="whereWorking" value="<%= profile.getOrganization() %>" required="true"/>
-				</aui:column>
-				<aui:column>	
-					<aui:input type="textarea" name="occupationDetails" value="<%= profile.getProfessionDetail() %>" required="true"/>
-					<span id="<portlet:namespace />100CountForOccupationDetails"></span> character(s) remaining.	
-				</aui:column>	
-			</aui:row>
-			<aui:row>
-				<aui:column cssClass="salary-selection">
-					<aui:select name="incomeFrequency" >
-						<%= MyListUtil.getIncomeFrequency(locale,profile)%>
-					</aui:select>
-				</aui:column>
-				<aui:column cssClass="iddCode-selection">
-				<%--
-				<c:choose>
-					<c:when test="<%= profile.getCountryOfBirth() == profile.getResidingCountry() %>">
- 						<aui:input name="currency" disabled="true" value="<%=CurrencyLocalServiceUtil.getCurrency(profile.getCountryOfBirth()).getCurrencyCode()%>"></aui:input>
-					</c:when>
-					<c:otherwise>
-						<aui:select name="currency"><%=MyListUtil.getCurrencyList(locale, profile)%></aui:select>
-					</c:otherwise>
-				</c:choose>	
-				 --%>
-				</aui:column>
-				<aui:column>
-					<aui:input name="salary" value="<%= profile.getIncome() %>"/>
-				</aui:column>
-			</aui:row>
-
-		</aui:fieldset>
+	<liferay-ui:panel title="occupation" extended="<%= true %>" collapsible="<%= true %>" >	
+		<%@ include file="/html/edit/step2-occupation.jspf" %>
 	</liferay-ui:panel>		
 </liferay-ui:panel-container>
 
