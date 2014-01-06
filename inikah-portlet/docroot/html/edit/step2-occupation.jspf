@@ -48,5 +48,4 @@
 			<aui:input name="salary" value="<%=profile.getIncome()%>" />
 		</aui:column>
 	</aui:row>
-
 </aui:fieldset>
