@@ -1,3 +1,4 @@
+<%@page import="com.inikah.util.MyListUtil"%>
 <%
 	String areaLabel = "Area within <b>" + profile.getCityText() + "</b>";
 	List<String> iddCodes = profile.getIDDCodes();
@@ -26,7 +27,7 @@
 			</c:when>
 			<c:otherwise>
 				<aui:column cssClass="iddCode-selection">
-					<aui:select name="iddCode" />
+					<aui:select name="iddCode"><%= MyListUtil.getIDDoptions("",iddCodes) %></aui:select>
 				</aui:column>
 				<aui:column cssClass="iddCode-selection">
 					<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" />
