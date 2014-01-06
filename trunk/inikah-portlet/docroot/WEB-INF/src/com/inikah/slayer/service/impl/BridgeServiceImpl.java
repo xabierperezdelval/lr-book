@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.BridgeServiceBaseImpl;
-import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
