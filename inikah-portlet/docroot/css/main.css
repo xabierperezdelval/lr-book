@@ -21,6 +21,12 @@
     color: maroon !important;
 }
 
+.edit-portlet .help-inline {
+    display: block;
+    font-style: italic;
+    color: maroon !important;
+}
+
 .plan-box .column-content  {
 	border: 2px solid orange;
 	text-align: center;

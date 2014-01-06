@@ -30,8 +30,8 @@
 	<liferay-ui:panel title="social-info" extended="<%= true %>" collapsible="<%= true %>" >
 		<aui:fieldset >
 			<aui:column>
-				<aui:input name="area" value="<%= profile.getResidingArea()  %>" required="true"/>
-				<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>" required="true"/>
+				<aui:input name="area" value="<%= profile.getResidingArea()  %>" />
+				<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>" />
 				<aui:select name="motherTongue" required="true">
 					<%= MyListUtil.getLanguagesSpoken(profile) %>
 				</aui:select>
@@ -86,14 +86,12 @@
 		</liferay-ui:panel>	
 	</c:if>
 
-<!--======================  EDUCATION ========================= -->
-
 	<liferay-ui:panel title="education-info" extended="<%= true %>" collapsible="<%= true %>" >
 		<aui:fieldset cssClass="min">
 			<aui:row>
 				<aui:column>
 					<aui:select name="education" onChange="javascript:cascade(this,'specifyEducation');" required="true">
-						<%=MyListUtil.getEducationList(locale, profile)%>
+						<%= MyListUtil.getEducationList(locale, profile)%>
 					</aui:select>
 					
 				</aui:column>
@@ -118,8 +116,6 @@
 			</aui:row>
 		</aui:fieldset>
 	</liferay-ui:panel>
-
-<!--======================   ISLAMIC EDUCATION     ========================= -->
 	
 	<liferay-ui:panel title="islamic-education" extended="<%= true %>" collapsible="<%= true %>">
 				<aui:fieldset cssClass="min">
@@ -150,13 +146,12 @@
 		</aui:fieldset>
 	</liferay-ui:panel>	
 
-	
 	<liferay-ui:panel title="occupation" extended="<%= true %>" collapsible="<%= true %>" >		
 		<aui:fieldset cssClass="min">
 			<aui:row>
 				<aui:column>
 					<aui:select name="occupation" onChange="javascript:cascade(this,'specifyOccupation');" required="true">
-						<%=MyListUtil.getProfessionList(locale, profile)%>
+						<%= MyListUtil.getProfessionList(locale, profile) %>
 					</aui:select>
 				</aui:column>
 				<aui:column>
