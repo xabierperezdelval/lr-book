@@ -8,7 +8,7 @@
 <aui:fieldset>
 	<aui:row>
 		<aui:column>
-			<aui:input name="area" label="<%= areaLabel %>"
+			<aui:input name="residingArea" label="<%= areaLabel %>"
 				value="<%= profile.getResidingArea()  %>" />
 		</aui:column>
 		<aui:column>
@@ -27,7 +27,9 @@
 			</c:when>
 			<c:otherwise>
 				<aui:column cssClass="iddCode-selection">
-					<aui:select name="iddCode"><%= MyListUtil.getIDDoptions("",iddCodes) %></aui:select>
+					<aui:select name="iddCode">
+						<%= MyListUtil.getIddOptions(profile.getMobileIdd(), iddCodes) %>
+					</aui:select>
 				</aui:column>
 				<aui:column cssClass="iddCode-selection">
 					<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" />

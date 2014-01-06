@@ -481,4 +481,22 @@ public class ProfileImpl extends ProfileBaseImpl {
 		
 		return mobileNumber;
 	}
+	
+	public String getMobileIdd() {
+		String mobileIDD = StringPool.BLANK;
+		
+		try {
+			List<Phone> phones = PhoneLocalServiceUtil.getPhones(
+					getCompanyId(), Profile.class.getName(), getProfileId());
+			
+			for (Phone phone: phones) {
+				mobileIDD = phone.getExtension();
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return mobileIDD;		
+	}
 }
