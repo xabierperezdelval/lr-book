@@ -21,43 +21,11 @@
 </c:if>
 
 <!-- step 2 fields -->
-<%
-	List<String> iddCodes = profile.getIDDCodes();
-	boolean singleIdd = (iddCodes.size() == 1);
-%>
 
 <liferay-ui:panel-container accordion="<%= true %>">
+	
 	<liferay-ui:panel title="social-info" extended="<%= true %>" collapsible="<%= true %>" >
-		<aui:fieldset >
-			<aui:column>
-				<aui:input name="area" value="<%= profile.getResidingArea()  %>" />
-				<aui:input name="emailAddress" value="<%= profile.getEmailAddress() %>" />
-				<aui:select name="motherTongue" required="true">
-					<%= MyListUtil.getLanguagesSpoken(profile) %>
-				</aui:select>
-			</aui:column>
-			
-			<aui:column >
-				<aui:input name="masjid" value="<%= profile.getNearbyMasjid() %>" required="true"/>
-				<c:choose>			
-					<c:when test="<%= singleIdd %>">
-						<aui:input name="mobileNumber" value="" prefix="<%= CharPool.PLUS+ iddCodes.get(0) %>"/>
-					</c:when>
-					<c:otherwise>
-						<aui:column cssClass="iddCode-selection">
-							<aui:select name="iddCode"/>
-						</aui:column>
-						<aui:column cssClass="iddCode-selection" >
-							<aui:input name="mobileNumber" value=""/>
-						</aui:column>
-					</c:otherwise>
-				</c:choose>
-				
-				<aui:select name="canSpeak" multiple="true">
-					<%= MyListUtil.getCanSpeakList(profile) %>
-				</aui:select>
-			</aui:column>			
-		</aui:fieldset>
+		<%@ include file="/html/edit/step2-social-info.jspf" %>
 	</liferay-ui:panel>
 
 	<c:if test="<%= !profile.isSingle() %>">

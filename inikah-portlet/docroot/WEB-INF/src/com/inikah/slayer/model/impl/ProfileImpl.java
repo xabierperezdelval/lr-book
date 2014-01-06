@@ -36,7 +36,6 @@ import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.FilterUtil;
 import com.inikah.util.IConstants;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.KeyValuePair;
@@ -46,8 +45,10 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
+import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.PhoneLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.webserver.WebServerServletTokenUtil;
@@ -461,5 +462,23 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return cityText;
+	}
+	
+	public String getMobileNumber() {
+		String mobileNumber = StringPool.BLANK;
+		
+		try {
+			List<Phone> phones = PhoneLocalServiceUtil.getPhones(
+					getCompanyId(), Profile.class.getName(), getProfileId());
+			
+			for (Phone phone: phones) {
+				mobileNumber = phone.getNumber();
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return mobileNumber;
 	}
 }

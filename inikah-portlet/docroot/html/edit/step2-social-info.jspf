@@ -1,0 +1,49 @@
+<%
+	String areaLabel = "Area within <b>" + profile.getCityText() + "</b>";
+	List<String> iddCodes = profile.getIDDCodes();
+	boolean singleIdd = (iddCodes.size() == 1);	
+%>
+
+<aui:fieldset>
+	<aui:row>
+		<aui:column>
+			<aui:input name="area" label="<%= areaLabel %>"
+				value="<%= profile.getResidingArea()  %>" />
+		</aui:column>
+		<aui:column>
+			<aui:input name="nearbyMasjid" value="<%= profile.getNearbyMasjid() %>" />
+		</aui:column>
+	</aui:row>
+	<aui:row>
+		<aui:column>
+			<aui:input name="emailAddress"
+				value="<%= profile.getEmailAddress() %>" required="true" />
+		</aui:column>
+		<c:choose>
+			<c:when test="<%= singleIdd %>">
+				<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>"
+					prefix="<%= CharPool.PLUS + iddCodes.get(0) %>" />
+			</c:when>
+			<c:otherwise>
+				<aui:column cssClass="iddCode-selection">
+					<aui:select name="iddCode" />
+				</aui:column>
+				<aui:column cssClass="iddCode-selection">
+					<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" />
+				</aui:column>
+			</c:otherwise>
+		</c:choose>
+	</aui:row>
+	<aui:row>
+		<aui:column>
+			<aui:select name="motherTongue" required="true" showEmptyOption="<%= true %>">
+				<%= MyListUtil.getLanguagesSpoken(profile) %>
+			</aui:select>
+		</aui:column>
+		<aui:column>
+			<aui:select name="canSpeak" multiple="true">
+				<%= MyListUtil.getCanSpeakList(profile) %>
+			</aui:select>
+		</aui:column>
+	</aui:row>
+</aui:fieldset>
