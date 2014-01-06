@@ -1,0 +1,33 @@
+<aui:fieldset cssClass="min">
+	<aui:row>
+		<aui:column>
+			<aui:select name="religiousEducation"
+				onChange="javascript:cascade(this,'specifyReligiousEducation');"
+				required="true">
+				<%=MyListUtil.getReligiousEducationList(
+									locale, profile)%>
+			</aui:select>
+		</aui:column>
+		<aui:column>
+			<div
+				<%if (Validator.isNull(profile
+								.getReligiousEducationOther())) {%>
+				hidden="true" <%}%>
+				id="<portlet:namespace/>specifyReligiousEducationDiv"
+				required="true">
+				<aui:input name="specifyReligiousEducation"
+					value="<%=profile.getReligiousEducationOther()%>" required="true" />
+			</div>
+		</aui:column>
+	</aui:row>
+	<aui:row>
+		<aui:column>
+			<aui:input name="religiousSchoolAttended" value="" required="true" />
+		</aui:column>
+		<aui:column>
+			<aui:input type="textarea" name="religiousEducationDetails"
+				value="<%=profile.getReligiousEducationDetail()%>" required="true" />
+			<span id="<portlet:namespace />100CountForRelEducationDetails"></span> character(s) remaining.	
+				</aui:column>
+	</aui:row>
+</aui:fieldset>
