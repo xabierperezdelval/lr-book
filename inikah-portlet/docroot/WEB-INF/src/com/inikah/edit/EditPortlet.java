@@ -173,8 +173,18 @@ public class EditPortlet extends MVCPortlet {
 
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
+		// Social Info
 		profile.setResidingArea(ParamUtil.getString(actionRequest, "residingArea"));
+		profile.setNearbyMasjid(ParamUtil.getString(actionRequest, "nearbyMasjid"));
+		profile.setEmailAddress(ParamUtil.getString(actionRequest, "emailAddress"));
 		
+		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
+		String extension = ParamUtil.getString(actionRequest, "mobileIdd", profile.getMobileIdd());
+		profile.setMotherTongue(ParamUtil.getInteger(actionRequest, "motherTongue"));
+		
+		long userId = PortalUtil.getUserId(actionRequest);
+		BridgeLocalServiceUtil.addPhone(userId, Profile.class.getName(),
+				profile.getProfileId(), mobileNumber, extension, true);
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP1_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP2_DONE);

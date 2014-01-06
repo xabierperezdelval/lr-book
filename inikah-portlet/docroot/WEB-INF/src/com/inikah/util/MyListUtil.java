@@ -369,6 +369,10 @@ public class MyListUtil {
 	public static String getIddOptions(String currValue , List<String> iddCodes) {	 
 		StringBuilder sb = new StringBuilder();
 		
+		if (Validator.isNull(currValue)) {
+			currValue = "0";
+		}
+		
 		for (int i=0; i<iddCodes.size(); i++) {			
 			sb.append(getOption(Long.valueOf(currValue), i, String.valueOf(i)));
 		}
