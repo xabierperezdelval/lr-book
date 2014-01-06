@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.inikah.slayer.model.Currency;
+import com.inikah.slayer.model.Location;
 import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Photo;
@@ -35,6 +36,7 @@ import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.FilterUtil;
 import com.inikah.util.IConstants;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.KeyValuePair;
@@ -443,5 +445,21 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return currencyCode;
+	}
+	
+	public String getCityText() {
+		
+		String cityText = StringPool.BLANK;
+		try {
+			Location city = LocationLocalServiceUtil.fetchLocation(getResidingCity());
+			
+			if (Validator.isNotNull(city)) {
+				cityText = city.getName();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return cityText;
 	}
 }

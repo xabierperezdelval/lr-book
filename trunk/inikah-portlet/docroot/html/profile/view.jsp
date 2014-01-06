@@ -1,3 +1,4 @@
+<%@page import="com.inikah.util.NotifyUtil"%>
 <%@ include file="/html/common/init.jsp" %>
 
 <%
