@@ -366,23 +366,11 @@ public class MyListUtil {
 		return sb.toString();	
 	}
 	
-	public static String getIDDoptions(String currValue , List<String> iddCodes) {	 
+	public static String getIddOptions(String currValue , List<String> iddCodes) {	 
 		StringBuilder sb = new StringBuilder();
 		
-		for (int i=0; i<iddCodes.size(); i++) {
-			sb.append("<option value=");
-			sb.append(StringPool.QUOTE);
-			sb.append(iddCodes.get(i));
-			sb.append(StringPool.QUOTE);
-			
-			if (currValue.equalsIgnoreCase(iddCodes.get(i))) {
-				sb.append(StringPool.SPACE);
-				sb.append("selected");
-			}
-			
-			sb.append(">");
-			sb.append(iddCodes.get(i));
-			sb.append("</option>");
+		for (int i=0; i<iddCodes.size(); i++) {			
+			sb.append(getOption(Long.valueOf(currValue), i, String.valueOf(i)));
 		}
 		return sb.toString();
 	}
