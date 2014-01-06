@@ -7,15 +7,6 @@
 		content/Language_en.properties
 	</language-properties>
 	<custom-jsp-dir>/custom_jsps</custom-jsp-dir>
-
-	<service>
-		<service-type>
-			com.liferay.portal.service.ListTypeService
-		</service-type>
-		<service-impl>
-			com.liferay.portal.service.ExtListTypeService
-		</service-impl>
-	</service>	
 	
 	<struts-action>
 		<struts-action-path>/login/create_account</struts-action-path>
