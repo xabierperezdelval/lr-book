@@ -23,7 +23,11 @@
 					<img src="<%= photoURL %>" class="thumbnail"/>
 				</aui:column>
 				<aui:column>
-					<aui:input type="file" name="<%= fldName1 %>" label="profile-photo" required="<%= (i==0) %>"/>
+					<aui:input type="file" name="<%= fldName1 %>" label="profile-photo" required="<%= ((i==0) && (imageId == 0l)) %>">
+						<aui:validator name="acceptFiles">
+							 'jpg, png, jpeg'
+						</aui:validator>
+					</aui:input>
 					<aui:input name="<%= fldName2 %>" label="photo-description" value="<%= photo.getDescription() %>"/>
 				</aui:column>
 			</aui:fieldset>
