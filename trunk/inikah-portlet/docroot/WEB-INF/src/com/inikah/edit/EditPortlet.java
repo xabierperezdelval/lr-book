@@ -222,9 +222,7 @@ public class EditPortlet extends MVCPortlet {
 			PortletException {
 		
 		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
-		
-		System.out.println("inside serve photo ==> " + cmd);
-		
+				
 		if (cmd.equalsIgnoreCase("servePhoto")) {
 			long imageId = ParamUtil.getLong(resourceRequest, "imageId");
 			byte[] bytes = PhotoLocalServiceUtil.getThumbnail(imageId);
