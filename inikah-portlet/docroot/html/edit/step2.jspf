@@ -57,7 +57,8 @@
 			div.style.display = 'block';
 			fld.focus();
 		} else {
-			div.style.display = 'none';		
+			div.style.display = 'none';	
+			fld.value = '';
 		}
 	}
 
