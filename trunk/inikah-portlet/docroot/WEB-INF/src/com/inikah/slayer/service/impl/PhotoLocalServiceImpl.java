@@ -70,11 +70,19 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		long companyId = CompanyThreadLocal.getCompanyId();
 		long repositoryId = CompanyConstants.SYSTEM;
 		
-		if (imageId == 0) {
+		boolean updateFile = false;
+		if (imageId == 0l) {
 			try {
 				imageId = counterLocalService.increment(Image.class.getName());
 				photo = createPhoto(imageId);
-				addPhoto(photo);
+				photo = addPhoto(photo);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		} else {
+			updateFile = true;
+			try {
+				photo = fetchPhoto(imageId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -82,6 +90,9 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		try {
 			String filePath = getPath(profileId, imageId, companyId, repositoryId, "I");
+			if (updateFile) {
+				DLStoreUtil.deleteFile(companyId, repositoryId, filePath);
+			} 
 			DLStoreUtil.addFile(companyId, repositoryId, filePath, true, file);
 		} catch (PortalException e) {
 			e.printStackTrace();
@@ -91,10 +102,10 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		try {
 			imageLocalService.updateImage(imageId, file);
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 		
 		photo.setUploadDate(new java.util.Date());
@@ -103,7 +114,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		photo.setImageType(IConstants.IMG_TYPE_PHOTO);
 		
 		try {
-			updatePhoto(photo);
+			photo = updatePhoto(photo);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
