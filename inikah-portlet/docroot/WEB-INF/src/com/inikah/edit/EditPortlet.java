@@ -198,27 +198,22 @@ public class EditPortlet extends MVCPortlet {
 		}		
 	}
 	
-	private void saveStep4(ActionRequest actionRequest, Profile profile) {
+	public void saveStep4(ActionRequest actionRequest, Profile profile) {
+
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		
+		for (int i=0; i<4; i++) {
+			File profilePhoto = uploadPortletRequest.getFile("profilePhoto_" + i);
+			
+			if (Validator.isNotNull(profilePhoto) && profilePhoto.length() > 0) {
+				long imageId = ParamUtil.getLong(uploadPortletRequest, "imageId_"+i, 0l);
+				String description = ParamUtil.getString(uploadPortletRequest, "description_"+i);
+				PhotoLocalServiceUtil.upload(imageId, profile.getProfileId(), profilePhoto, description);
+			}
+		}
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
-		}
-	}
-	
-	public void uploadImage(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
-
-		long profileId = ParamUtil.getLong(actionRequest, "profileId", 100l);
-		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-		
-		for (int i=1; i<=4; i++) {
-			File profilePhoto = uploadPortletRequest.getFile("profilePhoto_" + i);
-			
-			if (profilePhoto.length() > 0) {
-				long imageId = ParamUtil.getLong(uploadPortletRequest, "imageId_"+i, 0l);
-				String description = ParamUtil.getString(uploadPortletRequest, "description_"+i);
-				PhotoLocalServiceUtil.upload(imageId, profileId, profilePhoto, description);
-			}
 		}
 	}
 	
@@ -227,6 +222,8 @@ public class EditPortlet extends MVCPortlet {
 			PortletException {
 		
 		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
+		
+		System.out.println("inside serve photo ==> " + cmd);
 		
 		if (cmd.equalsIgnoreCase("servePhoto")) {
 			long imageId = ParamUtil.getLong(resourceRequest, "imageId");

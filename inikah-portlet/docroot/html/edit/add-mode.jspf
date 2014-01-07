@@ -13,7 +13,8 @@
 	
 	<c:when test="<%= profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE %>">
 		<%@ include file="/html/edit/step4.jspf" %>
-	</c:when>			
+	</c:when>
+			
 </c:choose>
 
 <aui:button type="submit" value="Next &raquo;"/>

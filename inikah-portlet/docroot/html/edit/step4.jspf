@@ -1,4 +1,35 @@
-
-
-This is step 4. 
-
+<%
+	List<Photo> photos = profile.getPhotos();
+	int i=0;
+	for (Photo photo: photos) {
+		long imageId = photo.getImageId();
+		String fldName0 = "imageId_" + i;
+		String fldName1 = "profilePhoto_" + i;
+		String fldName2 = "description_" + i;
+		
+		String photoURL = themeDisplay.getPathThemeImages() + StringPool.SLASH + "inikah" + StringPool.SLASH + (profile.isBride()? "bride":"groom")  + ".png";
+		
+		if (imageId > 0l) {
+			PortletURL imageURL = PortletURLFactoryUtil.create(renderRequest, "edit_WAR_inikahportlet", plid, PortletRequest.RESOURCE_PHASE);
+			imageURL.setParameter(Constants.CMD, "servePhoto");
+			imageURL.setParameter("imageId", String.valueOf(imageId));
+			photoURL = imageURL.toString();
+		}
+		
+		%>	
+			<aui:fieldset>
+				<aui:input type="hidden" name="<%= fldName0 %>" value="<%= imageId %>"/>
+				<aui:row>
+					<aui:column>
+						<img src="<%= photoURL %>" />
+					</aui:column>
+					<aui:column>
+						<aui:input type="file" name="<%= fldName1 %>" label="profile-photo" required="<%= (i==0) %>"/>
+					</aui:column>
+				</aui:row>
+				<aui:input name="<%= fldName2 %>" label="photo-description" value="<%= photo.getDescription() %>"/>
+			</aui:fieldset>
+		<%
+		i++;
+	}
+%>

@@ -100,7 +100,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		photo.setUploadDate(new java.util.Date());
 		photo.setProfileId(profileId);
 		photo.setDescription(description);
-		photo.setImageType(IConstants.IMAGE_TYPE_PHOTO);
+		photo.setImageType(IConstants.IMG_TYPE_PHOTO);
 		
 		try {
 			updatePhoto(photo);
@@ -262,7 +262,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			ImageLocalServiceUtil.updateImage(thumbnailId, file);
 			
 			Photo photo = createPhoto(thumbnailId);
-			photo.setImageType(IConstants.IMAGE_TYPE_FACE);
+			photo.setImageType(IConstants.IMG_TYPE_FACE);
 			photo.setApproved(true);
 			photo.setUploadDate(new java.util.Date());
 			photo.setProfileId(profileId);
@@ -283,7 +283,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		long thumbnailId = 0l;
 		
 		try {
-			List<Photo> photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMAGE_TYPE_FACE);
+			List<Photo> photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMG_TYPE_FACE);
 			
 			for (Photo photo: photos) {
 				thumbnailId = photo.getImageId();
@@ -301,7 +301,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		List<Photo> photos = null;
 		
 		try {
-			photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMAGE_TYPE_PHOTO);
+			photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMG_TYPE_PHOTO);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}		

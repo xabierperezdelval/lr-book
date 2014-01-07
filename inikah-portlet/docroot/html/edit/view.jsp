@@ -2,7 +2,14 @@
 
 <portlet:actionURL var="saveProfileURL" name="saveProfile"/>
 
-<aui:form action="<%= saveProfileURL %>" >
+<%
+	String enctype = StringPool.BLANK;
+	if (profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
+		enctype = "multipart/form-data";
+	}
+%>
+
+<aui:form action="<%= saveProfileURL %>" enctype="<%= enctype %>">
 	<c:choose>
 		<c:when test="<%= editMode %>">
 			<%@ include file="/html/edit/edit-mode.jspf" %>
