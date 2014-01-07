@@ -429,7 +429,25 @@ public class ProfileImpl extends ProfileBaseImpl {
 	}
 	
 	public List<Photo> getPhotos() {
-		return PhotoLocalServiceUtil.getPhotos(getProfileId());
+		
+		List<Photo> photos = new ArrayList<Photo>();
+		
+		List<Photo> _photos = PhotoLocalServiceUtil.getPhotos(getProfileId());
+		
+		int cnt = 0;
+		for (Photo photo: _photos) {
+			photos.add(photo);
+			cnt++;
+			if (cnt == 4) break; 
+		}
+		
+		if (cnt < 4) {
+			for (int i=0;i<(4-cnt); i++) {
+				photos.add(new PhotoImpl());
+			}
+		}
+		
+		return photos;
 	}
 	
 	public String getCurrencyCode() {

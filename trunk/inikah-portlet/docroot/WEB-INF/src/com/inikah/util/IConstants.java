@@ -6,6 +6,7 @@ public interface IConstants {
 	int PROFILE_STATUS_STEP2_DONE = 2;
 	int PROFILE_STATUS_STEP3_DONE = 3;
 	int PROFILE_STATUS_STEP4_DONE = 4;
+	
 	int PROFILE_STATUS_PAYMENT_PENDING = 5;
 	int PROFILE_STATUS_ACTIVE = 6;
 	int PROFILE_STATUS_INACTIVE = 7;
@@ -37,9 +38,9 @@ public interface IConstants {
 	int LOC_TYPE_AREA = 3;
 	int LOC_TYPE_MASJID = 4;
 	
-	int IMAGE_TYPE_PHOTO = 1;
-	int IMAGE_TYPE_FACE = 2;
-	int IMAGE_TYPE_DOCUMENT = 3;
+	int IMG_TYPE_PHOTO = 1;
+	int IMG_TYPE_FACE = 2;
+	int IMG_TYPE_DOC = 3;
 	
 	String PAY_MODE_CHEQUE_DD = "chequeDD";
 	
