@@ -17,18 +17,19 @@
 		}
 		
 		%>	
+			<aui:input type="hidden" name="<%= fldName0 %>" value="<%= imageId %>"/>
 			<aui:fieldset>
-				<aui:input type="hidden" name="<%= fldName0 %>" value="<%= imageId %>"/>
-				<aui:row>
-					<aui:column>
-						<img src="<%= photoURL %>" />
-					</aui:column>
-					<aui:column>
-						<aui:input type="file" name="<%= fldName1 %>" label="profile-photo" required="<%= (i==0) %>"/>
-					</aui:column>
-				</aui:row>
-				<aui:input name="<%= fldName2 %>" label="photo-description" value="<%= photo.getDescription() %>"/>
+				<aui:column columnWidth="30">
+					<img src="<%= photoURL %>" class="thumbnail"/>
+				</aui:column>
+				<aui:column>
+					<aui:input type="file" name="<%= fldName1 %>" label="profile-photo" required="<%= (i==0) %>"/>
+					<aui:input name="<%= fldName2 %>" label="photo-description" value="<%= photo.getDescription() %>"/>
+				</aui:column>
 			</aui:fieldset>
+			<c:if test="<%= i < 3%>">
+				<hr/>
+			</c:if>
 		<%
 		i++;
 	}
