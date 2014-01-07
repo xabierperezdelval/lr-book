@@ -1,18 +1,18 @@
 <aui:fieldset>
 	<aui:row>
 		<aui:column cssClass="iddCode-selection">
-			<aui:select name="sons" required="true">
+			<aui:select name="sons">
 				<%= MyListUtil.getChildrenList(profile.getSons()) %>
 			</aui:select>
 		</aui:column>
 		<aui:column cssClass="iddCode-selection">
-			<aui:select name="daughters" required="true">
+			<aui:select name="daughters">
 				<%= MyListUtil.getChildrenList(profile.getDaughters()) %>
 			</aui:select>
 		</aui:column>
 		<c:if test="<%= !profile.isBride() && profile.isMarried() %>">
 			<aui:column>
-				<aui:select name="remarriageReason" required="true">
+				<aui:select name="remarriageReason" required="true" showEmptyOption="true">
 					<%= MyListUtil.getRemarriageReason(locale, profile) %>
 				</aui:select>
 			</aui:column>

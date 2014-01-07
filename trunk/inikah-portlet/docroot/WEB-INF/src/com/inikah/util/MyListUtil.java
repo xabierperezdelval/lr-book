@@ -91,10 +91,10 @@ public class MyListUtil {
 	}
 	
 	public static String getMaritalStatusOptions(Locale locale, Profile profile) {
-		return getOptions(locale, profile, IConstants.LIST_MARITAL_STATUS, profile.getMaritalStatus());
+		return getOptions(locale, profile, IConstants.LIST_MARITAL_STATUS, profile.getMaritalStatus(), false);
 	}
 
-	private static String getOptions(Locale locale, Profile profile, String suffix, long currValue) {
+	private static String getOptions(Locale locale, Profile profile, String suffix, long currValue, boolean appendOther) {
 		
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -130,11 +130,15 @@ public class MyListUtil {
 			e.printStackTrace();
 		}
 		
+		if (appendOther) {
+			sb.append("<option value='-1'>Other</option>");
+		}
+		
 		return sb.toString();
 	}
 	
 	public static String getCreatedFor(Locale locale, Profile profile) {
-		return getOptions(locale, profile, IConstants.LIST_CREATED_FOR, profile.getCreatedFor());
+		return getOptions(locale, profile, IConstants.LIST_CREATED_FOR, profile.getCreatedFor(), false);
 	}
 	
 	public static String getMonths(Locale locale, int bornOn) {
@@ -287,7 +291,7 @@ public class MyListUtil {
 	}
 	
 	 public static String getComplexionsList(Locale locale, Profile profile) {
-         return getOptions(locale, profile, IConstants.LIST_COMPLEXION, profile.getComplexion());
+         return getOptions(locale, profile, IConstants.LIST_COMPLEXION, profile.getComplexion(), false);
 	 }
 	 
 	public static String getCountries(long currValue) {
@@ -373,8 +377,9 @@ public class MyListUtil {
 			currValue = "0";
 		}
 		
-		for (int i=0; i<iddCodes.size(); i++) {			
-			sb.append(getOption(Long.valueOf(currValue), i, String.valueOf(i)));
+		for (int i=0; i<iddCodes.size(); i++) {
+			String iddCode = iddCodes.get(i);
+			sb.append(getOption(Long.valueOf(currValue), Long.valueOf(iddCode), iddCode));
 		}
 		return sb.toString();
 	}
@@ -388,22 +393,22 @@ public class MyListUtil {
      }
 	 
 	 public static String getRemarriageReason(Locale locale, Profile profile){
-		 return getOptions(locale, profile, IConstants.LIST_REMARRIAGE_REASON, profile.getReMarriageReason());
+		 return getOptions(locale, profile, IConstants.LIST_REMARRIAGE_REASON, profile.getReMarriageReason(), false);
      }
 	 
 	 public static String getEducationList(Locale locale, Profile profile) {
-		 return getOptions(locale, profile, IConstants.LIST_EDUCATION, profile.getEducation());
+		 return getOptions(locale, profile, IConstants.LIST_EDUCATION, profile.getEducation(), true);
      }
      
 	 public static String getReligiousEducationList(Locale locale, Profile profile) {
-		 return getOptions(locale, profile, IConstants.LIST_RELIGIOUS_EDUCATION, profile.getReligiousEducation());
+		 return getOptions(locale, profile, IConstants.LIST_RELIGIOUS_EDUCATION, profile.getReligiousEducation(), true);
      }
 	 
      public static String getProfessionList(Locale locale, Profile profile) {
-		return getOptions(locale, profile, IConstants.LIST_PROFESSION, profile.getProfession());
+		return getOptions(locale, profile, IConstants.LIST_PROFESSION, profile.getProfession(), true);
      }
      
      public static String getIncomeFrequency(Locale locale, Profile profile) {
-			return getOptions(locale, profile, IConstants.LIST_INCOME_FREQUENCY, profile.getIncomeFrequency());
+			return getOptions(locale, profile, IConstants.LIST_INCOME_FREQUENCY, profile.getIncomeFrequency(), false);
      }
 }

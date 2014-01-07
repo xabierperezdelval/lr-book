@@ -18,7 +18,9 @@
 	<aui:row>
 		<aui:column>
 			<aui:input name="emailAddress"
-				value="<%= profile.getEmailAddress() %>" required="true" />
+				value="<%= profile.getEmailAddress() %>" required="true">
+				<aui:validator name="email" />
+			</aui:input>	
 		</aui:column>
 		<c:choose>
 			<c:when test="<%= singleIdd %>">
@@ -27,7 +29,7 @@
 			</c:when>
 			<c:otherwise>
 				<aui:column cssClass="iddCode-selection">
-					<aui:select name="iddCode">
+					<aui:select name="mobileIdd">
 						<%= MyListUtil.getIddOptions(profile.getMobileIdd(), iddCodes) %>
 					</aui:select>
 				</aui:column>
