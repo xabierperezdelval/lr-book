@@ -415,7 +415,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		if (thumbnailId > 0l) {
 			StringBuilder sb = new StringBuilder()
 				.append(themeDisplay.getPathImage())
-				.append("/photo/?img_id=")
+				.append("/photo?img_id=")
 				.append(thumbnailId)
 				.append("&t=")
 				.append(WebServerServletTokenUtil.getToken(thumbnailId));			
@@ -435,7 +435,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		if (getPortraitId() > 0l) {
 			StringBuilder sb = new StringBuilder()
 				.append(themeDisplay.getPathImage())
-				.append("/photo/?img_id=")
+				.append("/photo?img_id=")
 				.append(getPortraitId())
 				.append("&t=")
 				.append(WebServerServletTokenUtil.getToken(getPortraitId()));			
