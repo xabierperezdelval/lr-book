@@ -49,6 +49,7 @@
 <%@page import="com.inikah.slayer.service.ProfileLocalServiceUtil"%>
 <%@page import="com.inikah.slayer.service.LocationLocalServiceUtil"%>
 <%@page import="com.inikah.slayer.service.CurrencyLocalServiceUtil"%>
+<%@page import="com.liferay.portal.webserver.WebServerServletTokenUtil"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>

@@ -7,9 +7,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeLocalServiceUtil;
@@ -19,9 +16,7 @@ import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -217,26 +212,11 @@ public class EditPortlet extends MVCPortlet {
 		}
 	}
 	
-	public void serveResource(ResourceRequest resourceRequest,
-			ResourceResponse resourceResponse) throws IOException,
-			PortletException {
-		
-		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
-				
-		if (cmd.equalsIgnoreCase("servePhoto")) {
-			long imageId = ParamUtil.getLong(resourceRequest, "imageId");
-			byte[] bytes = PhotoLocalServiceUtil.getThumbnail(imageId);
-			HttpServletResponse response = PortalUtil
-					.getHttpServletResponse(resourceResponse);
-			ServletResponseUtil.write(response, bytes);
-		}
-	}
-	
-	public void makeThumbnail(ActionRequest actionRequest,
+	public void makePortrait(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException {
 		
 		long imageId = ParamUtil.getLong(actionRequest, "imageId");
 		
-		PhotoLocalServiceUtil.createThumbnail(imageId);
+		PhotoLocalServiceUtil.createPortrait(imageId);
 	}	
-}
+} 
