@@ -25,6 +25,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.cloudinary.Cloudinary;
 import com.inikah.slayer.model.Photo;
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.PhotoLocalServiceBaseImpl;
 import com.inikah.util.AppConfig;
 import com.inikah.util.CloudinaryUtil;
@@ -34,13 +35,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Image;
-import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
+import com.liferay.util.portlet.PortletProps;
 
 /**
  * The implementation of the photo local service.
@@ -67,10 +69,6 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		Photo photo = null;
 		
-		long companyId = CompanyThreadLocal.getCompanyId();
-		long repositoryId = CompanyConstants.SYSTEM;
-		
-		boolean updateFile = false;
 		if (imageId == 0l) {
 			try {
 				imageId = counterLocalService.increment(Image.class.getName());
@@ -80,24 +78,11 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 				e.printStackTrace();
 			}
 		} else {
-			updateFile = true;
 			try {
 				photo = fetchPhoto(imageId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		try {
-			String filePath = getPath(profileId, imageId, companyId, repositoryId, "I");
-			if (updateFile) {
-				DLStoreUtil.deleteFile(companyId, repositoryId, filePath);
-			} 
-			DLStoreUtil.addFile(companyId, repositoryId, filePath, true, file);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
 		}
 		
 		try {
@@ -107,7 +92,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
+				
 		photo.setUploadDate(new java.util.Date());
 		photo.setProfileId(profileId);
 		photo.setDescription(description);
@@ -119,41 +104,12 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
+		createThumbnail(imageId);
+		
 		return photo;
 	}
 
-	private String getPath(long profileId, long imageId, long companyId, long repositoryId, String prefix) {
-		
-		String folderName = "P" + String.format("%07d", profileId);
-		
-		boolean folderExists = false;
-		
-		try {
-			folderExists = DLStoreUtil.hasDirectory(
-				companyId, repositoryId, folderName);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (!folderExists) {
-			try {
-				DLStoreUtil.addDirectory(
-					companyId, repositoryId, folderName);
-			} catch (PortalException e) {
-				e.printStackTrace();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return folderName + StringPool.SLASH + prefix + String.format("%07d", imageId);
-	}
-
-	public byte[] getThumbnail(long imageId) {
-		byte[] bytes = null;
-		ImageBag imageBag = null;
+	public long createThumbnail(long imageId) {
 		
 		Image image = null;
 		try {
@@ -162,31 +118,71 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNull(image)) return null; 
+		if (Validator.isNull(image)) return 0l;
 		
+		long thumbnailId = imageId;
+		
+		// check the original width of the image. 
+		float thumbnailWidth = GetterUtil.getFloat(PortletProps.get("profile.photo.thumbnail.width"));
+		if (image.getWidth() > (int)thumbnailWidth) {
+			try {
+				thumbnailId = counterLocalService.increment(Image.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			ImageBag imageBag = null;
+			try {
+				imageBag = ImageToolUtil.read(image.getTextObj());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (Validator.isNull(imageBag)) return 0l;
+			
+			RenderedImage renderedImage = imageBag.getRenderedImage();
+			
+			float reduceBy = (thumbnailWidth / (float) image.getWidth());
+						
+			long height = Math.round(image.getHeight() * reduceBy);
+			long width = Math.round(image.getWidth() * reduceBy);
+			renderedImage = ImageToolUtil.scale(renderedImage, (int) height, (int) width);
+			
+			byte[] bytes = null;
+			try {
+				bytes = ImageToolUtil.getBytes(renderedImage, image.getType());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(bytes)) {
+				try {
+					imageLocalService.updateImage(thumbnailId, bytes);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}			
+		} 
+		
+		Photo photo = null;
 		try {
-			imageBag = ImageToolUtil.read(image.getTextObj());
-		} catch (IOException e) {
+			photo = fetchPhoto(imageId);
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		if (Validator.isNull(imageBag)) return null;
 		
-		RenderedImage renderedImage = imageBag.getRenderedImage();
-		
-		float reduceBy = 0.20f;
-		
-		long height = Math.round(image.getHeight() * reduceBy);
-		long width = Math.round(image.getWidth() * reduceBy);
-		renderedImage = ImageToolUtil.scale(renderedImage, (int) height, (int) width);
+		photo.setThumbnailId(thumbnailId);
 		try {
-			bytes = ImageToolUtil.getBytes(renderedImage, image.getType());
-		} catch (IOException e) {
+			updatePhoto(photo);
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		return bytes;
+		
+		return thumbnailId;
 	}
 	
-	public long createThumbnail(long imageId) {
+	public long createPortrait(long imageId) {
 		
 		Photo photo = null;
 		try {
@@ -198,28 +194,32 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		if (Validator.isNull(photo)) return 0l;
 		
 		long profileId = photo.getProfileId();
-		long companyId = CompanyThreadLocal.getCompanyId();
-		long repositoryId = CompanyConstants.SYSTEM;
+		String publicId = String.valueOf(imageId);
 		
-		String filePath = getPath(profileId, imageId, companyId, repositoryId, "I");
+		String fileName = StringPool.BLANK;
+		try {
+			Image image = imageLocalService.fetchImage(imageId);
+			fileName = imageId + StringPool.PERIOD + image.getType();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		
 		File file = null;
 		try {
-			file = DLStoreUtil.getFile(companyId, repositoryId, filePath);
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
+			file = DLStoreUtil.getFile(0l, 0l, fileName);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 		
-		String publicId = "T" + String.format("%07d", imageId);
 		try {
 			CloudinaryUtil.getService().uploader().upload(file, Cloudinary.asMap("public_id", publicId));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		long thumbnailId = storeThumbnail(imageId, profileId, companyId, repositoryId);
+		long thumbnailId = savePortrait(imageId, profileId);
 		
 		try {
 			CloudinaryUtil.getService().uploader().destroy(publicId, Cloudinary.asMap("public_id", publicId));
@@ -230,7 +230,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		return thumbnailId;
 	}
 	
-	private long storeThumbnail(long imageId, long profileId, long companyId, long repositoryId) {
+	private long savePortrait(long imageId, long profileId) {
 		
 		Image image = null;
 		try {
@@ -239,7 +239,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		String publicId = "T" + String.format("%07d", imageId) + StringPool.PERIOD + image.getType();
+		String publicId = String.valueOf(imageId) + StringPool.PERIOD + image.getType();
 		
 		URL url = null;
 		try {
@@ -259,26 +259,19 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		long thumbnailId = 0l;
+		long portraitId = 0l;
 		try {
-			thumbnailId = counterLocalService.increment(Image.class.getName());
+			portraitId = counterLocalService.increment(Image.class.getName());
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
-		String filePath = getPath(profileId, thumbnailId, companyId, repositoryId, "T");
-		
+				
 		try {
-			DLStoreUtil.addFile(companyId, repositoryId, filePath, file);
-			ImageLocalServiceUtil.updateImage(thumbnailId, file);
+			imageLocalService.updateImage(portraitId, file);
 			
-			Photo photo = createPhoto(thumbnailId);
-			photo.setImageType(IConstants.IMG_TYPE_FACE);
-			photo.setApproved(true);
-			photo.setUploadDate(new java.util.Date());
-			photo.setProfileId(profileId);
-			
-			addPhoto(photo);
+			Profile profile = profileLocalService.fetchProfile(profileId);
+			profile.setPortraitId(portraitId);
+			profileLocalService.updateProfile(profile);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -287,25 +280,9 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		file.delete();
 		
-		return thumbnailId;
-	}	
-	
-	public long getThumbnailId(long profileId) {
-		long thumbnailId = 0l;
-		
-		try {
-			List<Photo> photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMG_TYPE_FACE);
-			
-			for (Photo photo: photos) {
-				thumbnailId = photo.getImageId();
-				break;
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return thumbnailId;
+		return portraitId;
 	}
+	
 	
 	public List<Photo> getPhotos(long profileId) {
 		
@@ -318,5 +295,30 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		}		
 		
 		return photos;
+	}
+	
+	@Override
+	@Indexable(type = IndexableType.DELETE)
+	public Photo deletePhoto(long imageId) throws PortalException,
+			SystemException {
+		
+		imageLocalService.deleteImage(imageId);
+		
+		Photo photo = fetchPhoto(imageId);
+		if (Validator.isNotNull(photo) && photo.getThumbnailId() > 0l) {
+			imageLocalService.deleteImage(photo.getThumbnailId());
+		}
+		
+		return super.deletePhoto(imageId);
+	}
+	
+	public void approve(long imageId) {
+		try {
+			Photo photo = fetchPhoto(imageId);
+			photo.setApproved(true);
+			updatePhoto(photo);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 }

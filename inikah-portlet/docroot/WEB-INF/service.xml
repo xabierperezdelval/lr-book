@@ -89,6 +89,7 @@
 		<column name="currentPlan" type="long"/>
 		<column name="validUpto" type="Date"/>
 		<column name="allowNonSingleProposals" type="boolean"/>
+		<column name="portraitId" type="long"/>
 		
 		<order by="desc">
 			<order-column name="ownerLastLogin"/>
@@ -118,6 +119,7 @@
 		<column name="imageId" type="long" primary="true"/>
 		<column name="profileId" type="long"/>
 		<column name="description" type="String"/>
+		<column name="thumbnailId" type="long"/>
 		<column name="imageType" type="int"/>
 		<column name="approved" type="boolean"/>
 		<column name="uploadDate" type="Date"/>

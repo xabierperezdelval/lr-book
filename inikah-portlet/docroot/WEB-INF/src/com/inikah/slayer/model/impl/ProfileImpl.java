@@ -406,14 +406,12 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return iddCodes;
 	}
 	
-	public String getThumbnailURL(ThemeDisplay themeDisplay) {
+	public String getThumbnailURL(ThemeDisplay themeDisplay, long thumbnailId) {
 		
 		String thumbnailURL = 
 				themeDisplay.getPathThemeImages() + "/inikah/" + 
 				(isBride()? "bride.png" : "groom.png");
-		
-		long thumbnailId = PhotoLocalServiceUtil.getThumbnailId(getProfileId());
-		
+				
 		if (thumbnailId > 0l) {
 			StringBuilder sb = new StringBuilder()
 				.append(themeDisplay.getPathImage())
@@ -427,6 +425,26 @@ public class ProfileImpl extends ProfileBaseImpl {
 		
 		return thumbnailURL;
 	}
+	
+	public String getPortraitURL(ThemeDisplay themeDisplay) {
+		
+		String portraitURL = 
+				themeDisplay.getPathThemeImages() + "/inikah/" + 
+				(isBride()? "bride.png" : "groom.png");
+				
+		if (getPortraitId() > 0l) {
+			StringBuilder sb = new StringBuilder()
+				.append(themeDisplay.getPathImage())
+				.append("/photo/?img_id=")
+				.append(getPortraitId())
+				.append("&t=")
+				.append(WebServerServletTokenUtil.getToken(getPortraitId()));			
+			
+			portraitURL = sb.toString();
+		}
+		
+		return portraitURL;
+	}	
 	
 	public List<Photo> getPhotos() {
 		
