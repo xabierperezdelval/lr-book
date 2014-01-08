@@ -13,7 +13,7 @@
 		%>	
 			<aui:input type="hidden" name="<%= fldName0 %>" value="<%= imageId %>"/>
 			<aui:fieldset>
-				<aui:column columnWidth="30">
+				<aui:column columnWidth="25">
 					<img src="<%= thumbnailURL %>" class="thumbnail" />
 				</aui:column>
 				<aui:column>
