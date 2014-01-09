@@ -1,12 +1,16 @@
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <aui:fieldset>
-
+<% 
+String hidden= Validator.equals(profile.getEducation(), -1) ? StringPool.BLANK : "hidden"; 
+%>
 	<aui:column>
 		<aui:select name="education" required="true" showEmptyOption="true"
 				onChange="javascript:cascade(this, 'educationOther');">
 			<%= MyListUtil.getEducationList(locale, profile) %>
 		</aui:select>
-		<div hidden="<%= !Validator.equals(profile.getEducation(), -1) %>" id="<portlet:namespace/>educationOtherDiv">
-			<aui:input name="educationOther" value="<%= profile.getEducationOther() %>" required="true" />
+		<div <%= Validator.equals(profile.getEducation(), -1) ? StringPool.BLANK : "hidden" %>
+				 id="<portlet:namespace/>educationOtherDiv">
+			<aui:input name="educationOther" value="<%= profile.getEducationOther() %>"/>
 		</div>
 		<aui:input name="schoolAttended" value="<%= profile.getEducationSchool() %>" />	
 	</aui:column>
