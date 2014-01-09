@@ -9,14 +9,11 @@
 		Liferay.Service(
 		  '/inikah-portlet.earning/get-earnings-text',
 		  {
-		    userId: 10198
+		  	userId: 10198
 		  },
 		  function(obj) {
-		    console.log(obj);
-		    alert('Theme'+obj);
 		    A.one('#my').set('innerHTML','My Earnings: '+obj);
 		 }
 	);
 	}); 
-
 </script>
