@@ -1,51 +1,31 @@
-<aui:fieldset cssClass="min">
-	<aui:row>
-		<aui:column>
-			<aui:select name="occupation"
-				onChange="javascript:cascade(this,'specifyOccupation');"
-				required="true">
-				<%=MyListUtil.getProfessionList(locale,
-									profile)%>
-			</aui:select>
-		</aui:column>
-		<aui:column>
-			<div hidden="true" id="<portlet:namespace/>specifyOccupationDiv">
-				<aui:input name="specifyOccupation" value="" required="true" />
-			</div>
-		</aui:column>
-	</aui:row>
-	<aui:row>
-		<aui:column>
-			<aui:input name="whereWorking"
-				value="<%=profile.getOrganization()%>" required="true" />
-		</aui:column>
-		<aui:column>
-			<aui:input type="textarea" name="occupationDetails"
-				value="<%=profile.getProfessionDetail()%>" required="true" />
-			<span id="<portlet:namespace />100CountForOccupationDetails"></span> character(s) remaining.	
-				</aui:column>
-	</aui:row>
-	<aui:row>
-		<aui:column cssClass="salary-selection">
-			<aui:select name="incomeFrequency">
-				<%=MyListUtil.getIncomeFrequency(locale,
-									profile)%>
-			</aui:select>
-		</aui:column>
-		<aui:column cssClass="iddCode-selection">
-			<%--
-				<c:choose>
-					<c:when test="<%= profile.getCountryOfBirth() == profile.getResidingCountry() %>">
- 						<aui:input name="currency" disabled="true" value="<%=CurrencyLocalServiceUtil.getCurrency(profile.getCountryOfBirth()).getCurrencyCode()%>"></aui:input>
-					</c:when>
-					<c:otherwise>
-						<aui:select name="currency"><%=MyListUtil.getCurrencyList(locale, profile)%></aui:select>
-					</c:otherwise>
-				</c:choose>	
-				 --%>
-		</aui:column>
-		<aui:column>
-			<aui:input name="salary" value="<%=profile.getIncome()%>" />
-		</aui:column>
-	</aui:row>
+<aui:fieldset>
+	<aui:column>
+		<aui:select name="occupation" required="true" showEmptyOption="true"
+				onChange="javascript:cascade(this,'occupation');">
+			<%= MyListUtil.getProfessionList(locale, profile) %>
+		</aui:select>
+		<div hidden="<%= !Validator.equals(profile.getProfession(), -1) %>" id="<portlet:namespace/>occupationDiv">
+			<aui:input name="professionOther"
+				value="<%=profile.getProfessionOther()%>" required="true" />
+		</div>
+		<aui:input name="whereWorking"
+			value="<%= profile.getOrganization() %>" />
+	</aui:column>
+	<aui:column>
+		<aui:input type="textarea" name="occupationDetails"
+			value="<%= profile.getProfessionDetail() %>" style="height:115px;" />
+		<span id="<portlet:namespace />100CountForOccupationDetails"></span> character(s) remaining.	
+	</aui:column>
+</aui:fieldset>
+
+<aui:fieldset>
+	<aui:column>
+		<aui:input name="income" value="<%= profile.getIncome() %>"
+			prefix="<%= profile.getCurrencyCode() %>" required="<%= !profile.isBride() %>"/>
+	</aui:column>
+	<aui:column cssClass="salary-selection">
+		<aui:select name="incomeFrequency">
+			<%= MyListUtil.getIncomeFrequency(locale,profile) %>
+		</aui:select>
+	</aui:column>
 </aui:fieldset>

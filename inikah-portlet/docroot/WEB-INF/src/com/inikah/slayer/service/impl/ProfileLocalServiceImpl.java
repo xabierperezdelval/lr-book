@@ -69,7 +69,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setBride(bride);
 		profile.setProfileName(profileName);
 		profile.setEmailAddress(emailAddress);
-		profile.setEmailAddressVerified(true);
+		profile.setIncomeFrequency(BridgeServiceUtil.getListTypeId(IConstants.LIST_INCOME_FREQUENCY, "monthly"));
 		
 		if (createdForSelf) {
 			profile.setCreatedFor(BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self"));
