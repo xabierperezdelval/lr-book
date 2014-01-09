@@ -25,7 +25,7 @@
 		<c:choose>
 			<c:when test="<%= singleIdd %>">
 				<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>"
-					prefix="<%= CharPool.PLUS + iddCodes.get(0) %>" />
+					prefix="<%= CharPool.PLUS + iddCodes.get(0) %>" required="true"/>
 			</c:when>
 			<c:otherwise>
 				<aui:column cssClass="iddCode-selection">
@@ -34,7 +34,7 @@
 					</aui:select>
 				</aui:column>
 				<aui:column cssClass="iddCode-selection">
-					<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" />
+					<aui:input name="mobileNumber" value="<%= profile.getMobileNumber() %>" required="true"/>
 				</aui:column>
 			</c:otherwise>
 		</c:choose>

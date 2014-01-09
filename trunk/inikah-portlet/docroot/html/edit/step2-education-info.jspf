@@ -1,26 +1,19 @@
-<aui:fieldset cssClass="min">
-	<aui:row>
-		<aui:column>
-			<aui:select name="education"
-				onChange="javascript:cascade(this, 'educationOther');"
-				required="true" showEmptyOption="true">
-				<%= MyListUtil.getEducationList(locale, profile) %>
-			</aui:select>
-		</aui:column>
-		<aui:column>
-			<div hidden="true" id="<portlet:namespace/>educationOtherDiv">
-				<aui:input name="educationOther" value="<%= profile.getEducationOther() %>" />
-			</div>
-		</aui:column>
-	</aui:row>
-	<aui:row>
-		<aui:column>
-			<aui:input name="schoolAttended" value="<%= profile.getEducationSchool() %>" />
-		</aui:column>
-		<aui:column>
-			<aui:input type="textarea" name="educationDetails"
-				value="<%= profile.getEducationDetail() %>" />
-			<span id="<portlet:namespace />100CountForEducationDetails"></span> character(s) remaining.	
-				</aui:column>
-	</aui:row>
+<aui:fieldset>
+
+	<aui:column>
+		<aui:select name="education" required="true" showEmptyOption="true"
+				onChange="javascript:cascade(this, 'educationOther');">
+			<%= MyListUtil.getEducationList(locale, profile) %>
+		</aui:select>
+		<div hidden="<%= !Validator.equals(profile.getEducation(), -1) %>" id="<portlet:namespace/>educationOtherDiv">
+			<aui:input name="educationOther" value="<%= profile.getEducationOther() %>" required="true" />
+		</div>
+		<aui:input name="schoolAttended" value="<%= profile.getEducationSchool() %>" />	
+	</aui:column>
+	<aui:column>
+		<aui:input type="textarea" name="educationDetails" 
+				value="<%= profile.getEducationDetail() %>" style="height:115px;" />
+		<span id="<portlet:namespace />100CountForEducationDetails"></span> character(s) remaining.	
+	</aui:column>
+	
 </aui:fieldset>
