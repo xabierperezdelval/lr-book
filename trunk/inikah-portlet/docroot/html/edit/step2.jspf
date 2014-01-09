@@ -32,7 +32,7 @@
 		<liferay-ui:panel title="non-single" extended="<%= true %>" collapsible="<%= true %>" >
 			<%@ include file="/html/edit/step2-non-single.jspf" %>
 		</liferay-ui:panel>	
-	</c:if>
+	</c:if> 
 
 	<liferay-ui:panel title="education-info" extended="<%= true %>" collapsible="<%= true %>" >
 		<%@ include file="/html/edit/step2-education-info.jspf" %>
@@ -56,9 +56,12 @@
 		if (value == 'Other'){
 			div.style.display = 'block';
 			fld.focus();
+			fld.required = true;
 		} else {
-			div.style.display = 'none';	
-			fld.value = '';
+			div.style.display = 'none';
+			fld.value='';
+			fld.required = false;
+			
 		}
 	}
 

@@ -1,12 +1,13 @@
 <aui:fieldset>
 	<aui:column>
 		<aui:select name="occupation" required="true" showEmptyOption="true"
-				onChange="javascript:cascade(this,'occupation');">
+				onChange="javascript:cascade(this,'occupationOther');">
 			<%= MyListUtil.getProfessionList(locale, profile) %>
 		</aui:select>
-		<div hidden="<%= !Validator.equals(profile.getProfession(), -1) %>" id="<portlet:namespace/>occupationDiv">
-			<aui:input name="professionOther"
-				value="<%=profile.getProfessionOther()%>" required="true" />
+		<div <%= Validator.equals(profile.getProfession(), -1) ? StringPool.BLANK : "hidden" %>
+				id="<portlet:namespace/>occupationOtherDiv">
+			<aui:input name="occupationOther"
+				value="<%=profile.getProfessionOther()%>"/>
 		</div>
 		<aui:input name="whereWorking"
 			value="<%= profile.getOrganization() %>" />

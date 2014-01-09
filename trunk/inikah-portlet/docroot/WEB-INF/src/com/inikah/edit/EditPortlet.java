@@ -8,6 +8,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
@@ -17,6 +19,7 @@ import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -166,24 +169,62 @@ public class EditPortlet extends MVCPortlet {
 		}
 	}
 
-	private void saveStep2(ActionRequest actionRequest, Profile profile) {
+private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
-		// Social Info
-		profile.setResidingArea(ParamUtil.getString(actionRequest, "residingArea"));
-		profile.setNearbyMasjid(ParamUtil.getString(actionRequest, "nearbyMasjid"));
-		profile.setEmailAddress(ParamUtil.getString(actionRequest, "emailAddress"));
+		//------------------social-info----------------------------        
 		
-		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
-		String extension = ParamUtil.getString(actionRequest, "mobileIdd", profile.getMobileIdd());
-		profile.setMotherTongue(ParamUtil.getInteger(actionRequest, "motherTongue"));
+		String[] canSpeak = ParamUtil.getParameterValues(actionRequest, "canSpeak");
+        String canSpeakList = StringUtils.join(canSpeak, CharPool.COMMA);
+  		profile.setResidingArea(ParamUtil.getString(actionRequest, "residingArea"));
+        profile.setNearbyMasjid(ParamUtil.getString(actionRequest, "nearbyMasjid"));
+        profile.setEmailAddress(ParamUtil.getString(actionRequest, "emailAddress"));
+        profile.setCanSpeak(canSpeakList);
+
+        String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
+        String extension = ParamUtil.getString(actionRequest, "mobileIdd", profile.getMobileIdd());
+        profile.setMotherTongue(ParamUtil.getInteger(actionRequest, "motherTongue"));
+      
+        long userId = PortalUtil.getUserId(actionRequest);
+        BridgeLocalServiceUtil.addPhone(userId, Profile.class.getName(),profile.getProfileId(), mobileNumber, extension, true);
+      
 		
-		long userId = PortalUtil.getUserId(actionRequest);
-		BridgeLocalServiceUtil.addPhone(userId, Profile.class.getName(),
-				profile.getProfileId(), mobileNumber, extension, true);
+        //------------------non-single-info----------------------------
+		
+		profile.setSons(ParamUtil.getInteger(actionRequest, "sons"));
+		profile.setDaughters(ParamUtil.getInteger(actionRequest, "daughters"));
+		profile.setReMarriageReason(ParamUtil.getInteger(actionRequest, "remarriageReason"));
+        
+		
+		//------------------education-info----------------------------
+		
+		profile.setEducation(ParamUtil.getInteger(actionRequest, "education"));
+		profile.setEducationOther(ParamUtil.getString(actionRequest, "educationOther"));
+		profile.setEducationDetail(ParamUtil.getString(actionRequest, "educationDetails"));
+		profile.setEducationSchool(ParamUtil.getString(actionRequest, "schoolAttended"));
+		
+		
+		//------------------Islamic education-info----------------------------
+
+		profile.setReligiousEducation(ParamUtil.getInteger(actionRequest, "religiousEducation"));
+		profile.setReligiousEducationOther(ParamUtil.getString(actionRequest, "religiousEducationOther"));
+		profile.setReligiousEducationDetail(ParamUtil.getString(actionRequest, "religiousEducationDetails"));
+		profile.setReligiousEducationSchool(ParamUtil.getString(actionRequest, "religiousSchoolAttended"));
+		
+		
+		//------------------Occupation-info----------------------------
+		
+		profile.setProfession(ParamUtil.getInteger(actionRequest, "occupation"));
+		profile.setProfessionOther(ParamUtil.getString(actionRequest, "occupationOther"));
+		profile.setProfessionDetail(ParamUtil.getString(actionRequest, "occupationDetails"));
+		profile.setOrganization(ParamUtil.getString(actionRequest, "whereWorking"));
+		profile.setIncome(ParamUtil.getInteger(actionRequest, "income"));;
+		profile.setIncomeFrequency(ParamUtil.getInteger(actionRequest, "incomeFrequency"));
+		
+		
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP1_DONE) {
-			profile.setStatus(IConstants.PROFILE_STATUS_STEP2_DONE);
-		}
+                 //profile.setStatus(IConstants.PROFILE_STATUS_STEP2_DONE);
+         }
 	}
 	
 	private void saveStep3(ActionRequest actionRequest, Profile profile) {

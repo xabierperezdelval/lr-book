@@ -1,11 +1,12 @@
 <aui:fieldset>
 	<aui:column>
 		<aui:select name="religiousEducation" required="true" showEmptyOption="true"
-				onChange="javascript:cascade(this,'religiousEducation');">
+				onChange="javascript:cascade(this,'religiousEducationOther');">
 			<%= MyListUtil.getReligiousEducationList(locale, profile) %>
 		</aui:select>
-		<div hidden="<%= !Validator.equals(profile.getReligiousEducation(), -1) %>" id="<portlet:namespace/>religiousEducationOtherDiv">
-			<aui:input name="religiousEducationOther" value="<%= profile.getReligiousEducationOther() %>" required="true" />
+		<div <%= Validator.equals(profile.getReligiousEducation(), -1) ? StringPool.BLANK : "hidden" %>
+		 		id="<portlet:namespace/>religiousEducationOtherDiv">
+			<aui:input name="religiousEducationOther" value="<%= profile.getReligiousEducationOther() %>"/>
 		</div>
 		<aui:input name="religiousSchoolAttended" value="<%= profile.getReligiousEducationSchool() %>" />
 
