@@ -131,7 +131,8 @@ public class MyListUtil {
 		}
 		
 		if (appendOther) {
-			sb.append("<option value='-1'>Other</option>");
+			String selected = (currValue == -1)? "selected" : StringPool.BLANK;
+			sb.append("<option value='-1' ").append(selected).append(">Other</option>");
 		}
 		
 		return sb.toString();
