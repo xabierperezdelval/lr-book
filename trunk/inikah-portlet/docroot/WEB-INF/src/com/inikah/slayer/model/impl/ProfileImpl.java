@@ -406,6 +406,24 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return iddCodes;
 	}
 	
+	public String getPhotoURL(ThemeDisplay themeDisplay, long imageId) {
+		
+		String photoURL = StringPool.BLANK;
+				
+		if (imageId > 0l) {
+			StringBuilder sb = new StringBuilder()
+				.append(themeDisplay.getPathImage())
+				.append("/photo?img_id=")
+				.append(imageId)
+				.append("&t=")
+				.append(WebServerServletTokenUtil.getToken(imageId));			
+			
+			photoURL = sb.toString();
+		}
+		
+		return photoURL;
+	}	
+	
 	public String getThumbnailURL(ThemeDisplay themeDisplay, long thumbnailId) {
 		
 		String thumbnailURL = 
