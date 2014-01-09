@@ -35,6 +35,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -104,7 +106,11 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		createThumbnail(imageId);
+		//createThumbnail(imageId);
+		Message message = new Message();
+		message.put("messageName", "createThumbnail");
+		message.put("imageId", String.valueOf(imageId));
+		MessageBusUtil.sendMessage("inikah/destination", message);
 		
 		return photo;
 	}
