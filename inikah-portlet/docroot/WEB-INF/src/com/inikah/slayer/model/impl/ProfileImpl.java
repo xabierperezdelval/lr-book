@@ -27,6 +27,7 @@ import com.inikah.slayer.model.MatchCriteria;
 import com.inikah.slayer.model.MyLanguage;
 import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.CurrencyLocalServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
@@ -553,4 +554,10 @@ public class ProfileImpl extends ProfileBaseImpl {
 		
 		return mobileIDD;		
 	}
+	
+	public boolean isMobileVerified() {
+		return BridgeLocalServiceUtil.isMobileVerified(getProfileId());
+	}
+	
+	
 }

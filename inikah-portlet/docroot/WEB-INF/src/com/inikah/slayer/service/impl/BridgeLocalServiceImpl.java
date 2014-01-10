@@ -16,6 +16,7 @@ package com.inikah.slayer.service.impl;
 
 import java.util.List;
 
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.BridgeLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.SMSUtil;
@@ -63,12 +64,16 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		
 		long phoneId = 0l;
 		try {
-			Phone phone = phoneLocalService.addPhone(userId, className, classPK, number, extension, IConstants.PHONE_UNVERIFIED, primary, serviceContext);
+			Phone phone = phoneLocalService.addPhone(userId, className,
+					classPK, number, extension, IConstants.PHONE_UNVERIFIED,
+					primary, serviceContext);
 			phoneId = phone.getPhoneId();
 			
 			phone.setUserName(PwdGenerator.getPinNumber());
 			if (alreadyVerified) {
 				phone.setTypeId(IConstants.PHONE_VERIFIED);
+			} else {
+				sendVerificationCode(phoneId);
 			}
 			
 			phone = phoneLocalService.updatePhone(phone);
@@ -143,12 +148,10 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Phone.class, PortalClassLoaderUtil.getClassLoader());
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("number", number));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("extension", extension));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", IConstants.PHONE_VERIFIED));
 		
 		if (phoneId > 0l) {
-			dynamicQuery.add(RestrictionsFactoryUtil.ne("typeId", IConstants.PHONE_VERIFIED));
 			dynamicQuery.add(RestrictionsFactoryUtil.ne("phoneId", phoneId));
-		} else {
-			dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", IConstants.PHONE_VERIFIED));
 		}
 		
 		try {
@@ -187,5 +190,26 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isMobileVerified(long profileId) {
+		
+		boolean verified = false;
+				
+		long companyId = CompanyThreadLocal.getCompanyId();
+		long classNameId = ClassNameLocalServiceUtil.getClassNameId(Profile.class);
+		try {
+			List<Phone> phones = phonePersistence.findByC_C_C(companyId, classNameId, profileId);
+			for (Phone phone: phones) {
+				if (phone.getTypeId() == IConstants.PHONE_VERIFIED) {
+					verified = true;
+					break;
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		return verified;
 	}
 }

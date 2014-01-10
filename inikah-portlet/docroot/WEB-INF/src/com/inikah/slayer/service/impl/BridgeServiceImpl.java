@@ -155,4 +155,12 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		return listTypes;
 	}
+	
+	public void sendVerificationCode(long phoneId) {
+		bridgeLocalService.sendVerificationCode(phoneId);
+	}
+	
+	public boolean verifyPhone(long phoneId, String verificationCode) {
+		return bridgeLocalService.verifyPhone(phoneId, verificationCode);
+	}
 }
