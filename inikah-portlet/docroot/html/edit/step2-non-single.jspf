@@ -10,7 +10,7 @@
 				<%= MyListUtil.getChildrenList(profile.getDaughters()) %>
 			</aui:select>
 		</aui:column>
-		<c:if test="<%= !profile.isBride() && profile.isMarried() %>">
+		<c:if test="<%= profile.isMarried() %>">
 			<aui:column>
 				<aui:select name="remarriageReason" required="true" showEmptyOption="true">
 					<%= MyListUtil.getRemarriageReason(locale, profile) %>

@@ -61,7 +61,6 @@
 			div.style.display = 'none';
 			fld.value='';
 			fld.required = false;
-			
 		}
 	}
 
@@ -71,18 +70,18 @@
        		input: '#<portlet:namespace/>educationDetails',
        		counter: '#<portlet:namespace/>100CountForEducationDetails',
        		maxLength: 100
-			});
+		});
    		
    		new Y.CharCounter({
    	        input: '#<portlet:namespace/>religiousEducationDetails',
    	        counter: '#<portlet:namespace/>100CountForRelEducationDetails',
    	        maxLength: 100
-  			});
+  		});
    
    		new Y.CharCounter({
  	        	input: '#<portlet:namespace/>occupationDetails',
  	        	counter: '#<portlet:namespace/>100CountForOccupationDetails',
  	        	maxLength: 100
-			});    	        
+		});    	        
     });
 </script>
