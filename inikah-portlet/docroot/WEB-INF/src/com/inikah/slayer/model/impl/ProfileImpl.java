@@ -558,6 +558,4 @@ public class ProfileImpl extends ProfileBaseImpl {
 	public boolean isMobileVerified() {
 		return BridgeLocalServiceUtil.isMobileVerified(getProfileId());
 	}
-	
-	
 }
