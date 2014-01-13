@@ -3,17 +3,21 @@
 %>
 
 <c:if test="<%= Validator.isNotNull(album) && album.size() > 0 %>">
-	<div id="myGallery">
-		<%
-			for (Photo photo: album) {
-	 			%>
-					<a href="<%= profile.getPhotoURL(themeDisplay, photo.getImageId()) %>" title="<%= photo.getDescription() %>"> 
-						<img class="thumbnail" src="<%= profile.getPhotoURL(themeDisplay, photo.getThumbnailId()) %>" />
-					</a>
-				<%
-	  		}
-	  	%>
-	</div>
+	<fieldset>
+		<div id="myGallery">
+			<%
+				for (Photo photo: album) {
+		 			%>
+		 				<aui:column>
+							<a href="<%= profile.getPhotoURL(themeDisplay, photo.getImageId()) %>" title="<%= photo.getDescription() %>"> 
+								<img class="thumbnail" src="<%= profile.getPhotoURL(themeDisplay, photo.getThumbnailId()) %>" />
+							</a>		 				
+		 				</aui:column>
+					<%
+		  		}
+		  	%>
+		</div>
+	</fieldset>
 
 	<script>
 		YUI().use(
