@@ -12,5 +12,4 @@
 		<struts-action-path>/login/create_account</struts-action-path>
 		<struts-action-impl>com.liferay.portlet.login.action.CreateAccountAction2</struts-action-impl>
 	</struts-action>
-
 </hook>
