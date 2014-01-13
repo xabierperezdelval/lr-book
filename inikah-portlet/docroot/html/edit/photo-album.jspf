@@ -1,0 +1,38 @@
+<%
+	List<Photo> album = profile.getApprovedPhotos();
+%>
+
+<c:if test="<%= Validator.isNotNull(album) && album.size() > 0 %>">
+	<div id="myGallery">
+		<%
+			for (Photo photo: album) {
+	 			%>
+					<a href="<%= profile.getPhotoURL(themeDisplay, photo.getImageId()) %>" title="<%= photo.getDescription() %>"> 
+						<img class="thumbnail" src="<%= profile.getPhotoURL(themeDisplay, photo.getThumbnailId()) %>" />
+					</a>
+				<%
+	  		}
+	  	%>
+	</div>
+
+	<script>
+		YUI().use(
+	 		'aui-image-viewer-gallery',
+	 		function(Y) {
+	   			new Y.ImageViewer({
+	       			anim: true,
+	       			caption: 'Album of <%= profile.getProfileName() %>',
+	       			captionFromTitle: true,
+	       			imageAnim: {
+	        			duration: 1,
+	        			easing: 'easeIn'
+	       			},
+	       			centered: false,
+	       			links: '#myGallery a',
+	       			preloadAllImages: false,
+	       			showInfo: true,
+	     		}).render();
+	 		}
+		);
+	</script>
+</c:if>

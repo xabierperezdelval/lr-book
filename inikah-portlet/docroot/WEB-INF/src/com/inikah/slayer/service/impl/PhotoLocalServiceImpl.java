@@ -126,6 +126,12 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		if (Validator.isNull(image)) return 0l;
 		
+		// optimize the original image
+		float originalWidth = GetterUtil.getFloat(PortletProps.get("profile.photo.original.width"));
+		if (image.getWidth() > (int)originalWidth) {
+			minifyPhoto(image, imageId, originalWidth);
+		}
+		
 		long thumbnailId = imageId;
 		
 		// check the original width of the image. 
@@ -137,38 +143,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 				e.printStackTrace();
 			}
 			
-			ImageBag imageBag = null;
-			try {
-				imageBag = ImageToolUtil.read(image.getTextObj());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (Validator.isNull(imageBag)) return 0l;
-			
-			RenderedImage renderedImage = imageBag.getRenderedImage();
-			
-			float reduceBy = (thumbnailWidth / (float) image.getWidth());
-						
-			long height = Math.round(image.getHeight() * reduceBy);
-			long width = Math.round(image.getWidth() * reduceBy);
-			renderedImage = ImageToolUtil.scale(renderedImage, (int) height, (int) width);
-			
-			byte[] bytes = null;
-			try {
-				bytes = ImageToolUtil.getBytes(renderedImage, image.getType());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			if (Validator.isNotNull(bytes)) {
-				try {
-					imageLocalService.updateImage(thumbnailId, bytes);
-				} catch (PortalException e) {
-					e.printStackTrace();
-				} catch (SystemException e) {
-					e.printStackTrace();
-				}
-			}			
+			minifyPhoto(image, thumbnailId, thumbnailWidth);			
 		} 
 		
 		Photo photo = null;
@@ -186,6 +161,41 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		}
 		
 		return thumbnailId;
+	}
+
+	private void minifyPhoto(Image image, long thumbnailId, float newWidth) {
+		ImageBag imageBag = null;
+		try {
+			imageBag = ImageToolUtil.read(image.getTextObj());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (Validator.isNull(imageBag)) return;
+		
+		RenderedImage renderedImage = imageBag.getRenderedImage();
+		
+		float reduceBy = (newWidth / (float) image.getWidth());
+					
+		long height = Math.round(image.getHeight() * reduceBy);
+		long width = Math.round(image.getWidth() * reduceBy);
+		renderedImage = ImageToolUtil.scale(renderedImage, (int) height, (int) width);
+		
+		byte[] bytes = null;
+		try {
+			bytes = ImageToolUtil.getBytes(renderedImage, image.getType());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(bytes)) {
+			try {
+				imageLocalService.updateImage(thumbnailId, bytes);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public long createPortrait(long imageId) {
