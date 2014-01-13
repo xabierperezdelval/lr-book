@@ -32,5 +32,3 @@
 		i++;
 	}
 %>
-
-<%@ include file="/html/edit/photo-album.jspf" %>
