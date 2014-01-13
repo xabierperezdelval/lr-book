@@ -127,9 +127,9 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		if (Validator.isNull(image)) return 0l;
 		
 		// optimize the original image
-		float originalWidth = GetterUtil.getFloat(PortletProps.get("profile.photo.original.width"));
-		if (image.getWidth() > (int)originalWidth) {
-			minifyPhoto(image, imageId, originalWidth);
+		float maximumWidth = GetterUtil.getFloat(PortletProps.get("profile.photo.maximum.width"));
+		if (image.getWidth() > (int)maximumWidth) {
+			minifyPhoto(image, imageId, maximumWidth);
 		}
 		
 		long thumbnailId = imageId;
