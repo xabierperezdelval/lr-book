@@ -184,12 +184,12 @@ public class EditPortlet extends MVCPortlet {
         profile.setCanSpeak(canSpeakList);
 
         String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
-        String extension = ParamUtil.getString(actionRequest, "mobileIdd", profile.getMobileIdd());
+        String extension = ParamUtil.getString(actionRequest, "mobileIdd", profile.getPhoneIdd(true));
         profile.setMotherTongue(ParamUtil.getInteger(actionRequest, "motherTongue"));
       
         long userId = PortalUtil.getUserId(actionRequest);
 		BridgeLocalServiceUtil.addPhone(userId, Profile.class.getName(),
-				profile.getProfileId(), mobileNumber, extension, true);    
+				profile.getProfileId(), mobileNumber, extension, true);
 		
         //------------------non-single-info----------------------------
 		

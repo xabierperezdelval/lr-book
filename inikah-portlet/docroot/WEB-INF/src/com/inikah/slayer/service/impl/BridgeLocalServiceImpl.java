@@ -16,16 +16,11 @@ package com.inikah.slayer.service.impl;
 
 import java.util.List;
 
-import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.BridgeLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.SMSUtil;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
@@ -56,10 +51,6 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 	 */
 	
 	public long addPhone(long userId, String className, long classPK, String number, String extension, boolean primary) {
-		
-		List<Phone> phones = getPhones(0l, number, extension);
-		boolean alreadyVerified = (Validator.isNotNull(phones) && phones.size() > 0);
-		
 		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		
 		long phoneId = 0l;
@@ -68,19 +59,16 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 					classPK, number, extension, IConstants.PHONE_UNVERIFIED,
 					primary, serviceContext);
 			phoneId = phone.getPhoneId();
-			
 			phone.setUserName(PwdGenerator.getPinNumber());
-			if (alreadyVerified) {
-				phone.setTypeId(IConstants.PHONE_VERIFIED);
-			} else {
-				sendVerificationCode(phoneId);
-			}
-			
 			phone = phoneLocalService.updatePhone(phone);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
 			e.printStackTrace();
+		}
+		
+		if (primary) {
+			sendVerificationCode(phoneId);
 		}
 		
 		return phoneId;
@@ -95,13 +83,15 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNotNull(phone) && phone.getTypeId() != IConstants.PHONE_VERIFIED) {
+		if (Validator.isNotNull(phone) && phone.getTypeId() == IConstants.PHONE_UNVERIFIED) {
 			String mobileNumber = phone.getExtension() + phone.getNumber();
 			SMSUtil.sendVerificationCode(mobileNumber, phone.getUserName());
 		}
 	}
 	
 	public boolean verifyPhone(long phoneId, String verificationCode) {
+		
+		boolean verified = false;
 		
 		Phone phone = null;
 		try {
@@ -110,57 +100,43 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		boolean verified = (Validator.isNotNull(phone) 
-				&& phone.getUserName().equalsIgnoreCase(verificationCode)
-				&& phone.getTypeId() == IConstants.PHONE_VERIFIED);
-		
-		if (!verified) {
-			phone.setTypeId(IConstants.PHONE_VERIFIED);
+		if (Validator.isNotNull(phone) && phone.getUserName().equalsIgnoreCase(verificationCode)) {
+			verified = true;
 			
+			phone.setTypeId(IConstants.PHONE_VERIFIED);
 			try {
 				phoneLocalService.updatePhone(phone);
 			} catch (SystemException e) {
 				e.printStackTrace();
-			}
-			
-			// get all other phones like this and set verified
-			List<Phone> phones = getPhones(phoneId, phone.getNumber(), phone.getExtension());
-			for (Phone fone: phones) {
-				fone.setTypeId(IConstants.PHONE_VERIFIED);
-				
-				try {
-					phoneLocalService.updatePhone(fone);
-				} catch (SystemException e) {
-					e.printStackTrace();
-				}
 			}
 		}
 		
 		return verified;
 	}
 	
+	public Phone getPhone(long classPK, String className, boolean primary) {
+		Phone phone = null;
 		
-	@SuppressWarnings("unchecked")
-	private List<Phone> getPhones(long phoneId, String number, String extension) {
-		
-		List<Phone> phones = null;
-		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Phone.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("number", number));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("extension", extension));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", IConstants.PHONE_VERIFIED));
-		
-		if (phoneId > 0l) {
-			dynamicQuery.add(RestrictionsFactoryUtil.ne("phoneId", phoneId));
-		}
+		long companyId = CompanyThreadLocal.getCompanyId();
+		long classNameId = ClassNameLocalServiceUtil.getClassNameId(className);		
 		
 		try {
-			phones = phoneLocalService.dynamicQuery(dynamicQuery);
+			List<Phone> phones = phonePersistence.findByC_C_C_P(companyId, classNameId, classPK, primary);
+			for (Phone _phone: phones) {
+				phone = _phone;
+				break;
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}	
+		}
 		
-		return phones;
+		return phone;
+	}
+	
+	public boolean isPhoneVerified(long classPK, String className, boolean primary) {
+		Phone phone = getPhone(classPK, className, primary);
+		
+		return (Validator.isNotNull(phone) && phone.getTypeId() == IConstants.PHONE_VERIFIED);
 	}
 	
 	public void updatePhone(String className, long classPK, String number, String extension, boolean primary) {
@@ -190,26 +166,5 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public boolean isMobileVerified(long profileId) {
-		
-		boolean verified = false;
-				
-		long companyId = CompanyThreadLocal.getCompanyId();
-		long classNameId = ClassNameLocalServiceUtil.getClassNameId(Profile.class);
-		try {
-			List<Phone> phones = phonePersistence.findByC_C_C(companyId, classNameId, profileId);
-			for (Phone phone: phones) {
-				if (phone.getTypeId() == IConstants.PHONE_VERIFIED) {
-					verified = true;
-					break;
-				}
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-
-		return verified;
 	}
 }
