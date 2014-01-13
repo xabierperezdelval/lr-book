@@ -15,7 +15,7 @@
 			<aui:fieldset>
 				<aui:column columnWidth="25">
 					<img src="<%= thumbnailURL %>" class="thumbnail" />
-					<%= photo.isApproved()? "Photo Approved": "Pending for approval" %>
+					<%= photo.isApproved()? "Photo Approved.": "Approval Pending." %>
 				</aui:column>
 				<aui:column>
 					<aui:input disabled="<%= photo.isApproved() %>" type="file" name="<%= fldName1 %>" label="profile-photo" required="<%= ((i==0) && (imageId == 0l)) %>">
