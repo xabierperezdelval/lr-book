@@ -486,6 +486,21 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return photos;
 	}
 	
+	public List<Photo> getApprovedPhotos() {
+		
+		List<Photo> photos = new ArrayList<Photo>();
+		
+		List<Photo> _photos = getPhotos();
+		
+		for (Photo photo: _photos) {
+			if (photo.isApproved()) {
+				photos.add(photo);
+			}
+		}
+		
+		return photos;
+	}	
+	
 	public String getCurrencyCode() {
 		
 		String currencyCode = StringPool.BLANK;
