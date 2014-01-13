@@ -49,7 +49,6 @@ import com.liferay.portal.model.Country;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CountryServiceUtil;
-import com.liferay.portal.service.PhoneLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.webserver.WebServerServletTokenUtil;
@@ -519,43 +518,31 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return cityText;
 	}
 	
-	public String getMobileNumber() {
-		String mobileNumber = StringPool.BLANK;
+	public String getPhone(boolean primary) {
+		String phoneNumber = StringPool.BLANK;
 		
-		try {
-			List<Phone> phones = PhoneLocalServiceUtil.getPhones(
-					getCompanyId(), Profile.class.getName(), getProfileId());
-			
-			for (Phone phone: phones) {
-				mobileNumber = phone.getNumber();
-				break;
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
+		Phone phone = BridgeLocalServiceUtil.getPhone(getProfileId(), Profile.class.getName(), primary);
+		
+		if (Validator.isNotNull(phone)) {
+			phoneNumber = phone.getExtension() + StringPool.DASH + phone.getNumber();
 		}
 		
-		return mobileNumber;
+		return phoneNumber;
 	}
 	
-	public String getMobileIdd() {
-		String mobileIDD = StringPool.BLANK;
+	public boolean isPhoneVerified() {		
+		return BridgeLocalServiceUtil.isPhoneVerified(getProfileId(), Profile.class.getName(), true);
+	}
+	
+	public String getPhoneIdd(boolean primary) {
+		String phoneIDD = StringPool.BLANK;
 		
-		try {
-			List<Phone> phones = PhoneLocalServiceUtil.getPhones(
-					getCompanyId(), Profile.class.getName(), getProfileId());
-			
-			for (Phone phone: phones) {
-				mobileIDD = phone.getExtension();
-				break;
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
+		Phone phone = BridgeLocalServiceUtil.getPhone(getProfileId(), Profile.class.getName(), primary);
+		
+		if (Validator.isNotNull(phone)) {
+			phoneIDD = phone.getExtension();
 		}
 		
-		return mobileIDD;		
-	}
-	
-	public boolean isMobileVerified() {
-		return BridgeLocalServiceUtil.isMobileVerified(getProfileId());
+		return phoneIDD;		
 	}
 }
