@@ -1,7 +1,5 @@
-<%@page import="com.liferay.portal.model.Phone"%>
-<%@page import="com.inikah.slayer.service.BridgeLocalServiceUtil"%>
-<%@page import="com.liferay.portal.service.PhoneLocalServiceUtil"%>
 <%@ include file="/html/edit/init.jsp" %>
+
 <%
 List<Phone>phones = PhoneLocalServiceUtil.getPhones(profile.getCompanyId(), Profile.class.getName(), profile.getProfileId());
 long phoneId = 0l;

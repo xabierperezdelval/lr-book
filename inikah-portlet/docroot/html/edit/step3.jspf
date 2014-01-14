@@ -1,12 +1,11 @@
-<%@page import="com.inikah.slayer.service.BridgeLocalServiceUtil"%>
 <c:if test="<%= !profile.isPhoneVerified() %>">
 	<portlet:renderURL var="verifyURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="jspPage" value="/html/edit/mobileVerify.jsp" />
+		<portlet:param name="jspPage" value="/html/edit/mobile-verify.jsp" />
 	</portlet:renderURL>
 	<aui:script>
 		AUI().ready(function() {
 			AUI().use('aui-dialog', function(A) {
-				var popup = Liferay.Util.openWindow({
+				Liferay.Util.openWindow({
 					dialog: {
 					    centered: true,
 					    modal: true,
