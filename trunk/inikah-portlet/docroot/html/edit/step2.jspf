@@ -1,6 +1,6 @@
 <c:if test="<%= !editMode && !profile.isCreatedForSelf() && profile.isFirst() %>">
 	<portlet:renderURL var="updateUserInfoURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="jspPage" value="/html/edit/userinfo.jsp" />
+		<portlet:param name="jspPage" value="/html/edit/popup-user-info.jsp" />
 	</portlet:renderURL>
 	<aui:script>
 		AUI().ready(function() {
