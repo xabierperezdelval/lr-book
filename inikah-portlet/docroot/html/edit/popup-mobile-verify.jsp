@@ -6,7 +6,7 @@
 	String phoneIDD = profile.getPhoneIdd(true);
 %>
 
-<h2><%= StringPool.PLUS + phoneIDD + StringPool.DASH + profile.getPhone(true) %></h2>
+<h3><%= StringPool.PLUS + phoneIDD + StringPool.DASH + profile.getPhone(true) %></h3>
 
 <aui:input name="verificationCode" label="verification-code" required="true">
 	<aui:validator name="digits"/>
