@@ -10,7 +10,7 @@
 					    centered: true,
 					    modal: true,
 			    		width: 350,
-					    height:300				
+					    height: 500				
 					},
 					id: '<portlet:namespace/>verificationPopup',
 					title: Liferay.Language.get('verify-mobile-number'),
