@@ -545,6 +545,19 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return phoneNumber;
 	}
 	
+	public long getPhoneId(boolean primary) {
+		
+		long phoneId = 0l;
+		
+		Phone phone = BridgeLocalServiceUtil.getPhone(getProfileId(), Profile.class.getName(), primary);
+		
+		if (Validator.isNotNull(phone)) {
+			phoneId = phone.getPhoneId();
+		}		
+		
+		return phoneId;
+	}
+	
 	public boolean isPhoneVerified() {		
 		return BridgeLocalServiceUtil.isPhoneVerified(getProfileId(), Profile.class.getName(), true);
 	}
