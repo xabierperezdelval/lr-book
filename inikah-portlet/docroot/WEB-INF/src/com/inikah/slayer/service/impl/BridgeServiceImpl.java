@@ -163,4 +163,10 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	public boolean verifyPhone(long phoneId, String verificationCode) {
 		return bridgeLocalService.verifyPhone(phoneId, verificationCode);
 	}
+	
+	public void addPhone(long userId, String className, long classPK,
+			String number, String extension, boolean primary) {
+		bridgeLocalService.addPhone(userId, className, classPK, number,
+				extension, primary);
+	}
 }
