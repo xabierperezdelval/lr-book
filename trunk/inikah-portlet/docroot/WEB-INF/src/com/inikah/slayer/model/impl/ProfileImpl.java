@@ -539,7 +539,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		Phone phone = BridgeLocalServiceUtil.getPhone(getProfileId(), Profile.class.getName(), primary);
 		
 		if (Validator.isNotNull(phone)) {
-			phoneNumber = phone.getExtension() + StringPool.DASH + phone.getNumber();
+			phoneNumber = phone.getNumber();
 		}
 		
 		return phoneNumber;
@@ -556,6 +556,13 @@ public class ProfileImpl extends ProfileBaseImpl {
 		
 		if (Validator.isNotNull(phone)) {
 			phoneIDD = phone.getExtension();
+		} else {
+			try {
+				Country country = CountryServiceUtil.fetchCountry(getResidingCountry());
+				phoneIDD = country.getIdd();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return phoneIDD;		
