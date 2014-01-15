@@ -16,6 +16,7 @@ package com.inikah.slayer.service.impl;
 
 import java.util.List;
 
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.BridgeLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.SMSUtil;
@@ -67,7 +68,7 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		if (primary) {
+		if (primary && className.equalsIgnoreCase(Profile.class.getName())) {
 			sendVerificationCode(phoneId);
 		}
 		

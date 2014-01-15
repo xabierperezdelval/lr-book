@@ -41,8 +41,8 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 	
 	public Relative addRelative(long userId, long profileId, String name, boolean married,
 			boolean passedAway, String phone, String emailAddress,
-			int category, int occupation, String occupationOther,
-			String comments, boolean owner, int relationship, int age) {
+			String profession, String comments, boolean owner, 
+			int relationship, int age) {
 	
 		long relativeId = 0l;
 		try {
@@ -53,12 +53,10 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		
 		Relative relative = createRelative(relativeId);
 		
-		relative.setCategory(category);
 		relative.setName(name);
 		relative.setComments(comments);
 		relative.setRelationship(relationship);
-		relative.setOccupation(occupation);
-		relative.setOccupationOther(occupationOther);
+		relative.setProfession(profession);
 		relative.setOwner(owner);
 		relative.setPassedAway(passedAway);
 		relative.setProfileId(profileId);
@@ -84,8 +82,8 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 	
 	public Relative updateRelative(long relativeId, String name, boolean married,
 			boolean passedAway, String phone, String emailAddress,
-			int category, int occupation, String occupationOther,
-			String comments, boolean owner, int relationship, int age) {
+			String profession, String comments, 
+			boolean owner, int relationship, int age) {
 		
 		Relative relative = null;
 		try {
@@ -94,12 +92,10 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		relative.setCategory(category);
 		relative.setName(name);
 		relative.setComments(comments);
 		relative.setRelationship(relationship);
-		relative.setOccupation(occupation);
-		relative.setOccupationOther(occupationOther);
+		relative.setProfession(profession);
 		relative.setOwner(owner);
 		relative.setPassedAway(passedAway);
 		relative.setMarried(married);

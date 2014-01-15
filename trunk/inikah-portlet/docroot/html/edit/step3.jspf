@@ -20,3 +20,48 @@
 		});
 	</aui:script>
 </c:if>
+
+<portlet:renderURL var="relationInfoURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+	<portlet:param name="jspPage" value="/html/edit/popup-relative-info.jsp" />
+</portlet:renderURL>
+<aui:row>
+	<aui:column columnWidth="30">
+		<select onchange="javascript:showPopup(this);">
+			<option value="0">Add...</option>
+			<option value="1">Father</option>
+			<option value="2">Grand Father</option>
+			<option value="3">Mother</option>
+			<option value="4">Brother</option>
+			<option value="5">Sister</option>
+			<option value="6">Bro-in-Law</option>
+			<option value="7">Uncle</option>
+			<option value="8">Friend</option>
+			<option value="9">Reference</option>
+		</select>	
+	</aui:column>
+	<aui:column>
+		put some explanation here....
+	</aui:column>
+</aui:row>
+
+<script>
+	function showPopup(obj) {
+		var val = obj.value;
+		
+		if (val > 0) {
+			AUI().use('aui-dialog', function(A) {
+				Liferay.Util.openWindow({
+					dialog: {
+					    centered: true,
+					    modal: true,
+			    		width: 600,
+					    height: 450				
+					},
+					id: '<portlet:namespace/>relativeInfoPopup',
+					title: Liferay.Language.get('relative-info'),
+					uri: '<%= relationInfoURL %>&<portlet:namespace/>relationship=' + val
+				});
+			});			
+		}
+	}
+</script>

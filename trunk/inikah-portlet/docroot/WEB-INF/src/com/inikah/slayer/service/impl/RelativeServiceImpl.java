@@ -40,21 +40,22 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 	
 	public Relative addRelative(long userId, long profileId, String name, boolean married,
 			boolean passedAway, String phone, String emailAddress,
-			int category, int occupation, String occupationOther,
-			String comments, boolean owner, int relationship, int age) {
+			String profession, String comments, 
+			boolean owner, int relationship, int age) {
+		
+		System.out.println("going to invoke the actual method....");
 		
 		return relativeLocalService.addRelative(userId, profileId, name,
-				married, passedAway, phone, emailAddress, category, occupation,
-				occupationOther, comments, owner, relationship, age);
+				married, passedAway, phone, emailAddress, profession,
+				comments, owner, relationship, age);
 	}
 	
 	public Relative updateRelative(long relativeId, String name, boolean married,
 			boolean passedAway, String phone, String emailAddress,
-			int category, int occupation, String occupationOther,
-			String comments, boolean owner, int relationship, int age) {
+			String profession, String comments, boolean owner, int relationship, int age) {
 		
 		return relativeLocalService.updateRelative(relativeId, name,
-				married, passedAway, phone, emailAddress, category, occupation,
-				occupationOther, comments, owner, relationship, age);
+				married, passedAway, phone, emailAddress, profession,
+				comments, owner, relationship, age);
 	}
 }
