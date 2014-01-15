@@ -36,23 +36,22 @@
 	<aui:button type="submit" onClick="javascript:saveRelative();" value="save" />
 </aui:form>
 
-<script>
+<script type="text/javascript">
 	function saveRelative() {
 		
-		alert('inside function...');
-		var fm = document.<portlet:namespace/>fm;
+		var frm = document.<portlet:namespace/>fm;
 		var userId = '<%= user.getUserId() %>';
 		var profileId = '<%= profile.getProfileId() %>';
-		var name = fm.<portlet:namespace/>name.value;
+		var name = frm.<portlet:namespace/>name.value;
 		var married = true;
 		var passedAway = false;
-		var phone = fm.<portlet:namespace/>mobile.value;
-		var emailAddress = fm.<portlet:namespace/>emailAddress.value;
-		var comments = fm.<portlet:namespace/>comments.value;
-		var profession = fm.<portlet:namespace/>profession.value;
+		var phone = frm.<portlet:namespace/>mobile.value;
+		var emailAddress = frm.<portlet:namespace/>emailAddress.value;
+		var comments = frm.<portlet:namespace/>comments.value;
+		var profession = frm.<portlet:namespace/>profession.value;
 		var relationship = '<%= relationship %>';
 		var age = 20;
-		
+				
 		Liferay.Service(
 			'/inikah-portlet.relative/add-relative',
 		  	{
@@ -69,8 +68,8 @@
 		    	relationship: relationship,
 		    	age: age
 		  	},
-		  	function(obj) {
-		  		alert("success" + obj);
+		  	function(data) {
+		  		alert("success" + data);
 		  	}
 		); 
 		
