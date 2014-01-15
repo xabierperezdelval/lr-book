@@ -436,5 +436,6 @@
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		<column name="owner" type="boolean"/>
+		<column name="younger" type="boolean"/>
 	</entity>
 </service-builder>
