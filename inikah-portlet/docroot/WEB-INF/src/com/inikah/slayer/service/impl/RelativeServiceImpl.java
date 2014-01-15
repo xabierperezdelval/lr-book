@@ -43,8 +43,6 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 			String profession, String comments, 
 			boolean owner, int relationship, int age) {
 		
-		System.out.println("going to invoke the actual method....");
-		
 		return relativeLocalService.addRelative(userId, profileId, name,
 				married, passedAway, phone, emailAddress, profession,
 				comments, owner, relationship, age);

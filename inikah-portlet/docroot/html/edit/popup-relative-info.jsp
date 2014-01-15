@@ -33,15 +33,13 @@
 		</aui:column>
 	</aui:row>
 	
-	<aui:button type="submit" onClick="javascript:saveRelative();" value="save" />
+	<aui:button onClick="javascript:saveRelative();" value="save" />
 </aui:form>
 
 <script type="text/javascript">
 	function saveRelative() {
 		
 		var frm = document.<portlet:namespace/>fm;
-		var userId = '<%= user.getUserId() %>';
-		var profileId = '<%= profile.getProfileId() %>';
 		var name = frm.<portlet:namespace/>name.value;
 		var married = true;
 		var passedAway = false;
@@ -54,25 +52,23 @@
 				
 		Liferay.Service(
 			'/inikah-portlet.relative/add-relative',
-		  	{
-		    	userId: userId,
-		    	profileId: profileId,
-		    	name: name,
-		    	married: married,
-		    	passedAway: passedAway,
-		    	phone: phone,
-		    	emailAddress: emailAddress,
-		    	profession: profession,
-		    	comments: comments,
-		    	owner: true,
-		    	relationship: relationship,
-		    	age: age
-		  	},
-		  	function(data) {
-		  		alert("success" + data);
-		  	}
+			{
+			    userId: '<%= user.getUserId() %>',
+			    profileId: '<%= profile.getProfileId() %>',
+			    name: name,
+			    married: married,
+			    passedAway: passedAway,
+			    phone: phone,
+			    emailAddress: emailAddress,
+			    profession: profession,
+			    comments: comments,
+			    owner: true,
+			    relationship: relationship,
+			    age: age
+			},
+			function(data) {
+				Liferay.Util.getWindow('<portlet:namespace/>relativeInfoPopup').destroy();
+			}
 		); 
-		
-		Liferay.Util.getWindow('<portlet:namespace/>relativeInfoPopup').destroy();
 	}
 </script>

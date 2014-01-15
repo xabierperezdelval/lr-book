@@ -43,7 +43,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 			boolean passedAway, String phone, String emailAddress,
 			String profession, String comments, boolean owner, 
 			int relationship, int age) {
-	
+			
 		long relativeId = 0l;
 		try {
 			relativeId = counterLocalService.increment(Relative.class.getName());
@@ -72,11 +72,10 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		long classPK = relative.getRelativeId();
 		String className = Relative.class.getName();
 		
-		bridgeLocalService.addPhone(userId, className, classPK, phone, "91", true);
-		
+		bridgeLocalService.addPhone(userId, className, relativeId, phone, "91", true);
+				
 		return relative;
 	}
 	
