@@ -437,5 +437,10 @@
 		<column name="modifiedDate" type="Date"/>
 		<column name="owner" type="boolean"/>
 		<column name="younger" type="boolean"/>
+		
+		<finder return-type="Collection" name="Relationship">
+			<finder-column name="profileId"/>
+			<finder-column name="relationship"/>
+		</finder>
 	</entity>
 </service-builder>
