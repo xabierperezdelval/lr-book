@@ -14,8 +14,12 @@
 
 package com.inikah.slayer.service.impl;
 
+import java.util.List;
+
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the relative remote service.
@@ -55,5 +59,19 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 		return relativeLocalService.updateRelative(relativeId, name,
 				married, passedAway, phone, emailAddress, profession,
 				comments, owner, relationship, age);
+	}
+	
+	public boolean isRelativeAdded(long profileId, int relationship) {
+		
+		boolean flag = false;
+		
+		try {
+			List<Relative> relatives = relativePersistence.findByRelationship(profileId, relationship);
+			flag = (Validator.isNotNull(relatives) && relatives.size() > 0);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
 	}
 }
