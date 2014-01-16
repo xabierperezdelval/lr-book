@@ -26,7 +26,7 @@
 </portlet:renderURL>
 <aui:row>
 	<aui:column columnWidth="30">
-		<select onchange="javascript:showPopup(this);">
+		<select id="relationshipList" onchange="javascript:showPopup(this);">
 			<option value="0">Add...</option>
 			<option value="1">Father</option>
 			<option value="2">Grand Father</option>
@@ -44,7 +44,14 @@
 	</aui:column>
 </aui:row>
 
-<script>
+<hr/>
+
+<div id="myDataTable"></div>
+
+<hr/>
+
+<script type="text/javascript">
+	
 	function showPopup(obj) {
 		var val = obj.value;
 		
@@ -61,7 +68,63 @@
 					title: Liferay.Language.get('relative-info'),
 					uri: '<%= relationInfoURL %>&<portlet:namespace/>relationship=' + val
 				});
+				
+				/* script to reload the portlet */
+				
+				Liferay.provide(
+					window, '<portlet:namespace />reloadPortlet', function() {
+      					var curPortletId = '#p_p_id<portlet:namespace />';
+             			Liferay.Portlet.refresh(curPortletId);
+       				},
+       				['aui-dialog','aui-dialog-iframe']
+   				);				
 			});			
+		}
+	}
+	
+	YUI().use(
+		'aui-base','aui-datatable',
+		function(Y) {
+			
+			adjustSelectBox();
+			
+			Liferay.Service(
+				'/inikah-portlet.relative/get-relatives',
+				{
+					profileId: '<%= profile.getProfileId() %>'
+				},
+				function(data) {
+					var columns = ['name', 'relationship', 'city', 'state'];
+
+					new Y.DataTable.Base({
+						columnset: columns,
+					    recordset: data
+					}).render('#myDataTable');
+				}
+			);
+		}
+	);
+	
+	function adjustSelectBox() {
+		for (var i=1; i<=3; i++) {
+			Liferay.Service(
+				'/inikah-portlet.relative/is-relative-added',
+				{
+					profileId: '<%= profile.getProfileId() %>',
+					relationship: i
+				},
+				function(val) {
+					if (val > 0){
+						var sel = document.getElementById("relationshipList");
+						for (var i=1; i<=3; i++) {
+							 if (sel.options[i].value == val) {
+								 sel.remove(i);
+								 break;
+							 }
+						}
+					}
+				}
+			);
 		}
 	}
 </script>

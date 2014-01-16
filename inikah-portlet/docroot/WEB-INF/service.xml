@@ -438,9 +438,17 @@
 		<column name="owner" type="boolean"/>
 		<column name="younger" type="boolean"/>
 		
+		<order by="asc">
+			<order-column name="relationship"/>
+		</order>
+		
 		<finder return-type="Collection" name="Relationship">
 			<finder-column name="profileId"/>
 			<finder-column name="relationship"/>
+		</finder>
+		
+		<finder return-type="Collection" name="ProfileId">
+			<finder-column name="profileId"/>
 		</finder>
 	</entity>
 </service-builder>

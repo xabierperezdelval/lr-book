@@ -68,6 +68,7 @@
 			},
 			function(data) {
 				Liferay.Util.getWindow('<portlet:namespace/>relativeInfoPopup').destroy();
+				Liferay.Util.getOpener().<portlet:namespace />reloadPortlet();
 			}
 		); 
 	}
