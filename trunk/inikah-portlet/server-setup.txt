@@ -31,24 +31,120 @@ sudo apt-get install oracle-java7-installer
 
 12. dpkg-reconfigure tzdata
 
+13. apt-get install libtcnative-1
+
+14. go to /phpmyadmin and create a new database "inikah"
+
+15. a2enmod proxy_ajp
+
+16. service apache2 restart
+
+17. vi /etc/apache2/conf-enabled/proxy-ajp.conf 
+
+ProxyPass /phpmyadmin !
+ProxyPassReverse /phpmyadmin !
+
+ProxyPass / ajp://localhost:8009/
+ProxyPassReverse / ajp://localhost:8009/
 
 ================================
 Portal setup
 ================================
 
-13.
+1.
 
 useradd -m -c "portal" portal
 mkdir /opt/portal
 chown -R portal:portal /opt/portal
 vi /etc/passwd
 
+2. setting parameter for ANT
 
-14. su portal
+vi .bash_profile inside "/home/portal"
+
+Put this content and save, 
+
+ANT_OPTS="-Xms256M -Xmx512M"
+export ANT_OPTS
+
+2. to create a folder to store document_library files. 
+
+mkdir /mnt/data
+chown portal:portal /mnt/data/
+
+2. 
+su portal
 cd /opt/portal
 
 
-15. 
+3. wget http://superb-dca2.dl.sourceforge.net/project/lportal/Liferay%20Portal/6.2.0%20GA1/liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip
+
+4. unzip liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip
+
+5. Open "bin/setenv.sh" and change GMT to IST
+
+6. Open "conf/server.xml" and close port "8080"
+
+7. From "webapps"
+
+rm -r opensocial-portlet/
+rm -r resources-importer-web/
+rm -r welcome-theme/
+
+7. copy the portal-setup-wizard.properties.
+
+Replace password, "ApKd2uPOLHWekK0t1k0f5Y+Lfc2FJUIYnPFX4CL0fk6Z"
+
+Change the database name to "inikah" 
+
+8. Start the tomcat server
+
+===============================
+Setup plugin SDK
+===============================
+
+1. vi build.portal.properties
+
+2. put this entry and save the file. 
+
+app.server.parent.dir=${sdk.dir}/../liferay-portal-6.2.0-ce-ga1
+os.unix=Linux
+database.name=inikah
+database.types=mysql
+javac.compiler=modern
+
+3. cd themes
+
+svn co http://lr-book.googlecode.com/svn/trunk/inikah-theme/
+
+4. cd inikah-theme and "ant deploy"
+
+5. cd ../../portlet
+
+svn co http://lr-book.googlecode.com/svn/trunk/inikah-portlet/
+
+6. cd inikah-portlet
+
+ant build-services
+ant compile 
+ant deploy
+
+Confirm both tasks complete successfully.
+
+7. Confirm that all config entries are entered into "inikah_Config" table
+====================
+
+
+
+
+
+ 
+
+
+
+
+
+
 
 
 
