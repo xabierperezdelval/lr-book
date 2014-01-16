@@ -61,17 +61,32 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 				comments, owner, relationship, age);
 	}
 	
-	public boolean isRelativeAdded(long profileId, int relationship) {
+	public int isRelativeAdded(long profileId, int relationship) {
 		
-		boolean flag = false;
+		int flag = 0;
 		
 		try {
 			List<Relative> relatives = relativePersistence.findByRelationship(profileId, relationship);
-			flag = (Validator.isNotNull(relatives) && relatives.size() > 0);
+			if (Validator.isNotNull(relatives) && relatives.size() > 0) {
+				flag = relatives.get(0).getRelationship();
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		return flag;
+	}
+	
+	public List<Relative> getRelatives(long profileId) {
+		
+		List<Relative> relatives = null;
+		
+		try {
+			relatives = relativePersistence.findByProfileId(profileId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return relatives;
 	}
 }
