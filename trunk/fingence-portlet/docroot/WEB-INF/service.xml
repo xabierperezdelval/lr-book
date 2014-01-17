@@ -131,6 +131,9 @@
 		<column name="wealthAdvisorId" type="long"/>
 		<column name="relationshipManagerId" type="long"/>
 		<column name="bankId" type="long"/>
+		<column name="trial" type="boolean"/>
+		<column name="primary" type="boolean"/>
+		<column name="public" type="boolean"/>
 	</entity>
 	
 	<entity name="PortfolioItem" local-service="true" remote-service="true">
