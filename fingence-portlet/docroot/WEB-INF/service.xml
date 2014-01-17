@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+<service-builder package-path="com.fingence.slayer">
+	<author>Ahmed Hasan</author>
+	<namespace>fing</namespace>
+
+	<entity name="Asset" local-service="true" remote-service="true">
+		<!-- PK fields -->
+		<column name="assetId" type="long" primary="true"/>
+		
+		<!-- Audit Fields -->
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		<column name="companyId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="userName" type="String"/>
+		
+		<!-- common fields -->		
+		<column name="security_ticker" type="String"/>
+		<column name="id_cusip" type="String"/>
+		<column name="id_isin" type="String"/>
+		<column name="id_bb_global" type="String"/>
+		<column name="id_bb_sec_num_src" type="long"/>
+		<column name="name" type="String"/>
+		<column name="chg_pct_mtd" type="double"/>
+		<column name="chg_pct_5d" type="double"/>
+		<column name="chg_pct_1m" type="double"/>
+		<column name="chg_pct_3m" type="double"/>
+		<column name="chg_pct_6m" type="double"/>
+		<column name="chg_pct_ytd" type="double"/>
+		<column name="chg_pct_high_52week" type="double"/>
+		<column name="chg_pct_low_52week" type="double"/>
+		<column name="chg_pct_1yr" type="double"/>
+		<column name="chg_trr_5yr" type="double"/>
+		<column name="curent_price" type="double"/>
+		<column name="last_price" type="double"/>
+		<column name="bid_price" type="double"/>
+		<column name="ask_price" type="double"/>
+		<column name="security_des" type="String"/>
+		<column name="security_typ" type="String"/>
+		<column name="security_typ2" type="String"/>
+		<column name="parent_comp_name" type="String"/>
+		<column name="volatility_90d" type="double"/>
+		<column name="volatility_180d" type="double"/>
+		<column name="volatility_360d" type="double"/>
+		<column name="security_class" type="String"/>
+		<column name="volatility_30d" type="double"/>
+		<column name="volatility_90d" type="double"/>
+		<column name="volatility_180d" type="double"/>
+		<column name="volatility_360d" type="double"/>
+	</entity>
+	
+	<entity name="Bond" local-service="true" remote-service="true">
+		<!-- PK fields -->
+		<column name="bondId" type="long" primary="true"/>
+		<!-- Audit fields -->
+		<column name="assetId" type="long"/>
+		<column name="issuer_bulk" type="String"/>
+		<column name="cpn" type="double"/>
+		<column name="cpn_typ" type="String"/>
+		<column name="mty_typ" type="String"/>
+		<column name="mty_years_tdy" type="double"/>
+		<column name="yld_ytm_ask" type="double"/>
+		<column name="yld_ytm_bid" type="double"/>
+		<column name="yld_cur_mid" type="double"/>
+		<column name="maturity_dt" type="Date"/>
+		<column name="bb_composite" type="String"/>
+		<column name="rtg_sp" type="String"/>
+		<column name="rtg_moody" type="String"/>
+		<column name="cpn_freq" type="double"/>
+		<column name="5y_bid_cds_spread" type="double"/>
+		<column name="dur_mid" type="double"/>
+		<column name="price_to_cash_flow" type="double"/>
+	</entity>
+	
+	<entity name="Equity" local-service="true" remote-service="true">
+		<!-- PK fields -->
+		<column name="equityId" type="long" primary="true"/>
+		
+		<!-- Audit fields -->
+		<column name="assetId" type="long"/>
+		<column name="eqy_alpha" type="double"/>
+		<column name="dividend_yield" type="double"/>
+		<column name="eqy_dvd_yld_12m" type="double"/>
+		<column name="eqy_dvd_yld_es" type="double"/>
+		<column name="dvd_payout_ratio" type="double"/>
+		<column name="pe_ratio" type="double"/>
+		<column name="tot_debt_to_com_eqy" type="double"/>
+		<column name="ebitda_to_revenue" type="double"/>
+		<column name="trail_12m_prof_margin" type="double"/>
+		<column name="best_current_ev_best_opp" type="double"/>
+		<column name="eqy_beta" type="double"/>
+		<column name="return_sharpe_ratio" type="double"/>
+		<column name="eqy_sharpe_ratio_1yr" type="double"/>
+		<column name="eqy_sharpe_ratio_3yr" type="double"/>
+		<column name="eqy_sharpe_ratio_5yr" type="double"/>
+	</entity>
+	
+	<entity name="MutualFund" local-service="true" remote-service="true">
+		<!-- PK fields -->
+		<column name="mutualFundId" type="long" primary="true"/>
+		
+		<!-- Audit fields -->
+		<column name="assetId" type="long"/>
+		<column name="fund_total_assets" type="double"/>
+		<column name="fund_asset_class_focus" type="String"/>
+		<column name="fund_geo_focus" type="String"/>
+	</entity>
+	
+	<entity name="CountryExt" local-service="true" remote-service="true">
+		<!-- PK fields -->
+		<column name="countryId" type="long" primary="true"/>
+		
+		<!-- Audit fields -->
+		<column name="currency" type="String"/>
+		<column name="currencyDesc" type="String"/>
+		<column name="conversion" type="double"/>
+		<column name="marketType" type="String"/> <!-- developed, emerging, frontier -->
+	</entity>
+	
+	<entity name="Portfolio" local-service="true" remote-service="true">
+		<column name="portfolioId" type="long" primary="true"/>
+		<column name="porfolioName" type="String"/>
+		
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		<column name="companyId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="userName" type="String"/>
+		
+		<column name="wealthAdvisorId" type="long"/>
+		<column name="relationshipManagerId" type="long"/>
+		<column name="bankId" type="long"/>
+	</entity>
+	
+	<entity name="PortfolioItem" local-service="true" remote-service="true">
+		<column name="itemId" type="long" primary="true"/>
+		
+		<column name="assetId" type="long"/>
+		<column name="portfolioId" type="long"/>
+		<column name="purchaseDate" type="Date"/>
+		<column name="purchasePrice" type="double"/>
+		<column name="purchaseQty" type="int"/>
+		<column name="purchasedMarketValue " type="double"/>
+		<column name="purchasedConversionRate" type="double"/>
+		<column name="currentMarketValue" type="double"/>
+		
+	</entity>
+</service-builder>
