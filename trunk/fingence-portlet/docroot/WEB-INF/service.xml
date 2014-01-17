@@ -5,17 +5,14 @@
 	<namespace>fing</namespace>
 
 	<entity name="Asset" local-service="true" remote-service="true">
-		<!-- PK fields -->
 		<column name="assetId" type="long" primary="true"/>
 		
-		<!-- Audit Fields -->
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		<column name="companyId" type="long"/>
 		<column name="userId" type="long"/>
 		<column name="userName" type="String"/>
 		
-		<!-- common fields -->		
 		<column name="security_ticker" type="String"/>
 		<column name="id_cusip" type="String"/>
 		<column name="id_isin" type="String"/>
@@ -40,9 +37,6 @@
 		<column name="security_typ" type="String"/>
 		<column name="security_typ2" type="String"/>
 		<column name="parent_comp_name" type="String"/>
-		<column name="volatility_90d" type="double"/>
-		<column name="volatility_180d" type="double"/>
-		<column name="volatility_360d" type="double"/>
 		<column name="security_class" type="String"/>
 		<column name="volatility_30d" type="double"/>
 		<column name="volatility_90d" type="double"/>
@@ -51,9 +45,8 @@
 	</entity>
 	
 	<entity name="Bond" local-service="true" remote-service="true">
-		<!-- PK fields -->
 		<column name="bondId" type="long" primary="true"/>
-		<!-- Audit fields -->
+		
 		<column name="assetId" type="long"/>
 		<column name="issuer_bulk" type="String"/>
 		<column name="cpn" type="double"/>
@@ -74,10 +67,8 @@
 	</entity>
 	
 	<entity name="Equity" local-service="true" remote-service="true">
-		<!-- PK fields -->
 		<column name="equityId" type="long" primary="true"/>
 		
-		<!-- Audit fields -->
 		<column name="assetId" type="long"/>
 		<column name="eqy_alpha" type="double"/>
 		<column name="dividend_yield" type="double"/>
@@ -97,7 +88,6 @@
 	</entity>
 	
 	<entity name="MutualFund" local-service="true" remote-service="true">
-		<!-- PK fields -->
 		<column name="mutualFundId" type="long" primary="true"/>
 		
 		<!-- Audit fields -->
@@ -108,10 +98,8 @@
 	</entity>
 	
 	<entity name="CountryExt" local-service="true" remote-service="true">
-		<!-- PK fields -->
 		<column name="countryId" type="long" primary="true"/>
 		
-		<!-- Audit fields -->
 		<column name="currency" type="String"/>
 		<column name="currencyDesc" type="String"/>
 		<column name="conversion" type="double"/>
