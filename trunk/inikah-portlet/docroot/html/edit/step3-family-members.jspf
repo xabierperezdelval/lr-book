@@ -20,7 +20,11 @@
 						profileId: '<%= profile.getProfileId() %>'
 					},
 					function(data) {
-						var columns = ['name', 'relationship', 'city', 'state'];
+						var columns = ['name', 'relationship', 'city', 'state', 'phone'];
+						
+						for (var i=0; i<data.length; i++) {
+							data[i].phone = "98989898";
+						}
 
 						new Y.DataTable.Base({
 							columnset: columns,
