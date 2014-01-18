@@ -439,9 +439,9 @@
 		<column name="passedAway" type="boolean"/>
 		<column name="relationship" type="int"/>
 		<column name="age" type="int" />
+		<column name="residingIn" type="long"/>
 		<column name="emailAddress" type="String"/>
 		<column name="profession" type="String"/>
-		<column name="comments" type="String"/>
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		<column name="owner" type="boolean"/>
