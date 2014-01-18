@@ -24,6 +24,7 @@ public interface ConfigConstants {
 	
 	// openxchangerates.org
 	boolean OPENXCHAGE_UPDATE = GetterUtil.getBoolean(AppConfig.get("openxchange.update"));
+	boolean NOTIFY_OLD_USERS = GetterUtil.getBoolean(AppConfig.get("notify.old.users"));
 	String OPENXCHAGE_API_ID = "openxchange.api.id";
 	
 	// Cloudinary (for thumbnail conversion)
