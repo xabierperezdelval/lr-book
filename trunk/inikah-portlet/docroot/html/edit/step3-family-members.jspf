@@ -1,0 +1,57 @@
+<%
+	List<Relative> relatives = RelativeServiceUtil.getRelatives(profile.getProfileId());
+	boolean hasRelatives = (Validator.isNotNull(relatives) && relatives.size() > 0);
+%>
+
+<c:if test="<%= hasRelatives %>">
+
+	<hr/><div id="myDataTable"></div><br/>
+	
+	<script type="text/javascript">
+		YUI().use(
+			'aui-base','aui-datatable',
+			function(Y) {
+				
+				adjustSelectBox();
+				
+				Liferay.Service(
+					'/inikah-portlet.relative/get-relatives',
+					{
+						profileId: '<%= profile.getProfileId() %>'
+					},
+					function(data) {
+						var columns = ['name', 'relationship', 'city', 'state'];
+
+						new Y.DataTable.Base({
+							columnset: columns,
+						    recordset: data
+						}).render('#myDataTable');
+					}
+				);
+			}
+		);
+		
+		function adjustSelectBox() {
+			for (var i=1; i<=3; i++) {
+				Liferay.Service(
+					'/inikah-portlet.relative/is-relative-added',
+					{
+						profileId: '<%= profile.getProfileId() %>',
+						relationship: i
+					},
+					function(val) {
+						if (val > 0){
+							var sel = document.getElementById("relationshipList");
+							for (var i=1; i<=3; i++) {
+								 if (sel.options[i].value == val) {
+									 sel.remove(i);
+									 break;
+								 }
+							}
+						}
+					}
+				);
+			}
+		}	
+	</script>
+</c:if>

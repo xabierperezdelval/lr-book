@@ -47,5 +47,15 @@ public interface IConstants {
 	int PHONE_UNVERIFIED = 777;
 	int PHONE_VERIFIED = 999;
 	
+	int RELATION_FATHER = 1;
+	int RELATION_GRAND_FATHER = 2;
+	int RELATION_MOTHER = 3;
+	int RELATION_BROTHER = 4;
+	int RELATION_SISTER = 5;
+	int RELATION_BRO_IN_LAW = 6;
+	int RELATION_UNCLE = 7;
+	int RELATION_FRIEND = 8;
+	int RELATION_REFERENCE = 9;
+	
 	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }

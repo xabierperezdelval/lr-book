@@ -39,10 +39,10 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.RelativeLocalServiceUtil} to access the relative local service.
 	 */
 	
-	public Relative addRelative(long userId, long profileId, String name, boolean married,
+	public Relative addRelative(long userId, long profileId, String name, boolean unMarried,
 			boolean passedAway, String phone, String emailAddress,
 			String profession, String comments, boolean owner, 
-			int relationship, int age) {
+			int relationship, boolean younger, int age) {
 			
 		long relativeId = 0l;
 		try {
@@ -60,9 +60,10 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		relative.setOwner(owner);
 		relative.setPassedAway(passedAway);
 		relative.setProfileId(profileId);
-		relative.setMarried(married);
+		relative.setUnMarried(unMarried);
 		relative.setEmailAddress(emailAddress);
 		relative.setAge(age);
+		relative.setYounger(younger);
 		
 		relative.setCreateDate(new java.util.Date());
 		
@@ -79,10 +80,10 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		return relative;
 	}
 	
-	public Relative updateRelative(long relativeId, String name, boolean married,
+	public Relative updateRelative(long relativeId, String name, boolean unMarried,
 			boolean passedAway, String phone, String emailAddress,
 			String profession, String comments, 
-			boolean owner, int relationship, int age) {
+			boolean owner, int relationship, boolean younger, int age) {
 		
 		Relative relative = null;
 		try {
@@ -97,8 +98,9 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		relative.setProfession(profession);
 		relative.setOwner(owner);
 		relative.setPassedAway(passedAway);
-		relative.setMarried(married);
+		relative.setUnMarried(unMarried);
 		relative.setAge(age);
+		relative.setYounger(younger);
 		
 		relative.setModifiedDate(new java.util.Date());
 		

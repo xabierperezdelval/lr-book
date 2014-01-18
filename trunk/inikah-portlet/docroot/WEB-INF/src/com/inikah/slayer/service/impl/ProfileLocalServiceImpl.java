@@ -17,7 +17,10 @@ package com.inikah.slayer.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.inikah.slayer.model.Payment;
+import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.model.Profile;
+import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.base.ProfileLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
@@ -227,5 +230,50 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		return profiles;
+	}
+	
+	public void destroy(long profileId) {
+		
+		// delete relatives
+		try {
+			List<Relative> relatives = relativePersistence.findByProfileId(profileId);
+			for (Relative relative: relatives) {
+				try {
+					relativeLocalService.deleteRelative(relative.getRelativeId());
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		// delete photos
+		try {
+			List<Photo> photos = photoPersistence.findByProfileId(profileId);
+			for (Photo photo: photos) {
+				try {
+					photoLocalService.deletePhoto(photo.getImageId());
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+			}			
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		// delete payment
+		try {
+			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			for (Payment payment: payments) {
+				try {
+					paymentLocalService.deletePayment(payment.getPaymentId());
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+			}				
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 }

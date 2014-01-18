@@ -1,7 +1,11 @@
+<%@page import="com.inikah.slayer.model.Relative"%>
+<%@page import="com.inikah.slayer.service.RelativeServiceUtil"%>
+
 <c:if test="<%= !profile.isPhoneVerified() %>">
 	<portlet:renderURL var="mobileVerifyURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="jspPage" value="/html/edit/popup-mobile-verify.jsp" />
 	</portlet:renderURL>
+	
 	<aui:script>
 		AUI().ready(function() {
 			AUI().use('aui-dialog', function(A) {
@@ -44,12 +48,6 @@
 	</aui:column>
 </aui:row>
 
-<hr/>
-
-<div id="myDataTable"></div>
-
-<hr/>
-
 <script type="text/javascript">
 	
 	function showPopup(obj) {
@@ -62,7 +60,7 @@
 					    centered: true,
 					    modal: true,
 			    		width: 600,
-					    height: 450				
+					    height: 500				
 					},
 					id: '<portlet:namespace/>relativeInfoPopup',
 					title: Liferay.Language.get('relative-info'),
@@ -81,50 +79,7 @@
 			});			
 		}
 	}
-	
-	YUI().use(
-		'aui-base','aui-datatable',
-		function(Y) {
-			
-			adjustSelectBox();
-			
-			Liferay.Service(
-				'/inikah-portlet.relative/get-relatives',
-				{
-					profileId: '<%= profile.getProfileId() %>'
-				},
-				function(data) {
-					var columns = ['name', 'relationship', 'city', 'state'];
-
-					new Y.DataTable.Base({
-						columnset: columns,
-					    recordset: data
-					}).render('#myDataTable');
-				}
-			);
-		}
-	);
-	
-	function adjustSelectBox() {
-		for (var i=1; i<=3; i++) {
-			Liferay.Service(
-				'/inikah-portlet.relative/is-relative-added',
-				{
-					profileId: '<%= profile.getProfileId() %>',
-					relationship: i
-				},
-				function(val) {
-					if (val > 0){
-						var sel = document.getElementById("relationshipList");
-						for (var i=1; i<=3; i++) {
-							 if (sel.options[i].value == val) {
-								 sel.remove(i);
-								 break;
-							 }
-						}
-					}
-				}
-			);
-		}
-	}
 </script>
+
+<%@ include file="/html/edit/step3-family-members.jspf" %>
+<br/>
