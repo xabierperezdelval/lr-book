@@ -17,6 +17,10 @@ package com.inikah.slayer.service.impl;
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Country;
+import com.liferay.portal.service.CountryServiceUtil;
 
 /**
  * The implementation of the relative local service.
@@ -41,7 +45,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 	
 	public Relative addRelative(long userId, long profileId, String name, boolean unMarried,
 			boolean passedAway, String phone, String emailAddress,
-			String profession, String comments, boolean owner, 
+			String profession, long residingIn, boolean owner, 
 			int relationship, boolean younger, int age) {
 			
 		long relativeId = 0l;
@@ -54,7 +58,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		Relative relative = createRelative(relativeId);
 		
 		relative.setName(name);
-		relative.setComments(comments);
+		relative.setResidingIn(residingIn);
 		relative.setRelationship(relationship);
 		relative.setProfession(profession);
 		relative.setOwner(owner);
@@ -75,14 +79,14 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		
 		String className = Relative.class.getName();
 		
-		bridgeLocalService.addPhone(userId, className, relativeId, phone, "91", true);
+		bridgeLocalService.addPhone(userId, className, relativeId, phone, getIdd(residingIn), true);
 				
 		return relative;
 	}
 	
 	public Relative updateRelative(long relativeId, String name, boolean unMarried,
 			boolean passedAway, String phone, String emailAddress,
-			String profession, String comments, 
+			String profession, long residingIn, 
 			boolean owner, int relationship, boolean younger, int age) {
 		
 		Relative relative = null;
@@ -93,7 +97,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		}
 		
 		relative.setName(name);
-		relative.setComments(comments);
+		relative.setResidingIn(residingIn);
 		relative.setRelationship(relationship);
 		relative.setProfession(profession);
 		relative.setOwner(owner);
@@ -113,8 +117,26 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		long classPK = relative.getRelativeId();
 		String className = Relative.class.getName();
 		
-		bridgeLocalService.updatePhone(className, classPK, phone, "91", true);
+
+		
+		bridgeLocalService.updatePhone(className, classPK, phone, getIdd(residingIn), true);
 		
 		return relative;
 	}	
+	
+	private String getIdd(long countryId) {
+		String idd = StringPool.BLANK;
+		if (countryId > 0l) {
+			try {
+				Country country = CountryServiceUtil.fetchCountry(countryId);
+				
+				if (Validator.isNotNull(country)) {
+					idd = country.getIdd();
+				}
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		return idd;
+	}
 }

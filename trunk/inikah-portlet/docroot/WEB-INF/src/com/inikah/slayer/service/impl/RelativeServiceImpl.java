@@ -45,22 +45,22 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 	
 	public Relative addRelative(long userId, long profileId, String name, boolean unMarried,
 			boolean passedAway, String phone, String emailAddress,
-			String profession, String comments, 
+			String profession, long residingIn, 
 			boolean owner, int relationship, boolean younger, int age) {
 		
 		return relativeLocalService.addRelative(userId, profileId, name,
 				unMarried, passedAway, phone, emailAddress, profession,
-				comments, owner, relationship, younger, age);
+				residingIn, owner, relationship, younger, age);
 	}
 	
 	public Relative updateRelative(long relativeId, String name, boolean unMarried,
 			boolean passedAway, String phone, String emailAddress,
-			String profession, String comments, boolean owner, 
+			String profession, long residingIn, boolean owner, 
 			int relationship, boolean younger, int age) {
 		
 		return relativeLocalService.updateRelative(relativeId, name,
 				unMarried, passedAway, phone, emailAddress, profession,
-				comments, owner, relationship, younger, age);
+				residingIn, owner, relationship, younger, age);
 	}
 	
 	public int isRelativeAdded(long profileId, int relationship) {
