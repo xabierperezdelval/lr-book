@@ -10,6 +10,14 @@
 	width:150px;
 }
 
+.quarter-width select {
+	width:50px;
+}
+
+.quarter-width input {
+	width:50px;
+}
+
 .month-selection-content {
 	padding-left: 0;
 	padding-right: 0;
@@ -56,4 +64,8 @@
 /* -----div padding ------*/
 .aui .min .control-group {
 	margin-bottom: 0;
+}
+
+.aui .display-down .checkbox {
+	padding-top: 30px;
 }

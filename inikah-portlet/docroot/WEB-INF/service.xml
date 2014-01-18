@@ -129,6 +129,10 @@
 			<finder-column name="imageType"/>
 		</finder>
 		
+		<finder return-type="Collection" name="ProfileId">
+			<finder-column name="profileId"/>
+		</finder>		
+		
 		<reference entity="Image" package-path="com.liferay.portal" />
 	</entity>
 	
@@ -391,6 +395,11 @@
 		<column name="details" type="String"/>
 		<column name="comments" type="String"/>
 		<column name="paid" type="boolean"/>
+		
+		<finder return-type="Collection" name="ProfileId">
+			<finder-column name="profileId"/>
+		</finder>
+		
 	</entity>
 	
 	<entity name="Config" local-service="true" remote-service="true" cache-enabled="false">
@@ -426,7 +435,7 @@
 		<column name="relativeId" type="long" primary="true"/>
 		<column name="profileId" type="long"/>
 		<column name="name" type="String"/>
-		<column name="married" type="boolean"/>
+		<column name="unMarried" type="boolean"/>
 		<column name="passedAway" type="boolean"/>
 		<column name="relationship" type="int"/>
 		<column name="age" type="int" />
