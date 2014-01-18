@@ -25,43 +25,37 @@
 							 	{
 							 		key: 'name',
 							 		label: 'Name',
-							 		formatter:function (o) {
-							 		    var name = o.value;
-							 			if(o.data.passedAway){
-							 			name = o.value + ' (Late)';
+							 		formatter:function(obj) {
+							 			if (obj.data.passedAway){
+							 				obj.value += '(Late)';
 							 		    }
-							 		    return name;
 							 		}
 							 	},
 							 	{
 							 		key: 'relationship',
 							 		label: 'Relationship',
-							 		formatter:function (o) {
-							 		    var relationShip = [" ","Father","Grandfather","Mother","Brother","Sister","Bro-in-Law","Uncle","Friend","Reference"];
-							 			var value = relationShip[o.value];
-							 		    if(o.data.younger){
-							 		    	value= value+' (Younger)';
+							 		formatter:function(obj) {
+							 		    var relationShip = ["","Father", "Grand Father", "Mother", "Brother", "Sister", "Brother-in-Law", "Uncle", "Friend", "Reference"];
+							 		    obj.value = relationShip[obj.value];
+							 		    if (obj.data.younger){
+							 		    	obj.value += '(Younger)';
 							 			}
-							 		  return value;
 							 		}
 							 	},
 							 	{
 							 		key: 'unMarried',
 							 		label: 'Un-Married',
-							 		formatter: function(o) {
-							 			var value = '';
-							 			if(o.data.unMarried){
-							 				
-							 				value = 'Yes ('+ o.data.age+' Yrs)'
+							 		formatter: function(obj) {
+							 			obj.value = '--';
+							 			if (obj.data.unMarried){
+							 				obj.value = 'Yes ('+ obj.data.age + ' Yrs)'
 							 			}
-							 			return value;
-							 		},
-							 		emptyCellValue: "--" 
+							 		}
 							 	},
 							 	{
 							 		key: 'profession',
 							 		label: 'Proffession',
-							 		emptyCellValue: "--" 
+							 		emptyCellValue: '--'
 							 	},
 							 	{
 							 		key: 'relativeId',
