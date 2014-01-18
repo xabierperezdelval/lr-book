@@ -20,7 +20,23 @@
 						profileId: '<%= profile.getProfileId() %>'
 					},
 					function(data) {
-						var columns = ['name', 'relationship', 'city', 'state', 'phone'];
+						var columns = 
+							[
+							 	{
+							 		key: 'name',
+							 		label: 'Name'
+							 	},
+							 	{
+							 		key: 'relationship',
+							 		label: 'Relationship'
+							 	},
+							 	{
+							 		key: 'relativeId',
+							 		label: 'Edit',
+							 		formatter: '<a href="javascript:showPopup(-1, {value});">Edit</a>',
+							 		allowHTML: true
+							 	}
+							];
 						
 						for (var i=0; i<data.length; i++) {
 							data[i].phone = "98989898";
