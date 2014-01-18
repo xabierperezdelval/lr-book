@@ -24,11 +24,44 @@
 							[
 							 	{
 							 		key: 'name',
-							 		label: 'Name'
+							 		label: 'Name',
+							 		formatter:function (o) {
+							 		    var name = o.value;
+							 			if(o.data.passedAway){
+							 			name = o.value + ' (Late)';
+							 		    }
+							 		    return name;
+							 		}
 							 	},
 							 	{
 							 		key: 'relationship',
-							 		label: 'Relationship'
+							 		label: 'Relationship',
+							 		formatter:function (o) {
+							 		    var relationShip = [" ","Father","Grandfather","Mother","Brother","Sister","Bro-in-Law","Uncle","Friend","Reference"];
+							 			var value = relationShip[o.value];
+							 		    if(o.data.younger){
+							 		    	value= value+' (Younger)';
+							 			}
+							 		  return value;
+							 		}
+							 	},
+							 	{
+							 		key: 'unMarried',
+							 		label: 'Un-Married',
+							 		formatter: function(o) {
+							 			var value = '';
+							 			if(o.data.unMarried){
+							 				
+							 				value = 'Yes ('+ o.data.age+' Yrs)'
+							 			}
+							 			return value;
+							 		},
+							 		emptyCellValue: "--" 
+							 	},
+							 	{
+							 		key: 'profession',
+							 		label: 'Proffession',
+							 		emptyCellValue: "--" 
 							 	},
 							 	{
 							 		key: 'relativeId',
