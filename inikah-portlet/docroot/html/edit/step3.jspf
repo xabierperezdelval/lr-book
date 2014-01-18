@@ -30,7 +30,7 @@
 </portlet:renderURL>
 <aui:row>
 	<aui:column columnWidth="30">
-		<select id="relationshipList" onchange="javascript:showPopup(this);">
+		<select id="relationshipList" onchange="javascript:showPopup(this.value, '0');">
 			<option value="0">Add...</option>
 			<option value="1">Father</option>
 			<option value="2">Grand Father</option>
@@ -50,10 +50,9 @@
 
 <script type="text/javascript">
 	
-	function showPopup(obj) {
-		var val = obj.value;
-		
-		if (val > 0) {
+	function showPopup(val, relativeId) {
+						
+		if (val != 0) {
 			AUI().use('aui-dialog', function(A) {
 				Liferay.Util.openWindow({
 					dialog: {
@@ -64,7 +63,7 @@
 					},
 					id: '<portlet:namespace/>relativeInfoPopup',
 					title: Liferay.Language.get('relative-info'),
-					uri: '<%= relationInfoURL %>&<portlet:namespace/>relationship=' + val
+					uri: '<%= relationInfoURL %>&<portlet:namespace/>relationship=' + val + '&<portlet:namespace/>relativeId=' + relativeId
 				});
 				
 				/* script to reload the portlet */
