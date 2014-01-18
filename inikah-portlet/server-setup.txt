@@ -17,6 +17,14 @@ Initial Steps
 7. cd /etc/apache2/conf-enabled
 # ln -s /etc/phpmyadmin/apache.conf phpmyadmin.conf
 
+7a. login to http://host/phpmyadmin
+
+7b. removing encrypt problem
+
+mv -i /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available/
+sudo php5enmod mcrypt
+sudo service apache2 restart
+
 8. Install Java7
 
 sudo add-apt-repository ppa:webupd8team/java
