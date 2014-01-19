@@ -17,7 +17,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.service.CountryServiceUtil;
 
-
 public class CurrencyConfig extends SimpleAction {
 	public void run(String[] arg0) throws ActionException {
 		
