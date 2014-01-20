@@ -141,19 +141,3 @@ Confirm both tasks complete successfully.
 
 7. Confirm that all config entries are entered into "inikah_Config" table
 ====================
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
