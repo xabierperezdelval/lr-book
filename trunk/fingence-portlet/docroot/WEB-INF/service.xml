@@ -6,13 +6,6 @@
 
 	<entity name="Asset" local-service="true" remote-service="true">
 		<column name="assetId" type="long" primary="true"/>
-		
-		<column name="createDate" type="Date"/>
-		<column name="modifiedDate" type="Date"/>
-		<column name="companyId" type="long"/>
-		<column name="userId" type="long"/>
-		<column name="userName" type="String"/>
-		
 		<column name="security_ticker" type="String"/>
 		<column name="id_cusip" type="String"/>
 		<column name="id_isin" type="String"/>
@@ -42,12 +35,21 @@
 		<column name="volatility_90d" type="double"/>
 		<column name="volatility_180d" type="double"/>
 		<column name="volatility_360d" type="double"/>
+		
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		<column name="companyId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="userName" type="String"/>
+		
+		<finder return-type="Asset" name="IdISIN">
+			<finder-column name="id_isin"/>
+		</finder>		
 	</entity>
 	
 	<entity name="Bond" local-service="true" remote-service="true">
-		<column name="bondId" type="long" primary="true"/>
+		<column name="assetId" type="long" primary="true"/>
 		
-		<column name="assetId" type="long"/>
 		<column name="issuer_bulk" type="String"/>
 		<column name="cpn" type="double"/>
 		<column name="cpn_typ" type="String"/>
@@ -66,10 +68,8 @@
 		<column name="price_to_cash_flow" type="double"/>
 	</entity>
 	
-	<entity name="Equity" local-service="true" remote-service="true">
-		<column name="equityId" type="long" primary="true"/>
-		
-		<column name="assetId" type="long"/>
+	<entity name="Equity" local-service="true" remote-service="true">		
+		<column name="assetId" type="long" primary="true"/>
 		<column name="eqy_alpha" type="double"/>
 		<column name="dividend_yield" type="double"/>
 		<column name="eqy_dvd_yld_12m" type="double"/>
@@ -88,10 +88,7 @@
 	</entity>	
 	
 	<entity name="MutualFund" local-service="true" remote-service="true">
-		<column name="mutualFundId" type="long" primary="true"/>
-		
-		<!-- Audit fields -->
-		<column name="assetId" type="long"/>
+		<column name="assetId" type="long" primary="true"/>
 		<column name="fund_total_assets" type="double"/>
 		<column name="fund_asset_class_focus" type="String"/>
 		<column name="fund_geo_focus" type="String"/>
@@ -99,7 +96,6 @@
 	
 	<entity name="CountryExt" local-service="true" remote-service="true">
 		<column name="countryId" type="long" primary="true"/>
-		
 		<column name="currency" type="String"/>
 		<column name="currencyDesc" type="String"/>
 		<column name="conversion" type="double"/>
