@@ -1,5 +1,3 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
-<portlet:defineObjects />
+<%@ include file="/html/fingence/init.jsp" %>
 
 This is the <b>Main Portlet</b> portlet in Edit mode.
