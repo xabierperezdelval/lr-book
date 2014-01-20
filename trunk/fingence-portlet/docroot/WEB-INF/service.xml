@@ -106,6 +106,7 @@
 		<column name="portfolioId" type="long" primary="true"/>
 		<column name="porfolioName" type="String"/>
 		
+		<column name="inverstorId" type="long"/>
 		<column name="wealthAdvisorId" type="long"/>
 		<column name="relationshipManagerId" type="long"/>		
 		<column name="bankId" type="long"/>
