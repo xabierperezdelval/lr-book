@@ -133,7 +133,7 @@
 		<column name="purchaseDate" type="Date"/>
 		<column name="purchasePrice" type="double"/>
 		<column name="purchaseQty" type="int"/>
-		<column name="purchasedMarketValue " type="double"/>
+		<column name="purchasedMarketValue" type="double"/>
 		<column name="purchasedConversionRate" type="double"/>
 		<column name="currentMarketValue" type="double"/>
 		
