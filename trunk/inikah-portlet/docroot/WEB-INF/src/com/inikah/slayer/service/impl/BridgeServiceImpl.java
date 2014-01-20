@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.ListType;
+import com.liferay.portal.service.CountryServiceUtil;
 
 /**
  * The implementation of the bridge remote service.
@@ -168,5 +169,21 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			String number, String extension, boolean primary) {
 		bridgeLocalService.addPhone(userId, className, classPK, number,
 				extension, primary);
+	}
+	
+	public String getIdd(long countryId) {
+		String idd = StringPool.BLANK;
+		if (countryId > 0l) {
+			try {
+				Country country = CountryServiceUtil.fetchCountry(countryId);
+				
+				if (Validator.isNotNull(country)) {
+					idd = country.getIdd();
+				}
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		return idd;
 	}
 }

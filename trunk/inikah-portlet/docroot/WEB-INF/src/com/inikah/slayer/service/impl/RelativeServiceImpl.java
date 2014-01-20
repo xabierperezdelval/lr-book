@@ -43,22 +43,13 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.RelativeServiceUtil} to access the relative remote service.
 	 */
 	
-	public Relative addRelative(long userId, long profileId, String name, boolean unMarried,
-			boolean passedAway, String phone, String emailAddress,
-			String profession, long residingIn, 
-			boolean owner, int relationship, boolean younger, int age) {
+	public Relative updateRelative(long userId, long relativeId,
+			long profileId, String name, boolean unMarried, boolean passedAway,
+			String phone, String emailAddress, String profession,
+			long residingIn, boolean owner, int relationship, boolean younger,
+			int age) {
 		
-		return relativeLocalService.addRelative(userId, profileId, name,
-				unMarried, passedAway, phone, emailAddress, profession,
-				residingIn, owner, relationship, younger, age);
-	}
-	
-	public Relative updateRelative(long relativeId, String name, boolean unMarried,
-			boolean passedAway, String phone, String emailAddress,
-			String profession, long residingIn, boolean owner, 
-			int relationship, boolean younger, int age) {
-		
-		return relativeLocalService.updateRelative(relativeId, name,
+		return relativeLocalService.updateRelative(userId, relativeId, profileId, name,
 				unMarried, passedAway, phone, emailAddress, profession,
 				residingIn, owner, relationship, younger, age);
 	}
@@ -90,9 +81,5 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 		}
 		
 		return relatives;
-	}
-	
-	public Phone getPhone(long relativeId) {
-		return bridgeLocalService.getPhone(relativeId, Relative.class.getName(), true);
 	}
 }
