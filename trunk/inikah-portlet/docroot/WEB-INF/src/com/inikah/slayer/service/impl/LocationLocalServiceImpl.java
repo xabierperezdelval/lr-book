@@ -311,7 +311,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
 				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("classPK", userId));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("city", cityId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("city", String.valueOf(cityId)));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("regionId", regionId));
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("countryId", countryId));
 		
