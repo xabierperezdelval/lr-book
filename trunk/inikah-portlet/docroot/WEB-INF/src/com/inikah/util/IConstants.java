@@ -56,6 +56,4 @@ public interface IConstants {
 	int RELATION_UNCLE = 7;
 	int RELATION_FRIEND = 8;
 	int RELATION_REFERENCE = 9;
-	
-	String OWNER_VIEW = "/html/list/owner-view.jsp";
 }
