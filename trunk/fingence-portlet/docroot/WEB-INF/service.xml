@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
 <service-builder package-path="com.fingence.slayer">
 	<author>Ahmed Hasan</author>
 	<namespace>fing</namespace>
@@ -51,7 +51,7 @@
 		<column name="issuer_bulk" type="String"/>
 		<column name="cpn" type="double"/>
 		<column name="cpn_typ" type="String"/>
-		<column name="mty_typ" type="String"/>
+		<column name="mty_typ" type="String"/>		
 		<column name="mty_years_tdy" type="double"/>
 		<column name="yld_ytm_ask" type="double"/>
 		<column name="yld_ytm_bid" type="double"/>
@@ -61,7 +61,7 @@
 		<column name="rtg_sp" type="String"/>
 		<column name="rtg_moody" type="String"/>
 		<column name="cpn_freq" type="double"/>
-		<column name="5y_bid_cds_spread" type="double"/>
+		<column name="five_y_bid_cds_spread" type="double"/>
 		<column name="dur_mid" type="double"/>
 		<column name="price_to_cash_flow" type="double"/>
 	</entity>
@@ -85,7 +85,7 @@
 		<column name="eqy_sharpe_ratio_1yr" type="double"/>
 		<column name="eqy_sharpe_ratio_3yr" type="double"/>
 		<column name="eqy_sharpe_ratio_5yr" type="double"/>
-	</entity>
+	</entity>	
 	
 	<entity name="MutualFund" local-service="true" remote-service="true">
 		<column name="mutualFundId" type="long" primary="true"/>
@@ -110,18 +110,19 @@
 		<column name="portfolioId" type="long" primary="true"/>
 		<column name="porfolioName" type="String"/>
 		
+		<column name="wealthAdvisorId" type="long"/>
+		<column name="relationshipManagerId" type="long"/>		
+		<column name="bankId" type="long"/>
+		<column name="trial" type="boolean"/>
+		<column name="primary" type="boolean"/>
+		<column name="social" type="boolean"/>
+		
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		<column name="companyId" type="long"/>
 		<column name="userId" type="long"/>
-		<column name="userName" type="String"/>
-		
-		<column name="wealthAdvisorId" type="long"/>
-		<column name="relationshipManagerId" type="long"/>
-		<column name="bankId" type="long"/>
-		<column name="trial" type="boolean"/>
-		<column name="primary" type="boolean"/>
-		<column name="public" type="boolean"/>
+		<column name="userName" type="String"/>		
+		 
 	</entity>
 	
 	<entity name="PortfolioItem" local-service="true" remote-service="true">
@@ -136,5 +137,6 @@
 		<column name="purchasedConversionRate" type="double"/>
 		<column name="currentMarketValue" type="double"/>
 		
-	</entity>
+	</entity>	
+	
 </service-builder>
