@@ -141,3 +141,11 @@ Confirm both tasks complete successfully.
 
 7. Confirm that all config entries are entered into "inikah_Config" table
 ====================
+
+Application Setup
+-----------------
+
+Create the following pages in the Guest site and place the portlets appropriately. 
+
+Public Guest Pages - home, view
+Private Guest Pages - mine, edit, match, pay, invite
