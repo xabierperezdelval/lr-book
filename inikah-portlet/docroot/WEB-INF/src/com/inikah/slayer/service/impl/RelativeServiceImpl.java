@@ -20,7 +20,6 @@ import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Phone;
 
 /**
  * The implementation of the relative remote service.
