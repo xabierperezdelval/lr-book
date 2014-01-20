@@ -141,7 +141,7 @@
 			    emailAddress: emailAddress,
 			    profession: profession,
 			    residingIn: residingIn,
-			    owner: '<%= isOwner %>',
+			    owner: false,
 			    relationship: '<%= relationship %>',
 			    younger: younger,
 			    age: age
