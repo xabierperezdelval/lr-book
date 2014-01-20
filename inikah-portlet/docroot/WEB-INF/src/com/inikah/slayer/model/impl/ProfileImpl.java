@@ -570,12 +570,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 		if (Validator.isNotNull(phone)) {
 			phoneIDD = phone.getExtension();
 		} else {
-			try {
-				Country country = CountryServiceUtil.fetchCountry(getResidingCountry());
-				phoneIDD = country.getIdd();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+			phoneIDD = BridgeServiceUtil.getIdd(getResidingCountry());
 		}
 		
 		return phoneIDD;		

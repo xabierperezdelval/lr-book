@@ -48,19 +48,19 @@
 							 		formatter: function(obj) {
 							 			obj.value = '--';
 							 			if (obj.data.unMarried){
-							 				obj.value = 'Yes ('+ obj.data.age + ' Yrs)'
+							 				obj.value = 'Yes('+ obj.data.age + ' Yrs)'
 							 			}
 							 		}
 							 	},
 							 	{
 							 		key: 'profession',
-							 		label: 'Proffession',
+							 		label: 'Profession',
 							 		emptyCellValue: '--'
 							 	},
 							 	{
 							 		key: 'relativeId',
 							 		label: 'Edit',
-							 		formatter: '<a href="javascript:showPopup(-1, {value});">Edit</a>',
+							 		formatter: '<a href="javascript:showPopup(-1, {value});"><img src="<%= themeDisplay.getPathThemeImages() + "/common/edit.png" %>"/></a>',
 							 		allowHTML: true
 							 	}
 							];

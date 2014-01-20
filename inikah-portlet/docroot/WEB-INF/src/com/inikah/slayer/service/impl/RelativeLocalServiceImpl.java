@@ -17,10 +17,6 @@ package com.inikah.slayer.service.impl;
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.base.RelativeLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Country;
-import com.liferay.portal.service.CountryServiceUtil;
 
 /**
  * The implementation of the relative local service.
@@ -43,57 +39,33 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.RelativeLocalServiceUtil} to access the relative local service.
 	 */
 	
-	public Relative addRelative(long userId, long profileId, String name, boolean unMarried,
-			boolean passedAway, String phone, String emailAddress,
-			String profession, long residingIn, boolean owner, 
-			int relationship, boolean younger, int age) {
-			
-		long relativeId = 0l;
-		try {
-			relativeId = counterLocalService.increment(Relative.class.getName());
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		Relative relative = createRelative(relativeId);
-		
-		relative.setName(name);
-		relative.setResidingIn(residingIn);
-		relative.setRelationship(relationship);
-		relative.setProfession(profession);
-		relative.setOwner(owner);
-		relative.setPassedAway(passedAway);
-		relative.setProfileId(profileId);
-		relative.setUnMarried(unMarried);
-		relative.setEmailAddress(emailAddress);
-		relative.setAge(age);
-		relative.setYounger(younger);
-		
-		relative.setCreateDate(new java.util.Date());
-		
-		try {
-			relative = addRelative(relative);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+	public Relative updateRelative(long userId, long relativeId,
+			long profileId, String name, boolean unMarried, boolean passedAway,
+			String phone, String emailAddress, String profession,
+			long residingIn, boolean owner, int relationship, boolean younger,
+			int age) {
 		
 		String className = Relative.class.getName();
 		
-		bridgeLocalService.addPhone(userId, className, relativeId, phone, getIdd(residingIn), true);
-				
-		return relative;
-	}
-	
-	public Relative updateRelative(long relativeId, String name, boolean unMarried,
-			boolean passedAway, String phone, String emailAddress,
-			String profession, long residingIn, 
-			boolean owner, int relationship, boolean younger, int age) {
+		boolean update = (relativeId > 0l);
+		
+		System.out.println("this is update ==> " + update);
 		
 		Relative relative = null;
-		try {
-			relative = fetchRelative(relativeId);
-		} catch (SystemException e) {
-			e.printStackTrace();
+		
+		if (update) {
+			try {
+				relative = fetchRelative(relativeId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				relativeId = counterLocalService.increment(className);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			relative = createRelative(relativeId);
 		}
 		
 		relative.setName(name);
@@ -105,8 +77,13 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		relative.setUnMarried(unMarried);
 		relative.setAge(age);
 		relative.setYounger(younger);
+		relative.setProfileId(profileId);
 		
-		relative.setModifiedDate(new java.util.Date());
+		if (update) {
+			relative.setModifiedDate(new java.util.Date());
+		} else {
+			relative.setCreateDate(new java.util.Date());
+		}
 		
 		try {
 			relative = updateRelative(relative);
@@ -114,29 +91,14 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		long classPK = relative.getRelativeId();
-		String className = Relative.class.getName();
-		
-
-		
-		bridgeLocalService.updatePhone(className, classPK, phone, getIdd(residingIn), true);
-		
-		return relative;
-	}	
-	
-	private String getIdd(long countryId) {
-		String idd = StringPool.BLANK;
-		if (countryId > 0l) {
-			try {
-				Country country = CountryServiceUtil.fetchCountry(countryId);
-				
-				if (Validator.isNotNull(country)) {
-					idd = country.getIdd();
-				}
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+		if (update) {
+			bridgeLocalService.updatePhone(className, relativeId, phone,
+					bridgeService.getIdd(residingIn), true);			
+		} else {
+			bridgeLocalService.addPhone(userId, className, relativeId, phone,
+					bridgeService.getIdd(residingIn), true);	
 		}
-		return idd;
+
+		return relative;
 	}
 }
