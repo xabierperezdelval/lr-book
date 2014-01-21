@@ -12,6 +12,8 @@
 	<portlet:param name="matchingProfileId" value="<%= String.valueOf(match.getProfileId()) %>"/>
 </portlet:renderURL>
 
-<a href="javascript:void();" onclick="javascript:expandDiv(<%= match.getProfileId() %>);"><liferay-ui:message key="show-details"/></a>
+<a href="javascript:void();" onclick="javascript:expandDiv(<%= match.getProfileId() %>);">
+	<liferay-ui:message key="show-details"/>
+</a>
 
 <div id="<%= match.getProfileId() %>_details"></div>
