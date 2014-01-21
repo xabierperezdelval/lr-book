@@ -25,6 +25,16 @@
 		ajaxURL.setParameter("jspPage", "/html/matches/detail.jsp");
 		ajaxURL.setParameter("matchingProfileId", profileId);
 		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
-		AUI().one('#' + profileId + '_details').load('<%= themeDisplay.getURLPortal() %>'+ajaxURL);
+		
+		var nodeObject = AUI().one('div.current');
+		if (nodeObject){
+			AUI().one(nodeObject).hide(true);	
+			nodeObject.replaceClass('current','profile-details');	
+		}
+		
+		var current = AUI().one('#' + profileId + '_details');
+		current.show(true);
+		current.load('<%= themeDisplay.getURLPortal() %>' + ajaxURL);
+		current.replaceClass('profile-details', 'current');
 	}
 </script>
