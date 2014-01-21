@@ -331,7 +331,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
 						street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
-						999, false, true, serviceContext);
+						IConstants.PHONE_VERIFIED, false, true, serviceContext);
 			} catch (PortalException e) {
 				e.printStackTrace();
 			} catch (SystemException e) {
