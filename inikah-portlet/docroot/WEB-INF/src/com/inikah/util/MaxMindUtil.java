@@ -32,7 +32,9 @@ public class MaxMindUtil {
 		String ipAddress = user.getLastLoginIP();
 		if (Validator.isNull(ipAddress) || ipAddress.equals("127.0.0.1")) {
 			return;
-		}		
+		}	
+		
+		System.out.println("ipAddress ==> " + ipAddress);
 		
 		// check if the MaxMind coordinates are already set for this user
 		if (LocationLocalServiceUtil.isLocationSet(user)) return;
@@ -68,7 +70,8 @@ public class MaxMindUtil {
 		isoCode = omniResponse.getMostSpecificSubdivision().getIsoCode();
 		String name = omniResponse.getMostSpecificSubdivision().getName();
 		
-		Location region = LocationLocalServiceUtil.getLocation(country.getCountryId(), isoCode, name, userId);
+		Location region = LocationLocalServiceUtil.getLocation(
+				country.getCountryId(), isoCode, name, userId);
 		long countryId = country.getCountryId();
 		long regionId = region.getLocationId();
 		
@@ -81,8 +84,12 @@ public class MaxMindUtil {
 		String street2 = String.valueOf(omniResponse.getLocation().getLongitude());
 		String street3 = omniResponse.getContinent().getName();
 		
+		System.out.println("going to insert address....");
+		
 		LocationLocalServiceUtil.insertAddress(userId, street1, street2, street3,
 				city.getLocationId(), regionId, countryId, ipAddress);
+		
+		System.out.println("address successfully inserted....");
 
 		// check queries remaining...
 		int queriesRemaining = omniResponse.getMaxMind().getQueriesRemaining();
