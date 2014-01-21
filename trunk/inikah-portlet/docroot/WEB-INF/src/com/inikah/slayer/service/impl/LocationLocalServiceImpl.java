@@ -326,7 +326,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNotNull(address)) {
+		if (Validator.isNull(address)) {
 			try {
 				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
