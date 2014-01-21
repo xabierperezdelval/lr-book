@@ -33,9 +33,7 @@ public class MaxMindUtil {
 		if (Validator.isNull(ipAddress) || ipAddress.equals("127.0.0.1")) {
 			return;
 		}	
-		
-		System.out.println("ipAddress ==> " + ipAddress);
-		
+				
 		// check if the MaxMind coordinates are already set for this user
 		if (LocationLocalServiceUtil.isLocationSet(user)) return;
 
@@ -64,9 +62,7 @@ public class MaxMindUtil {
 		String isoCode = omniResponse.getCountry().getIsoCode();
 
 		Country country = BridgeServiceUtil.getCountry(isoCode);
-		
-		System.out.println("country ==> " + country);
-		
+				
 		if (Validator.isNull(country)) return;
 		
 		isoCode = omniResponse.getMostSpecificSubdivision().getIsoCode();
@@ -75,7 +71,6 @@ public class MaxMindUtil {
 		Location region = LocationLocalServiceUtil.getLocation(
 				country.getCountryId(), isoCode, name, userId);
 		
-		System.out.println("region==> " + region);
 		long countryId = country.getCountryId();
 		long regionId = region.getLocationId();
 		
@@ -83,20 +78,14 @@ public class MaxMindUtil {
 				omniResponse.getCity().getName(), IConstants.LOC_TYPE_CITY,
 				userId);
 		
-		System.out.println("city ==> " + city);
-		
 		// latitude, longitude and continent
 		String street1 = String.valueOf(omniResponse.getLocation().getLatitude());
 		String street2 = String.valueOf(omniResponse.getLocation().getLongitude());
 		String street3 = omniResponse.getContinent().getName();
-		
-		System.out.println("going to insert address...." + street3);
-		
+				
 		LocationLocalServiceUtil.insertAddress(userId, street1, street2, street3,
 				city.getLocationId(), regionId, countryId, ipAddress);
 		
-		System.out.println("address successfully inserted....");
-
 		// check queries remaining...
 		int queriesRemaining = omniResponse.getMaxMind().getQueriesRemaining();
 		if (queriesRemaining < 50) {
