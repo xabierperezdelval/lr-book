@@ -180,22 +180,6 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		/*
-		try {
-			invitation = invitationPersistence.findByInviteeEmail(emailAddress);
-		} catch (NoSuchInvitationException e) {
-			try {
-				invitation = invitationPersistence.findByRegisteredEmail(emailAddress);
-			} catch (NoSuchInvitationException e1) {
-				// ignore
-			} catch (SystemException e1) {
-				e1.printStackTrace();
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		*/
-		
 		if (Validator.isNull(invitation)) return;
 		
 		invitation.setInviteeNewUserId(user.getUserId());
@@ -260,7 +244,9 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		List<Invitation> invitations = null;
 		
 		try {
-			invitations = (status < 0)? invitationPersistence.findByUserId(userId) : invitationPersistence.findByUserId_Status(userId, status);
+			invitations = (status < 0) ? invitationPersistence
+					.findByUserId(userId) : invitationPersistence
+					.findByUserId_Status(userId, status);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
