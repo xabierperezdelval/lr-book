@@ -1,4 +1,4 @@
-<%@ include file="/html/common/init.jsp" %>
+<%@ include file="/html/matches/init.jsp" %>
 
 <%@page import="com.inikah.slayer.service.InteractionServiceUtil"%>
 <%@page import="com.inikah.slayer.service.InteractionLocalServiceUtil"%>
