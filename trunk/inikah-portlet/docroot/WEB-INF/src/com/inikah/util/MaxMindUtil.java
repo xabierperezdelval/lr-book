@@ -68,14 +68,20 @@ public class MaxMindUtil {
 		isoCode = omniResponse.getMostSpecificSubdivision().getIsoCode();
 		String name = omniResponse.getMostSpecificSubdivision().getName();
 		
+		if (Validator.isNull(name)) return; 
+		
 		Location region = LocationLocalServiceUtil.getLocation(
 				country.getCountryId(), isoCode, name, userId);
 		
 		long countryId = country.getCountryId();
 		long regionId = region.getLocationId();
 		
+		String cityName = omniResponse.getCity().getName();
+		
+		if (Validator.isNull(cityName)) return;
+		
 		Location city = LocationLocalServiceUtil.getLocation(regionId,
-				omniResponse.getCity().getName(), IConstants.LOC_TYPE_CITY,
+				cityName, IConstants.LOC_TYPE_CITY,
 				userId);
 		
 		// latitude, longitude and continent
