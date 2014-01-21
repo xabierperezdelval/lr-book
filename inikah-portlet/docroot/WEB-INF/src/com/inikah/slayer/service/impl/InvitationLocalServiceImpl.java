@@ -20,6 +20,7 @@ import java.util.List;
 import com.inikah.invite.InviteConstants;
 import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.service.base.InvitationLocalServiceBaseImpl;
+import com.inikah.util.NotifyUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -29,6 +30,7 @@ import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
 
 /**
  * The implementation of the invitation local service.
@@ -109,6 +111,8 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 	 */
 	public Invitation initInvitation(long inviterId, String emailAddress, int status) {
 		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		
 		long invitationId = 0l;
 		try {
 			invitationId = counterLocalService.increment(Invitation.class.getName());
@@ -118,6 +122,7 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		
 		Invitation invitation = createInvitation(invitationId);
 		
+		invitation.setCompanyId(companyId);
 		invitation.setUserId(inviterId);
 		invitation.setCreateDate(new Date());
 		invitation.setInviteeEmail(emailAddress);
@@ -144,15 +149,19 @@ public class InvitationLocalServiceImpl extends InvitationLocalServiceBaseImpl {
 		if (Validator.isNull(inviter)) return;
 		
 		Invitation invitation = initInvitation(inviterId, inviteeEmail, 0);
-		
 		invitation.setUserName(inviteeName);
+		
+		try {
+			updateInvitation(invitation);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		
 		// email the actual invitation
 		String inviterName = inviter.getFirstName();
 		String inviterEmail = inviter.getEmailAddress();
 		
-		System.out.println("inviterName ==> " + inviterName);
-		System.out.println("inviterEmail ==> " + inviterEmail);
+		NotifyUtil.sendInvitation(invitation.getInvitationId(), inviterEmail, inviterName, inviteeEmail, inviteeName);
 	}
 	
 	public void linkInvitation(User user) {

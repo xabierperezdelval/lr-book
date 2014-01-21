@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
@@ -60,6 +61,42 @@ public class NotifyUtil {
 			e.printStackTrace();
 		}
 		return addr;
+	}
+	
+	private static InternetAddress getTo(String inviteeEmail, String inviteeName) {
+		InternetAddress addr = new InternetAddress();
+		addr.setAddress(inviteeEmail);
+		try {
+			addr.setPersonal(inviteeName);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return addr;
+	}
+	
+	public static void sendInvitation(long invitationId, String inviterEmail, String inviterName, String inviteeEmail, String inviteeName) {
+		
+		MailMessage mailMessage = new MailMessage();
+		mailMessage.setFrom(getFrom());
+		mailMessage.setTo(getTo(inviteeEmail, inviteeName));
+		
+		InternetAddress[] replyTo = new InternetAddress[]{getTo(inviterEmail, inviterName)};
+		mailMessage.setReplyTo(replyTo);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Inviation from ").append(inviterName).append("to join hasnain");
+		mailMessage.setSubject(sb.toString());
+		
+		String mailBody = getEmailTemplate("PORTAL_INVITATION");
+		
+		String[] tokens = {"[$INVITER_NAME$]", "[$INVITATION_ID$]"};
+		String[] replacements = {inviterName, String.valueOf(invitationId)};
+		
+		mailBody = StringUtil.replace(mailBody, tokens, replacements);
+		
+		mailMessage.setBody(mailBody);
+		
+		MailServiceUtil.sendEmail(mailMessage);
 	}
 	
 	public static String getEmailTemplate(String articleId) {
