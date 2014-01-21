@@ -17,6 +17,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portlet.journal.model.JournalArticle;
@@ -29,7 +31,7 @@ public class NotifyUtil {
 		MailMessage mailMessage = new MailMessage();
 		mailMessage.setFrom(getFrom());
 		mailMessage.setTo(getAdmin());
-		mailMessage.setSubject("New Region Created: " 
+		mailMessage.setSubject("New City Created: " 
 				+ LocationLocalServiceUtil.getDisplayInfo(location.getLocationId()));
 		MailServiceUtil.sendEmail(mailMessage);
 	}
@@ -40,9 +42,9 @@ public class NotifyUtil {
 	
 	private static InternetAddress getFrom() {
 		InternetAddress addr = new InternetAddress();
-		addr.setAddress("info@inikah.com");
+		addr.setAddress(PropsUtil.get(PropsKeys.ADMIN_EMAIL_FROM_ADDRESS));
 		try {
-			addr.setPersonal("inikah.com");
+			addr.setPersonal(PropsUtil.get(PropsKeys.ADMIN_EMAIL_FROM_NAME));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

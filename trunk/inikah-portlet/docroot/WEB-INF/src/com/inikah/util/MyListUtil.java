@@ -299,7 +299,7 @@ public class MyListUtil {
 		StringBuilder sb = new StringBuilder();
 		
 		try {
-			List<Country> countries = CountryServiceUtil.getCountries(false);
+			List<Country> countries = CountryServiceUtil.getCountries(true);
 			
 			for (Country country: countries) {
 				

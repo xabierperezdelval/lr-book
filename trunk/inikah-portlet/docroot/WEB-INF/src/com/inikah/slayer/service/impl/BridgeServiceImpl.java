@@ -45,8 +45,6 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.slayer.service.BridgeServiceUtil} to access the bridge remote service.
 	 */
-
-
 	
 	public Country getCountry(String isoCode) {
 		
@@ -60,12 +58,12 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		if (Validator.isNull(country)) return null;
 		
 		// check if country already 'enabled'
-		if (!country.getActive()) return country;
+		if (country.getActive()) return country;
 		
-		country.setActive(false);
+		country.setActive(true);
 		
 		try {
-			country = countryPersistence.update(country);
+			country = countryPersistence.updateImpl(country);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
