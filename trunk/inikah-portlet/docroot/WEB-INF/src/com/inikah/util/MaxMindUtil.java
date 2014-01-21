@@ -65,6 +65,8 @@ public class MaxMindUtil {
 
 		Country country = BridgeServiceUtil.getCountry(isoCode);
 		
+		System.out.println("country ==> " + country);
+		
 		if (Validator.isNull(country)) return;
 		
 		isoCode = omniResponse.getMostSpecificSubdivision().getIsoCode();
@@ -72,6 +74,8 @@ public class MaxMindUtil {
 		
 		Location region = LocationLocalServiceUtil.getLocation(
 				country.getCountryId(), isoCode, name, userId);
+		
+		System.out.println("region==> " + region);
 		long countryId = country.getCountryId();
 		long regionId = region.getLocationId();
 		
@@ -79,12 +83,14 @@ public class MaxMindUtil {
 				omniResponse.getCity().getName(), IConstants.LOC_TYPE_CITY,
 				userId);
 		
+		System.out.println("city ==> " + city);
+		
 		// latitude, longitude and continent
 		String street1 = String.valueOf(omniResponse.getLocation().getLatitude());
 		String street2 = String.valueOf(omniResponse.getLocation().getLongitude());
 		String street3 = omniResponse.getContinent().getName();
 		
-		System.out.println("going to insert address....");
+		System.out.println("going to insert address...." + street3);
 		
 		LocationLocalServiceUtil.insertAddress(userId, street1, street2, street3,
 				city.getLocationId(), regionId, countryId, ipAddress);
