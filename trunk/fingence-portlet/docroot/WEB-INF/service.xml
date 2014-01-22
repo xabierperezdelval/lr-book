@@ -4,7 +4,7 @@
 	<author>Ahmed Hasan</author>
 	<namespace>fing</namespace>
 
-	<entity name="Asset" local-service="true" remote-service="true">
+	<entity name="Asset" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="assetId" type="long" primary="true"/>
 		<column name="security_ticker" type="String"/>
 		<column name="id_cusip" type="String"/>
@@ -47,7 +47,7 @@
 		</finder>		
 	</entity>
 	
-	<entity name="Bond" local-service="true" remote-service="true">
+	<entity name="Bond" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="assetId" type="long" primary="true"/>
 		
 		<column name="issuer_bulk" type="String"/>
@@ -68,7 +68,7 @@
 		<column name="price_to_cash_flow" type="double"/>
 	</entity>
 	
-	<entity name="Equity" local-service="true" remote-service="true">		
+	<entity name="Equity" local-service="true" remote-service="true" cache-enabled="false">		
 		<column name="assetId" type="long" primary="true"/>
 		<column name="eqy_alpha" type="double"/>
 		<column name="dividend_yield" type="double"/>
@@ -87,7 +87,7 @@
 		<column name="eqy_sharpe_ratio_5yr" type="double"/>
 	</entity>	
 	
-	<entity name="MutualFund" local-service="true" remote-service="true">
+	<entity name="MutualFund" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="assetId" type="long" primary="true"/>
 		<column name="fund_total_assets" type="double"/>
 		<column name="fund_asset_class_focus" type="String"/>
