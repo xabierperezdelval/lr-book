@@ -1,0 +1,5 @@
+.register-portlet .help-inline {
+    display: block;
+    font-style: italic;
+    color: maroon !important;
+}
