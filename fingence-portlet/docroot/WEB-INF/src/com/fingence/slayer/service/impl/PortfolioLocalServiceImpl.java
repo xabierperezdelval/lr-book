@@ -20,11 +20,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
@@ -54,7 +56,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.PortfolioLocalServiceUtil} to access the portfolio local service.
 	 */
 	
-	public void addPortfolio(long userId, String porfolioName, long inverstorId, long bankId,
+	public void addPortfolio(long userId, String porfolioName, long investorId, long bankId,
 			long wealthAdvisorId, boolean trial, long relationshipManagerId,
 			boolean social, boolean primary, File excel) {	
 		
@@ -70,7 +72,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		Portfolio portfolio = createPortfolio(portfolioId);
 		
 		portfolio.setPorfolioName(porfolioName);
-		portfolio.setInverstorId(inverstorId);
+		portfolio.setInvestorId(investorId);
 		portfolio.setWealthAdvisorId(wealthAdvisorId);
 		portfolio.setRelationshipManagerId(relationshipManagerId);
 		portfolio.setBankId(bankId);
@@ -146,6 +148,46 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 				e.printStackTrace();
 			}
         }
+	}
+	
+	public List<Portfolio> getPortfolios(long finderKey, int userType) {
 		
+		List<Portfolio> portfolios = null;
+		
+		switch (userType) {
+			case IConstants.USER_TYPE_INVESTOR:
+			try {
+				portfolios = portfolioPersistence.findByInvestorId(finderKey);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			break;
+			
+			case IConstants.USER_TYPE_WEALTH_ADVISOR:
+			try {
+				portfolios = portfolioPersistence.findByWealthAdvisorId(finderKey);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			break;
+			
+			case IConstants.USER_TYPE_BANK_ADMIN:
+			try {
+				portfolios = portfolioPersistence.findByBankId(finderKey);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			break;	
+			
+			case IConstants.USER_TYPE_REL_MANAGER:
+			try {
+				portfolios = portfolioPersistence.findByRelationshipManagerId(finderKey);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			break;	
+		}
+		
+		return portfolios;
 	}
 }

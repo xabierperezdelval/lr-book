@@ -39,5 +39,7 @@
 
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 
+<%@page import="com.fingence.IConstants"%>
+
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
