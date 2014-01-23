@@ -37,6 +37,8 @@ public class PortfolioPortlet extends MVCPortlet {
 
 		File excelFile = uploadPortletRequest.getFile("excelFile");
 		
-		PortfolioLocalServiceUtil.updatePortfolio(portfolioId, userId, portfolioName, investorId, institutionId, wealthAdvisorId, trial, relationshipManagerId, social, true, excelFile);
+		PortfolioLocalServiceUtil.updatePortfolio(portfolioId, userId,
+				portfolioName, investorId, institutionId, wealthAdvisorId,
+				trial, relationshipManagerId, social, true, excelFile);
 	}
 }
