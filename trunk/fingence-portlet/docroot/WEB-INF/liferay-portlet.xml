@@ -2,20 +2,21 @@
 <!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
-	
-	<portlet>
-		<portlet-name>main</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>false</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>main-portlet</css-class-wrapper>
-	</portlet>
 	<portlet>
 		<portlet-name>register</portlet-name>
 		<icon>/icon.png</icon>
+		
+		<scheduler-entry>
+			<scheduler-event-listener-class>com.inikah.jobs.UpdateXRates</scheduler-event-listener-class>
+			<trigger>
+				<cron>
+					<cron-trigger-value>0 0 13 * * 6</cron-trigger-value>
+				</cron>
+			</trigger>
+		</scheduler-entry>
+		
+		<action-url-redirect>true</action-url-redirect>
+				
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
