@@ -34,8 +34,7 @@
 								<aui:input type="checkbox" name="unMarried" onClick="javascript:toggleDiv();" value="<%= relative.getUnMarried() %>"/>
 							</aui:column>
 							<aui:column cssClass="quarter-width">
-								<div id="<portlet:namespace/>ageDiv" hidden="true">
-									<aui:input name="age" value="<%= relative.getAge() %>">
+								<div id="<portlet:namespace/>ageDiv" <%= !relative.getUnMarried() ? "hidden" : StringPool.BLANK %>>									<aui:input name="age" value="<%= relative.getAge() %>">
 										<aui:validator name="digits"/>
 									</aui:input> 
 								</div>
