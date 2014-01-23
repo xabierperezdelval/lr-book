@@ -109,7 +109,7 @@
 		<column name="investorId" type="long"/>
 		<column name="wealthAdvisorId" type="long"/>
 		<column name="relationshipManagerId" type="long"/>		
-		<column name="bankId" type="long"/>
+		<column name="institutionId" type="long"/>
 		
 		<column name="trial" type="boolean"/>
 		<column name="primary" type="boolean"/>
@@ -133,8 +133,8 @@
 			<finder-column name="relationshipManagerId"/>
 		</finder>	
 		
-		<finder return-type="Collection" name="BankId">
-			<finder-column name="bankId"/>
+		<finder return-type="Collection" name="InstitutionId">
+			<finder-column name="institutionId"/>
 		</finder>						
 		 
 	</entity>

@@ -24,7 +24,7 @@
 				<aui:option value="false" label="female"/>
 			</aui:select>
 			
-			<aui:select name="countryId" required="true" showEmptyOption="true">
+			<aui:select name="countryId" required="true" showEmptyOption="true" label="residing-country">
 				<% 
 					List<Country> countries = CountryServiceUtil.getCountries(true);
 					for (Country country: countries) {
