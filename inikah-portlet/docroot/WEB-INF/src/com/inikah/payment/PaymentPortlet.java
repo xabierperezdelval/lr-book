@@ -8,6 +8,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 
 import com.inikah.slayer.model.Payment;
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.inikah.util.PayPalUtil;
@@ -23,49 +24,20 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class PaymentPortlet extends MVCPortlet {
 	
-	/*
- 
-	@Override
-	public void render(RenderRequest request, RenderResponse response)
-			throws PortletException, IOException {
-
-		long profileId = ParamUtil.getLong(request, "profileId");
-				
-		PortletSession portletSession = request.getPortletSession();
-		if (Validator.isNull(portletSession.getAttribute("PROFILE"))) {
-			Profile profile = null;
-			try {
-				profile = ProfileLocalServiceUtil.fetchProfile(profileId);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			if (Validator.isNotNull(profile)) {
-				portletSession.setAttribute("PROFILE", profile);
-			}
-		}
-		
-		super.render(request, response);
-	}
-	*/
-	
-
-	public void showPaymentOptions(ActionRequest actionRequest,
+	public void savePlan(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		long planId = ParamUtil.getLong(actionRequest, "planId", 0l);
 		long profileId = ParamUtil.getLong(actionRequest, "profileId", 0l);
 		
-		long paymentId = 0;
 		if (planId > 0l && profileId > 0l) {
-			Payment payment = PaymentLocalServiceUtil.init(profileId, planId);
-			paymentId = payment.getPaymentId();
 			
-			PortletSession portletSession = actionRequest.getPortletSession();
-			portletSession.setAttribute("FINAL_AMOUNT", String.valueOf(payment.getAmount()));
+			Profile profile = (Profile) actionRequest.getPortletSession()
+					.getAttribute("SEL_PROFILE",
+							PortletSession.APPLICATION_SCOPE);
+			
+			PaymentLocalServiceUtil.init(profile, planId);
 		}
-		
-		actionRequest.setAttribute("paymentId", paymentId);
-		actionResponse.setRenderParameter("jspPage", "/html/payment/options.jsp");
 	}
 	
 	public void finalPay(ActionRequest actionRequest,
@@ -90,7 +62,6 @@ public class PaymentPortlet extends MVCPortlet {
 		
 		actionResponse.setRenderParameter("jspPage", "/html/payment/thanks.jsp");
 	}
-	
 	
 	public void paypalComplete(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {

@@ -382,7 +382,7 @@
 		</finder>
 	</entity>
 	
-	<entity name="Payment" local-service="true" remote-service="false">
+	<entity name="Payment" local-service="true" remote-service="false" cache-enabled="false">
 		<column name="paymentId" type="long" primary="true"/>
 		<column name="profileId" type="long"/>
 		<column name="userId" type="long"/>

@@ -1,31 +1,12 @@
-<%@ include file="/html/common/init.jsp" %>
+<%@ include file="/html/payment/init.jsp" %>
 
 <%@page import="com.inikah.slayer.model.Plan"%>
 <%@page import="com.inikah.slayer.service.PlanLocalServiceUtil"%>
 
-<%
-	List<Plan> plans = PlanLocalServiceUtil.getPlans(company.getCompanyId());
-%>
+<c:choose>
+	<c:when test="<%= profile.getCurrentPlan() == 0 %>">
+		<%@ include file="/html/payment/plan-selection.jspf" %>
+	</c:when>
+</c:choose>
 
-<liferay-ui:header title="<%= profile.getTitle() %>"/>
-
-<aui:layout cssClass="plan-box">
-	<%
-		for (Plan plan: plans) {
-			%>
-				<portlet:actionURL var="showPaymentOptionsURL" name="showPaymentOptions">
-					<portlet:param name="planId" value="<%= String.valueOf(plan.getPlanId()) %>"/>
-				</portlet:actionURL>
-				<aui:column columnWidth="25">
-					<div><%= plan.getPlanName() %></div>
-					<div>Validity: <%= plan.getValidity() %> Month(s)</div>
-					<div>(<%= plan.getValidity() * 30 %> Days)</div>
-					<div><%= profile.getPrice(plan.getPlanId()) %></div>
-					<div>Discount <%= plan.getDiscount() %>%</div>
-					<div>What you pay: </div>
-					<aui:button value="pick" onClick="<%= showPaymentOptionsURL %>" disabled="<%= (profile.getCurrentPlan() > plan.getPlanId()) %>"/>
-				</aui:column>			
-			<% 
-		}
-	%>
-</aui:layout>
+<h1><%= profile.getCurrentPlan() %></h1>

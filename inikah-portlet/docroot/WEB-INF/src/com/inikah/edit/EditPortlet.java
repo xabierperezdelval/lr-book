@@ -111,7 +111,6 @@ public class EditPortlet extends MVCPortlet {
 		}
 				
 		if (profile.getStatus() == IConstants.PROFILE_STATUS_STEP5_DONE) {
-			System.out.println("proceeding to payment....");
 			actionResponse.sendRedirect(StringPool.SLASH + "pay");
 		} else {
 			actionResponse.setRenderParameter("tabs1", ParamUtil.getString(actionRequest, "tabs1"));

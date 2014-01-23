@@ -1,5 +1,8 @@
-<%@ include file="/html/common/init.jsp" %>
 <%@ include file="/html/payment/init.jsp" %>
+
+Show options here....
+
+<%--
 
 <%
 	long planId = ParamUtil.getLong(request, "planId");
@@ -38,3 +41,4 @@
 		<%@ include file="/html/payment/pay-at-door.jspf" %>
 	</liferay-ui:panel>		
 </liferay-ui:panel-container>
+ --%>
