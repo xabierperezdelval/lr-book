@@ -4,6 +4,7 @@
 <display>
 	<category name="Fingence">
 		<portlet id="register" />
-		<portlet id="portfolio"/>
+		<portlet id="portfolio" />
+		<portlet id="report"/>
 	</category>
 </display>
