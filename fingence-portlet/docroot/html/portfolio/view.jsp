@@ -17,7 +17,7 @@
 	<liferay-ui:search-container-row className="com.fingence.slayer.model.Portfolio" modelVar="portfolio">
 		<liferay-ui:search-container-column-text name="porfolioName"/>
 		<liferay-ui:search-container-column-text name="Bank Name">
-			<%= portfolio.getBankId() %>
+			<%= portfolio.getInstitutionId() %>
 		</liferay-ui:search-container-column-text>
 		<liferay-ui:search-container-column-text name="Relation Manager">
 			<%= portfolio.getRelationshipManagerId() %>
