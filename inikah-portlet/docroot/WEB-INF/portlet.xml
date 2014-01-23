@@ -80,6 +80,10 @@
 			<name>view-template</name>
 			<value>/html/invite/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>			
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -112,6 +116,10 @@
 			<name>view-template</name>
 			<value>/html/payment/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>			
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -135,6 +143,7 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
+		<supported-public-render-parameter>profileId</supported-public-render-parameter>
 	</portlet>
 	<portlet>
 		<portlet-name>filter</portlet-name>
@@ -183,6 +192,10 @@
 			<name>view-template</name>
 			<value>/html/matches/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>			
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -258,6 +271,10 @@
 			<name>view-template</name>
 			<value>/html/start/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>			
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -290,6 +307,10 @@
 			<name>view-template</name>
 			<value>/html/admin/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>			
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -318,6 +339,4 @@
 		<identifier>profileId</identifier>
 		<qname xmlns:x="http://inikah.com">x:profileId</qname>
 	</public-render-parameter>
-
-
 </portlet-app>
