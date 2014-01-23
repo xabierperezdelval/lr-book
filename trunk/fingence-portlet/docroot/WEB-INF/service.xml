@@ -102,14 +102,15 @@
 		<column name="marketType" type="String"/> <!-- developed, emerging, frontier -->
 	</entity>
 	
-	<entity name="Portfolio" local-service="true" remote-service="true">
+	<entity name="Portfolio" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="portfolioId" type="long" primary="true"/>
 		<column name="porfolioName" type="String"/>
 		
-		<column name="inverstorId" type="long"/>
+		<column name="investorId" type="long"/>
 		<column name="wealthAdvisorId" type="long"/>
 		<column name="relationshipManagerId" type="long"/>		
 		<column name="bankId" type="long"/>
+		
 		<column name="trial" type="boolean"/>
 		<column name="primary" type="boolean"/>
 		<column name="social" type="boolean"/>
@@ -118,7 +119,23 @@
 		<column name="modifiedDate" type="Date"/>
 		<column name="companyId" type="long"/>
 		<column name="userId" type="long"/>
-		<column name="userName" type="String"/>		
+		<column name="userName" type="String"/>
+		
+		<finder return-type="Collection" name="InvestorId">
+			<finder-column name="investorId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="WealthAdvisorId">
+			<finder-column name="wealthAdvisorId"/>
+		</finder>	
+		
+		<finder return-type="Collection" name="RelationshipManagerId">
+			<finder-column name="relationshipManagerId"/>
+		</finder>	
+		
+		<finder return-type="Collection" name="BankId">
+			<finder-column name="bankId"/>
+		</finder>						
 		 
 	</entity>
 	
