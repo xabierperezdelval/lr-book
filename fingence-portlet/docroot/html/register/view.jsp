@@ -24,14 +24,13 @@
 				<aui:option value="false" label="female"/>
 			</aui:select>
 			
-			<aui:select name="country" required="true" showEmptyOption="true">
+			<aui:select name="countryId" required="true" showEmptyOption="true">
 				<% 
 					List<Country> countries = CountryServiceUtil.getCountries(true);
 					for (Country country: countries) {
 						%><aui:option value="<%= country.getCountryId() %>" label="<%= TextFormatter.formatName(country.getName()) %>"/><%
 					}
 				%>
-				
 			</aui:select>
 			
 			<aui:input name="jobTitle" />
