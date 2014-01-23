@@ -1,4 +1,6 @@
 <%@page import="com.inikah.util.PayPalUtil"%>
+
+<script src='https://www.paypalobjects.com/js/external/dg.js' type='text/javascript'></script>
  
 Extra PayPal Charges <%= String.valueOf(finalPrice * 0.044 + 0.30) %>
 <aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid) %>">

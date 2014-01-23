@@ -33,6 +33,7 @@ import com.inikah.slayer.service.CurrencyLocalServiceUtil;
 import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.MatchCriteriaLocalServiceUtil;
 import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
+import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.FilterUtil;
@@ -574,5 +575,9 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return phoneIDD;		
+	}
+	
+	public boolean isPaymentPending() {
+		return PaymentLocalServiceUtil.isPaymentPending(getProfileId());
 	}
 }
