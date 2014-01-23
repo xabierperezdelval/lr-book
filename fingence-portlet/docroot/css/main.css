@@ -3,3 +3,13 @@
     font-style: italic;
     color: maroon !important;
 }
+
+.portfolio-portlet .help-inline {
+    display: block;
+    font-style: italic;
+    color: maroon !important;
+}
+
+.aui .display-down .checkbox {
+	padding-top: 30px;
+}

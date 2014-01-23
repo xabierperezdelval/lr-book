@@ -56,42 +56,31 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.PortfolioLocalServiceUtil} to access the portfolio local service.
 	 */
 	
-	public void addPortfolio(long userId, String porfolioName, long investorId, long bankId,
+	public void updatePortfolio(long portfolioId, long userId,
+			String portfolioName, long investorId, long institutionId,
 			long wealthAdvisorId, boolean trial, long relationshipManagerId,
-			boolean social, boolean primary, File excel) {	
+			boolean social, boolean primary, File excelFile) {
 		
-		long companyId = CompanyThreadLocal.getCompanyId();
+		Portfolio portfolio = getPortfolioObj(portfolioId, userId);
 		
-		long portfolioId = 0l;
-		try {
-			portfolioId = counterLocalService.increment(Portfolio.class.getName());
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		Portfolio portfolio = createPortfolio(portfolioId);
-		
-		portfolio.setPorfolioName(porfolioName);
+		portfolio.setPorfolioName(portfolioName);
 		portfolio.setInvestorId(investorId);
 		portfolio.setWealthAdvisorId(wealthAdvisorId);
 		portfolio.setRelationshipManagerId(relationshipManagerId);
-		portfolio.setBankId(bankId);
+		portfolio.setInstitutionId(institutionId);
 		portfolio.setTrial(trial);
 		portfolio.setPrimary(primary);
 		portfolio.setSocial(social);
-		portfolio.setCreateDate(new java.util.Date());
-		portfolio.setCompanyId(companyId);
-		portfolio.setUserId(userId);
 		
 		try {
-			addPortfolio(portfolio);
+			updatePortfolio(portfolio);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		InputStream is = null;
 		try {
-			is = new FileInputStream(excel);
+			is = new FileInputStream(excelFile);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -173,7 +162,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			case IConstants.USER_TYPE_BANK_ADMIN:
 			try {
-				portfolios = portfolioPersistence.findByBankId(finderKey);
+				portfolios = portfolioPersistence.findByInstitutionId(finderKey);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -189,5 +178,40 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		}
 		
 		return portfolios;
+	}
+	
+	private Portfolio getPortfolioObj(long portfolioId, long userId) {
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		
+		Portfolio portfolio = null;
+		
+		if (portfolioId > 0l) {
+			try {
+				portfolio = fetchPortfolio(portfolioId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			portfolio.setModifiedDate(new java.util.Date());
+		} else {
+			try {
+				portfolioId = counterLocalService.increment(Portfolio.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			portfolio = createPortfolio(portfolioId);
+			portfolio.setCreateDate(new java.util.Date());
+			portfolio.setUserId(userId);
+			portfolio.setCompanyId(companyId);
+			
+			try {
+				portfolio = addPortfolio(portfolio);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return portfolio;
 	}
 }
