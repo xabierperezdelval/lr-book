@@ -14,7 +14,6 @@
 		for (Plan plan: plans) {
 			%>
 				<portlet:actionURL var="showPaymentOptionsURL" name="showPaymentOptions">
-					<portlet:param name="profileId" value="<%= String.valueOf(profile.getProfileId()) %>"/>
 					<portlet:param name="planId" value="<%= String.valueOf(plan.getPlanId()) %>"/>
 				</portlet:actionURL>
 				<aui:column columnWidth="25">

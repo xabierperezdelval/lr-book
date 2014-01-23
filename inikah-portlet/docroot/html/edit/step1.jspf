@@ -8,7 +8,7 @@
 				
 				<%@ include file="/html/edit/step1-bornon.jspf" %>
 				
-				<aui:select name="height">
+				<aui:select name="height" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
 					<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
 				</aui:select>					
 			</aui:column>
@@ -22,7 +22,7 @@
 					<%= MyListUtil.getComplexionsList(locale, profile) %>
 				</aui:select>	
 				
-				<aui:select name="weight">
+				<aui:select name="weight" showEmptyOption="<%= true %>">
 					<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
 				</aui:select>			
 			</aui:column>

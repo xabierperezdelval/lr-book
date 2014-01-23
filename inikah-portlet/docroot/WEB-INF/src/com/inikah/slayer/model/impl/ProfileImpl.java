@@ -200,7 +200,7 @@ public class ProfileImpl extends ProfileBaseImpl {
 	}
 	
 	public boolean isEditMode() {
-		return getStatus() >= IConstants.PROFILE_STATUS_STEP4_DONE;
+		return getStatus() >= IConstants.PROFILE_STATUS_STEP5_DONE;
 	}
 	
 	public boolean isOwner(long userId) {
