@@ -4,7 +4,7 @@
 	<author>Ahmed Hasan</author>
 	<namespace>inikah</namespace>
 
-	<entity name="Profile" local-service="true" remote-service="true">
+	<entity name="Profile" local-service="true" remote-service="true" cache-enabled="false">
 
 		<!-- PK fields -->
 

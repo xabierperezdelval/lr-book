@@ -4,7 +4,7 @@
 
 <%
 	String enctype = StringPool.BLANK;
-	if (profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
+	if (profile.getStatus() == IConstants.PROFILE_STATUS_STEP4_DONE) {
 		enctype = "multipart/form-data";
 	}
 %>

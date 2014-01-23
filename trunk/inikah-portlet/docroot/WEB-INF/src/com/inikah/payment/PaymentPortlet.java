@@ -6,13 +6,9 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 
 import com.inikah.slayer.model.Payment;
-import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
-import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.inikah.util.PayPalUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -26,6 +22,8 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class PaymentPortlet
  */
 public class PaymentPortlet extends MVCPortlet {
+	
+	/*
  
 	@Override
 	public void render(RenderRequest request, RenderResponse response)
@@ -48,6 +46,7 @@ public class PaymentPortlet extends MVCPortlet {
 		
 		super.render(request, response);
 	}
+	*/
 	
 
 	public void showPaymentOptions(ActionRequest actionRequest,

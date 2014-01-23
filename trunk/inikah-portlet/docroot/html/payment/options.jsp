@@ -2,7 +2,6 @@
 <%@ include file="/html/payment/init.jsp" %>
 
 <%
-	//long profileId = ParamUtil.getLong(request, "profileId");	
 	long planId = ParamUtil.getLong(request, "planId");
 	
 	long paymentId = (Long) request.getAttribute("paymentId");

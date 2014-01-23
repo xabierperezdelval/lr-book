@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -95,7 +96,11 @@ public class EditPortlet extends MVCPortlet {
 						
 				case IConstants.PROFILE_STATUS_STEP3_DONE: 
 					saveStep4(actionRequest, profile);
-					break;					
+					break;	
+					
+				case IConstants.PROFILE_STATUS_STEP4_DONE: 
+					saveStep5(actionRequest, profile);
+					break;						
 			}
 			
 			try {
@@ -104,7 +109,13 @@ public class EditPortlet extends MVCPortlet {
 				e.printStackTrace();
 			}			
 		}
-		actionResponse.setRenderParameter("tabs1", ParamUtil.getString(actionRequest, "tabs1"));
+				
+		if (profile.getStatus() == IConstants.PROFILE_STATUS_STEP5_DONE) {
+			System.out.println("proceeding to payment....");
+			actionResponse.sendRedirect(StringPool.SLASH + "pay");
+		} else {
+			actionResponse.setRenderParameter("tabs1", ParamUtil.getString(actionRequest, "tabs1"));
+		}
 	}
 	
 	private void saveStep1(ActionRequest actionRequest, Profile profile, User user) {
@@ -253,7 +264,14 @@ public class EditPortlet extends MVCPortlet {
 		}		
 	}
 	
-	public void saveStep4(ActionRequest actionRequest, Profile profile) {
+	private void saveStep4(ActionRequest actionRequest, Profile profile) {
+		
+		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
+			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
+		}
+	}	
+	
+	public void saveStep5(ActionRequest actionRequest, Profile profile) {
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
@@ -267,8 +285,8 @@ public class EditPortlet extends MVCPortlet {
 			}
 		}
 		
-		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
-			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
+		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP4_DONE) {
+			profile.setStatus(IConstants.PROFILE_STATUS_STEP5_DONE);
 		}
 	}
 	
