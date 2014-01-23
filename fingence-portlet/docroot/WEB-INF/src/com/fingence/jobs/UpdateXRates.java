@@ -70,14 +70,14 @@ public class UpdateXRates extends BaseMessageListener {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		List<CountryExt> currencies = null;
+		List<CountryExt> countryExts = null;
 		try {
-			currencies = CountryExtLocalServiceUtil.getCountryExts(0, count);
+			countryExts = CountryExtLocalServiceUtil.getCountryExts(0, count);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 								
-		for (CountryExt countryExt: currencies) {
+		for (CountryExt countryExt: countryExts) {
 			
 			double conversion = 1.0d;
 			String currency = countryExt.getCurrency();
