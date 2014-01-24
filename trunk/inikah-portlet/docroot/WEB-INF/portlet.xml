@@ -300,12 +300,12 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>admin</portlet-name>
-		<display-name>Admin Portlet</display-name>
-		<portlet-class>com.inikah.admin.AdminPortlet</portlet-class>
+		<portlet-name>backofis</portlet-name>
+		<display-name>Backofis Portlet</display-name>
+		<portlet-class>com.inikah.backofis.BackofisPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/admin/view.jsp</value>
+			<value>/html/backofis/view.jsp</value>
 		</init-param>
 		<init-param>
 		    <name>add-process-action-success-action</name>
@@ -318,15 +318,12 @@
 		</supports>
 		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
-			<title>Admin Portlet</title>
-			<short-title>Admin Portlet</short-title>
+			<title>Backofis Portlet</title>
+			<short-title>Backofis Portlet</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>guest</role-name>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>power-user</role-name>

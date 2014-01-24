@@ -10,7 +10,7 @@
 		<portlet id="filter" />
 		<portlet id="edit" />
 		<portlet id="matches" />
-		<portlet id="start"></portlet>
-		<portlet id="admin"></portlet>
+		<portlet id="start" />
+		<portlet id="backofis" />
 	</category>
 </display>
