@@ -11,7 +11,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowStateException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,7 +34,7 @@ import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
-import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.paypal.exception.ClientActionRequiredException;
@@ -51,8 +50,7 @@ public class PayPalUtil {
 		
 		String token = null;
 				
-		PortletSession portletSession = portletRequest.getPortletSession();
-		double itemAmount = GetterUtil.getDouble(portletSession.getAttribute("FINAL_AMOUNT"));
+		double itemAmount = ParamUtil.getDouble(portletRequest, "FINAL_PRICE");
 		
 		// add paypal charges
 		itemAmount += (0.044 * itemAmount) + 0.30d;

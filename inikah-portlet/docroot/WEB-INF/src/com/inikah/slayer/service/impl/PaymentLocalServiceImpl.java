@@ -144,4 +144,21 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		
 		return currentPlan;
 	}
+	
+	public Payment getCurrentPayment(long profileId) {
+		Payment payment = null;
+		
+		try {
+			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			
+			for (Payment _payment: payments) {
+				payment = _payment;
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}	
+		
+		return payment;
+	}
 }
