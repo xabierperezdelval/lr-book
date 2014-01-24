@@ -3,6 +3,11 @@
 <script src='https://www.paypalobjects.com/js/external/dg.js' type='text/javascript'></script>
  
 Extra PayPal Charges <%= String.valueOf(finalPrice * 0.044 + 0.30) %>
+
+<%
+	renderRequest.setAttribute("FINAL_PRICE", String.valueOf(finalPrice));
+%>
+
 <aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid) %>">
 	<aui:input type="image" name="paypal_submit" src="https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif" border='0' align='top' alt='Pay with PayPal' label=""/>
 </aui:form>
