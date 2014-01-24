@@ -86,7 +86,6 @@
 		
 		<!-- status -->
 		<column name="status" type="int" />
-		<column name="currentPlan" type="long"/>
 		<column name="validUpto" type="Date"/>
 		<column name="allowNonSingleProposals" type="boolean"/>
 		<column name="portraitId" type="long"/>
@@ -393,11 +392,15 @@
 		<column name="details" type="String"/>
 		<column name="comments" type="String"/>
 		<column name="paid" type="boolean"/>
+		<column name="createDate" type="Date"/>
+		
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>		
 		
 		<finder return-type="Collection" name="ProfileId">
 			<finder-column name="profileId"/>
-		</finder>
-		
+		</finder>		
 	</entity>
 	
 	<entity name="Config" local-service="true" remote-service="true" cache-enabled="false">

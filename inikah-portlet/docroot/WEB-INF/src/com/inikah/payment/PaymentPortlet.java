@@ -8,7 +8,6 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 
 import com.inikah.slayer.model.Payment;
-import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.inikah.util.PayPalUtil;
@@ -31,12 +30,7 @@ public class PaymentPortlet extends MVCPortlet {
 		long profileId = ParamUtil.getLong(actionRequest, "profileId", 0l);
 		
 		if (planId > 0l && profileId > 0l) {
-			
-			Profile profile = (Profile) actionRequest.getPortletSession()
-					.getAttribute("SEL_PROFILE",
-							PortletSession.APPLICATION_SCOPE);
-			
-			PaymentLocalServiceUtil.init(profile, planId);
+			PaymentLocalServiceUtil.init(profileId, planId);
 		}
 	}
 	

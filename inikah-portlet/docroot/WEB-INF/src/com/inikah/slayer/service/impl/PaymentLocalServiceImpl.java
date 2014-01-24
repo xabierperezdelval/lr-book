@@ -19,7 +19,6 @@ import java.util.List;
 import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.model.Payment;
 import com.inikah.slayer.model.Plan;
-import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.PaymentLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
@@ -46,7 +45,7 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.PaymentLocalServiceUtil} to access the payment local service.
 	 */
 	
-	public Payment init(Profile profile, long planId) {
+	public Payment init(long profileId, long planId) {
 		
 		long paymentId = 0l;
 		try {
@@ -57,21 +56,15 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		
 		Payment payment = createPayment(paymentId);
 		
-		payment.setProfileId(profile.getProfileId());
+		payment.setProfileId(profileId);
 		payment.setPlanId(planId);
+		payment.setCreateDate(new java.util.Date());
 		
 		// calculate the amount as per the plan and the profile
 		payment.setAmount(2.30d);
 		
 		try {
 			payment = addPayment(payment);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			profile.setCurrentPlan(planId);
-			profileLocalService.updateProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -125,15 +118,30 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
 			
 			for (Payment payment: payments) {
-				if (payment.isPaid()) {
-					paymentPending = false;
-					break;
-				}
+				paymentPending = payment.isPaid();
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		return paymentPending;
+	}
+	
+	public int getCurrentPlan(long profileId) {
+		
+		int currentPlan = 0;
+		
+		try {
+			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			
+			for (Payment payment: payments) {
+				currentPlan = (int)payment.getPlanId();
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
+		
+		return currentPlan;
 	}
 }
