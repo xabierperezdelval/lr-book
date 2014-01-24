@@ -209,14 +209,14 @@ public class PayPalUtil {
 		
 		return acknowlegment;
 	}
-	
+	 
 	static PayPalAPIInterfaceServiceService service;
 	
 	static {
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		
 		String paypalEnvironment = AppConfig.get(ConfigConstants.PAYPAL_ENVIRONMENT);
-		
+				
 		sdkConfig.put("mode", paypalEnvironment);
 		sdkConfig.put("acct1.UserName", 
 				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
@@ -224,6 +224,8 @@ public class PayPalUtil {
 				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
 		sdkConfig.put("acct1.Signature",
 				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
-		service = new PayPalAPIInterfaceServiceService(sdkConfig);			
+		service = new PayPalAPIInterfaceServiceService(sdkConfig);
+		
+		System.out.println("service ==> " + service);
 	}	
 }
