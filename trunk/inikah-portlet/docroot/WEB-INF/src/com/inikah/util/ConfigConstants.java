@@ -13,9 +13,9 @@ public interface ConfigConstants {
 	String PAYPAL_ENVIRONMENT_LIVE = "live";
 	String PAYPAL_ENVIRONMENT_SANDBOX = "sandbox";
 	
-	String PAYPAL_MERCHANT_USERNAME = "acct1.UserName";
-	String PAYPAL_MERCHANT_PASSWORD = "acct1.Password";
-	String PAYPAL_MERCHANT_SIGNATURE = "acct1.Signature";
+	String PAYPAL_MERCHANT_USERNAME = "paypal.acct1.UserName";
+	String PAYPAL_MERCHANT_PASSWORD = "paypal.acct1.Password";
+	String PAYPAL_MERCHANT_SIGNATURE = "paypal.acct1.Signature";
 	
 	// clickatell (for SMS)
 	String CLICKATELL_USERNAME = "clickatell.username";
