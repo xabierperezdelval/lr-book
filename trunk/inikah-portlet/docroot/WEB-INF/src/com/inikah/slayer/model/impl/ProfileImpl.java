@@ -580,4 +580,8 @@ public class ProfileImpl extends ProfileBaseImpl {
 	public boolean isPaymentPending() {
 		return PaymentLocalServiceUtil.isPaymentPending(getProfileId());
 	}
+	
+	public int getCurrentPlan() {
+		return PaymentLocalServiceUtil.getCurrentPlan(getProfileId());
+	}
 }
