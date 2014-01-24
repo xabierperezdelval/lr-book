@@ -164,20 +164,20 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	}
 	
 	public String getUserLocation(long userId) {
-		long cityId = 1l;
+		String location = "Un Known Location";
 		try {
 			User user = UserLocalServiceUtil.fetchUser(userId);
 			
 			Address address = getLocation(user);
 			
 			if (Validator.isNotNull(address)) {
-				cityId = Long.valueOf(address.getCity());
+				location = getDisplayInfo(Long.valueOf(address.getCity()));
 			}			
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
-		return getDisplayInfo(cityId);
+		return location;
 	}
 	
 	public long insertCity(long regionId, String name, long userId) {
