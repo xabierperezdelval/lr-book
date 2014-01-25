@@ -29,6 +29,7 @@ import com.inikah.util.MyListUtil;
 import com.inikah.util.ProfileCodeUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -300,6 +301,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 				Profile.class, PortletClassLoaderUtil.getClassLoader());
 		
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
+		dynamicQuery.addOrder(OrderFactoryUtil.desc("dateModified"));
 		
 		String[] parts = status.split(StringPool.COMMA);
 		
