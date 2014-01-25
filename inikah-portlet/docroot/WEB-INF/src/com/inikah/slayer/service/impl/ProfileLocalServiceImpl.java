@@ -301,7 +301,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 				Profile.class, PortletClassLoaderUtil.getClassLoader());
 		
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
-		dynamicQuery.addOrder(OrderFactoryUtil.desc("dateModified"));
+		dynamicQuery.addOrder(OrderFactoryUtil.desc("modifiedDate"));
 		
 		String[] parts = status.split(StringPool.COMMA);
 		
