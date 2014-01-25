@@ -276,4 +276,11 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public Profile updateProfile(Profile profile) throws SystemException {
+
+		profile.setModifiedDate(new java.util.Date());
+		return super.updateProfile(profile);
+	}
 }
