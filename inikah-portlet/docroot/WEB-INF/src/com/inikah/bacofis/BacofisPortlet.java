@@ -1,11 +1,11 @@
-package com.inikah.backofis;
+package com.inikah.bacofis;
 
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
  * Portlet implementation class AdminPortlet
  */
-public class BackofisPortlet extends MVCPortlet {
+public class BacofisPortlet extends MVCPortlet {
  
 
 }

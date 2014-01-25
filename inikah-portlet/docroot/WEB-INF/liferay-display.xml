@@ -11,9 +11,9 @@
 		<portlet id="edit" />
 		<portlet id="matches" />
 		<portlet id="start" />
-		<portlet id="backofis" />
+		<portlet id="bacofis" />
 	</category>
 	<category name="category.sample">
-		<portlet id="bacofic-menu"></portlet>
+		<portlet id="bacofis-menu"></portlet>
 	</category>
 </display>

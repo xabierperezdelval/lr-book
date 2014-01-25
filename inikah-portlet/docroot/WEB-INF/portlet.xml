@@ -300,12 +300,12 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>backofis</portlet-name>
-		<display-name>Backofis Portlet</display-name>
-		<portlet-class>com.inikah.backofis.BackofisPortlet</portlet-class>
+		<portlet-name>bacofis</portlet-name>
+		<display-name>Bacofis Portlet</display-name>
+		<portlet-class>com.inikah.bacofis.BacofisPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/backofis/view.jsp</value>
+			<value>/html/bacofis/view.jsp</value>
 		</init-param>
 		<init-param>
 		    <name>add-process-action-success-action</name>
@@ -318,8 +318,8 @@
 		</supports>
 		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
-			<title>Backofis Portlet</title>
-			<short-title>Backofis Portlet</short-title>
+			<title>Bacofis Portlet</title>
+			<short-title>Bacofis Portlet</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>
@@ -333,14 +333,14 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>bacofic-menu</portlet-name>
-		<display-name>Bacofic Menu</display-name>
+		<portlet-name>bacofis-menu</portlet-name>
+		<display-name>Bacofis Menu</display-name>
 		<portlet-class>
 			com.liferay.util.bridges.mvc.MVCPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/bacofic-menu/view.jsp</value>
+			<value>/html/bacofis/menu.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -349,15 +349,12 @@
 		</supports>
 		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
-			<title>Bacofic Menu</title>
-			<short-title>Bacofic Menu</short-title>
+			<title>Bacofis Menu</title>
+			<short-title>Bacofis Menu</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>guest</role-name>
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>power-user</role-name>
