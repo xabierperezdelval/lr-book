@@ -324,6 +324,11 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 				dynamicQuery.add(RestrictionsFactoryUtil.eq("status", _status));
 			} else {
 				dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
+				dynamicQuery.addOrder(OrderFactoryUtil.desc("status"));
+				
+				if (status.equalsIgnoreCase(IConstants.BACOFIS_STATUS_IN_PROGRESS)) {
+					//dynamicQuery.add(RestrictionsFactoryUtil.)
+				}
 			}
 			
 		} else {
