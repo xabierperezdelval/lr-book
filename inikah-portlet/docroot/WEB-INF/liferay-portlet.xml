@@ -138,6 +138,10 @@
 		<role-link>Power User</role-link>
 	</role-mapper>
 	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>	
+	<role-mapper>
 		<role-name>user</role-name>
 		<role-link>User</role-link>
 	</role-mapper>
