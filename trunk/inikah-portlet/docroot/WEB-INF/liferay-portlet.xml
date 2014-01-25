@@ -111,23 +111,23 @@
 		<css-class-wrapper>start-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
-		<portlet-name>backofis</portlet-name>
+		<portlet-name>bacofis</portlet-name>
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
-		<css-class-wrapper>backofis-portlet</css-class-wrapper>
+		<css-class-wrapper>bacofis-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
-		<portlet-name>bacofic-menu</portlet-name>
+		<portlet-name>bacofis-menu</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
-		<css-class-wrapper>bacofic-menu-portlet</css-class-wrapper>
+		<css-class-wrapper>bacofis-menu-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
