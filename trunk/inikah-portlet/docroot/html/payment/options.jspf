@@ -1,3 +1,4 @@
+<%@page import="com.inikah.slayer.service.PlanLocalServiceUtil"%>
 <%@page import="com.inikah.slayer.model.Payment"%>
 <%@page import="com.inikah.slayer.service.PaymentLocalServiceUtil"%>
 
@@ -6,8 +7,11 @@
 %>
 
 <c:if test="<%= Validator.isNotNull(payment) %>">
+
+	<h3>You've picked <%= PlanLocalServiceUtil.getName(payment.getPlanId()) %> Plan and the amount is <%= payment.getAmount() %></h3>
+
 	<% 
-		long paymentId = payment.getPaymentId(); 
+		long paymentId = payment.getPaymentId();
 		double finalPrice = payment.getAmount();
 	%>
 	

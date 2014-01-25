@@ -33,9 +33,12 @@ import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 
+import com.inikah.slayer.model.Payment;
+import com.inikah.slayer.service.PaymentLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.paypal.exception.ClientActionRequiredException;
 import com.paypal.exception.HttpErrorException;
@@ -46,11 +49,20 @@ import com.paypal.exception.SSLConfigurationException;
 import com.paypal.sdk.exceptions.OAuthException;
 
 public class PayPalUtil {
-	public static String getCheckoutURL(PortletRequest portletRequest, long plid) {
+	public static String getCheckoutURL(PortletRequest portletRequest, long plid, long paymentId) {
 		
 		String token = null;
-				
-		double itemAmount = ParamUtil.getDouble(portletRequest, "FINAL_PRICE");
+		
+		Payment payment = null;
+		try {
+			payment = PaymentLocalServiceUtil.fetchPayment(paymentId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(payment)) return StringPool.BLANK;
+		
+		double itemAmount = payment.getAmount();
 		
 		// add paypal charges
 		itemAmount += (0.044 * itemAmount) + 0.30d;
@@ -91,6 +103,7 @@ public class PayPalUtil {
 		
 		PortletURL returnURL = PortletURLFactoryUtil.create(portletRequest, "payment_WAR_inikahportlet", plid, PortletRequest.ACTION_PHASE);
 		returnURL.setParameter(ActionRequest.ACTION_NAME, "paypalComplete");
+		returnURL.setParameter("paymentId", String.valueOf(paymentId));
 		
 		try {
 			returnURL.setPortletMode(PortletMode.VIEW);
@@ -224,8 +237,6 @@ public class PayPalUtil {
 				AppConfig.get(paypalEnvironment + StringPool.PERIOD + IConstants.PAYPAL_MERCHANT_PASSWORD));
 		sdkConfig.put("acct1.Signature",
 				AppConfig.get(paypalEnvironment + StringPool.PERIOD + IConstants.PAYPAL_MERCHANT_SIGNATURE));
-		service = new PayPalAPIInterfaceServiceService(sdkConfig);
-		
-		System.out.println("service ==> " + service);
+		service = new PayPalAPIInterfaceServiceService(sdkConfig);		
 	}	
 }

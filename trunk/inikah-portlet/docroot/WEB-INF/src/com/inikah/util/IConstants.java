@@ -49,7 +49,10 @@ public interface IConstants {
 	int IMG_TYPE_FACE = 2;
 	int IMG_TYPE_DOC = 3;
 	
-	String PAY_MODE_CHEQUE_DD = "chequeDD";
+	int PAYMODE_PAYPAL_SIGNIN = 1;
+	int PAYMODE_PAYPAL_DIRECT = 2;
+	int PAYMODE_FROM_CREDITS = 3;
+	int PAYMODE_CHEQUE_DD = 4;
 	
 	int PHONE_UNVERIFIED = 777;
 	int PHONE_VERIFIED = 999;

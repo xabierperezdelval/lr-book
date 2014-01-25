@@ -19,6 +19,8 @@ import java.util.List;
 import com.inikah.slayer.model.Plan;
 import com.inikah.slayer.service.base.PlanLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the plan local service.
@@ -51,5 +53,21 @@ public class PlanLocalServiceImpl extends PlanLocalServiceBaseImpl {
 		}
 		
 		return plans;
+	}
+	
+	public String getName(long planId) {
+		String name = StringPool.BLANK;
+		
+		try {
+			Plan plan = fetchPlan(planId);
+			
+			if (Validator.isNotNull(plan)) {
+				name = plan.getPlanName();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return name;
 	}
 }
