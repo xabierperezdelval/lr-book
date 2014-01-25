@@ -1,4 +1,4 @@
-<%@ include file="/html/backofis/init.jsp" %>
+<%@ include file="/html/bacofis/init.jsp" %>
 
 <%
 	String status = ParamUtil.getString(request, "status", IConstants.BACOFIS_STATUS_PAID);
