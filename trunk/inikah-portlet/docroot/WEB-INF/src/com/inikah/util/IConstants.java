@@ -1,6 +1,7 @@
 package com.inikah.util;
 
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 public interface IConstants {
 	int PROFILE_STATUS_CREATED = 0;
@@ -15,7 +16,9 @@ public interface IConstants {
 	int PROFILE_STATUS_SENT_BACK = 9;
 	int PROFILE_STATUS_ACTIVE = 10;
 	int PROFILE_STATUS_INACTIVE = 11;
-	int PROFILE_STATUS_MATCH_FOUND = 12;
+	int PROFILE_STATUS_EXPIRED = 12;
+	int PROFILE_STATUS_MATCH_FOUND = 13;
+	int PROFILE_STATUS_DELETE_REQUESTED = 14;
 	int PROFILE_STATUS_DELETED = 15;
 	
 	String LIST_MARITAL_STATUS = "maritalStatus"; 
@@ -91,5 +94,27 @@ public interface IConstants {
 	// Cloudinary (for thumbnail conversion)
 	String CLDY_CLOUD_NAME = "cloudinary.cloud.name";
 	String CLDY_API_KEY = "cloudinary.api.key";
-	String CLDY_API_SECRET = "cloudinary.api.secret";	
+	String CLDY_API_SECRET = "cloudinary.api.secret";
+	
+	String BACOFIS_STATUS_PAID = String.valueOf(PROFILE_STATUS_PAYMENT_DONE);
+	String BACOFIS_STATUS_PLAN_PICKED = 
+			String.valueOf(PROFILE_STATUS_PLAN_PICKED);
+	String BACOFIS_STATUS_MODE_PICKED = 
+			String.valueOf(PROFILE_STATUS_MODE_PICKED);
+	String BACOFIS_STATUS_IN_PROGRESS =
+			PROFILE_STATUS_STEP1_DONE + StringPool.COMMA +
+			PROFILE_STATUS_STEP2_DONE + StringPool.COMMA +
+			PROFILE_STATUS_STEP3_DONE + StringPool.COMMA +
+			PROFILE_STATUS_STEP4_DONE + StringPool.COMMA +
+			PROFILE_STATUS_STEP5_DONE;
+	String BACOFIS_STATUS_SENT_BACK = 
+			String.valueOf(PROFILE_STATUS_SENT_BACK);
+	String BACOFIS_STATUS_INACTIVE =
+			String.valueOf(PROFILE_STATUS_INACTIVE);
+	String BACOFIS_STATUS_EXPIRED =
+			String.valueOf(PROFILE_STATUS_EXPIRED);
+	String BACOFIS_STATUS_DELETE_REQUESTED =
+			String.valueOf(PROFILE_STATUS_DELETE_REQUESTED);
+	String BACOFIS_STATUS_DELETE_MODIFIED = "19";
+	String BACOFIS_STATUS_DELETE_EXPIRING = "20";
 }

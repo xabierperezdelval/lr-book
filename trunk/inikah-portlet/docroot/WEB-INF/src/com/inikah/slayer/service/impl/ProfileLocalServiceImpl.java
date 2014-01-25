@@ -14,6 +14,7 @@
 
 package com.inikah.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +27,13 @@ import com.inikah.slayer.service.base.ProfileLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.MyListUtil;
 import com.inikah.util.ProfileCodeUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
@@ -282,5 +288,57 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 
 		profile.setModifiedDate(new java.util.Date());
 		return super.updateProfile(profile);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Profile> getProfilesWithStatus(String status) {
+		List<Profile> profiles = null;
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Profile.class, PortletClassLoaderUtil.getClassLoader());
+		
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
+		
+		String[] parts = status.split(StringPool.COMMA);
+		
+		if (parts.length == 1) {	
+			int _status = Integer.valueOf(parts[0]);
+			
+			if (_status < 19) {
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("status", _status));
+			} else {
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("status", IConstants.PROFILE_STATUS_ACTIVE));
+			}
+			
+		} else {
+			
+			List<Integer> values = new ArrayList<Integer>();
+			for (String value: parts) {
+				values.add(Integer.parseInt(value));
+			}
+			dynamicQuery.add(RestrictionsFactoryUtil.in("status", values));
+		}
+		
+		try {
+			profiles = dynamicQuery(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return profiles;
+	}
+	
+	public int getProfilesWithStatusCount(String status) {
+		
+		int count = 0;
+		
+		List<Profile> profiles = getProfilesWithStatus(status);
+		if (Validator.isNotNull(profiles) && profiles.size() > 0) {
+			count = profiles.size();
+		}
+		
+		return count;
 	}
 }
