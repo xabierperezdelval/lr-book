@@ -86,8 +86,8 @@ public interface IConstants {
 			String.valueOf(PROFILE_STATUS_EXPIRED);
 	String BACOFIS_STATUS_DELETE_REQUESTED =
 			String.valueOf(PROFILE_STATUS_DELETE_REQUESTED);
-	String BACOFIS_STATUS_DELETE_MODIFIED = "19";
-	String BACOFIS_STATUS_DELETE_EXPIRING = "20";	
+	String BACOFIS_STATUS_MODIFIED = "19";
+	String BACOFIS_STATUS_EXPIRING = "20";	
 	
 	// -------------------------------------------------------
 	// Configuration Constants

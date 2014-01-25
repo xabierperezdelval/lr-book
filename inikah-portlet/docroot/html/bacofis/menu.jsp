@@ -25,4 +25,22 @@
 	
 	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_IN_PROGRESS %>" label="bacofis-in-progress" /> 
 		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_IN_PROGRESS) %>)
+
+	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_SENT_BACK %>" label="bacofis-sent-back" />
+		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_SENT_BACK) %>)
+	
+	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_INACTIVE %>" label="bacofis-inactive" />
+		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_INACTIVE) %>)
+		
+	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_EXPIRED %>" label="bacofis-expired" />
+		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_EXPIRED) %>)
+		
+	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_DELETE_REQUESTED %>" label="bacofis-delete-requested" /> 
+		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_DELETE_REQUESTED) %>)
+		
+	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_MODIFIED %>" label="bacofis-modified" /> 
+		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_MODIFIED) %>)
+		
+	<li><aui:a href="<%= link + IConstants.BACOFIS_STATUS_EXPIRING %>" label="bacofis-expiring" /> 
+		&nbsp;(<%= ProfileLocalServiceUtil.getProfilesWithStatusCount(IConstants.BACOFIS_STATUS_EXPIRING) %>)		
 </ul>
