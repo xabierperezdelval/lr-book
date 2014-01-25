@@ -29,7 +29,6 @@ import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.base.PhotoLocalServiceBaseImpl;
 import com.inikah.util.AppConfig;
 import com.inikah.util.CloudinaryUtil;
-import com.inikah.util.ConfigConstants;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -260,7 +259,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		URL url = null;
 		try {
 			url = new URL("http://res.cloudinary.com/" 
-					+ AppConfig.get(ConfigConstants.CLDY_CLOUD_NAME) 
+					+ AppConfig.get(IConstants.CLDY_CLOUD_NAME) 
 					+ "/image/upload/w_80,h_100,c_thumb,g_face/" 
 					+ publicId);
 		} catch (MalformedURLException e) {
