@@ -34,6 +34,8 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -239,7 +241,25 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return profiles;
 	}
 	
-	public void destroy(long profileId) {
+	
+	@Override
+	@Indexable(type = IndexableType.DELETE)
+	public Profile deleteProfile(long profileId) throws PortalException,
+			SystemException {
+
+		destroy(profileId);
+		return super.deleteProfile(profileId);
+	}
+	
+	@Override
+	@Indexable(type = IndexableType.DELETE)
+	public Profile deleteProfile(Profile profile) throws SystemException {
+		
+		destroy(profile.getProfileId());
+		return super.deleteProfile(profile);
+	}
+	
+	private void destroy(long profileId) {
 		
 		// delete relatives
 		try {
