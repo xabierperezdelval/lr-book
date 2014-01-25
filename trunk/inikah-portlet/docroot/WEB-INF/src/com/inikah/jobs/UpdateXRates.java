@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 import com.inikah.slayer.model.Currency;
 import com.inikah.slayer.service.CurrencyLocalServiceUtil;
 import com.inikah.util.AppConfig;
-import com.inikah.util.ConfigConstants;
+import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -31,9 +31,9 @@ public class UpdateXRates extends BaseMessageListener {
 
 	private void update() {
 		
-		if (!ConfigConstants.OPENXCHAGE_UPDATE) return;
+		if (!IConstants.OPENXCHAGE_UPDATE) return;
 				
-		String appId = AppConfig.get(ConfigConstants.OPENXCHAGE_API_ID);
+		String appId = AppConfig.get(IConstants.OPENXCHAGE_API_ID);
 		String url = "http://openexchangerates.org/api/latest.json?app_id="+ appId;
 	
 		HttpClient client = new HttpClient();
