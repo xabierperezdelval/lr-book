@@ -3,11 +3,14 @@
 <%
 	String status = ParamUtil.getString(request, "status", IConstants.BACOFIS_STATUS_PAID);
 	List<Profile> profiles = ProfileLocalServiceUtil.getProfilesWithStatus(status);
+	
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("status", status);
 %>
 
-<liferay-ui:search-container delta="10" emptyResultsMessage="bacofis-no-profiles">
+<liferay-ui:search-container delta="10" emptyResultsMessage="bacofis-no-profiles" iteratorURL="<%= iteratorURL %>">
 
-	<liferay-ui:search-container-results 
+	<liferay-ui:search-container-results
 		total="<%= profiles.size() %>"
 		results="<%= ListUtil.subList(profiles, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
 		
