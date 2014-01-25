@@ -2,7 +2,7 @@ package com.inikah.jobs;
 
 import java.util.List;
 
-import com.inikah.util.ConfigConstants;
+import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -24,7 +24,7 @@ public class NotifyOldUsers extends BaseMessageListener {
 
 	private void update() {
 		
-		if (!ConfigConstants.NOTIFY_OLD_USERS) return;
+		if (!IConstants.NOTIFY_OLD_USERS) return;
 		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 				User.class, PortalClassLoaderUtil.getClassLoader());

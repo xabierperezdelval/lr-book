@@ -1,5 +1,7 @@
 package com.inikah.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
+
 public interface IConstants {
 	int PROFILE_STATUS_CREATED = 0;
 	int PROFILE_STATUS_STEP1_DONE = 1;
@@ -58,4 +60,36 @@ public interface IConstants {
 	int RELATION_UNCLE = 7;
 	int RELATION_FRIEND = 8;
 	int RELATION_REFERENCE = 9;
+	
+	// -------------------------------------------------------
+	// Configuration Constants
+	// -------------------------------------------------------
+	
+	// maxmind
+	String MAX_MIND_USER_ID = "max.mind.user.id";
+	String MAX_MIND_LICENSE_KEY = "max.mind.license.key";
+	
+	// paypal
+	String PAYPAL_ENVIRONMENT = "paypal.environment";
+	String PAYPAL_ENVIRONMENT_LIVE = "live";
+	String PAYPAL_ENVIRONMENT_SANDBOX = "sandbox";
+	
+	String PAYPAL_MERCHANT_USERNAME = "paypal.acct1.UserName";
+	String PAYPAL_MERCHANT_PASSWORD = "paypal.acct1.Password";
+	String PAYPAL_MERCHANT_SIGNATURE = "paypal.acct1.Signature";
+	
+	// clickatell (for SMS)
+	String CLICKATELL_USERNAME = "clickatell.username";
+	String CLICKATELL_PASSWORD = "clickatell.password";
+	String CLICKATELL_API_ID = "clickatell.api.id";
+	
+	// openxchangerates.org
+	boolean OPENXCHAGE_UPDATE = GetterUtil.getBoolean(AppConfig.get("openxchange.update"));
+	boolean NOTIFY_OLD_USERS = GetterUtil.getBoolean(AppConfig.get("notify.old.users"));
+	String OPENXCHAGE_API_ID = "openxchange.api.id";
+	
+	// Cloudinary (for thumbnail conversion)
+	String CLDY_CLOUD_NAME = "cloudinary.cloud.name";
+	String CLDY_API_KEY = "cloudinary.api.key";
+	String CLDY_API_SECRET = "cloudinary.api.secret";	
 }

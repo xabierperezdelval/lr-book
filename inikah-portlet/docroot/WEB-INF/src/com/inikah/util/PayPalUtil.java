@@ -55,8 +55,8 @@ public class PayPalUtil {
 		// add paypal charges
 		itemAmount += (0.044 * itemAmount) + 0.30d;
 		
-		String paypalEnvironment = AppConfig.get(ConfigConstants.PAYPAL_ENVIRONMENT);
-		boolean sandbox = paypalEnvironment.equalsIgnoreCase(ConfigConstants.PAYPAL_ENVIRONMENT_SANDBOX);
+		String paypalEnvironment = AppConfig.get(IConstants.PAYPAL_ENVIRONMENT);
+		boolean sandbox = paypalEnvironment.equalsIgnoreCase(IConstants.PAYPAL_ENVIRONMENT_SANDBOX);
 		
 		PaymentDetailsType paymentDetails = new PaymentDetailsType();
 		paymentDetails.setPaymentAction(PaymentActionCodeType.fromValue("Sale"));
@@ -215,15 +215,15 @@ public class PayPalUtil {
 	static {
 		Map<String, String> sdkConfig = new HashMap<String, String>();
 		
-		String paypalEnvironment = AppConfig.get(ConfigConstants.PAYPAL_ENVIRONMENT);
+		String paypalEnvironment = AppConfig.get(IConstants.PAYPAL_ENVIRONMENT);
 				
 		sdkConfig.put("mode", paypalEnvironment);
 		sdkConfig.put("acct1.UserName", 
-				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_USERNAME));
+				AppConfig.get(paypalEnvironment + StringPool.PERIOD + IConstants.PAYPAL_MERCHANT_USERNAME));
 		sdkConfig.put("acct1.Password", 
-				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_PASSWORD));
+				AppConfig.get(paypalEnvironment + StringPool.PERIOD + IConstants.PAYPAL_MERCHANT_PASSWORD));
 		sdkConfig.put("acct1.Signature",
-				AppConfig.get(paypalEnvironment + StringPool.PERIOD + ConfigConstants.PAYPAL_MERCHANT_SIGNATURE));
+				AppConfig.get(paypalEnvironment + StringPool.PERIOD + IConstants.PAYPAL_MERCHANT_SIGNATURE));
 		service = new PayPalAPIInterfaceServiceService(sdkConfig);
 		
 		System.out.println("service ==> " + service);
