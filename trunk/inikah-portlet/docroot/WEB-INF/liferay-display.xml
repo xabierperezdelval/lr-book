@@ -12,8 +12,6 @@
 		<portlet id="matches" />
 		<portlet id="start" />
 		<portlet id="bacofis" />
-	</category>
-	<category name="category.sample">
-		<portlet id="bacofis-menu"></portlet>
+		<portlet id="bacofis-menu" />
 	</category>
 </display>
