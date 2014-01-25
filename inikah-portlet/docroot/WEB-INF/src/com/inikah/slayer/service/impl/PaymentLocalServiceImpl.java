@@ -19,7 +19,9 @@ import java.util.List;
 import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.model.Payment;
 import com.inikah.slayer.model.Plan;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.slayer.service.base.PaymentLocalServiceBaseImpl;
+import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -96,7 +98,6 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 			if (Validator.isNotNull(referralBonus)) {
 				commission = referralBonus.split(StringPool.COMMA);
 			}
-
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -158,6 +159,35 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}	
+		
+		return payment;
+	}
+	
+	public Payment paymentDone(long userId, long paymentId, int paymentMode, String details) {
+		
+		Payment payment = null;
+		try {
+			payment = fetchPayment(paymentId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(payment)) return payment;
+		
+		payment.setPaymentMode(paymentMode);
+		payment.setDetails(details);
+		payment.setModifiedDate(new java.util.Date());
+		payment.setPaid(true);
+		payment.setUserId(userId);
+		
+		try {
+			payment = updatePayment(payment);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		ProfileLocalServiceUtil.updateStatus(payment.getProfileId(), IConstants.PROFILE_STATUS_PAYMENT_DONE);
+		reward(userId, payment.getPlanId(), payment.getAmount());
 		
 		return payment;
 	}

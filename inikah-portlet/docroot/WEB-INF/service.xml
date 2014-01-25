@@ -386,13 +386,12 @@
 		<column name="profileId" type="long"/>
 		<column name="userId" type="long"/>
 		<column name="planId" type="long"/>
-		<column name="planName" type="String"/>
 		<column name="amount" type="double"/>
-		<column name="paymentMethod" type="String"/>
-		<column name="details" type="String"/>
-		<column name="comments" type="String"/>
+		<column name="paymentMode" type="int"/>
+		<column name="details" type="String" />
 		<column name="paid" type="boolean"/>
 		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
 		
 		<order by="desc">
 			<order-column name="createDate"/>

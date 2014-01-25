@@ -120,19 +120,11 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 * (non-Javadoc)
 	 * @see com.inikah.slayer.service.ProfileLocalService#updateStatus(long, java.lang.String)
 	 */
-	public void updateStatus(long profileId, String status) {
+	public void updateStatus(long profileId, int status) {
 		
-		Profile profile = null;
 		try {
-			profile = fetchProfile(profileId);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (Validator.isNull(profile)) return;
-		
-		//profile.setStatus(status);
-		try {
+			Profile profile = fetchProfile(profileId);
+			profile.setStatus(status);
 			updateProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();

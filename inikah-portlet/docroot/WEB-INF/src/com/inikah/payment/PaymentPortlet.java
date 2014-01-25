@@ -5,14 +5,12 @@ import java.io.IOException;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.PortletSession;
 
 import com.inikah.slayer.model.Payment;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.util.IConstants;
 import com.inikah.util.PayPalUtil;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
@@ -47,11 +45,7 @@ public class PaymentPortlet extends MVCPortlet {
 		}
 		
 		if (Validator.isNotNull(payment)) {
-			String paymentMode = ParamUtil.getString(actionRequest, "paymentMode");
-			
-			if (paymentMode.equalsIgnoreCase(IConstants.PAY_MODE_CHEQUE_DD)) {
-				
-			}
+			//String paymentMode = ParamUtil.getString(actionRequest, "paymentMode");
 		}
 		
 		actionResponse.setRenderParameter("jspPage", "/html/payment/thanks.jsp");
@@ -60,18 +54,35 @@ public class PaymentPortlet extends MVCPortlet {
 	public void paypalComplete(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
-		String token = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)).getParameter("token");
-		String payerId = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)).getParameter("PayerID");
+		long paymentId = ParamUtil.getLong(actionRequest, "paymentId");
 		
-		PortletSession portletSession = actionRequest.getPortletSession();
-		double amount = GetterUtil.getDouble(portletSession.getAttribute("FINAL_AMOUNT"));
+		if (paymentId == 0l) return;
 		
-		String acknowledgement = PayPalUtil.executePayment(token, payerId, amount);
-		
-		if (acknowledgement.equalsIgnoreCase("SUCCESS")) {
-			PaymentLocalServiceUtil.reward(17222, 4, 100d);
+		Payment payment = null;
+		try {
+			payment = PaymentLocalServiceUtil.fetchPayment(paymentId);
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 		
-		actionResponse.setRenderParameter("jspPage", "/html/payment/paypal-success.jsp");
+		if (Validator.isNull(payment)) return;
+		
+		String token = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)).getParameter("token");
+		String payerId = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(actionRequest)).getParameter("PayerID");
+		String acknowledgement = PayPalUtil.executePayment(token, payerId, payment.getAmount());
+		
+		if (acknowledgement.equalsIgnoreCase("SUCCESS")) {
+	
+			StringBuilder sb = new StringBuilder();
+			sb.append("TOKEN: ").append(token);
+			sb.append("##").append("PAYER-ID:").append(payerId);
+			
+			long userId = PortalUtil.getUserId(actionRequest);
+			
+			PaymentLocalServiceUtil.paymentDone(userId, paymentId, IConstants.PAYMODE_PAYPAL_SIGNIN, sb.toString());
+			actionResponse.setRenderParameter("jspPage", "/html/payment/paypal-success.jsp");
+		} else {
+			// forward to another place. 
+		}
 	}
 }

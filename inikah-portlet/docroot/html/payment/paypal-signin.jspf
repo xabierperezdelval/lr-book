@@ -4,11 +4,7 @@
  
 Extra PayPal Charges <%= String.valueOf(finalPrice * 0.044 + 0.30) %>
 
-<%
-	renderRequest.setAttribute("FINAL_PRICE", String.valueOf(finalPrice));
-%>
-
-<aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid) %>">
+<aui:form action="<%= PayPalUtil.getCheckoutURL(renderRequest, plid, paymentId) %>">
 	<aui:input type="image" name="paypal_submit" src="https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif" border='0' align='top' alt='Pay with PayPal' label=""/>
 </aui:form>
 
