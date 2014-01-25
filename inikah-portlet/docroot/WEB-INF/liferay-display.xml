@@ -13,4 +13,7 @@
 		<portlet id="start" />
 		<portlet id="backofis" />
 	</category>
+	<category name="category.sample">
+		<portlet id="bacofic-menu"></portlet>
+	</category>
 </display>
