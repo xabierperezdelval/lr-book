@@ -1,7 +1,7 @@
-<%@ include file="/html/common/init.jsp" %>
+<%@ include file="/html/bacofis/init.jsp" %>
 
 <%
-	String tgtPortlet = "backofis_WAR_inikahportlet"; 
+	String tgtPortlet = "bacofis_WAR_inikahportlet"; 
 	String tgtNamespace = StringPool.UNDERLINE + tgtPortlet + StringPool.UNDERLINE;
 %>
 

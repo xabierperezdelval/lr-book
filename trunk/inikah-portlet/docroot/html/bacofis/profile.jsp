@@ -1,4 +1,4 @@
-<%@ include file="/html/backofis/init.jsp" %>
+<%@ include file="/html/bacofis/init.jsp" %>
 
 <% 
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
