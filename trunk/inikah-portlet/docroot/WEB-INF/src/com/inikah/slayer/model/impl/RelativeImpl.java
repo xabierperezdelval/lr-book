@@ -52,4 +52,16 @@ public class RelativeImpl extends RelativeBaseImpl {
 		
 		return idd;
 	}	
+	
+	public String getNumber() {
+		String number = StringPool.BLANK ;
+		
+		Phone phone = BridgeLocalServiceUtil.getPhone(getRelativeId(), Relative.class.getName(), true);
+		
+		if (Validator.isNotNull(phone)) {
+			number = phone.getNumber();
+		}
+		
+		return number;
+	}	
 }
