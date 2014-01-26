@@ -120,4 +120,7 @@ public interface IConstants {
 	String CLDY_CLOUD_NAME = "cloudinary.cloud.name";
 	String CLDY_API_KEY = "cloudinary.api.key";
 	String CLDY_API_SECRET = "cloudinary.api.secret";
+	
+	String CFG_PAYPAL_CLIENT_ID = "paypal.client.id";
+	String CFG_PAYPAL_CLIENT_SECRET = "paypal.client.secret";
 }
