@@ -150,7 +150,6 @@
 		<column name="purchasedMarketValue" type="double"/>
 		<column name="purchasedConversionRate" type="double"/>
 		<column name="currentMarketValue" type="double"/>
-		
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		
