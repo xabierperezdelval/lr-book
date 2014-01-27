@@ -40,6 +40,8 @@
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 
 <%@page import="com.fingence.IConstants"%>
+<%@page import="com.liferay.portal.model.Organization"%>
+<%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
