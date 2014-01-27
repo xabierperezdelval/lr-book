@@ -45,3 +45,7 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
+
+<%
+	int userType = BridgeServiceUtil.getUserType(user.getUserId());
+%>
