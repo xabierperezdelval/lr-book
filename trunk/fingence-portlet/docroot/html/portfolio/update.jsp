@@ -32,7 +32,14 @@
 		</aui:column>
 		
 		<aui:column>
-			<aui:input name="institutionId" label="institution"/>
+			<aui:select name="institutionId" label="institution" required="true" showEmptyOption="true">
+				<%
+					List<Organization> institutions = BridgeServiceUtil.getInstitutions();
+					for (Organization institution: institutions) {
+						%><aui:option value="<%= institution.getOrganizationId() %>" label="<%= institution.getName() %>"/><% 
+					}
+				%>
+			</aui:select>
 		</aui:column>		
 	</aui:row>	
 	

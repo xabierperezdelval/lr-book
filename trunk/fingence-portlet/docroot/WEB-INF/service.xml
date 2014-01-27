@@ -157,6 +157,10 @@
 			<finder-column name="assetId"/>
 			<finder-column name="portfolioId"/>
 		</finder>
+	</entity>
+	
+	<entity name="Bridge">
+		<reference entity="Organization" package-path="com.liferay.portal"/>
 	</entity>	
 	
 </service-builder>
