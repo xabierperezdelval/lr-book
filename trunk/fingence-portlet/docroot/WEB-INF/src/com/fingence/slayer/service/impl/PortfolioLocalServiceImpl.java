@@ -65,6 +65,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		
 		Portfolio portfolio = getPortfolioObj(portfolioId, userId);
 		
+		portfolioId = portfolio.getPortfolioId();
 		portfolio.setPorfolioName(portfolioName);
 		portfolio.setInvestorId(investorId);
 		portfolio.setWealthAdvisorId(wealthAdvisorId);
