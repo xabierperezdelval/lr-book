@@ -33,7 +33,7 @@
 	
 	<aui:fieldset>
 		<aui:column>
-			<aui:input name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
+			<aui:input autoFocus="true" name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
 			
 			<aui:input name="emailAddress" required="<%= true %>" value="<%= emailAddress %>" helpMessage="help-msg-email-address">
 				<aui:validator name="email"/>
@@ -61,9 +61,6 @@
 </aui:form>
 
 <aui:script>
-	Liferay.Util.focusFormField(
-		document.<%= PORTLET_NSPACE %>fm.<%= PORTLET_NSPACE %>profileName);
-		
 	function setValues() {
 		var frm = document.<%= PORTLET_NSPACE %>fm;
 		var creatingForSelf = frm.<%= PORTLET_NSPACE %>creatingForSelf.value;

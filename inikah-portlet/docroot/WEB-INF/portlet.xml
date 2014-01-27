@@ -5,7 +5,7 @@
 	<portlet>
 		<portlet-name>main</portlet-name>
 		<display-name>Main Portlet</display-name>
-		<portlet-class>com.inikah.portlet.MainPortlet</portlet-class>
+		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/profile/view.jsp</value>
