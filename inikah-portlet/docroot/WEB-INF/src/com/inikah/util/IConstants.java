@@ -123,4 +123,8 @@ public interface IConstants {
 	
 	String CFG_PAYPAL_CLIENT_ID = "paypal.client.id";
 	String CFG_PAYPAL_CLIENT_SECRET = "paypal.client.secret";
+	
+	String CFG_AWS_S3_BUCKET_PHOTO_PROFILE = "aws.s3.bucket.photo.profile";
+	String CFG_AWS_ACCESS_KEY = "aws.access.key";
+	String CFG_AWS_SECRET_KEY = "aws.secret.key";
 }
