@@ -151,6 +151,13 @@
 		<column name="purchasedConversionRate" type="double"/>
 		<column name="currentMarketValue" type="double"/>
 		
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		
+		<finder return-type="PortfolioItem" name="AssetId_PortfolioId">
+			<finder-column name="assetId"/>
+			<finder-column name="portfolioId"/>
+		</finder>
 	</entity>	
 	
 </service-builder>

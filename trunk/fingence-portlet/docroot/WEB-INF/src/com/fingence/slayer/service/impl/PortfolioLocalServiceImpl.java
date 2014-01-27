@@ -32,7 +32,9 @@ import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioLocalServiceBaseImpl;
+import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 
 /**
@@ -103,36 +105,57 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         	// get the individual columns. 
         	
         	Row row = rowIterator.next();
+        	if (row.getRowNum()==0) continue;
         	
-        	String id_isin = row.getCell(1).getStringCellValue();
+        	String id_isin = CellUtil.getString(row.getCell(0));
         	
-        	long itemId = 0l;
-			try {
-				itemId = counterLocalService.increment(PortfolioItem.class.getName());
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-        	
-        	PortfolioItem portfolioItem = portfolioItemLocalService.createPortfolioItem(itemId);
-        	portfolioItem.setPortfolioId(portfolioId);
-        	
+        	Asset asset = null;
         	try {
-				Asset asset = assetPersistence.findByIdISIN(id_isin);
-				portfolioItem.setAssetId(asset.getAssetId());
+				asset = assetPersistence.findByIdISIN(id_isin);
 			} catch (NoSuchAssetException e) {
 				e.printStackTrace();
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
         	
-        	//portfolioItem.setPurchaseDate(purchaseDate);
-        	//portfolioItem.setPurchasePrice(purchasePrice);
-        	//portfolioItem.setPurchaseQty(purchaseQty);
-        	//portfolioItem.setPurchasedMarketValue(purchasedMarketValue);
-        	//portfolioItem.setPurchasedConversionRate(purchasedConversionRate);
+        	if (Validator.isNull(asset)) continue;
         	
+        	long assetId = asset.getAssetId();
+        	
+        	PortfolioItem portfolioItem = null;
         	try {
-				portfolioItemLocalService.addPortfolioItem(portfolioItem);
+				portfolioItem = portfolioItemPersistence.fetchByAssetId_PortfolioId(assetId, portfolioId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+        	
+        	if (Validator.isNull(portfolioItem)) {
+        		long itemId = 0l;
+    			try {
+    				itemId = counterLocalService.increment(PortfolioItem.class.getName());
+    			} catch (SystemException e) {
+    				e.printStackTrace();
+    			}        		
+    			portfolioItem = portfolioItemLocalService.createPortfolioItem(itemId);
+    			portfolioItem.setCreateDate(new java.util.Date());
+				portfolioItem.setPortfolioId(portfolioId);
+				portfolioItem.setAssetId(assetId);
+    			
+    			try {
+					portfolioItemLocalService.addPortfolioItem(portfolioItem);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+        	} else {
+        		portfolioItem.setModifiedDate(new java.util.Date());
+        	}
+        	
+			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
+			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
+			portfolioItem.setPurchaseQty(CellUtil.getInteger(row.getCell(4)));
+			
+        	try {
+				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
