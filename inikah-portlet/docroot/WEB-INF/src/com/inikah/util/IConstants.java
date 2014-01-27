@@ -127,4 +127,5 @@ public interface IConstants {
 	String CFG_AWS_S3_BUCKET_PHOTO_PROFILE = "aws.s3.bucket.photo.profile";
 	String CFG_AWS_ACCESS_KEY = "aws.access.key";
 	String CFG_AWS_SECRET_KEY = "aws.secret.key";
+	String CFG_AWS_CLOUDFRONT_DOMAIN = "aws.cloudfront.domain";
 }

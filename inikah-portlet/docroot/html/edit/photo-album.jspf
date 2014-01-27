@@ -9,7 +9,7 @@
 				for (Photo photo: album) {
 		 			%>
 		 				<aui:column>
-							<a href="<%= profile.getPhotoURL(themeDisplay, photo.getImageId()) %>" title="<%= photo.getDescription() %>"> 
+							<a href="<%= profile.getS3URL(photo.getImageId()) %>" title="<%= photo.getDescription() %>"> 
 								<img class="thumbnail" src="<%= profile.getPhotoURL(themeDisplay, photo.getThumbnailId()) %>" />
 							</a>		 				
 		 				</aui:column>
