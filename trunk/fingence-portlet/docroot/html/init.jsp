@@ -24,6 +24,8 @@
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 
 <%@page import="com.liferay.portal.model.ListType"%>
+<%@page import="com.liferay.portal.model.Organization"%>
+
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
@@ -40,7 +42,6 @@
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 
 <%@page import="com.fingence.IConstants"%>
-<%@page import="com.liferay.portal.model.Organization"%>
 <%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
 
 <portlet:defineObjects />
