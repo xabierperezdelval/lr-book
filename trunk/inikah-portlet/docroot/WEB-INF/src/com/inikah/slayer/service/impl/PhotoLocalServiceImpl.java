@@ -30,6 +30,7 @@ import com.inikah.slayer.service.base.PhotoLocalServiceBaseImpl;
 import com.inikah.util.AppConfig;
 import com.inikah.util.CloudinaryUtil;
 import com.inikah.util.IConstants;
+import com.inikah.util.S3Util;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
@@ -42,7 +43,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Image;
-import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.util.portlet.PortletProps;
 
 /**
@@ -87,7 +87,8 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		}
 		
 		try {
-			imageLocalService.updateImage(imageId, file);
+			Image image = imageLocalService.updateImage(imageId, file);
+			photo.setContentType(image.getType());
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -159,7 +160,44 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
+		transferToS3(imageId);
+		
 		return thumbnailId;
+	}
+
+	private void transferToS3(long imageId) {
+		
+		Image image = null;
+		try {
+			image = imageLocalService.fetchImage(imageId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		Photo photo = null;
+		try {
+			photo = fetchPhoto(imageId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		String storagePath = photo.getProfileId() + StringPool.SLASH
+				+ photo.getUploadDate().getTime() + StringPool.SLASH
+				+ photo.getImageId() + StringPool.PERIOD + image.getType();
+
+		String bucketName = AppConfig.get(IConstants.CFG_AWS_S3_BUCKET_PHOTO_PROFILE);
+		S3Util.uploadToS3(bucketName, image.getTextObj(), image.getType(), storagePath);
+		
+		// delete the original image after successful upload to S3
+		if (photo.getImageId() != photo.getThumbnailId()) {
+			try {
+				imageLocalService.deleteImage(imageId);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void minifyPhoto(Image image, long thumbnailId, float newWidth) {
@@ -209,30 +247,41 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		if (Validator.isNull(photo)) return 0l;
 		
 		long profileId = photo.getProfileId();
+		
+		String fileName = imageId + StringPool.PERIOD + photo.getContentType();
+		File file = FileUtils.getFile(fileName);
+		
+		StringBuilder sb = new StringBuilder()
+				.append("http://")
+				.append(AppConfig.get(IConstants.CFG_AWS_CLOUDFRONT_DOMAIN))
+				.append(StringPool.SLASH)
+				.append(profileId)
+				.append(StringPool.SLASH)
+				.append(photo.getUploadDate().getTime())
+				.append(StringPool.SLASH)
+				.append(fileName);
+		
+		URL url = null;
+		try {
+			url = new URL(sb.toString());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}		
+		
+		try {
+			FileUtils.copyURLToFile(url, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		String publicId = String.valueOf(imageId);
-		
-		String fileName = StringPool.BLANK;
-		try {
-			Image image = imageLocalService.fetchImage(imageId);
-			fileName = imageId + StringPool.PERIOD + image.getType();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		File file = null;
-		try {
-			file = DLStoreUtil.getFile(0l, 0l, fileName);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
 		try {
 			CloudinaryUtil.getService().uploader().upload(file, Cloudinary.asMap("public_id", publicId));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		file.delete();
 		
 		long thumbnailId = savePortrait(imageId, profileId);
 		
@@ -247,14 +296,14 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 	
 	private long savePortrait(long imageId, long profileId) {
 		
-		Image image = null;
+		Photo photo = null;
 		try {
-			image = imageLocalService.fetchImage(imageId);
+			photo = fetchPhoto(imageId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
-		String publicId = String.valueOf(imageId) + StringPool.PERIOD + image.getType();
+		String publicId = String.valueOf(imageId) + StringPool.PERIOD + photo.getContentType();
 		
 		URL url = null;
 		try {
@@ -298,7 +347,6 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		return portraitId;
 	}
 	
-	
 	public List<Photo> getPhotos(long profileId) {
 		
 		List<Photo> photos = null;
@@ -317,14 +365,39 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 	public Photo deletePhoto(long imageId) throws PortalException,
 			SystemException {
 		
-		imageLocalService.deleteImage(imageId);
-		
 		Photo photo = fetchPhoto(imageId);
-		if (Validator.isNotNull(photo) && photo.getThumbnailId() > 0l) {
-			imageLocalService.deleteImage(photo.getThumbnailId());
+		
+		if (Validator.isNotNull(photo)) {
+			if (photo.getThumbnailId() > 0l) {
+				imageLocalService.deleteImage(photo.getThumbnailId());
+			}
+			
+			// delete image from S3
+			StringBuilder sb = new StringBuilder()
+				.append(photo.getProfileId())
+				.append(StringPool.SLASH)
+				.append(photo.getUploadDate().getTime())
+				.append(StringPool.SLASH)
+				.append(photo.getImageId())
+				.append(StringPool.PERIOD)
+				.append(photo.getContentType());
+				
+			S3Util.removeFromS3(AppConfig.get(IConstants.CFG_AWS_S3_BUCKET_PHOTO_PROFILE), sb.toString());
 		}
 		
 		return super.deletePhoto(imageId);
+	}
+	
+	@Override
+	public Photo deletePhoto(Photo photo) throws SystemException {
+		
+		try {
+			deletePhoto(photo.getImageId());
+		} catch (PortalException e) {
+			e.printStackTrace();
+		}
+
+		return super.deletePhoto(photo);
 	}
 	
 	public void approve(long imageId) {

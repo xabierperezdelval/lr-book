@@ -36,6 +36,7 @@ import com.inikah.slayer.service.MyLanguageLocalServiceUtil;
 import com.inikah.slayer.service.PaymentLocalServiceUtil;
 import com.inikah.slayer.service.PhotoLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.inikah.util.AppConfig;
 import com.inikah.util.FilterUtil;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -423,7 +424,38 @@ public class ProfileImpl extends ProfileBaseImpl {
 		}
 		
 		return photoURL;
-	}	
+	}
+	
+	public String getS3URL(long imageId) {
+		
+		String s3URL = StringPool.BLANK;
+		
+		if (imageId > 0l) {
+			
+			Photo photo = null;
+			try {
+				photo = PhotoLocalServiceUtil.fetchPhoto(imageId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			StringBuilder sb = new StringBuilder()
+					.append("http://")
+					.append(AppConfig.get(IConstants.CFG_AWS_CLOUDFRONT_DOMAIN))
+					.append(StringPool.SLASH)
+					.append(getProfileId())
+					.append(StringPool.SLASH)
+					.append(photo.getUploadDate().getTime())
+					.append(StringPool.SLASH)
+					.append(imageId)
+					.append(StringPool.PERIOD)
+					.append(photo.getContentType());
+			
+			s3URL = sb.toString();
+		}
+		
+		return s3URL;
+	}
 	
 	public String getThumbnailURL(ThemeDisplay themeDisplay, long thumbnailId) {
 		

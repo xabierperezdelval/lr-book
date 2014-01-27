@@ -120,6 +120,7 @@
 		<column name="description" type="String"/>
 		<column name="thumbnailId" type="long"/>
 		<column name="imageType" type="int"/>
+		<column name="contentType" type="String"/>
 		<column name="approved" type="boolean"/>
 		<column name="uploadDate" type="Date"/>
 		
