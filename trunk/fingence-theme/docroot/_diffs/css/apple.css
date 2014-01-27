@@ -1,7 +1,3 @@
-body {
-    color: #333333;
-}
-
 .aui #navigation .navbar-inner {
 	background:url("../images/apple/globalheader.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
 	border-radius: 4px;
@@ -14,12 +10,16 @@ body {
 	height: 36px;
 }
 
-.aui #navigation .nav li.hover a {
+.aui #navigation .nav li.hover a, .aui #navigation .nav li.selected:first-child:hover {
 	background: url("../images/apple/focus_1.png") repeat-x scroll 0 0px, none repeat scroll 0 0 rgba(0, 0, 0, 0.4);
 }
 
 .aui #navigation .nav li:last-child.hover a {
 	background: none;
+}
+
+.aui .navbar-inner{
+	padding: 0px;
 }
 
 .aui #navigation .nav > .active > a  {
@@ -75,7 +75,7 @@ body {
 	background: none; 
 }
 
-#navigation ul a {
+#navigation ul a, #navigation ul li:first-child a {
     border-image: url("../images/apple/nav_border.png") 0 2 0 1;
     -o-border-image: url("../images/apple/nav_border.png") 0 2 0 1;
 	-ms-border-image: url("../images/apple/nav_border.png") 0 2 0 1;
@@ -102,8 +102,12 @@ body {
     display: none;
 }
 
-#navigation ul li:last-child {
+#navigation ul li:last-child, .aui .navbar .nav > li:last-child {
     float: right;
+}
+
+.aui .navbar .nav{
+	float:none;
 }
 
 #globalsearch input[type="text"] {
@@ -128,12 +132,10 @@ body {
 	background: url("../images/apple/globalsearch_field_focus.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
 	width: 160px !important;
 	color: #000 !important;
-	
 }
 
 #globalsearch form{
-	background-color: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 0;
-    margin: 7px 7px 0 0;
+    margin: 4px 7px 0 0;
 }
