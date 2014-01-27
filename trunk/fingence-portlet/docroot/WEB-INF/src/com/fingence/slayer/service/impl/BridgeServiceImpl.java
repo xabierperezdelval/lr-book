@@ -16,12 +16,14 @@ package com.fingence.slayer.service.impl;
 
 import java.util.List;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.service.base.BridgeServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.service.OrganizationLocalServiceUtil;
 
 /**
  * The implementation of the bridge remote service.
@@ -52,19 +54,70 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		Organization parentOrg = null;
 		try {
-			parentOrg = OrganizationLocalServiceUtil.fetchOrganization(companyId, "Banks");
+			parentOrg = organizationLocalService.fetchOrganization(companyId, "Banks");
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		if (Validator.isNotNull(parentOrg)) {
 			try {
-				institutions = OrganizationLocalServiceUtil.getOrganizations(companyId, parentOrg.getOrganizationId());
+				institutions = organizationLocalService.getOrganizations(companyId, parentOrg.getOrganizationId());
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 		}
 		
 		return institutions;
+	}
+	
+	private boolean isUserHavingRole(long userId, String parentOrg, String roleName) {
+		
+		boolean wealthAdvisor = false;
+		
+		try {
+			List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
+			
+			for (Organization organization:organizations) {
+
+				try {
+					List<Organization> parents = organizationLocalService.getParentOrganizations(organization.getOrganizationId());
+					for (Organization parent: parents) {
+						if (!parent.getName().equalsIgnoreCase(parentOrg)) continue;
+					}					
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+				
+				try {
+					wealthAdvisor = userGroupRoleLocalService.hasUserGroupRole(
+							userId, organization.getGroupId(),
+							roleName);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+				
+				if (wealthAdvisor){
+					break;
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return wealthAdvisor;
+	}
+	
+	public int getUserType(long userId) {
+		int userType = IConstants.USER_TYPE_INVESTOR;
+		
+		if (isUserHavingRole(userId, "Firms", RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
+			userType = IConstants.USER_TYPE_WEALTH_ADVISOR;
+		} else if (isUserHavingRole(userId, "Firms", IConstants.ROLE_RELATIONSHIP_MANAGER)) {
+			userType = IConstants.USER_TYPE_REL_MANAGER;
+		} else if (isUserHavingRole(userId, "Banks", RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
+			userType = IConstants.USER_TYPE_BANK_ADMIN;
+		}
+		
+		return userType;
 	}
 }

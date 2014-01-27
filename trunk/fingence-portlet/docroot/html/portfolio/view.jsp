@@ -1,7 +1,7 @@
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
-	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId(), IConstants.USER_TYPE_INVESTOR);
+	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId(), userType);
 %>
 
 <portlet:renderURL var="addPortfolioURL">
