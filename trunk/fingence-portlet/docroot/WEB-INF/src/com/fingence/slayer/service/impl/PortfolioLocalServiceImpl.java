@@ -152,7 +152,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         	
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
-			portfolioItem.setPurchaseQty(CellUtil.getInteger(row.getCell(4)));
+			portfolioItem.setPurchaseQty((int)CellUtil.getInteger(row.getCell(4)));
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
