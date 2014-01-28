@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -269,7 +270,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		
 		// delete photos
 		try {
-			List<Photo> photos = photoPersistence.findByProfileId(profileId);
+			List<Photo> photos = photoPersistence.findByClassNameId_ClassPK(
+					ClassNameLocalServiceUtil.getClassNameId(Profile.class),
+					profileId);
 			for (Photo photo: photos) {
 				try {
 					photoLocalService.deletePhoto(photo.getImageId());
@@ -283,7 +286,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		
 		// delete payment
 		try {
-			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			List<Payment> payments = paymentPersistence
+					.findByClassNameId_ClassPK(ClassNameLocalServiceUtil
+							.getClassNameId(Profile.class), profileId);
 			for (Payment payment: payments) {
 				try {
 					paymentLocalService.deletePayment(payment.getPaymentId());
