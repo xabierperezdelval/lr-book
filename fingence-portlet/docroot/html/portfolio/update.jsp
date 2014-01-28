@@ -18,7 +18,14 @@
 
 	<aui:row>
 		<aui:column>
-			<aui:input name="investorId" label="investor"/>
+			<aui:select name="investorId" label="investor" required="true" showEmptyOption="true">
+				<%
+					List<User> users = BridgeServiceUtil.getInvestors(user.getUserId());
+					for (User user: users) {
+						%><aui:option value="<%= user.getUserId() %>" label="<%= user.getFullName() %>"/><% 
+					}
+				%>
+			</aui:select>			
 		</aui:column>
 		
 		<aui:column>

@@ -35,6 +35,9 @@
 		<column name="volatility_90d" type="double"/>
 		<column name="volatility_180d" type="double"/>
 		<column name="volatility_360d" type="double"/>
+		<column name="currency" type="String"/>
+		<column name="country" type="long"/>
+		<column name="countryOfRisk" type="long"/>
 		
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
