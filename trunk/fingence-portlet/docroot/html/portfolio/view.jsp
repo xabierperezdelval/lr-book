@@ -2,7 +2,7 @@
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
-	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId(), BridgeServiceUtil.getUserType(user.getUserId()));
+	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId());
 	AssetLocalServiceUtil.importFromExcel(user.getUserId(), null);
 %>
 
