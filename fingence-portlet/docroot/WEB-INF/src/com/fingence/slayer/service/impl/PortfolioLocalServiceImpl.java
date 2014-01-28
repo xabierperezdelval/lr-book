@@ -163,14 +163,16 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         }
 	}
 	
-	public List<Portfolio> getPortfolios(long finderKey, int userType) {
+	public List<Portfolio> getPortfolios(long userId) {
 		
 		List<Portfolio> portfolios = null;
+		
+		int userType = bridgeService.getUserType(userId);
 		
 		switch (userType) {
 			case IConstants.USER_TYPE_INVESTOR:
 			try {
-				portfolios = portfolioPersistence.findByInvestorId(finderKey);
+				portfolios = portfolioPersistence.findByInvestorId(userId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -178,15 +180,17 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			case IConstants.USER_TYPE_WEALTH_ADVISOR:
 			try {
-				portfolios = portfolioPersistence.findByWealthAdvisorId(finderKey);
+				portfolios = portfolioPersistence.findByWealthAdvisorId(userId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 			break;
 			
 			case IConstants.USER_TYPE_BANK_ADMIN:
+				
+			long institutionId = getInstitutionId(userId);	
 			try {
-				portfolios = portfolioPersistence.findByInstitutionId(finderKey);
+				portfolios = portfolioPersistence.findByInstitutionId(institutionId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -194,7 +198,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			case IConstants.USER_TYPE_REL_MANAGER:
 			try {
-				portfolios = portfolioPersistence.findByRelationshipManagerId(finderKey);
+				portfolios = portfolioPersistence.findByRelationshipManagerId(userId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -204,6 +208,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		return portfolios;
 	}
 	
+	private long getInstitutionId(long userId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private Portfolio getPortfolioObj(long portfolioId, long userId) {
 		
 		long companyId = CompanyThreadLocal.getCompanyId();
