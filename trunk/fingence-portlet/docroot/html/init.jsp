@@ -11,6 +11,7 @@
 
 <%@page import="java.util.List"%>
 
+<%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.model.Organization"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
@@ -20,7 +21,3 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
-
-<%
-	int userType = BridgeServiceUtil.getUserType(user.getUserId());
-%>

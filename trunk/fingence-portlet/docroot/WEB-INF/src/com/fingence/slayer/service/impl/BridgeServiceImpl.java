@@ -14,6 +14,7 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fingence.IConstants;
@@ -23,6 +24,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 
 /**
@@ -72,7 +74,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	
 	private boolean isUserHavingRole(long userId, String parentOrg, String roleName) {
 		
-		boolean wealthAdvisor = false;
+		boolean havingRole = false;
 		
 		try {
 			List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
@@ -89,14 +91,14 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 				}
 				
 				try {
-					wealthAdvisor = userGroupRoleLocalService.hasUserGroupRole(
+					havingRole = userGroupRoleLocalService.hasUserGroupRole(
 							userId, organization.getGroupId(),
 							roleName);
 				} catch (PortalException e) {
 					e.printStackTrace();
 				}
 				
-				if (wealthAdvisor){
+				if (havingRole){
 					break;
 				}
 			}
@@ -104,7 +106,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		return wealthAdvisor;
+		return havingRole;
 	}
 	
 	public int getUserType(long userId) {
@@ -119,5 +121,25 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		}
 		
 		return userType;
+	}
+	
+	public List<User> getInvestors(long userId) {
+		
+		int userType = getUserType(userId);
+		
+		List<User> users = new ArrayList<User>();
+		
+		switch (userType) {
+		case IConstants.USER_TYPE_INVESTOR:
+			try {
+				User user = userLocalService.fetchUser(userId);
+				users.add(user);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return users;
+		
 	}
 }
