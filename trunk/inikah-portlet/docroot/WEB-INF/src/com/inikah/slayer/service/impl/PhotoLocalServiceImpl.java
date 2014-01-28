@@ -249,7 +249,6 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		long profileId = photo.getProfileId();
 		
 		String fileName = imageId + StringPool.PERIOD + photo.getContentType();
-		File file = FileUtils.getFile(fileName);
 		
 		StringBuilder sb = new StringBuilder()
 				.append("http://")
@@ -267,7 +266,8 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}		
-		
+
+		File file = FileUtils.getFile(fileName);
 		try {
 			FileUtils.copyURLToFile(url, file);
 		} catch (IOException e) {
