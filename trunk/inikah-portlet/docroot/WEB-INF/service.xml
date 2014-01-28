@@ -116,7 +116,8 @@
 	
 	<entity name="Photo" remote-service="false" local-service="true">
 		<column name="imageId" type="long" primary="true"/>
-		<column name="profileId" type="long"/>
+		<column name="classNameId" type="long"/>
+		<column name="classPK" type="long"/>
 		<column name="description" type="String"/>
 		<column name="thumbnailId" type="long"/>
 		<column name="imageType" type="int"/>
@@ -124,13 +125,15 @@
 		<column name="approved" type="boolean"/>
 		<column name="uploadDate" type="Date"/>
 		
-		<finder return-type="Collection" name="ProfileId_ImageType">
-			<finder-column name="profileId"/>
+		<finder return-type="Collection" name="ClassNameId_ClassPK_ImageType">
+			<finder-column name="classNameId"/>
+			<finder-column name="classPK"/>
 			<finder-column name="imageType"/>
 		</finder>
 		
-		<finder return-type="Collection" name="ProfileId">
-			<finder-column name="profileId"/>
+		<finder return-type="Collection" name="ClassNameId_ClassPK">
+			<finder-column name="classNameId"/>
+			<finder-column name="classPK"/>
 		</finder>		
 		
 		<reference entity="Image" package-path="com.liferay.portal" />
@@ -384,7 +387,8 @@
 	
 	<entity name="Payment" local-service="true" remote-service="false" cache-enabled="false">
 		<column name="paymentId" type="long" primary="true"/>
-		<column name="profileId" type="long"/>
+		<column name="classNameId" type="long"/>
+		<column name="classPK" type="long"/>
 		<column name="userId" type="long"/>
 		<column name="planId" type="long"/>
 		<column name="amount" type="double"/>
@@ -398,8 +402,9 @@
 			<order-column name="createDate"/>
 		</order>		
 		
-		<finder return-type="Collection" name="ProfileId">
-			<finder-column name="profileId"/>
+		<finder return-type="Collection" name="ClassNameId_ClassPK">
+			<finder-column name="classNameId"/>
+			<finder-column name="classPK"/>
 		</finder>		
 	</entity>
 	
