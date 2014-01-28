@@ -19,12 +19,14 @@ import java.util.List;
 import com.inikah.slayer.model.Invitation;
 import com.inikah.slayer.model.Payment;
 import com.inikah.slayer.model.Plan;
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.slayer.service.base.PaymentLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 
 /**
  * The implementation of the payment local service.
@@ -58,7 +60,8 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		
 		Payment payment = createPayment(paymentId);
 		
-		payment.setProfileId(profileId);
+		payment.setClassName(Profile.class.getName());
+		payment.setClassPK(profileId);
 		payment.setPlanId(planId);
 		payment.setCreateDate(new java.util.Date());
 		
@@ -116,7 +119,9 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		boolean paymentPending = true;
 		
 		try {
-			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			List<Payment> payments = paymentPersistence
+					.findByClassNameId_ClassPK(ClassNameLocalServiceUtil
+							.getClassNameId(Profile.class), profileId);
 			
 			for (Payment payment: payments) {
 				paymentPending = payment.isPaid();
@@ -133,7 +138,9 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		int currentPlan = 0;
 		
 		try {
-			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			List<Payment> payments = paymentPersistence
+					.findByClassNameId_ClassPK(ClassNameLocalServiceUtil
+							.getClassNameId(Profile.class), profileId);
 			
 			for (Payment payment: payments) {
 				currentPlan = (int)payment.getPlanId();
@@ -150,7 +157,9 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 		Payment payment = null;
 		
 		try {
-			List<Payment> payments = paymentPersistence.findByProfileId(profileId);
+			List<Payment> payments = paymentPersistence
+					.findByClassNameId_ClassPK(ClassNameLocalServiceUtil
+							.getClassNameId(Profile.class), profileId);
 			
 			for (Payment _payment: payments) {
 				payment = _payment;
@@ -186,7 +195,7 @@ public class PaymentLocalServiceImpl extends PaymentLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		ProfileLocalServiceUtil.updateStatus(payment.getProfileId(), IConstants.PROFILE_STATUS_PAYMENT_DONE);
+		ProfileLocalServiceUtil.updateStatus(payment.getClassPK(), IConstants.PROFILE_STATUS_PAYMENT_DONE);
 		reward(userId, payment.getPlanId(), payment.getAmount());
 		
 		return payment;

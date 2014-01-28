@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Image;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.util.portlet.PortletProps;
 
 /**
@@ -96,7 +97,8 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		}
 				
 		photo.setUploadDate(new java.util.Date());
-		photo.setProfileId(profileId);
+		photo.setClassName(Profile.class.getName());
+		photo.setClassPK(profileId);
 		photo.setDescription(description);
 		photo.setImageType(IConstants.IMG_TYPE_PHOTO);
 		
@@ -181,7 +183,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		String storagePath = photo.getProfileId() + StringPool.SLASH
+		String storagePath = photo.getClassPK() + StringPool.SLASH
 				+ photo.getUploadDate().getTime() + StringPool.SLASH
 				+ photo.getImageId() + StringPool.PERIOD + image.getType();
 
@@ -246,7 +248,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		
 		if (Validator.isNull(photo)) return 0l;
 		
-		long profileId = photo.getProfileId();
+		long profileId = photo.getClassPK();
 		
 		String fileName = imageId + StringPool.PERIOD + photo.getContentType();
 		
@@ -352,7 +354,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		List<Photo> photos = null;
 		
 		try {
-			photos = photoPersistence.findByProfileId_ImageType(profileId, IConstants.IMG_TYPE_PHOTO);
+			photos = photoPersistence.findByClassNameId_ClassPK_ImageType(ClassNameLocalServiceUtil.getClassNameId(Profile.class), profileId, IConstants.IMG_TYPE_PHOTO);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}		
@@ -374,7 +376,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 			
 			// delete image from S3
 			StringBuilder sb = new StringBuilder()
-				.append(photo.getProfileId())
+				.append(photo.getClassPK())
 				.append(StringPool.SLASH)
 				.append(photo.getUploadDate().getTime())
 				.append(StringPool.SLASH)
