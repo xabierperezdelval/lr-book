@@ -94,8 +94,8 @@
 }
 
 .ie #navigation ul a { 
-	border-color: #BFBFBF;
-	border-width: 0 1px 0 1px;
+    border-color: #777;
+    border-width: 0 0.1px 0 0.1px;
 }
 
 #globalsearch select, #globalsearch input[type="image"] {
@@ -138,4 +138,13 @@
     border-radius: 12px;
     padding: 0;
     margin: 4px 7px 0 0;
+}
+
+.aui.ie9 #navigation .nav .active a{
+    filter: filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#373737', endColorstr='#373737',GradientType=0 ) !important;
+}
+
+.aui.ie9 #navigation .nav .active:first-child a{
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false) !important;
+    background: none !important;
 }
