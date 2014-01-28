@@ -22,7 +22,7 @@
 		<column name="chg_pct_low_52week" type="double"/>
 		<column name="chg_pct_1yr" type="double"/>
 		<column name="chg_trr_5yr" type="double"/>
-		<column name="curent_price" type="double"/>
+		<column name="current_price" type="double"/>
 		<column name="last_price" type="double"/>
 		<column name="bid_price" type="double"/>
 		<column name="ask_price" type="double"/>
@@ -37,7 +37,7 @@
 		<column name="volatility_360d" type="double"/>
 		<column name="currency" type="String"/>
 		<column name="country" type="long"/>
-		<column name="countryOfRisk" type="long"/>
+		<column name="country_of_risk" type="long"/>
 		
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
@@ -150,9 +150,6 @@
 		<column name="purchaseDate" type="Date"/>
 		<column name="purchasePrice" type="double"/>
 		<column name="purchaseQty" type="int"/>
-		<column name="purchasedMarketValue" type="double"/>
-		<column name="purchasedConversionRate" type="double"/>
-		<column name="currentMarketValue" type="double"/>
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
 		

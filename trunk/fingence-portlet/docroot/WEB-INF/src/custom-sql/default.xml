@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findResults"> 
+		<![CDATA[
+			SELECT 
+				a.assetId, 
+				a.security_ticker, 
+				a.name, 
+				a.current_price,	
+				a.security_des,
+				a.security_typ,
+				a.security_typ2,	
+				a.parent_comp_name,	
+				a.security_class,	
+				a.country as countryId, 
+				d.name as countryName, 
+				a.country_of_risk as countryOfRisk,
+				a.currency_ as currency,
+				(c.purchasePrice * c.purchaseQty) as purchasedMarketValue,
+				(a.current_price * c.purchaseQty) as currentMarketValue,
+				(c.purchasePrice * c.purchaseQty - a.current_price * c.purchaseQty) as gain_loss
+			FROM 
+				fing_asset a, 
+				fing_portfolio b, 
+				fing_portfolioitem c, 
+				country d 
+			WHERE 
+				b.portfolioId = ?
+				and a.assetId = c.assetId 
+				and b.portfolioId = c.portfolioId 
+				and a.country = d.countryId
+		]]>
+	</sql>
+</custom-sql>

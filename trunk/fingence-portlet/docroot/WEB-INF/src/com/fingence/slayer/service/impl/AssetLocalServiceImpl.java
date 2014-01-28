@@ -144,8 +144,14 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				e.printStackTrace();
 			}
 			if (Validator.isNotNull(country)) {
-				asset.setCountryOfRisk(country.getCountryId());
-			}			
+				asset.setCountry_of_risk(country.getCountryId());
+			}
+			
+			if (asset.getSecurity_class().equalsIgnoreCase("Fund")) {
+				asset.setCurrent_price(CellUtil.getDouble(row.getCell(21)));
+			} else {
+				asset.setCurrent_price(CellUtil.getDouble(row.getCell(28)));
+			}
 			
 			try {
 				updateAsset(asset);
