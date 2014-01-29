@@ -146,14 +146,6 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 				e.printStackTrace();
 			}
 		} else {
-			String roleName = RoleConstants.ORGANIZATION_USER;
-			
-			if (targetUserType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
-				roleName = RoleConstants.ORGANIZATION_ADMINISTRATOR;
-			} else if (targetUserType == IConstants.USER_TYPE_REL_MANAGER) {
-				roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
-			}
-			
 			try {
 				List<Organization> organizations = organizationLocalService.getUserOrganizations(loggedInUserId);
 				
@@ -162,19 +154,35 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 					
 					for (User user: organizationUsers) {
 						
-						boolean hasRole = (targetUserType == IConstants.USER_TYPE_INVESTOR); 
-						
-						if (!hasRole) {
-							try {
-								hasRole = userGroupRoleLocalService.hasUserGroupRole(user.getUserId(), organization.getGroupId(), roleName);
-							} catch (PortalException e) {
-								e.printStackTrace();
-							}
+						boolean wealthAdvisor = false;
+						try {
+							wealthAdvisor = userGroupRoleLocalService
+									.hasUserGroupRole(
+											user.getUserId(),
+											organization.getGroupId(),
+											RoleConstants.ORGANIZATION_ADMINISTRATOR);
+						} catch (PortalException e) {
+							e.printStackTrace();
 						}
 						
-						if (hasRole) {
+						boolean relationshipManager = false;
+						try {
+							relationshipManager = userGroupRoleLocalService
+									.hasUserGroupRole(
+											user.getUserId(),
+											organization.getGroupId(),
+											IConstants.ROLE_RELATIONSHIP_MANAGER);
+						} catch (PortalException e) {
+							e.printStackTrace();
+						}
+						
+						if (!wealthAdvisor && !relationshipManager && (targetUserType == IConstants.USER_TYPE_INVESTOR)) {
 							users.add(user);
-						}
+						} else if (relationshipManager && targetUserType == IConstants.USER_TYPE_REL_MANAGER) {
+							users.add(user);
+						} else if (wealthAdvisor && targetUserType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
+							users.add(user);
+						}				
 					}
 				}
 			} catch (SystemException e) {
