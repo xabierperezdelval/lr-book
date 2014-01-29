@@ -140,12 +140,42 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		if (getUserType(loggedInUserId) == targetUserType) {
 			try {
 				User user = userLocalService.fetchUser(loggedInUserId);
+				user.setLastName(user.getLastName() + "(My Self)");
 				users.add(user);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 		} else {
-			users = getUsers(loggedInUserId, targetUserType);
+			String roleName = RoleConstants.ORGANIZATION_USER;
+			
+			if (targetUserType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
+				roleName = RoleConstants.ORGANIZATION_ADMINISTRATOR;
+			} else if (targetUserType == IConstants.USER_TYPE_REL_MANAGER) {
+				roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
+			}
+			
+			try {
+				List<Organization> organizations = organizationLocalService.getUserOrganizations(loggedInUserId);
+				
+				for (Organization organization: organizations) {
+					List<User> organizationUsers = userLocalService.getOrganizationUsers(organization.getOrganizationId());
+					
+					for (User user: organizationUsers) {
+						boolean hasRole = false;
+						try {
+							hasRole = userGroupRoleLocalService.hasUserGroupRole(user.getUserId(), organization.getGroupId(), roleName);
+						} catch (PortalException e) {
+							e.printStackTrace();
+						}
+						
+						if (hasRole) {
+							users.add(user);
+						}
+					}
+				}
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return users;
@@ -302,43 +332,5 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		}
 		
 		return _type;
-	}
-	
-	private List<User> getUsers(long loggedInUserId, int targetUserType) {
-		
-		List<User> users = new ArrayList<User>();
-		
-		String roleName = RoleConstants.ORGANIZATION_USER;
-		
-		if (targetUserType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
-			roleName = RoleConstants.ORGANIZATION_ADMINISTRATOR;
-		} else if (targetUserType == IConstants.USER_TYPE_REL_MANAGER) {
-			roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
-		}
-		
-		try {
-			List<Organization> organizations = organizationLocalService.getUserOrganizations(loggedInUserId);
-			
-			for (Organization organization: organizations) {
-				List<User> organizationUsers = userLocalService.getOrganizationUsers(organization.getOrganizationId());
-				
-				for (User user: organizationUsers) {
-					boolean hasRole = false;
-					try {
-						hasRole = userGroupRoleLocalService.hasUserGroupRole(user.getUserId(), organization.getGroupId(), roleName);
-					} catch (PortalException e) {
-						e.printStackTrace();
-					}
-					
-					if (hasRole) {
-						users.add(user);
-					}
-				}
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return users;
 	}
 }
