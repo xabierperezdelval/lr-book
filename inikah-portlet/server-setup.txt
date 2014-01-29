@@ -37,17 +37,19 @@ sudo apt-get install oracle-java7-installer
 
 11. apt-get install unzip
 
-12. dpkg-reconfigure tzdata
+12. apt-get install language-pack-en-base
 
-13. apt-get install libtcnative-1
+13. dpkg-reconfigure tzdata
 
-14. go to /phpmyadmin and create a new database "inikah"
+14. apt-get install libtcnative-1
 
-15. a2enmod proxy_ajp
+15. go to /phpmyadmin and create a new database "inikah"
 
-16. service apache2 restart
+16. a2enmod proxy_ajp
 
-17. vi /etc/apache2/conf-enabled/proxy-ajp.conf 
+17. service apache2 restart
+
+18. vi /etc/apache2/conf-enabled/proxy-ajp.conf 
 
 ProxyPass /phpmyadmin !
 ProxyPassReverse /phpmyadmin !

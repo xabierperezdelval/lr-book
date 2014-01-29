@@ -3,4 +3,10 @@
 
 <project name="inikah-portlet" basedir="." default="deploy">
 	<import file="../build-common-portlet.xml" />
+	
+	<target name="copy-tlds">
+		<copy todir="${basedir}/docroot/WEB-INF/tld">
+			<fileset dir="${app.server.portal.dir}/WEB-INF/tld" includes="${plugin.tlds}" />
+		</copy>
+	</target>	
 </project>
