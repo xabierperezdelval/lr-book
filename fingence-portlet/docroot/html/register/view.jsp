@@ -65,7 +65,14 @@
 		</aui:column>
 		
 		<aui:column>
-			<aui:input name="firmName" required="true"/>
+			<c:choose>
+				<c:when test="<%= themeDisplay.isSignedIn() %>">
+					<aui:input name="firmName" readonly="true" value="<%= BridgeServiceUtil.getFirmName(user.getUserId()) %>"/>
+				</c:when>
+				<c:otherwise>
+					<aui:input name="firmName" required="true" />
+				</c:otherwise>
+			</c:choose>
 		</aui:column>		
 	</aui:row>	
 

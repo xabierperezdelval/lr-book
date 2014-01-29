@@ -333,4 +333,16 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		return _type;
 	}
+	
+	public String getFirmName(long userId) {
+		
+		String firmName = StringPool.BLANK;
+		Organization organization = getCurrentOrganization(userId);
+		
+		if (Validator.isNotNull(organization)) {
+			firmName = organization.getName();
+		}
+		
+		return firmName;
+	}
 }
