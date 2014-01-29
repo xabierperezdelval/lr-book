@@ -161,11 +161,15 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 					List<User> organizationUsers = userLocalService.getOrganizationUsers(organization.getOrganizationId());
 					
 					for (User user: organizationUsers) {
-						boolean hasRole = false;
-						try {
-							hasRole = userGroupRoleLocalService.hasUserGroupRole(user.getUserId(), organization.getGroupId(), roleName);
-						} catch (PortalException e) {
-							e.printStackTrace();
+						
+						boolean hasRole = (targetUserType == IConstants.USER_TYPE_INVESTOR); 
+						
+						if (!hasRole) {
+							try {
+								hasRole = userGroupRoleLocalService.hasUserGroupRole(user.getUserId(), organization.getGroupId(), roleName);
+							} catch (PortalException e) {
+								e.printStackTrace();
+							}
 						}
 						
 						if (hasRole) {
