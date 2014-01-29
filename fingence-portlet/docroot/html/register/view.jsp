@@ -73,7 +73,7 @@
 					<aui:input name="firmName" required="true" />
 				</c:otherwise>
 			</c:choose>
-		</aui:column>		
+		</aui:column>
 	</aui:row>	
 
 	<aui:button type="submit" />
