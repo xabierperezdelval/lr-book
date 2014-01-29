@@ -16,16 +16,26 @@ package com.fingence.slayer.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.service.base.BridgeServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Contact;
+import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.ListTypeServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
+import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 
 /**
  * The implementation of the bridge remote service.
@@ -123,20 +133,210 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		return userType;
 	}
 	
-	public List<User> getInvestors(long userId) {
-		
-		int userType = getUserType(userId);
+	public List<User> getUsersByTargetType(long loggedInUserId, int targetUserType) {
 		
 		List<User> users = new ArrayList<User>();
 		
-		switch (userType) {
-		case IConstants.USER_TYPE_INVESTOR:
+		if (getUserType(loggedInUserId) == targetUserType) {
 			try {
-				User user = userLocalService.fetchUser(userId);
+				User user = userLocalService.fetchUser(loggedInUserId);
 				users.add(user);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+		} else {
+			users = getUsers(loggedInUserId, targetUserType);
+		}
+		
+		return users;
+	}
+	
+	public Organization getCurrentOrganization(long userId) {
+        
+        int userType = getUserType(userId);
+        
+        String roleName = RoleConstants.ORGANIZATION_ADMINISTRATOR;
+        
+        if (userType == IConstants.USER_TYPE_REL_MANAGER) {
+            roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
+        }
+        
+        Organization organization = null;
+        
+        try {
+            List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
+            
+            for (Organization _organization: organizations) {
+                if (isUserHavingRole(userId, "Firms", roleName)) {
+                    organization = _organization;
+                    break;
+                }
+            }
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+        
+        return organization;
+    }
+	
+	public void assignRole(long loggedInUser, long createdUserId, int userType) {
+		
+		Organization currentOrg = getCurrentOrganization(loggedInUser);
+		
+		String roleName = RoleConstants.ORGANIZATION_USER;
+        if (userType == IConstants.USER_TYPE_REL_MANAGER) {
+            roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
+        }
+        
+		assignOrganizationRole(createdUserId, currentOrg.getOrganizationId(), roleName);
+	}
+	
+	private void assignOrganizationRole(long userId, long organizationId, String roleName) {
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		
+		long roleId = 0l;
+		try {
+			Role role = RoleLocalServiceUtil.fetchRole(companyId, roleName);
+			if (Validator.isNull(role)) return;
+			roleId = role.getRoleId();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			UserGroupRoleLocalServiceUtil.addUserGroupRoles(userId, organizationId, new long[] { roleId });
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addWealthAdvisorFirm(String firmName, long wealthAdvisorId) {
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		
+		long creatorUserId = 0l;
+		try {
+			creatorUserId = userLocalService.getDefaultUserId(companyId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		Organization parentOrg = null;
+		try {
+			parentOrg = organizationLocalService.fetchOrganization(companyId, "Firms");
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(parentOrg)) {
+			Organization newFirm = null;
+			try {
+				newFirm = organizationLocalService.addOrganization(creatorUserId, parentOrg.getOrganizationId(), firmName, false);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(newFirm)) {
+				assignOrganizationRole(wealthAdvisorId, newFirm.getOrganizationId(), RoleConstants.ORGANIZATION_ADMINISTRATOR);	
+			}
+		}
+	}
+	
+	public User addUser(long creatorUserId, String firstName, String lastName,
+			String emailAddress, boolean male, long countryId, String jobTitle) {
+		
+		long companyId = CompanyThreadLocal.getCompanyId();
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+
+		User user = null;
+		try {
+			user = userLocalService.addUser(creatorUserId, companyId, true,
+					null, null, true, null, emailAddress,
+					0, null, Locale.US, firstName, StringPool.BLANK, lastName,
+					0, 0, male, 1, 1,
+					1, jobTitle, null, null, null,
+					null, true, serviceContext);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		// insert a record into the "Address" table for this user
+		try {
+			addressLocalService.addAddress(user.getUserId(),
+					User.class.getName(), user.getUserId(), "Not Specified",
+					StringPool.BLANK, StringPool.BLANK, "Not Specified",
+					"Not Specified", 0l, countryId,
+					getType(Contact.class.getName(), "address"), false, true,
+					serviceContext);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return user;
+	}
+	
+	private int getType(String className, String type) {
+		
+		int _type = 0;
+		
+		try {
+			List<ListType> listTypes = ListTypeServiceUtil.getListTypes(className + StringPool.PERIOD + type);
+			
+			for (ListType listType: listTypes) {
+				if (listType.getName().equalsIgnoreCase("business")) {
+					_type = listType.getListTypeId();
+					break;
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return _type;
+	}
+	
+	private List<User> getUsers(long loggedInUserId, int targetUserType) {
+		
+		List<User> users = new ArrayList<User>();
+		
+		String roleName = RoleConstants.ORGANIZATION_USER;
+		
+		if (targetUserType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
+			roleName = RoleConstants.ORGANIZATION_ADMINISTRATOR;
+		} else if (targetUserType == IConstants.USER_TYPE_REL_MANAGER) {
+			roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
+		}
+		
+		try {
+			List<Organization> organizations = organizationLocalService.getUserOrganizations(loggedInUserId);
+			
+			for (Organization organization: organizations) {
+				List<User> organizationUsers = userLocalService.getOrganizationUsers(organization.getOrganizationId());
+				
+				for (User user: organizationUsers) {
+					boolean hasRole = false;
+					try {
+						hasRole = userGroupRoleLocalService.hasUserGroupRole(user.getUserId(), organization.getGroupId(), roleName);
+					} catch (PortalException e) {
+						e.printStackTrace();
+					}
+					
+					if (hasRole) {
+						users.add(user);
+					}
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 		
 		return users;

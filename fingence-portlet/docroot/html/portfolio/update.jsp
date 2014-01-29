@@ -20,22 +20,36 @@
 		<aui:column>
 			<aui:select name="investorId" label="investor" required="true" showEmptyOption="true">
 				<%
-					List<User> users = BridgeServiceUtil.getInvestors(user.getUserId());
-					for (User user: users) {
-						%><aui:option value="<%= user.getUserId() %>" label="<%= user.getFullName() %>"/><% 
+					List<User> users = BridgeServiceUtil.getUsersByTargetType(user.getUserId(), IConstants.USER_TYPE_INVESTOR);
+					for (User _user: users) {
+						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>"/><% 
 					}
 				%>
 			</aui:select>			
 		</aui:column>
 		
 		<aui:column>
-			<aui:input name="wealthAdvisorId" label="wealth-advisor"/>
+			<aui:select name="wealthAdvisorId" label="wealth-advisor" required="true" showEmptyOption="true">
+				<%
+					List<User> users = BridgeServiceUtil.getUsersByTargetType(user.getUserId(), IConstants.USER_TYPE_WEALTH_ADVISOR);
+					for (User _user: users) {
+						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>"/><% 
+					}
+				%>
+			</aui:select>			
 		</aui:column>		
 	</aui:row>
 	
 	<aui:row>
 		<aui:column>
-			<aui:input name="relationshipManagerId" label="relationship-manager"/>
+			<aui:select name="relationshipManagerId" label="relationship-manager" required="true" showEmptyOption="true">
+				<%
+					List<User> users = BridgeServiceUtil.getUsersByTargetType(user.getUserId(), IConstants.USER_TYPE_REL_MANAGER);
+					for (User _user: users) {
+						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>"/><% 
+					}
+				%>
+			</aui:select>			
 		</aui:column>
 		
 		<aui:column>

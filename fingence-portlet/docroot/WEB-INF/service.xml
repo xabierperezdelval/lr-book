@@ -162,6 +162,7 @@
 	<entity name="Bridge">
 		<reference entity="Organization" package-path="com.liferay.portal"/>
 		<reference entity="UserGroupRole" package-path="com.liferay.portal"/>
+		<reference entity="Address" package-path="com.liferay.portal"/>
 	</entity>	
 	
 </service-builder>
