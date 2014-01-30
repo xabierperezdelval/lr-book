@@ -27,18 +27,12 @@
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>main-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>register</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>register-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -49,9 +43,6 @@
 		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>invite-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -60,9 +51,6 @@
 		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>payment-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -72,9 +60,6 @@
 		<instanceable>false</instanceable>
 		<render-weight>1.5</render-weight>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>filter-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -83,9 +68,6 @@
 		<instanceable>false</instanceable>
 		<autopropagated-parameters>profileId</autopropagated-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>matches-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -94,9 +76,6 @@
 		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>edit-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -105,9 +84,6 @@
 		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>start-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -115,18 +91,12 @@
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>bacofis-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>bacofis-menu</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>bacofis-menu-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
