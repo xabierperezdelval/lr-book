@@ -1,4 +1,3 @@
-<%@page import="com.fingence.slayer.service.AssetLocalServiceUtil"%>
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
