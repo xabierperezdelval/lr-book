@@ -230,10 +230,10 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
             roleName = IConstants.ROLE_RELATIONSHIP_MANAGER;
         }
         
-		assignOrganizationRole(createdUserId, currentOrg.getOrganizationId(), roleName);
+		assignOrganizationRole(createdUserId, currentOrg, roleName);
 	}
 	
-	private void assignOrganizationRole(long userId, long organizationId, String roleName) {
+	private void assignOrganizationRole(long userId, Organization currentOrg, String roleName) {
 		
 		long companyId = CompanyThreadLocal.getCompanyId();
 		
@@ -245,9 +245,15 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			organizationLocalService.addUserOrganization(userId, currentOrg.getOrganizationId());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 
 		try {
-			UserGroupRoleLocalServiceUtil.addUserGroupRoles(userId, organizationId, new long[] { roleId });
+			UserGroupRoleLocalServiceUtil.addUserGroupRoles(userId, currentOrg.getGroupId(), new long[] { roleId });
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -284,7 +290,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			}
 			
 			if (Validator.isNotNull(newFirm)) {
-				assignOrganizationRole(wealthAdvisorId, newFirm.getOrganizationId(), RoleConstants.ORGANIZATION_ADMINISTRATOR);	
+				assignOrganizationRole(wealthAdvisorId, newFirm, RoleConstants.ORGANIZATION_ADMINISTRATOR);	
 			}
 		}
 	}
