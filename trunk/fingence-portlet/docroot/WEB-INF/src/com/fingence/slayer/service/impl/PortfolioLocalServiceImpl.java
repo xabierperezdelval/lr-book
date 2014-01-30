@@ -35,6 +35,7 @@ import com.fingence.slayer.service.base.PortfolioLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 
 /**
@@ -153,7 +154,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         	
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
-			portfolioItem.setPurchaseQty((int)CellUtil.getInteger(row.getCell(4)));
+			portfolioItem.setPurchaseQty((int)CellUtil.getDouble(row.getCell(4)));
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -209,8 +210,16 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	}
 	
 	private long getInstitutionId(long userId) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		long institutionId = 0l;
+
+		Organization organization = bridgeService.getCurrentOrganization(userId);
+		
+		if (Validator.isNotNull(organization)) {
+			institutionId = organization.getOrganizationId();
+		}
+		
+		return institutionId;
 	}
 
 	private Portfolio getPortfolioObj(long portfolioId, long userId) {
