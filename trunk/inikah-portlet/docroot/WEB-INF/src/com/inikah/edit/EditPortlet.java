@@ -265,8 +265,20 @@ public class EditPortlet extends MVCPortlet {
 	
 	private void saveStep4(ActionRequest actionRequest, Profile profile) {
 		
+		System.out.println(ParamUtil.getString(actionRequest, "description"));
+		
+    	profile.setDescription(ParamUtil.getString(actionRequest, "description"));
+    	profile.setExpectation(ParamUtil.getString(actionRequest, "expectation"));
+    	profile.setPayZakath(ParamUtil.getBoolean(actionRequest, "payZakath"));
+    	profile.setHobbies(ParamUtil.getString(actionRequest, "abcd"));
+    	profile.setPhysicallyChallenged(ParamUtil.getBoolean(actionRequest, "physicallyChallenged"));
+    	profile.setPhysicallyChallengedDetails(ParamUtil.getString(actionRequest, "physicallyChallengedDetail"));
+    	profile.setPerformedHaj(ParamUtil.getBoolean(actionRequest, "performedHaj"));
+    	profile.setRevertedToIslam(ParamUtil.getBoolean(actionRequest, "revertedToIslam"));
+    	profile.setMuslimSince(ParamUtil.getInteger(actionRequest, "muslimSince"));		
+		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_STEP3_DONE) {
-			profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
+			//profile.setStatus(IConstants.PROFILE_STATUS_STEP4_DONE);
 		}
 	}	
 	

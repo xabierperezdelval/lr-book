@@ -1,2 +1,103 @@
-this is step 4
+<aui:fieldset>
+	<aui:row>
+		<aui:column>
+			<aui:input type="textarea" name="description" value="<%= profile.getDescription() %>" required="true"/>
+			<span id="<portlet:namespace />100CountForDescription"></span> character(s) remaining.	
+		</aui:column>
+	</aui:row>
+	
+	<aui:row>
+		<aui:column>
+			<aui:input type="textarea" name="expectation" value="<%= profile.getExpectation() %>" required="true"/>
+			<span id="<portlet:namespace />100CountForExpectation"></span> character(s) remaining.	
+		</aui:column>
+	</aui:row>	
 
+	<aui:row>
+		<aui:column>
+			<div class="control-group">
+				<label class="control-label">hobbies-and-interests</label>
+				<%
+					for (int i=0; i<=10; i++) {
+						String label = "label" + i;
+						%><aui:input type="checkbox" value="<%= i %>" name="abcd" label="<%= label %>"/><%
+					}
+				%>
+			</div>		
+		</aui:column>	
+	</aui:row>
+	
+	<aui:row>
+		<aui:column>
+			<aui:input type="checkbox" name="payZakath" value="<%= profile.getPayZakath() %>"/>
+		</aui:column>
+		<aui:column>
+			<aui:input type="checkbox" name="performedHaj" value="<%= profile.getPerformedHaj() %>"/>	
+		</aui:column>
+	</aui:row>
+	
+	<aui:row>
+		<aui:column >
+			<aui:input type="checkbox" name="physicallyChallenged" value="<%= profile.getPhysicallyChallenged() %>"
+				onClick="javascript:toggleDiv('physicallyChallenged');"/>
+		</aui:column>
+		<aui:column>
+			<div <%= profile.getPhysicallyChallenged() ? StringPool.BLANK : "hidden"%> id="<portlet:namespace/>physicallyChallengedDiv">
+				<aui:input type="textarea" name="physicallyChallengedDetail" value="<%= profile.getPhysicallyChallengedDetails() %>"/>
+				<span id="<portlet:namespace/>100CountForPhysicallyChallengedDetail"></span> character(s) remaining.	
+			</div>		
+		</aui:column>
+	</aui:row>	
+	
+	<aui:row>
+		<aui:column>
+			<aui:input type="checkbox" name="revertedToIslam" onClick="javascript:toggleDiv('revertedToIslam')"/>
+		</aui:column>
+		<aui:column cssClass="year-selection">
+			<div id="<portlet:namespace/>revertedToIslamDiv" hidden>
+				<aui:select name="muslimSince">
+					<%
+						for (int i=0; i<=12; i++) {
+							%><aui:option value="<%= i %>" label="<%= i %>"/><%
+						}
+					%>
+				</aui:select>
+			</div>
+		</aui:column>
+	</aui:row>	
+</aui:fieldset>
+
+<script type="text/javascript">
+	function toggleDiv(fld) {
+		var value = document.getElementById('<portlet:namespace/>'+fld).value;		
+		var div = document.getElementById('<portlet:namespace/>'+fld+'Div');
+		
+		if (eval(value)) {
+			div.style.display = 'block';
+			fld.focus();
+		} else {
+			div.style.display = 'none';
+		}
+	}
+
+	//---------char count of 100 for education details------------
+	YUI().use('aui-char-counter', function(Y) {
+		new Y.CharCounter({
+	   		input: '#<portlet:namespace/>description',
+	   		counter: '#<portlet:namespace/>100CountForDescription',
+	   		maxLength: 100
+		});
+			
+		new Y.CharCounter({
+			input: '#<portlet:namespace/>physicallyChallengedDetail',
+		    counter: '#<portlet:namespace/>100CountForPhysicallyChallengedDetail',
+		    maxLength: 100
+		});
+	
+		new Y.CharCounter({
+			input: '#<portlet:namespace/>expectation',
+		    counter: '#<portlet:namespace/>100CountForExpectation',
+		    maxLength: 100
+		});    	        
+	});
+</script>
