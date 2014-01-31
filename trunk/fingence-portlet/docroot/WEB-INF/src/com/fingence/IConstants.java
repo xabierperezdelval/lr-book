@@ -7,4 +7,7 @@ public interface IConstants {
 	int USER_TYPE_REL_MANAGER = 4;
 	
 	String ROLE_RELATIONSHIP_MANAGER = "Relationship Manager";
+
+	String PAGE_ASSET_REPORT = "Asset Report";
+	String PAGE_SECURITY_HOLDINGS = "Security Holdings";
 }
