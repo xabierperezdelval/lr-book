@@ -2,7 +2,7 @@
 
 <%
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId());
-	AssetLocalServiceUtil.importFromExcel(user.getUserId(), null);
+	//AssetLocalServiceUtil.importFromExcel(user.getUserId(), null);
 %>
 
 <portlet:renderURL var="addPortfolioURL">
