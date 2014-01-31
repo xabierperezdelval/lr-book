@@ -41,7 +41,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 */
 	
 	public double getNetWorth(long portfolioId) {
-		double networth = 500.00d;
+		double networth = 0d;
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
 		
