@@ -157,6 +157,10 @@
 			<finder-column name="assetId"/>
 			<finder-column name="portfolioId"/>
 		</finder>
+		
+		<finder return-type="Collection" name="PortfolioId">
+			<finder-column name="portfolioId"/>
+		</finder>
 	</entity>
 	
 	<entity name="Bridge">
