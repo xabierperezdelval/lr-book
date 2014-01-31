@@ -20,6 +20,8 @@
 	
 </c:choose>
 
+<%--
+
 <div id="container" style="width:100%; height:400px;"></div>
 
 <script type="text/javascript">
@@ -150,3 +152,5 @@
         });
     });
 </script>
+
+ --%>

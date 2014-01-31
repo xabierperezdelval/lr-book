@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom-sql>
-	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findResults"> 
+	<sql id="com.fingence.slayer.service.persistence.MyResultFinderImpl.findResults"> 
 		<![CDATA[
 			SELECT
 				c.itemId,
