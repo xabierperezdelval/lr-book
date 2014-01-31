@@ -14,6 +14,9 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.util.List;
+
+import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
 
 /**
@@ -40,11 +43,11 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	public double getNetWorth(long portfolioId) {
 		double networth = 500.00d;
 		
-		//List<Result> results = myResultFinder.getResults(portfolioId);
+		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
 		
-		//for (Result result: results) {
-		//	networth += result.getCurrentMarketValue();
-		//}
+		for (MyResult myResult: myResults) {
+			networth += myResult.getCurrentMarketValue();
+		}
 		
 		return networth;
 	}	
