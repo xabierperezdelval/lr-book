@@ -2,7 +2,9 @@
 <custom-sql>
 	<sql id="com.inikah.slayer.service.persistence.MyKeyValueFinderImpl.findResults"> 
 		<![CDATA[
-			SELECT 
+			SELECT
+				c.itemId,
+				b.portfolioId,
 				a.assetId, 
 				a.security_ticker, 
 				a.name, 
@@ -18,7 +20,7 @@
 				a.currency_ as currency,
 				(c.purchasePrice * c.purchaseQty) as purchasedMarketValue,
 				(a.current_price * c.purchaseQty) as currentMarketValue,
-				(c.purchasePrice * c.purchaseQty - a.current_price * c.purchaseQty) as gain_loss
+				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty) as gain_loss
 			FROM 
 				fing_asset a, 
 				fing_portfolio b, 
