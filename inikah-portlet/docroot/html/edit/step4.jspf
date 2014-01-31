@@ -1,14 +1,16 @@
 <aui:fieldset>
 	<aui:row>
 		<aui:column>
-			<aui:input type="textarea" name="description" value="<%= profile.getDescription() %>" required="true"/>
+			<aui:input type="textarea" name="description" value="<%= profile.getDescription() %>" 
+				required="true" style="width : 750px; height:100px; resize:none;" />
 			<span id="<portlet:namespace />100CountForDescription"></span> character(s) remaining.	
 		</aui:column>
 	</aui:row>
 	
 	<aui:row>
 		<aui:column>
-			<aui:input type="textarea" name="expectation" value="<%= profile.getExpectation() %>" required="true"/>
+			<aui:input type="textarea" name="expectation" value="<%= profile.getExpectation() %>" 
+				required="true" style="width : 750px; height:100px; resize:none;"/>
 			<span id="<portlet:namespace />100CountForExpectation"></span> character(s) remaining.	
 		</aui:column>
 	</aui:row>	
@@ -17,12 +19,17 @@
 		<aui:column>
 			<div class="control-group">
 				<label class="control-label">hobbies-and-interests</label>
+				<table>
+				<tr>
 				<%
-					for (int i=0; i<=10; i++) {
+					for (int i=0; i<=11; i++) {
 						String label = "label" + i;
-						%><aui:input type="checkbox" value="<%= i %>" name="abcd" label="<%= label %>"/><%
+						%><td style="width: 300px"><label class="checkbox"><input type="checkbox" value="<%= i %>" name="abcd"/><%= label %></label></td><%
+								if(i%2==0)%></tr><tr><%
 					}
 				%>
+				</tr>
+				</table>
 			</div>		
 		</aui:column>	
 	</aui:row>
@@ -51,10 +58,11 @@
 	
 	<aui:row>
 		<aui:column>
-			<aui:input type="checkbox" name="revertedToIslam" onClick="javascript:toggleDiv('revertedToIslam')"/>
+			<aui:input type="checkbox" name="revertedToIslam" onClick="javascript:toggleDiv('revertedToIslam')"
+				value="<%= profile.getRevertedToIslam() %>"/>
 		</aui:column>
 		<aui:column cssClass="year-selection">
-			<div id="<portlet:namespace/>revertedToIslamDiv" hidden>
+			<div id="<portlet:namespace/>revertedToIslamDiv" <%= profile.getRevertedToIslam() ? StringPool.BLANK : "hidden"%>>
 				<aui:select name="muslimSince">
 					<%
 						for (int i=0; i<=12; i++) {
