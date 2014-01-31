@@ -163,10 +163,36 @@
 		</finder>
 	</entity>
 	
-	<entity name="Bridge">
+	<entity name="Bridge" local-service="true">
 		<reference entity="Organization" package-path="com.liferay.portal"/>
 		<reference entity="UserGroupRole" package-path="com.liferay.portal"/>
 		<reference entity="Address" package-path="com.liferay.portal"/>
 	</entity>	
+	
+	<entity name="MyResult" remote-service="true" local-service="true">
+		<column name="itemId" type="long" primary="true"/>
+		<column name="portfolioId" type="long"/>
+		<column name="assetId" type="long"/>
+		<column name="security_ticker" type="String"/>
+		<column name="name" type="String"/>
+		<column name="current_price" type="double"/>
+		<column name="security_des" type="String"/>
+		<column name="security_typ" type="String"/>
+		<column name="security_typ2" type="String"/>
+		<column name="parent_comp_name" type="String"/>
+		<column name="security_class" type="String"/>
+		<column name="countryId" type="long"/>
+		<column name="countryName" type="String"/>
+		<column name="countryOfRisk" type="long"/>
+		<column name="currency" type="String"/>
+		<column name="purchasedMarketValue" type="double"/>
+		<column name="currentMarketValue" type="double"/>
+		<column name="gain_loss" type="double"/>
+		<column name="gain_loss_percent" type="double"/>
+		
+		<finder return-type="Collection" name="PortfolioId">
+			<finder-column name="portfolioId"/>
+		</finder>
+	</entity>
 	
 </service-builder>

@@ -1,2 +1,22 @@
 This is asset Reports
 
+<h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
+
+<aui:script>
+
+	AUI().ready(function(A) {
+
+		// net worth value
+		Liferay.Service(
+  			'/fingence-portlet.myresult/get-net-worth',
+  			{
+    			portfolioId: 1204
+  			},
+  			function(obj) {
+    			var label = A.one('#<portlet:namespace/>networthLabel');
+    			label.text(obj);
+  			}
+		);			      
+	});	
+
+</aui:script>
