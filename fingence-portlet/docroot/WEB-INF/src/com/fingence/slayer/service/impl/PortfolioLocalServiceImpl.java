@@ -256,4 +256,29 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		
 		return portfolio;
 	}
+	
+	public int getAssetsCount(long portfolioId) {
+
+		int count = 0;
+		try {
+			count = portfolioItemPersistence.countByPortfolioId(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+
+	public List<PortfolioItem> getAssets(long portfolioId) {
+
+		List<PortfolioItem> assets = null;
+
+		try {
+			assets = portfolioItemPersistence.findByPortfolioId(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		return assets;
+	}
 }
