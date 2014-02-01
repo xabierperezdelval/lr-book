@@ -48,9 +48,7 @@ public class RelativeLocalServiceImpl extends RelativeLocalServiceBaseImpl {
 		String className = Relative.class.getName();
 		
 		boolean update = (relativeId > 0l);
-		
-		System.out.println("this is update ==> " + update);
-		
+				
 		Relative relative = null;
 		
 		if (update) {
