@@ -128,4 +128,8 @@ public interface IConstants {
 	String CFG_AWS_ACCESS_KEY = "aws.access.key";
 	String CFG_AWS_SECRET_KEY = "aws.secret.key";
 	String CFG_AWS_CLOUDFRONT_DOMAIN = "aws.cloudfront.domain";
+	
+	String DIV_HIDDEN = "hidden";
+	String FLD_CHECKED = "checked";
+	String FLD_SELECTED = "selected";
 }
