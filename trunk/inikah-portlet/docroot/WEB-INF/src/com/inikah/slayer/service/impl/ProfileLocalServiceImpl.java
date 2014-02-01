@@ -211,7 +211,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		try {
 			Profile profile = profilePersistence.fetchByUserId_CreatedFor(userId, createdFor);
 			
-			flag = (Validator.isNotNull(profile));
+			flag = (Validator.isNotNull(profile) && (profile.getStatus() >= IConstants.PROFILE_STATUS_ACTIVE));
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
