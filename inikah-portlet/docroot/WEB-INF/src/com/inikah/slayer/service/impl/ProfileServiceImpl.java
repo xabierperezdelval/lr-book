@@ -58,6 +58,7 @@ public class ProfileServiceImpl extends ProfileServiceBaseImpl {
 		user.setFirstName(userName);
 		user.setJobTitle(occupation);
 		user.setComments(additionalInfo);
+		user.setLdapServerId(-1);
 		
 		try {
 			userLocalService.updateUser(user);

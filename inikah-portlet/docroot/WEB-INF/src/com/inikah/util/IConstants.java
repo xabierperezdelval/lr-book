@@ -132,4 +132,7 @@ public interface IConstants {
 	String DIV_HIDDEN = "hidden";
 	String FLD_CHECKED = "checked";
 	String FLD_SELECTED = "selected";
+	
+	String PENDING_USR_FIRST_NAME = "Pending..";
+	int PENDING_USER_STATUS = 9999;
 }
