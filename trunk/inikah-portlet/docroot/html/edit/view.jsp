@@ -17,5 +17,5 @@
 		<c:otherwise>
 			<%@ include file="/html/edit/add-mode.jspf" %>
 		</c:otherwise>
-	</c:choose>
+	</c:choose>	
 </aui:form>

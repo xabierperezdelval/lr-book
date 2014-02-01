@@ -295,6 +295,20 @@ public class MyListUtil {
          return getOptions(locale, profile, IConstants.LIST_COMPLEXION, profile.getComplexion(), false);
 	 }
 	 
+	 public static List<ListType> getHobbiesList() {
+		 
+		 List<ListType> listTypes = null;
+		 		 
+		 try {
+			 listTypes = ListTypeServiceUtil.getListTypes(Profile.class.getName() + StringPool.PERIOD + "hobbies");
+		 } catch (SystemException e) {
+			 e.printStackTrace();
+			 
+		 }
+
+		 return listTypes;
+	 }	 
+	 
 	public static String getCountries(long currValue) {
 		StringBuilder sb = new StringBuilder();
 		

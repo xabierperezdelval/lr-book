@@ -182,8 +182,6 @@ public class EditPortlet extends MVCPortlet {
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
 		//------------------social-info----------------------------        
-		
-
   		profile.setResidingArea(ParamUtil.getString(actionRequest, "residingArea"));
         profile.setNearbyMasjid(ParamUtil.getString(actionRequest, "nearbyMasjid"));
         profile.setEmailAddress(ParamUtil.getString(actionRequest, "emailAddress"));
@@ -270,7 +268,12 @@ public class EditPortlet extends MVCPortlet {
     	profile.setDescription(ParamUtil.getString(actionRequest, "description"));
     	profile.setExpectation(ParamUtil.getString(actionRequest, "expectation"));
     	profile.setPayZakath(ParamUtil.getBoolean(actionRequest, "payZakath"));
-    	profile.setHobbies(ParamUtil.getString(actionRequest, "abcd"));
+    	
+		String hobbiesCSV = StringUtils.join(
+				ParamUtil.getParameterValues(actionRequest, "hobbies"),
+				CharPool.COMMA);      		
+        	
+    	profile.setHobbies(hobbiesCSV);
     	profile.setPhysicallyChallenged(ParamUtil.getBoolean(actionRequest, "physicallyChallenged"));
     	profile.setPhysicallyChallengedDetails(ParamUtil.getString(actionRequest, "physicallyChallengedDetail"));
     	profile.setPerformedHaj(ParamUtil.getBoolean(actionRequest, "performedHaj"));
