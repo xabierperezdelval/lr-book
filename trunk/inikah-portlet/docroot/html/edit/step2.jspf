@@ -1,4 +1,4 @@
-<c:if test="<%= !editMode && !profile.isCreatedForSelf() && profile.isFirst() %>">
+<c:if test="<%= (user.getLdapServerId() == IConstants.PENDING_USER_STATUS) %>">
 	<portlet:renderURL var="updateUserInfoURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="jspPage" value="/html/edit/popup-user-info.jsp" />
 	</portlet:renderURL>
@@ -10,8 +10,9 @@
 					    centered: true,
 					    modal: true,
 			    		width: 350,
-					    height:500				
+					    height:500		
 					},
+					id: '<portlet:namespace/>userInfoPopup',
 					title: Liferay.Language.get('enter-user-info'),
 					uri: '<%= updateUserInfoURL %>'
 				});

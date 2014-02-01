@@ -42,7 +42,7 @@ public class PostLoginAction extends Action {
 		
 		// Set Max Mind Coordinates
 		MaxMindUtil.setCoordinates(user);
-		
+			
 		// attach new profile with the user. 
 		ProfileLocalServiceUtil.attachProfileToUser(user);
 		

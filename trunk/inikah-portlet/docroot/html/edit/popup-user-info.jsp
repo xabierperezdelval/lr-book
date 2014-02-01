@@ -29,7 +29,7 @@
     			additionalInfo: additionalInfo
   			},
   			function(obj) {
-  				// close the popup
+  				Liferay.Util.getWindow('<portlet:namespace/>userInfoPopup').destroy();
   			}
 		);
 	}

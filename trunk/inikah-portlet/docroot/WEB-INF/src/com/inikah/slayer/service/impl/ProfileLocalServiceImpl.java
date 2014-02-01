@@ -184,18 +184,26 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	public void attachProfileToUser(User user) {
 
 		Profile profile = getProfileByEmail(user.getEmailAddress());
-		
+				
 		if (Validator.isNull(profile)) return; 
 		
 		profile.setUserId(user.getUserId());
-		profile.setUserName(user.getFirstName());
-		
 		profile.setDefaultLocation(user);
-		
+				
 		try {
 			updateProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
+		}
+				
+		if (user.getFirstName().equalsIgnoreCase(IConstants.PENDING_USR_FIRST_NAME)) {
+			user.setLdapServerId(IConstants.PENDING_USER_STATUS);
+			
+			try {
+				userLocalService.updateUser(user);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

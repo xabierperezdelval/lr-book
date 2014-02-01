@@ -26,7 +26,7 @@
 	<!-- birth day -->
 	<aui:input name="male" type="hidden" value="1" />
 	<aui:input name="birthdayDay" type="hidden" value="1" />
-	<aui:input name="firstName" type="hidden" value="Pending.." />
+	<aui:input name="firstName" type="hidden" value="<%= IConstants.PENDING_USR_FIRST_NAME %>" />
 	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
 	<aui:input name="invitationId" type="hidden" value="<%= String.valueOf(invitationId) %>" />
 	<aui:input name="inviterId" type="hidden" value="<%= String.valueOf(inviterId) %>" />
