@@ -1,3 +1,4 @@
+<%@page import="com.inikah.util.IConstants"%>
 <%@page import="java.util.Calendar"%>
 <aui:fieldset>
 	<aui:row>
@@ -55,21 +56,30 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:column>
+		<aui:column columnWidth="30">
 			<aui:input type="checkbox" name="payZakath" value="<%= profile.getPayZakath() %>"/>
 		</aui:column>
 		<aui:column>
-			<aui:input type="checkbox" name="performedHaj" value="<%= profile.getPerformedHaj() %>"/>	
+			&nbsp;
 		</aui:column>
 	</aui:row>
 	
 	<aui:row>
-		<aui:column >
+		<aui:column columnWidth="30">
+			<aui:input type="checkbox" name="performedHaj" value="<%= profile.getPerformedHaj() %>"/>	
+		</aui:column>
+		<aui:column>
+			&nbsp;
+		</aui:column>
+	</aui:row>	
+	
+	<aui:row>
+		<aui:column columnWidth="30">
 			<aui:input type="checkbox" name="physicallyChallenged" value="<%= profile.getPhysicallyChallenged() %>"
 				onClick="javascript:toggleDiv('physicallyChallenged');"/>
 		</aui:column>
 		<aui:column>
-			<div <%= profile.getPhysicallyChallenged() ? StringPool.BLANK : "hidden"%> id="<portlet:namespace/>physicallyChallengedDiv">
+			<div <%= profile.getPhysicallyChallenged()? StringPool.BLANK : IConstants.DIV_HIDDEN %> id="<portlet:namespace/>physicallyChallengedDiv">
 				<aui:input type="textarea" name="physicallyChallengedDetail" value="<%= profile.getPhysicallyChallengedDetails() %>"/>
 				<span id="<portlet:namespace/>100CountForPhysicallyChallengedDetail"></span> character(s) remaining.	
 			</div>		
@@ -77,12 +87,12 @@
 	</aui:row>	
 	
 	<aui:row>
-		<aui:column>
+		<aui:column columnWidth="30">
 			<aui:input type="checkbox" name="revertedToIslam" onClick="javascript:toggleDiv('revertedToIslam')"
 				value="<%= profile.getRevertedToIslam() %>"/>
 		</aui:column>
 		<aui:column cssClass="year-selection">
-			<div id="<portlet:namespace/>revertedToIslamDiv" <%= profile.getRevertedToIslam() ? StringPool.BLANK : "hidden"%>>
+			<div id="<portlet:namespace/>revertedToIslamDiv" <%= profile.getRevertedToIslam() ? StringPool.BLANK : IConstants.DIV_HIDDEN %>>
 				<aui:select name="muslimSince">
 					<%
 						Calendar cal = Calendar.getInstance();
