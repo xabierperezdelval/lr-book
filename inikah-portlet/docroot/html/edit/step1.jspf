@@ -1,31 +1,45 @@
 <liferay-ui:panel-container accordion="<%= true %>">
 	<liferay-ui:panel title="basic-info" extended="<%= true %>" collapsible="<%= true %>" >
 		<aui:fieldset>
-			<aui:column>
-				<aui:select name="maritalStatus" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-					<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
-				</aui:select>
+			<aui:row>
+				<aui:column>
+					<aui:select name="maritalStatus" required="<%= true %>" showEmptyOption="<%= true %>">
+						<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
+					</aui:select>					
+				</aui:column>
 				
-				<%@ include file="/html/edit/step1-bornon.jspf" %>
-				
-				<aui:select name="height" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-					<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
-				</aui:select>					
-			</aui:column>
+				<aui:column>
+					<aui:select name="createdFor" required="<%= true %>" showEmptyOption="<%= true %>">
+						<%= MyListUtil.getCreatedFor(locale, profile) %>
+					</aui:select>					
+				</aui:column>
+			</aui:row>
 			
-			<aui:column>
-				<aui:select name="createdFor" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-					<%= MyListUtil.getCreatedFor(locale, profile) %>
-				</aui:select>	
+			<aui:row>
+				<aui:column>
+					<%@ include file="/html/edit/step1-bornon.jspf" %>					
+				</aui:column>
 				
-				<aui:select name="complexion" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>">
-					<%= MyListUtil.getComplexionsList(locale, profile) %>
-				</aui:select>	
+				<aui:column>
+					<aui:select name="complexion" required="<%= true %>" showEmptyOption="<%= true %>">
+						<%= MyListUtil.getComplexionsList(locale, profile) %>
+					</aui:select>						
+				</aui:column>
+			</aui:row>
+			
+			<aui:row>
+				<aui:column>
+					<aui:select name="height" required="<%= true %>" showEmptyOption="<%= true %>">
+						<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
+					</aui:select>				
+				</aui:column>
 				
-				<aui:select name="weight" showEmptyOption="<%= true %>">
-					<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
-				</aui:select>			
-			</aui:column>
+				<aui:column>
+					<aui:select name="weight" showEmptyOption="<%= true %>">
+						<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
+					</aui:select>						
+				</aui:column>
+			</aui:row>
 		</aui:fieldset>
 	</liferay-ui:panel>
 	
@@ -37,47 +51,63 @@
 		</div>
 		
 		<aui:fieldset>
-			<aui:column>
-				<aui:select name="countryOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-						onChange="javascript:cascade1(this, 'stateOfBirth', 'cityOfBirth');">
-					<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
-				</aui:select>	
-				
-				<aui:select name="stateOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-						onChange="javascript:cascade2(this, 'cityOfBirth');">
-					<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
-				</aui:select>
-				
-				<aui:select name="cityOfBirth" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-						onChange="javascript:cascade3(this, 'newCityOfBirth');">
-					<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
-				</aui:select>	
-				
-				<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
-					<aui:input name="newCityOfBirth" />
-				</div>	
-			</aui:column>
+			<aui:row>
+				<aui:column>
+					<aui:select name="countryOfBirth" required="<%= true %>" showEmptyOption="<%= true %>"
+							onChange="javascript:cascade1(this, 'stateOfBirth', 'cityOfBirth');">
+						<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
+					</aui:select>					
+				</aui:column>
+				<aui:column>
+					<aui:select name="residingCountry" required="<%= true %>" showEmptyOption="<%= true %>" 
+							onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
+						<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
+					</aui:select>				
+				</aui:column>				
+			</aui:row>
 			
-			<aui:column>
-				<aui:select name="residingCountry" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>" 
-						onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
-					<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
-				</aui:select>
-				
-				<aui:select name="residingState" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-						onChange="javascript:cascade2(this, 'residingCity');">
-					<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
-				</aui:select>
-				
-				<aui:select name="residingCity" required="<%= true %>" showRequiredLabel="<%= true %>" showEmptyOption="<%= true %>"
-						onChange="javascript:cascade3(this, 'newResidingCity');">
-					<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
-				</aui:select>
-				
-				<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
-					<aui:input name="newResidingCity" />
-				</div>
-			</aui:column>
+			<aui:row>
+				<aui:column>
+					<aui:select name="stateOfBirth" required="<%= true %>" showEmptyOption="<%= true %>"
+							onChange="javascript:cascade2(this, 'cityOfBirth');">
+						<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
+					</aui:select>					
+				</aui:column>
+				<aui:column>
+					<aui:select name="residingState" required="<%= true %>" showEmptyOption="<%= true %>"
+							onChange="javascript:cascade2(this, 'residingCity');">
+						<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
+					</aui:select>				
+				</aui:column>				
+			</aui:row>
+			
+			<aui:row>
+				<aui:column>
+					<aui:select name="cityOfBirth" required="<%= true %>" showEmptyOption="<%= true %>"
+							onChange="javascript:cascade3(this, 'newCityOfBirth');">
+						<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
+					</aui:select>				
+				</aui:column>
+				<aui:column>
+					<aui:select name="residingCity" required="<%= true %>" showEmptyOption="<%= true %>"
+							onChange="javascript:cascade3(this, 'newResidingCity');">
+						<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
+					</aui:select>			
+				</aui:column>				
+			</aui:row>		
+			
+			<aui:row>
+				<aui:column>
+					<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
+						<aui:input name="newCityOfBirth" />
+					</div>			
+				</aui:column>
+				<aui:column>
+					<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
+						<aui:input name="newResidingCity" />
+					</div>		
+				</aui:column>				
+			</aui:row>
 		</aui:fieldset>
 	</liferay-ui:panel>	
 </liferay-ui:panel-container>	
@@ -132,7 +162,7 @@
 	  					var location = data[i];
 	  					child.options[i+1] = new Option(location.name, location.locationId);
 	  				}
-	  				child.options[data.length + 1] = new Option("-- New City --", "");
+	  				child.options[data.length + 1] = new Option("-- New City --", "-1");
 	  			}
 			);			
 		} else {
@@ -141,16 +171,19 @@
 	}
 	
 	function cascade3(obj, fld) {
+		
 		var index = obj.selectedIndex;
 		var value = obj.options[index].value;
 		var div = document.getElementById("<portlet:namespace/>"+ fld +"Div");
 		var fld = document.getElementById("<portlet:namespace/>" + fld);
 				
-		if (value == -1) {
+		if (value == '-1') {
 			div.style.display = 'block';
 			fld.focus();
+			fld.required = true;
 		} else {
-			div.style.display = 'none';		
+			div.style.display = 'none';
+			fld.required = false;
 		}
 	}	
 	
