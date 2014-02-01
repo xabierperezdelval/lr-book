@@ -1,8 +1,9 @@
+<%@page import="java.util.Calendar"%>
 <aui:fieldset>
 	<aui:row>
 		<aui:column>
 			<aui:input type="textarea" name="description" value="<%= profile.getDescription() %>" 
-				required="true" style="width : 750px; height:100px; resize:none;" />
+				required="true"/>
 			<span id="<portlet:namespace />100CountForDescription"></span> character(s) remaining.	
 		</aui:column>
 	</aui:row>
@@ -10,7 +11,7 @@
 	<aui:row>
 		<aui:column>
 			<aui:input type="textarea" name="expectation" value="<%= profile.getExpectation() %>" 
-				required="true" style="width : 750px; height:100px; resize:none;"/>
+				required="true" />
 			<span id="<portlet:namespace />100CountForExpectation"></span> character(s) remaining.	
 		</aui:column>
 	</aui:row>	
@@ -19,17 +20,36 @@
 		<aui:column>
 			<div class="control-group">
 				<label class="control-label">hobbies-and-interests</label>
-				<table>
-				<tr>
+				<table><tr>
 				<%
-					for (int i=0; i<=11; i++) {
-						String label = "label" + i;
-						%><td style="width: 300px"><label class="checkbox"><input type="checkbox" value="<%= i %>" name="abcd"/><%= label %></label></td><%
-								if(i%2==0)%></tr><tr><%
+					List<ListType> hobbies = MyListUtil.getHobbiesList();
+					int count = 0;
+					for (ListType listType: hobbies) {
+						String checked = MyListUtil.getChecked(profile.getHobbies(), String.valueOf(listType.getListTypeId()));
+						%>
+							<td>
+								<label class="checkbox">
+									<input type="checkbox" <%= checked %> value="<%= listType.getListTypeId() %>" name="<portlet:namespace/>hobbies" />
+									<liferay-ui:message key="<%= listType.getName() %>"/>
+								</label>
+							</td>
+						<%
+
+						if ((count+1)%3==0) {
+							%></tr><tr><%
+						}
+						count++;
+					}
+					
+					int xtraCells = 3-(count%3);
+				
+					if (xtraCells < 3) {
+						for (int j=0; j < xtraCells; j++) {
+							%><td>&nbsp;</td><%
+						}
 					}
 				%>
-				</tr>
-				</table>
+				</tr></table>
 			</div>		
 		</aui:column>	
 	</aui:row>
@@ -65,8 +85,11 @@
 			<div id="<portlet:namespace/>revertedToIslamDiv" <%= profile.getRevertedToIslam() ? StringPool.BLANK : "hidden"%>>
 				<aui:select name="muslimSince">
 					<%
-						for (int i=0; i<=12; i++) {
-							%><aui:option value="<%= i %>" label="<%= i %>"/><%
+						Calendar cal = Calendar.getInstance();
+						int currentYear = cal.get(Calendar.YEAR);
+						for (int i=currentYear; i>=currentYear-12; i--) {
+							String label = i + " (" + (currentYear - i) + " Yrs)";
+							%><aui:option value="<%= i %>" label="<%= label %>" selected="<%= (profile.getMuslimSince() == i) %>"/><%
 						}
 					%>
 				</aui:select>

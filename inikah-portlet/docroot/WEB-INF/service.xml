@@ -68,8 +68,6 @@
 		<column name="countryOfBirth" type="long" />
 		<column name="stateOfBirth" type="long" />
 		<column name="cityOfBirth" type="long" />
-		<column name="community" type="int" />
-		<column name="ethnicity" type="int" />
 		<column name="canSpeak" type="String"/>
 
 		<!-- Additional Information -->

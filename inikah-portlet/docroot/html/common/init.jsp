@@ -36,6 +36,7 @@
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@page import="com.liferay.portal.kernel.util.CharPool"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@page import="com.liferay.portal.model.ListType"%>
 
