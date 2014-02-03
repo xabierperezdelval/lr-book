@@ -281,4 +281,18 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 
 		return assets;
 	}
+	
+	public void makePrimary(long userId, long portfolioId) {
+		List<Portfolio> portfolios = getPortfolios(userId);
+		
+		for (Portfolio portfolio: portfolios) {
+			portfolio.setPrimary(portfolio.getPortfolioId() == portfolioId);
+			
+			try {
+				updatePortfolio(portfolio);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
