@@ -13,8 +13,6 @@
 	<portlet:param name="jspPage" value="/html/portfolio/update.jsp"/>
 </portlet:renderURL>
 
-<h1><%= BridgeServiceUtil.getUserType(user.getUserId()) %></h1>
-
 <aui:button-row>
 	<aui:button href="<%= addPortfolioURL %>" value="add-portfolio" />
 </aui:button-row>
