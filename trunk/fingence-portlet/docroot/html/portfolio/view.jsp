@@ -1,4 +1,3 @@
-<%@page import="com.fingence.slayer.service.BridgeLocalServiceUtil"%>
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
