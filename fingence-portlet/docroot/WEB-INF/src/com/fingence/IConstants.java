@@ -13,4 +13,6 @@ public interface IConstants {
 	
 	String PARENT_ORG_FIRMS = "Firms";
 	String PARENT_ORG_BANKS = "Banks";
+	
+	String PAGE_PORTFOLIO = "portfolio";
 }

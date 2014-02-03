@@ -8,6 +8,7 @@ import javax.portlet.PortletException;
 
 import com.fingence.slayer.service.BridgeServiceUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -44,9 +45,12 @@ public class RegisterPortlet extends MVCPortlet {
 				
 		if (themeDisplay.isSignedIn() && isWealthAdvisor) {
 			BridgeServiceUtil.assignRole(creatorUserId, user.getUserId(), userType);
+			actionResponse.sendRedirect(PortalUtil.getPortalURL(actionRequest)
+					+ StringPool.SLASH + IConstants.PAGE_PORTFOLIO);
 		} else if (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
 			String firmName = ParamUtil.getString(actionRequest, "firmName");
 			BridgeServiceUtil.addWealthAdvisorFirm(firmName, user.getUserId());
+			actionResponse.sendRedirect(themeDisplay.getURLSignIn());
 		}
 	}
 }
