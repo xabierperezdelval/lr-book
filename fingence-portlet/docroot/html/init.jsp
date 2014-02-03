@@ -21,6 +21,7 @@
 
 <%@page import="com.fingence.IConstants"%>
 <%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
+<%@page import="com.fingence.slayer.service.BridgeLocalServiceUtil"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
