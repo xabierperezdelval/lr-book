@@ -129,11 +129,11 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	public int getUserType(long userId) {
 		int userType = IConstants.USER_TYPE_INVESTOR;
 		
-		if (isUserHavingRole(userId, "Firms", RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
+		if (isUserHavingRole(userId, IConstants.PARENT_ORG_FIRMS, RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
 			userType = IConstants.USER_TYPE_WEALTH_ADVISOR;
-		} else if (isUserHavingRole(userId, "Firms", IConstants.ROLE_RELATIONSHIP_MANAGER)) {
+		} else if (isUserHavingRole(userId, IConstants.PARENT_ORG_FIRMS, IConstants.ROLE_RELATIONSHIP_MANAGER)) {
 			userType = IConstants.USER_TYPE_REL_MANAGER;
-		} else if (isUserHavingRole(userId, "Banks", RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
+		} else if (isUserHavingRole(userId, IConstants.PARENT_ORG_BANKS, RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
 			userType = IConstants.USER_TYPE_BANK_ADMIN;
 		}
 		
@@ -204,6 +204,9 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
         
         int userType = getUserType(userId);
         
+		String parentOrg = (userType == IConstants.USER_TYPE_BANK_ADMIN)?
+				IConstants.PARENT_ORG_BANKS : IConstants.PARENT_ORG_FIRMS;        
+        
         String roleName = RoleConstants.ORGANIZATION_ADMINISTRATOR;
         
         if (userType == IConstants.USER_TYPE_REL_MANAGER) {
@@ -216,7 +219,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
             List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
             
             for (Organization _organization: organizations) {
-                if (isUserHavingRole(userId, "Firms", roleName)) {
+                if (isUserHavingRole(userId, parentOrg, roleName)) {
                     organization = _organization;
                     break;
                 }
@@ -281,7 +284,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		Organization parentOrg = null;
 		try {
-			parentOrg = organizationLocalService.fetchOrganization(companyId, "Firms");
+			parentOrg = organizationLocalService.fetchOrganization(companyId, IConstants.PARENT_ORG_FIRMS);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -362,6 +365,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	public String getFirmName(long userId) {
 		
 		String firmName = StringPool.BLANK;
+		
 		Organization organization = getCurrentOrganization(userId);
 		
 		if (Validator.isNotNull(organization)) {

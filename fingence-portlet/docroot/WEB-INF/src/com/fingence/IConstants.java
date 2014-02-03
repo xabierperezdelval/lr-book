@@ -10,4 +10,7 @@ public interface IConstants {
 
 	String PAGE_ASSET_REPORT = "Asset Report";
 	String PAGE_SECURITY_HOLDINGS = "Security Holdings";
+	
+	String PARENT_ORG_FIRMS = "Firms";
+	String PARENT_ORG_BANKS = "Banks";
 }
