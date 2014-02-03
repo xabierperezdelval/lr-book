@@ -12,9 +12,11 @@
 	<portlet:param name="jspPage" value="/html/portfolio/update.jsp"/>
 </portlet:renderURL>
 
-<aui:button-row>
-	<aui:button href="<%= addPortfolioURL %>" value="add-portfolio" />
-</aui:button-row>
+<c:if test="<%= (BridgeServiceUtil.getUserType(user.getUserId()) != IConstants.USER_TYPE_BANK_ADMIN) %>">
+	<aui:button-row>
+		<aui:button href="<%= addPortfolioURL %>" value="add-portfolio" />
+	</aui:button-row>
+</c:if>
 
 <liferay-ui:search-container delta="5" emptyResultsMessage="no-portfolios">
 	<liferay-ui:search-container-results results="<%=ListUtil.subList(portfolios, searchContainer.getStart(),searchContainer.getEnd()) %>" total="<%= portfolios.size() %>"/>
@@ -35,5 +37,5 @@
        <liferay-ui:search-container-column-text name="primary"/>
 	
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator searchContainer="<%=searchContainer %>"/>
+		<liferay-ui:search-iterator searchContainer="<%= searchContainer %>"/>
 </liferay-ui:search-container>
