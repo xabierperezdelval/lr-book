@@ -234,7 +234,6 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			portfolio.setModifiedDate(new java.util.Date());
 		} else {
 			try {
 				portfolioId = counterLocalService.increment(Portfolio.class.getName());
@@ -254,6 +253,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			}
 		}
 		
+		portfolio.setModifiedDate(new java.util.Date());
 		return portfolio;
 	}
 	
