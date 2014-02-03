@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
@@ -12,9 +13,12 @@
 	<portlet:param name="jspPage" value="/html/portfolio/update.jsp"/>
 </portlet:renderURL>
 
-<c:if test="<%= (BridgeServiceUtil.getUserType(user.getUserId()) != IConstants.USER_TYPE_BANK_ADMIN) %>">
+<c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">
 	<aui:button-row>
 		<aui:button href="<%= addPortfolioURL %>" value="add-portfolio" />
+		<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+			<aui:button href="<%= PortalUtil.getCreateAccountURL(request, themeDisplay) %>" value="add-user" />
+		</c:if>
 	</aui:button-row>
 </c:if>
 
