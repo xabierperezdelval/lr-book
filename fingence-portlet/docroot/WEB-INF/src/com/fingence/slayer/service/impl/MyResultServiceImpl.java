@@ -40,15 +40,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.MyResultServiceUtil} to access the my result remote service.
 	 */
 	
-	public double getNetWorth(long portfolioId) {
-		double networth = 0d;
-		
-		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
-		
-		for (MyResult myResult: myResults) {
-			networth += myResult.getCurrentMarketValue();
-		}
-		
-		return networth;
-	}	
+	public List<MyResult> getMyResults(long portfolioId) {
+		return myResultFinder.findResults(portfolioId);
+	}
 }

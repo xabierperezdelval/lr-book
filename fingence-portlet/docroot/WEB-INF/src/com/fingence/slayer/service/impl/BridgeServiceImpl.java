@@ -85,37 +85,44 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	private boolean isUserHavingRole(long userId, String parentOrg, String roleName) {
 		
 		boolean havingRole = false;
-		
+				
 		try {
 			List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
 			
 			for (Organization organization:organizations) {
-
+				
+				boolean performRoleCheck = false;
+				
 				try {
 					List<Organization> parents = organizationLocalService.getParentOrganizations(organization.getOrganizationId());
 					for (Organization parent: parents) {
-						if (!parent.getName().equalsIgnoreCase(parentOrg)) continue;
+						if (parent.getName().equalsIgnoreCase(parentOrg)) {
+							performRoleCheck = true;
+							break;
+						} 
 					}					
 				} catch (PortalException e) {
 					e.printStackTrace();
 				}
 				
-				try {
-					havingRole = userGroupRoleLocalService.hasUserGroupRole(
-							userId, organization.getGroupId(),
-							roleName);
-				} catch (PortalException e) {
-					e.printStackTrace();
-				}
-				
-				if (havingRole){
-					break;
+				if (performRoleCheck) {
+					try {
+						havingRole = userGroupRoleLocalService.hasUserGroupRole(
+								userId, organization.getGroupId(),
+								roleName);
+						
+						if (havingRole) {
+							break;
+						}
+					} catch (PortalException e) {
+						e.printStackTrace();
+					}					
 				}
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
+				
 		return havingRole;
 	}
 	
@@ -362,5 +369,39 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		}
 		
 		return firmName;
+	}
+	
+	public String getOrganizationName(long organizationId) {
+		String orgName = StringPool.BLANK;
+		
+		try {
+			Organization organization = organizationLocalService.fetchOrganization(organizationId);
+			
+			if (Validator.isNotNull(organization)) {
+				orgName = organization.getName();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return orgName;
+	}
+	
+	public String getUserName(long userId) {
+		
+		String userName = StringPool.BLANK;
+		
+		try {
+			User user = userLocalService.fetchUser(userId);
+			
+			if (Validator.isNotNull(user)) {
+				userName = user.getFullName();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return userName;
+		
 	}
 }
