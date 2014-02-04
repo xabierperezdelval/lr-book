@@ -3,10 +3,10 @@
 
 <%
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId());
-	//AssetLocalServiceUtil.importFromExcel(user.getUserId(), null);
 	
 	PortletURL detailsURL = renderResponse.createRenderURL();
 	detailsURL.setParameter("jspPage", "/html/portfolio/details.jsp");
+	detailsURL.setParameter("backURL", themeDisplay.getURLCurrent());
 %>
 
 <portlet:renderURL var="addPortfolioURL">
