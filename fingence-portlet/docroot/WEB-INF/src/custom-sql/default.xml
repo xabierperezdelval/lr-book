@@ -7,6 +7,7 @@
 				b.portfolioId,
 				a.assetId, 
 				a.security_ticker, 
+				a.id_isin,
 				a.name, 
 				a.current_price,	
 				a.security_des,
