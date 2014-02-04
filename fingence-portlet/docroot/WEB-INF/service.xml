@@ -176,6 +176,7 @@
 		<column name="security_ticker" type="String"/>
 		<column name="id_isin" type="String"/>
 		<column name="name" type="String"/>
+		<column name="purchaseQty" type="int"/>
 		<column name="current_price" type="double"/>
 		<column name="security_des" type="String"/>
 		<column name="security_typ" type="String"/>
