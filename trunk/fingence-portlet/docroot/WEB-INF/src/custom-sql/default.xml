@@ -14,6 +14,7 @@
 				a.security_typ,
 				a.security_typ2,	
 				a.parent_comp_name,	
+				c.purchaseQty,
 				a.security_class,	
 				a.country as countryId, 
 				d.name as countryName, 

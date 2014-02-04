@@ -34,23 +34,20 @@
 		'aui-base','aui-datatable',
 		function(Y) {
 			Liferay.Service(
-				'/fingence-portlet.portfolioitem/get-portfolio-items',
+				'/fingence-portlet.myresult/get-my-results',
 				{
 					portfolioId : '<%= portfolioId %>'
 				},
 					
 				function(data) {
-					var columns = 
-						[
-							{
-								 key: 'purchasePrice',
-								 label: 'Purchase Price'
-							},
-							{
-								 key: 'purchaseQty',
-								 label: 'Purchase Quantity'
-							}
-						];	
+					var columns = [
+                    	{key: 'name', label: 'Name'},
+                        {key: 'security_ticker', label: 'TICKER'},
+                        {key: 'purchasedMarketValue', label: 'Purchased Value'},
+                        {key: 'currentMarketValue', label: 'Current Value'},
+                        {key: 'current_price', label: 'Current Price'},
+                        {key: 'purchaseQty', label: 'Quantity'}
+					];	
 								 	
 					new Y.DataTable.Base({
 						columnset: columns,
