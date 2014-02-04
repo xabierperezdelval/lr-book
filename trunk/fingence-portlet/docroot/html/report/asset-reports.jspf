@@ -50,60 +50,36 @@
   			function(data) {
   			
   				// 1. networth
-    			var netWorth = 0;
-    			netWorth = getTotalNetWorth(data, netWorth);
-    			
-				A.one('#<portlet:namespace/>networthLabel').text(netWorth);
+				A.one('#<portlet:namespace/>networthLabel').text(getTotalNetWorth(data));
 				
-				<!-- --------------------------------- -->
 				//2. Pie Chart - By Currency
-				showPieChart(data,'currency_','#container1');
+				renderChart(data, 'currency_', '#container1', 'By Currency');
 				
 				//3. Pie Chart - By Country of Risk
-				showPieChart(data,'countryOfRiskName','#container2');
+				renderChart(data,'countryOfRiskName', '#container2', 'By Country Of Risk');
 				
-				//4.Top Gainers/Losers
-				//Top Gainers
-				showDataTables(data, 'descending','#topGainers');
-				//5.Top Losses
-				showDataTables(data, 'ascending','#topLosers');
+				//4. Top Gainers Grid
+				showDataTable(data, 'desc','#topGainers', 'Top Gainers');
+				
+				//5.Top Losers Grid
+				showDataTable(data, 'asc','#topLosers', 'Top Losers');
   			}
 		);	
 	});
-	function showPieChart(data, chartType, divId){
-		var groupByCurrency = _.groupBy(data, chartType);
-		var currency = new Array();
-		var netWorthPerCurrencyType = new Array();
-		var netWorthCurrency = 0;
-		var pieChartTitle = new String();
-		if (chartType == "currency_"){
-			pieChartTitle = "By Currency";
-		} else {
-			pieChartTitle = "By Country Of Risk";
-		}
-		
+	
+	function renderChart(data, groupBy, divId, title){
+		var dataArray = new Array();
+		var netWorth = 0;
 		var i=0;
-		var out = _(groupByCurrency).map(function(netWorthPerCurrency, key) {
-			netWorthCurrency = netWorthPerCurrency[0].currentMarketValue;
-			_.reduce(netWorthPerCurrency, function(sum, val) {
-			    netWorthCurrency += val.currentMarketValue;
-		  	});
-			
-		  	currency[i] = key;
-			netWorthPerCurrencyType[i] = netWorthCurrency;
-		  	i++;
-		});
-		var pieName = Array();
-		var pieData = Array();
-		var pieChartDataArray = Array();
-		for(i=0;i<currency.length;i++) { 
-		   pieName[i] = currency[i]; 
-		   pieData[i] = netWorthPerCurrencyType[i];  
-		}
 		
-		for(j=0;j<pieName.length;j++) { 
-		   pieChartDataArray[j] = new Array(pieName[j],pieData[j]); 
-		}
+		_(_.groupBy(data, groupBy)).map(function(item, key) {
+			netWorth = item[0].currentMarketValue;
+			_.reduce(item, function(sum, val) {
+			    netWorth += val.currentMarketValue;
+		  	});
+		  	dataArray[i] = new Array(key,netWorth);
+		  	i++;
+		});		
 		
 		$(divId).highcharts({
 	        chart: {
@@ -112,7 +88,7 @@
 	            plotShadow: false
 	        },
 	        title: {
-	            text: pieChartTitle
+	            text: title
 	        },
 	        tooltip: {
 	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -131,64 +107,49 @@
 	        },
 	        series: [{
 	            type: 'pie',
-	            name: 'Fingence Currency Statistics',
-	            data: pieChartDataArray
+	            name: title,
+	            data: dataArray
 	        }]
 	    });	
 	}
-	function showDataTables(data, sortOrder, divId){
-		var sortGainers = _.sortBy(data,'gain_loss');
+	
+	function showDataTable(data, sortOrder, divId, title){
+		var sorted = _.sortBy(data,'gain_loss');
 		var dataTableHeading = new String();
 		
-		if(sortOrder == 'descending'){
-			sortGainers = sortGainers.reverse();
-			dataTableHeading = "Top 10 Gainers";
-		}else{
-			dataTableHeading = "Top 10 Losses";
+		if (sortOrder == 'desc') {
+			sorted = sorted.reverse();
 		}
-		var sortGainers = sortGainers.slice(0,10);
+		sorted = sorted.slice(0,7);
 		
 		YUI().use(
-		  'aui-datatable',
-		  function(Y) {
-		    var columns = [
-		    	{
-			 		key: 'portfolioId',
-			 		label: 'PortFolio ID',
-			 		formatter: function(obj) {
-			 			if (obj.data.portfolioId){
-			 				obj.value = obj.data.portfolioId
-			 			}
-			 		}
-			 	},
-			 	{
-			 		key: 'gainLoss',
-			 		label: dataTableHeading,
-			 		formatter: function(obj) {
-			 			if (obj.data.gain_loss){
-			 				obj.value = obj.data.gain_loss
-			 			}
-			 		}
-			 		
-			 	},
-		    ];
-		    new Y.DataTable.Base({
-				columnset: columns,
-			    recordset: sortGainers
-			}).render(divId);
-		  }
+			'aui-datatable',
+		  	function(Y) {
+		    	var columns = 
+		    		[
+		    			{
+			 				key: 'name',
+			 				label: 'Asset Name'
+			 			},
+			 			{
+			 				key: 'gain_loss',
+			 				label: title
+			 			},
+		   	 		];
+		   
+		   		new Y.DataTable.Base({
+					columnset: columns,
+			    	recordset: sorted
+				}).render(divId);
+		  	}
 		);
 	}
-	function getTotalNetWorth(data, netWorth){
+	
+	function getTotalNetWorth(data){
+		var netWorth = 0;
 		_.each(data, function(itemValue){
 			netWorth += itemValue.currentMarketValue;
 		},data);
-	  	return netWorth;
-	}
-	function getTotalNetWorthPerCurrency(data, netWorth){
-		_.reduce(data, function(sum, val) {
-		    netWorth += val.currentMarketValue;
-	  	});
 	  	return netWorth;
 	}
 </aui:script>
