@@ -15,7 +15,7 @@
 				<div id="container1"></div>
 			</aui:column>
 			<aui:column>
-				some information
+				<div id="currencyWeightage"></div>
 			</aui:column>
 		</aui:row>
 	</liferay-ui:panel>
@@ -49,8 +49,10 @@
   			},
   			function(data) {
   			
+  				var netWorth = getTotalNetWorth(data);
+  			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(getTotalNetWorth(data));
+				A.one('#<portlet:namespace/>networthLabel').text(netWorth);
 				
 				//2. Pie Chart - By Currency
 				renderChart(data, 'currency_', '#container1', 'By Currency');
@@ -63,23 +65,61 @@
 				
 				//5.Top Losers Grid
 				showDataTable(data, 'asc','#topLosers', 'Top Losers');
+				
+				//6. Group By currency with Weightage.
+				showWeightage(data, 'currency_', '#currencyWeightage', netWorth);
   			}
 		);	
 	});
 	
-	function renderChart(data, groupBy, divId, title){
+	function showWeightage(data, groupBy, divId, netWorth) {
+	
+		var jsonArr = [];
+		var dataArray = getModifiedArray(data, groupBy);
+		
+		for (var i=0; i<dataArray.length; i++) {
+			var obj = dataArray[i];
+			jsonArr.push({
+				currency: obj[0],
+				currentMarketValue: obj[1],
+				weightage: (obj[1] / netWorth * 100)
+			});
+		}
+		
+		YUI().use(
+			'aui-datatable',
+		  	function(Y) {
+		    	var columns = [
+		    		{key: 'currency', label: 'Currency'},
+			 		{key: 'currentMarketValue', label: 'Current Value'},
+			 		{key: 'weightage', label: 'Weightage (%)'}
+		   	 	];
+		   
+		   		new Y.DataTable.Base({
+					columnset: columns,
+			    	recordset: jsonArr
+				}).render(divId);
+		  	}
+		);
+	}
+	
+	function getModifiedArray(data, groupBy) {
 		var dataArray = new Array();
-		var netWorth = 0;
-		var i=0;
 		
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
-			netWorth = item[0].currentMarketValue;
-			_.reduce(item, function(sum, val) {
-			    netWorth += val.currentMarketValue;
+			var value = item[0].currentMarketValue;
+			_.reduce(item, function(sum, obj) {
+			    value += obj.currentMarketValue;
 		  	});
-		  	dataArray[i] = new Array(key,netWorth);
-		  	i++;
-		});		
+		  	dataArray.push(new Array(key, value));
+		});	
+		
+		return dataArray;	
+	}	
+	
+	function renderChart(data, groupBy, divId, title){
+	
+		var dataArray = getModifiedArray(data, groupBy);
 		
 		$(divId).highcharts({
 	        chart: {
@@ -125,17 +165,10 @@
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
-		    	var columns = 
-		    		[
-		    			{
-			 				key: 'name',
-			 				label: 'Asset Name'
-			 			},
-			 			{
-			 				key: 'gain_loss',
-			 				label: title
-			 			},
-		   	 		];
+		    	var columns = [
+		    		{key: 'name', label: 'Asset Name'},
+			 		{key: 'gain_loss',label: title},
+		   	 	];
 		   
 		   		new Y.DataTable.Base({
 					columnset: columns,
@@ -146,10 +179,10 @@
 	}
 	
 	function getTotalNetWorth(data){
-		var netWorth = 0;
+		var value = 0;
 		_.each(data, function(itemValue){
-			netWorth += itemValue.currentMarketValue;
-		},data);
-	  	return netWorth;
+			value += itemValue.currentMarketValue;
+		});
+	  	return value;
 	}
 </aui:script>
