@@ -11,7 +11,7 @@
 <liferay-ui:panel-container accordion="<%= true %>">
 	<liferay-ui:panel title="breakup-by-currency" extended="<%= true %>" collapsible="<%= true %>">
 		<aui:row>
-			<aui:column>
+			<aui:column cssClass="chart-container">
 				<div id="container1"></div>
 			</aui:column>
 			<aui:column>
