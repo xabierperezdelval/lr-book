@@ -18,6 +18,10 @@ import java.util.List;
 
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Country;
+import com.liferay.portal.service.CountryServiceUtil;
 
 /**
  * The implementation of the my result remote service.
@@ -41,6 +45,29 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 */
 	
 	public List<MyResult> getMyResults(long portfolioId) {
-		return myResultFinder.findResults(portfolioId);
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
+		
+		for (MyResult myResult: myResults) {
+			
+			long countryOfRisk = myResult.getCountryOfRisk();
+			
+			if (countryOfRisk > 0l) {
+				Country country = null;
+				try {
+					country = CountryServiceUtil.fetchCountry(countryOfRisk);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				if (Validator.isNotNull(country)) {
+					myResult.setCountryOfRiskName(country.getName());
+				}
+			} else {
+				myResult.setCountryOfRiskName("Un-Specified");
+			}
+		}
+		
+		return myResults;
 	}
 }

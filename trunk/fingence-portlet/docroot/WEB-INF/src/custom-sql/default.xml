@@ -18,15 +18,17 @@
 				a.country as countryId, 
 				d.name as countryName, 
 				a.country_of_risk as countryOfRisk,
-				a.currency_ as currency,
+				a.country_of_risk as countryOfRiskName,
+				a.currency_,
 				(c.purchasePrice * c.purchaseQty) as purchasedMarketValue,
 				(a.current_price * c.purchaseQty) as currentMarketValue,
-				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty) as gain_loss
+				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty) as gain_loss,
+				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty)/(c.purchasePrice * c.purchaseQty) * 100 as gain_loss_percent
 			FROM 
 				fing_asset a, 
 				fing_portfolio b, 
 				fing_portfolioitem c, 
-				country d 
+				country d
 			WHERE 
 				b.portfolioId = ?
 				and a.assetId = c.assetId 
