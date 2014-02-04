@@ -1,22 +1,194 @@
-This is asset Reports
+<h2>Asset Reports</h2>
 
-<h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
+<aui:row>
+	<aui:column>
+		<h4>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h4>
+	</aui:column>
+	<aui:column>
+	</aui:column>	
+</aui:row>
+
+<liferay-ui:panel-container accordion="<%= true %>">
+	<liferay-ui:panel title="breakup-by-currency" extended="<%= true %>" collapsible="<%= true %>">
+		<aui:row>
+			<aui:column>
+				<div id="container1"></div>
+			</aui:column>
+			<aui:column>
+				some information
+			</aui:column>
+		</aui:row>
+	</liferay-ui:panel>
+	
+	<liferay-ui:panel title="breakup-by-country-of-risk" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
+		<aui:row>
+			<aui:column>
+				<div id="container2"></div>
+			</aui:column>
+			<aui:column>
+				some information
+			</aui:column>
+		</aui:row>
+	</liferay-ui:panel>	
+	
+	<liferay-ui:panel title="top-gainers" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
+		<div id="topGainers"></div>
+	</liferay-ui:panel>		
+	
+	<liferay-ui:panel title="top-losers" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
+		<div id="topLosers"></div>
+	</liferay-ui:panel>		
+</liferay-ui:panel-container>
 
 <aui:script>
-
 	AUI().ready(function(A) {
-
-		// net worth value
 		Liferay.Service(
-  			'/fingence-portlet.myresult/get-net-worth',
+  			'/fingence-portlet.myresult/get-my-results',
   			{
-    			portfolioId: 1204
+    			portfolioId: 401
   			},
-  			function(obj) {
-    			var label = A.one('#<portlet:namespace/>networthLabel');
-    			label.text(obj);
+  			function(data) {
+  			
+  				// 1. networth
+    			var netWorth = 0;
+    			netWorth = getTotalNetWorth(data, netWorth);
+    			
+				A.one('#<portlet:namespace/>networthLabel').text(netWorth);
+				
+				<!-- --------------------------------- -->
+				//2. Pie Chart - By Currency
+				showPieChart(data,'currency_','#container1');
+				
+				//3. Pie Chart - By Country of Risk
+				showPieChart(data,'countryOfRiskName','#container2');
+				
+				//4.Top Gainers/Losers
+				//Top Gainers
+				showDataTables(data, 'descending','#topGainers');
+				//5.Top Losses
+				showDataTables(data, 'ascending','#topLosers');
   			}
-		);			      
-	});	
-
+		);	
+	});
+	function showPieChart(data, chartType, divId){
+		var groupByCurrency = _.groupBy(data, chartType);
+		var currency = new Array();
+		var netWorthPerCurrencyType = new Array();
+		var netWorthCurrency = 0;
+		var pieChartTitle = new String();
+		if (chartType == "currency_"){
+			pieChartTitle = "By Currency";
+		} else {
+			pieChartTitle = "By Country Of Risk";
+		}
+		
+		var i=0;
+		var out = _(groupByCurrency).map(function(netWorthPerCurrency, key) {
+			netWorthCurrency = netWorthPerCurrency[0].currentMarketValue;
+			_.reduce(netWorthPerCurrency, function(sum, val) {
+			    netWorthCurrency += val.currentMarketValue;
+		  	});
+			
+		  	currency[i] = key;
+			netWorthPerCurrencyType[i] = netWorthCurrency;
+		  	i++;
+		});
+		var pieName = Array();
+		var pieData = Array();
+		var pieChartDataArray = Array();
+		for(i=0;i<currency.length;i++) { 
+		   pieName[i] = currency[i]; 
+		   pieData[i] = netWorthPerCurrencyType[i];  
+		}
+		
+		for(j=0;j<pieName.length;j++) { 
+		   pieChartDataArray[j] = new Array(pieName[j],pieData[j]); 
+		}
+		
+		$(divId).highcharts({
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false
+	        },
+	        title: {
+	            text: pieChartTitle
+	        },
+	        tooltip: {
+	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: true,
+	                    color: '#000000',
+	                    connectorColor: '#000000',
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+	                }
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            name: 'Fingence Currency Statistics',
+	            data: pieChartDataArray
+	        }]
+	    });	
+	}
+	function showDataTables(data, sortOrder, divId){
+		var sortGainers = _.sortBy(data,'gain_loss');
+		var dataTableHeading = new String();
+		
+		if(sortOrder == 'descending'){
+			sortGainers = sortGainers.reverse();
+			dataTableHeading = "Top 10 Gainers";
+		}else{
+			dataTableHeading = "Top 10 Losses";
+		}
+		var sortGainers = sortGainers.slice(0,10);
+		
+		YUI().use(
+		  'aui-datatable',
+		  function(Y) {
+		    var columns = [
+		    	{
+			 		key: 'portfolioId',
+			 		label: 'PortFolio ID',
+			 		formatter: function(obj) {
+			 			if (obj.data.portfolioId){
+			 				obj.value = obj.data.portfolioId
+			 			}
+			 		}
+			 	},
+			 	{
+			 		key: 'gainLoss',
+			 		label: dataTableHeading,
+			 		formatter: function(obj) {
+			 			if (obj.data.gain_loss){
+			 				obj.value = obj.data.gain_loss
+			 			}
+			 		}
+			 		
+			 	},
+		    ];
+		    new Y.DataTable.Base({
+				columnset: columns,
+			    recordset: sortGainers
+			}).render(divId);
+		  }
+		);
+	}
+	function getTotalNetWorth(data, netWorth){
+		_.each(data, function(itemValue){
+			netWorth += itemValue.currentMarketValue;
+		},data);
+	  	return netWorth;
+	}
+	function getTotalNetWorthPerCurrency(data, netWorth){
+		_.reduce(data, function(sum, val) {
+		    netWorth += val.currentMarketValue;
+	  	});
+	  	return netWorth;
+	}
 </aui:script>

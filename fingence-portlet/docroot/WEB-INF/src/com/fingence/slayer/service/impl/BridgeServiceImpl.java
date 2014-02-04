@@ -406,6 +406,5 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		}
 		
 		return userName;
-		
 	}
 }
