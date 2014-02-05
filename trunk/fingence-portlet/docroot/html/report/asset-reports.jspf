@@ -25,10 +25,13 @@
 			<aui:column>
 				<div id="container2"></div>
 			</aui:column>
-			<aui:column>
-				some information
-			</aui:column>
 		</aui:row>
+		<hr/>
+		<aui:row>
+			<aui:column>
+				<div id="countryOfRiskWeightage"></div>
+			</aui:column>
+		</aui:row>		
 	</liferay-ui:panel>	
 	
 	<liferay-ui:panel title="top-gainers" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
@@ -67,12 +70,15 @@
 				showDataTable(data, 'asc','#topLosers', 'Top Losers');
 				
 				//6. Group By currency with Weightage.
-				showWeightage(data, 'currency_', '#currencyWeightage', netWorth);
+				showWeightage(data, 'currency_', '#currencyWeightage', 'Currency', netWorth);
+				
+				//7. Group By Country of Risk with Weightage.
+				showWeightage(data, 'countryOfRiskName', '#countryOfRiskWeightage', 'Country Of Risk', netWorth);				
   			}
 		);	
 	});
 	
-	function showWeightage(data, groupBy, divId, netWorth) {
+	function showWeightage(data, groupBy, divId, title, netWorth) {
 	
 		var jsonArr = [];
 		var dataArray = getModifiedArray(data, groupBy);
@@ -80,7 +86,7 @@
 		for (var i=0; i<dataArray.length; i++) {
 			var obj = dataArray[i];
 			jsonArr.push({
-				currency: obj[0],
+				_key: obj[0],
 				currentMarketValue: obj[1],
 				weightage: (obj[1] / netWorth * 100)
 			});
@@ -90,9 +96,21 @@
 			'aui-datatable',
 		  	function(Y) {
 		    	var columns = [
-		    		{key: 'currency', label: 'Currency'},
-			 		{key: 'currentMarketValue', label: 'Current Value'},
-			 		{key: 'weightage', label: 'Weightage (%)'}
+		    		{key: '_key', label: title},
+			 		{
+			 			key: 'currentMarketValue', 
+			 			label: 'Current Value',
+			 			formatter: function(obj) {
+			 				obj.value = accounting.formatMoney(obj.value);
+			 			}			 			
+			 		},
+			 		{
+			 			key: 'weightage', 
+			 			label: 'Weightage (%)',
+			 			formatter:function(obj) {
+				 			obj.value = (obj.value).toFixed(2) + '%';
+				 		}
+			 		}
 		   	 	];
 		   
 		   		new Y.DataTable.Base({
