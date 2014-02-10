@@ -40,6 +40,11 @@
 		<aui:column>
 			<aui:input name="emailAddress" required="true">
 				<aui:validator name="email"/>
+				<aui:validator name="custom" errorMessage="email-already-exists">
+					function() {
+						return emailNotExists();					
+					}
+				</aui:validator>
 			</aui:input>
 		</aui:column>
 		
@@ -78,3 +83,25 @@
 
 	<aui:button type="submit" />
 </aui:form>
+
+<aui:script>
+	function emailNotExists() {
+		var ele = document.<portlet:namespace/>fm.<portlet:namespace/>emailAddress;
+	
+		var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('register_WAR_fingenceportlet');
+		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_DUPLICATE %>');
+		ajaxURL.setParameter('emailAddress', ele.value);
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+				
+		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+			on: {
+				success: function() {
+					return (!(eval(this.get('responseData'))));
+				}
+			}
+		});
+		
+		return true;
+	}
+</aui:script>

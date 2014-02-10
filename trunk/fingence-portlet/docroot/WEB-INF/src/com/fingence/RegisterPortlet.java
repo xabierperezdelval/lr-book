@@ -1,12 +1,16 @@
 package com.fingence;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import com.fingence.slayer.service.BridgeServiceUtil;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -53,4 +57,19 @@ public class RegisterPortlet extends MVCPortlet {
 			actionResponse.sendRedirect(themeDisplay.getURLSignIn());
 		}
 	}
+	
+	public void serveResource(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException,
+			PortletException {
+		
+		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
+		
+		if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_DUPLICATE)) { 
+			long companyId = PortalUtil.getCompanyId(resourceRequest);
+	        String emailAddress = ParamUtil.getString(resourceRequest, "emailAddress");     
+	        PrintWriter writer = resourceResponse.getWriter();
+	        writer.println(BridgeServiceUtil.isEmailExists(companyId, emailAddress));
+	        writer.flush();
+		}
+    }
 }

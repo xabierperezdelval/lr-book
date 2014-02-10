@@ -107,7 +107,7 @@
 	
 	<entity name="Portfolio" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="portfolioId" type="long" primary="true"/>
-		<column name="porfolioName" type="String"/>
+		<column name="portfolioName" type="String"/>
 		
 		<column name="investorId" type="long"/>
 		<column name="wealthAdvisorId" type="long"/>

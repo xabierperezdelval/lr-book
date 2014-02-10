@@ -1,8 +1,6 @@
-<h2>Asset Reports</h2>
-
 <aui:row>
 	<aui:column>
-		<h4>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h4>
+		<h5>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h5>
 	</aui:column>
 	<aui:column>
 	</aui:column>	
@@ -45,17 +43,18 @@
 
 <aui:script>
 	AUI().ready(function(A) {
+	
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
-    			portfolioId: 401
+    			portfolioId: '<%= portfolioId %>'
   			},
   			function(data) {
   			
   				var netWorth = getTotalNetWorth(data);
   			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(netWorth);
+				A.one('#<portlet:namespace/>networthLabel').text(accounting.formatMoney(netWorth / 1000000) + ' Million');
 				
 				//2. Pie Chart - By Currency
 				renderChart(data, 'currency_', '#container1', 'By Currency');
