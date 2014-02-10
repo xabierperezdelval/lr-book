@@ -184,7 +184,13 @@
 		  	function(Y) {
 		    	var columns = [
 		    		{key: 'name', label: 'Asset Name'},
-			 		{key: 'gain_loss',label: title},
+			 		{
+			 			key: 'gain_loss',
+			 			label: title,
+			 			formatter: function(obj) {
+			 				obj.value = accounting.formatMoney(obj.value) + ' (' + (obj.data.gain_loss_percent).toFixed(2) +  '%)';
+			 			} 
+			 		}
 		   	 	];
 		   
 		   		new Y.DataTable.Base({

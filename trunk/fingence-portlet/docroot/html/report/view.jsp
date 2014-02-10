@@ -13,7 +13,7 @@
 
 <aui:row>
 	<aui:column columnWidth="50">
-		<h2><%= layoutName.toUpperCase() + " for " + portfolioId %></h2>
+		<h3><%= layoutName.toUpperCase() + " for " + portfolioId %></h3>
 	</aui:column>
 	<aui:column>
 		<aui:select name="portfolioList" onClick="javascript:changePortfolio(this);"/>
@@ -26,7 +26,7 @@
 		<%@ include file="/html/report/asset-reports.jspf"%>
 	</c:when>
 	
-	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_SECURITY_HOLDING) %>">
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME_REPORT) %>">
 		<%@ include file="/html/report/security-holding.jspf"%>
 	</c:when>
 	

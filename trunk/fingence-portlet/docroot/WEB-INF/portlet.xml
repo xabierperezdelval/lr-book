@@ -107,5 +107,5 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
-	</portlet>
+	</portlet> 
 </portlet-app>
