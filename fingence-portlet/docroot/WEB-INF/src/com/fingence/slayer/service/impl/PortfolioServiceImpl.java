@@ -14,6 +14,9 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.util.List;
+
+import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
 
 /**
@@ -37,7 +40,27 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.PortfolioServiceUtil} to access the portfolio remote service.
 	 */
 	
-	public void makePrimary(long userId, long portfolioId) {
-		portfolioLocalService.makePrimary(userId, portfolioId);
+	public void makePrimary(long portfolioId) {
+		portfolioLocalService.makePrimary(portfolioId);
+	}
+	
+	public List<Portfolio> getPortfolios(long userId) {
+		return portfolioLocalService.getPortfolios(userId);
+	}
+	
+	public long getDefault(long userId) {
+		
+		long portfolioId = 0l;
+		
+		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
+		
+		for (Portfolio portfolio: portfolios) {
+			if (portfolio.isPrimary()) {
+				portfolioId = portfolio.getPortfolioId();
+				break;
+			}
+		}
+		
+		return portfolioId;
 	}
 }

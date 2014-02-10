@@ -12,6 +12,7 @@
 <%@page import="java.util.List"%>
 
 <%@page import="javax.portlet.PortletURL"%>
+<%@page import="javax.portlet.PortletSession"%>
 
 <%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.model.Organization"%>
@@ -22,6 +23,9 @@
 <%@page import="com.fingence.IConstants"%>
 <%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
 <%@page import="com.fingence.slayer.service.BridgeLocalServiceUtil"%>
+
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>

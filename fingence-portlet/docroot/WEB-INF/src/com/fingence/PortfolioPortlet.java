@@ -24,7 +24,7 @@ public class PortfolioPortlet extends MVCPortlet {
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
 		long userId = PortalUtil.getUserId(actionRequest);
-		String portfolioName = ParamUtil.getString(uploadPortletRequest, "porfolioName");
+		String portfolioName = ParamUtil.getString(uploadPortletRequest, "portfolioName");
 		
 		long portfolioId = ParamUtil.getLong(uploadPortletRequest, "portfolioId");
 		long investorId = ParamUtil.getLong(uploadPortletRequest, "investorId");
@@ -39,6 +39,6 @@ public class PortfolioPortlet extends MVCPortlet {
 		
 		PortfolioLocalServiceUtil.updatePortfolio(portfolioId, userId,
 				portfolioName, investorId, institutionId, wealthAdvisorId,
-				trial, relationshipManagerId, social, true, excelFile);
+				trial, relationshipManagerId, social, excelFile);
 	}
 }

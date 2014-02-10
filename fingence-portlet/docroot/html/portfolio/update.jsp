@@ -8,7 +8,7 @@
 
 	<aui:row>
 		<aui:column>
-			<aui:input name="porfolioName" required="true" autoFocus="true"/>
+			<aui:input name="portfolioName" required="true" autoFocus="true"/>
 		</aui:column>
 		
 		<aui:column cssClass="display-down">

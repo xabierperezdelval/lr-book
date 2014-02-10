@@ -407,4 +407,18 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		return userName;
 	}
+	
+	public boolean isEmailExists(long companyId, String emailAddress) {
+		boolean exists = false;
+		
+		try {
+			User user = userLocalService.fetchUserByEmailAddress(companyId, emailAddress);
+			
+			exists = Validator.isNotNull(user);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return exists;
+	}
 }

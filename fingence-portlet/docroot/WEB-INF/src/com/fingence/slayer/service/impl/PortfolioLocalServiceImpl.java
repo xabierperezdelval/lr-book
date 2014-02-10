@@ -62,18 +62,18 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	public void updatePortfolio(long portfolioId, long userId,
 			String portfolioName, long investorId, long institutionId,
 			long wealthAdvisorId, boolean trial, long relationshipManagerId,
-			boolean social, boolean primary, File excelFile) {
+			boolean social, File excelFile) {
 		
 		Portfolio portfolio = getPortfolioObj(portfolioId, userId);
 		
 		portfolioId = portfolio.getPortfolioId();
-		portfolio.setPorfolioName(portfolioName);
+		portfolio.setPortfolioName(portfolioName);
 		portfolio.setInvestorId(investorId);
 		portfolio.setWealthAdvisorId(wealthAdvisorId);
 		portfolio.setRelationshipManagerId(relationshipManagerId);
 		portfolio.setInstitutionId(institutionId);
 		portfolio.setTrial(trial);
-		portfolio.setPrimary(primary);
+		portfolio.setPrimary(isFirstPortfolio(investorId));
 		portfolio.setSocial(social);
 		
 		try {
@@ -164,6 +164,20 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         }
 	}
 	
+	private boolean isFirstPortfolio(long investorId) {
+		
+		boolean first = false;
+		
+		try {
+			int count = portfolioPersistence.countByInvestorId(investorId);
+			first = (count == 0);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return first;
+	}
+
 	public List<Portfolio> getPortfolios(long userId) {
 		
 		List<Portfolio> portfolios = null;
@@ -282,17 +296,26 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		return assets;
 	}
 	
-	public void makePrimary(long userId, long portfolioId) {
-		List<Portfolio> portfolios = getPortfolios(userId);
+	public void makePrimary(long portfolioId) {
 		
-		for (Portfolio portfolio: portfolios) {
-			portfolio.setPrimary(portfolio.getPortfolioId() == portfolioId);
-			
+		Portfolio portfolio = null;
+		try {
+			portfolio = fetchPortfolio(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(portfolio)) {
 			try {
-				updatePortfolio(portfolio);
+				List<Portfolio> portfolios = portfolioPersistence.findByInvestorId(portfolio.getInvestorId());
+				
+				for (Portfolio obj: portfolios) {
+					obj.setPrimary(obj.getPortfolioId() == portfolioId);
+					updatePortfolio(obj);
+				}			
 			} catch (SystemException e) {
 				e.printStackTrace();
-			}
+			}			
 		}
 	}
 }
