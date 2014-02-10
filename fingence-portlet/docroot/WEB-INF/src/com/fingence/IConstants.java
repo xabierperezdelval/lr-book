@@ -9,7 +9,7 @@ public interface IConstants {
 	String ROLE_RELATIONSHIP_MANAGER = "Relationship Manager";
 
 	String PAGE_ASSET_REPORT = "Asset Report";
-	String PAGE_SECURITY_HOLDING = "Security Holding";
+	String PAGE_FIXED_INCOME_REPORT = "Fixed Income Report";
 	String PAGE_RISK_REPORT = "Risk Report";
 	String PAGE_PERFORMANCE_REPORT = "Performance Report";
 	String PAGE_VIOLATION_REPORT = "Violation Report";
