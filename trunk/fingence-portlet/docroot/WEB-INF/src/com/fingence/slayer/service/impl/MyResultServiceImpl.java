@@ -19,6 +19,7 @@ import java.util.List;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.service.CountryServiceUtil;
@@ -61,7 +62,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				}
 				
 				if (Validator.isNotNull(country)) {
-					myResult.setCountryOfRiskName(country.getName());
+					myResult.setCountryOfRiskName(TextFormatter.format(country.getName(), TextFormatter.J));
 				}
 			} else {
 				myResult.setCountryOfRiskName("Un-Specified");

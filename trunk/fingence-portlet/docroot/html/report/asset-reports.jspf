@@ -63,10 +63,10 @@
 				renderChart(data,'countryOfRiskName', '#container2', 'By Country Of Risk');
 				
 				//4. Top Gainers Grid
-				showDataTable(data, 'desc','#topGainers', 'Top Gainers');
+				showDataTable(data, 'desc','#topGainers', 'Gainers');
 				
 				//5.Top Losers Grid
-				showDataTable(data, 'asc','#topLosers', 'Top Losers');
+				showDataTable(data, 'asc','#topLosers', 'Losers');
 				
 				//6. Group By currency with Weightage.
 				showWeightage(data, 'currency_', '#currencyWeightage', 'Currency', netWorth);
