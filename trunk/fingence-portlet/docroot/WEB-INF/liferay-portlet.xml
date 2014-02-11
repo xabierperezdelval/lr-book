@@ -7,10 +7,10 @@
 		<icon>/icon.png</icon>
 		
 		<scheduler-entry>
-			<scheduler-event-listener-class>com.inikah.jobs.UpdateXRates</scheduler-event-listener-class>
+			<scheduler-event-listener-class>com.fingence.jobs.UpdateXRates</scheduler-event-listener-class>
 			<trigger>
 				<cron>
-					<cron-trigger-value>0 0 13 * * 6</cron-trigger-value>
+					<cron-trigger-value>0 0 8 1/1 * ? *</cron-trigger-value>
 				</cron>
 			</trigger>
 		</scheduler-entry>

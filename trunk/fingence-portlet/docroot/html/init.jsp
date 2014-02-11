@@ -31,5 +31,6 @@
 <liferay-theme:defineObjects/>
 
 <%
-	int userType = BridgeServiceUtil.getUserType(user.getUserId());
+	long userId = user.getUserId();
+	int userType = BridgeServiceUtil.getUserType(userId);
 %>

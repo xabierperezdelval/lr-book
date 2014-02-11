@@ -26,10 +26,10 @@
 				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty) as gain_loss,
 				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty)/(c.purchasePrice * c.purchaseQty) * 100 as gain_loss_percent
 			FROM 
-				fing_asset a, 
-				fing_portfolio b, 
-				fing_portfolioitem c, 
-				country d
+				fing_Asset a, 
+				fing_Portfolio b, 
+				fing_PortfolIoitem c, 
+				Country d
 			WHERE 
 				b.portfolioId = ?
 				and a.assetId = c.assetId 

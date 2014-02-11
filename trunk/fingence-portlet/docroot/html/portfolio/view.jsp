@@ -2,7 +2,7 @@
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
-	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(user.getUserId());
+	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
 	
 	PortletURL detailsURL = renderResponse.createRenderURL();
 	detailsURL.setParameter("jspPage", "/html/portfolio/details.jsp");

@@ -43,7 +43,6 @@
 
 <aui:script>
 	AUI().ready(function(A) {
-	
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
@@ -74,7 +73,7 @@
 				//7. Group By Country of Risk with Weightage.
 				showWeightage(data, 'countryOfRiskName', '#countryOfRiskWeightage', 'Country Of Risk', netWorth);				
   			}
-		);	
+		);
 	});
 	
 	function showWeightage(data, groupBy, divId, title, netWorth) {
