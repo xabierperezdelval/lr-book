@@ -8,7 +8,8 @@
 	String layoutName = layout.getName(locale);
 	long portfolioId = GetterUtil.getLong(portletSession.getAttribute(
 			"PORTFOLIO_ID", PortletSession.APPLICATION_SCOPE),
-			PortfolioServiceUtil.getDefault(user.getUserId()));
+			PortfolioServiceUtil.getDefault(userId));
+	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
 %>
 
 <aui:row>
@@ -16,7 +17,17 @@
 		<h3><%= layoutName.toUpperCase() + " for " + portfolioId %></h3>
 	</aui:column>
 	<aui:column>
-		<aui:select name="portfolioList" onClick="javascript:changePortfolio(this);"/>
+		<c:choose>
+			<c:when test="<%= portfolioCount == 1 %>">
+				&nbsp;
+			</c:when>
+			<c:when test="<%= portfolioCount == 2 %>">
+				&nbsp;
+			</c:when>			
+			<c:otherwise>
+				<aui:select name="portfolioList" onChange="javascript:changePortfolio(this);"/>
+			</c:otherwise>
+		</c:choose>
 	</aui:column>
 </aui:row>
 
@@ -44,39 +55,40 @@
 	
 </c:choose>
 
-<aui:script>
-
-	function changePortfolio(list) {
-		var ajaxURL = Liferay.PortletURL.createResourceURL();
-		ajaxURL.setPortletId('report_WAR_fingenceportlet');
-		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
-		ajaxURL.setParameter('portfolioId', list.value);
-		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
-		
-		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
-			on: {
-				success: function() {
-					Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+<c:if test="<%= (portfolioCount > 2) %>">
+	<aui:script>
+		function changePortfolio(list) {
+			var ajaxURL = Liferay.PortletURL.createResourceURL();
+			ajaxURL.setPortletId('report_WAR_fingenceportlet');
+			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
+			ajaxURL.setParameter('portfolioId', list.value);
+			ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+			
+			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+				sync: true,
+				on: {
+					success: function() {
+						location.reload();
+					}
 				}
-			}
-		});	
-	}
-
-	AUI().ready(function(A) {
+			});	
+		}
 	
-		var list = document.getElementById('<portlet:namespace/>portfolioList');
-		Liferay.Service(
-  			'/fingence-portlet.portfolio/get-portfolios',
-  			{
-    			userId: '<%= user.getUserId() %>'
-  			},
-  			function(data) {
-    			for (var i=0; i<(data.length); i++) {
-    				var obj = data[i];
-    				list.options[i] = new Option(obj.portfolioName, obj.portfolioId);
-    				list.options[i].selected = (obj.portfolioId == '<%= portfolioId %>');
-    			}
-  			}
-		);
-	});
-</aui:script>
+		AUI().ready(function(A) {
+			var list = document.getElementById('<portlet:namespace/>portfolioList');
+			Liferay.Service(
+	  			'/fingence-portlet.portfolio/get-portfolios',
+	  			{
+	    			userId: '<%= userId %>'
+	  			},
+	  			function(data) {
+	    			for (var i=0; i<(data.length); i++) {
+	    				var obj = data[i];
+	    				list.options[i] = new Option(obj.portfolioName, obj.portfolioId);
+	    				list.options[i].selected = (obj.portfolioId == '<%= portfolioId %>');
+	    			}
+	  			}
+			);
+		});
+	</aui:script>
+</c:if>

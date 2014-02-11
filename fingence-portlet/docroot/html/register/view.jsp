@@ -72,7 +72,7 @@
 		<aui:column>
 			<c:choose>
 				<c:when test="<%= themeDisplay.isSignedIn() %>">
-					<aui:input name="firmName" readonly="true" value="<%= BridgeServiceUtil.getFirmName(user.getUserId()) %>"/>
+					<aui:input name="firmName" readonly="true" value="<%= BridgeServiceUtil.getFirmName(userId) %>"/>
 				</c:when>
 				<c:otherwise>
 					<aui:input name="firmName" required="true" />
@@ -93,15 +93,17 @@
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_DUPLICATE %>');
 		ajaxURL.setParameter('emailAddress', ele.value);
 		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
-				
+		
+		var notExists = true;
 		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+			sync: true,
 			on: {
 				success: function() {
-					return (!(eval(this.get('responseData'))));
+					notExists = (!(eval(this.get('responseData'))));
 				}
 			}
 		});
 		
-		return true;
+		return notExists;
 	}
 </aui:script>
