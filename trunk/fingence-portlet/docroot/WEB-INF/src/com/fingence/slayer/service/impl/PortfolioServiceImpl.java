@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the portfolio remote service.
@@ -62,5 +63,18 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		}
 		
 		return portfolioId;
+	}
+	
+	public int getPortoliosCount(long userId) {
+		
+		int count = 0;
+		
+		List<Portfolio> portfolios = getPortfolios(userId);
+		
+		if (Validator.isNotNull(portfolios)) {
+			count = portfolios.size();
+		}
+		
+		return count;
 	}
 }
