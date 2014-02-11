@@ -1,0 +1,59 @@
+<aui:row>
+	<aui:column columnWidth="50">
+		<div id="topGainers"></div>
+	</aui:column>
+	
+	<aui:column>
+		<div id="topLosers"></div>
+	</aui:column>	
+</aui:row>
+
+<aui:script>
+	AUI().ready(function(A) {
+		Liferay.Service(
+  			'/fingence-portlet.myresult/get-my-results',
+  			{
+    			portfolioId: '<%= portfolioId %>'
+  			},
+  			function(data) {
+				
+				//1. Top Gainers Grid
+				showDataTable(data, 'desc','#topGainers', 'Gain');
+				
+				//2.Top Losers Grid
+				showDataTable(data, 'asc','#topLosers', 'Loss');
+  			}
+		);
+	});
+		
+	function showDataTable(data, sortOrder, divId, title){
+		var sorted = _.sortBy(data,'gain_loss');
+		var dataTableHeading = new String();
+		
+		if (sortOrder == 'desc') {
+			sorted = sorted.reverse();
+		}
+		sorted = sorted.slice(0,7);
+		
+		YUI().use(
+			'aui-datatable',
+		  	function(Y) {
+		    	var columns = [
+		    		{key: 'name', label: 'Asset Name'},
+			 		{
+			 			key: 'gain_loss',
+			 			label: title,
+			 			formatter: function(obj) {
+			 				obj.value = accounting.formatMoney(obj.value) + ' (' + (obj.data.gain_loss_percent).toFixed(2) +  '%)';
+			 			} 
+			 		}
+		   	 	];
+		   
+		   		new Y.DataTable.Base({
+					columnset: columns,
+			    	recordset: sorted
+				}).render(divId);
+		  	}
+		);
+	}
+</aui:script>
