@@ -41,11 +41,11 @@
 		</liferay-ui:search-container-column-text>
        	<liferay-ui:search-container-column-text name="primary">
        		<c:choose>
-       			<c:when test="<%= portfolio.isPrimary() %>">
-       				<b>Yes</b>
-       			</c:when>
+       			<c:when test="<%= !portfolio.isPrimary() && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+       				<a href="javascript:void(0);" onClick="javascript:makePrimary('<%= portfolioId %>');">Set</a>
+       			</c:when>     			
        			<c:otherwise>
-       				<a href="javascript:void(0);" onClick="javascript:makePrimary('<%= portfolioId %>');">Make</a>
+       				<b><%= portfolio.isPrimary() %></b>
        			</c:otherwise>
        		</c:choose>
        	</liferay-ui:search-container-column-text>
