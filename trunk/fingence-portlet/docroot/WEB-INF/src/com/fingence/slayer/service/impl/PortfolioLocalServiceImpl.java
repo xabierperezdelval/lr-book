@@ -19,9 +19,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -142,7 +145,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
     			portfolioItem.setCreateDate(new java.util.Date());
 				portfolioItem.setPortfolioId(portfolioId);
 				portfolioItem.setAssetId(assetId);
-    			
+		
     			try {
 					portfolioItemLocalService.addPortfolioItem(portfolioItem);
 				} catch (SystemException e) {
@@ -152,9 +155,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         		portfolioItem.setModifiedDate(new java.util.Date());
         	}
         	
-			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
+        	Date purchaseDate = CellUtil.getDate(row.getCell(2));
+			portfolioItem.setPurchaseDate(purchaseDate);
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
 			portfolioItem.setPurchaseQty((int)CellUtil.getDouble(row.getCell(4)));
+			portfolioItem.setConversion(getConversion(asset.getCurrency(), purchaseDate));
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -164,6 +169,20 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         }
 	}
 	
+	private double getConversion(String currency, Date purchaseDate) {
+		
+		double conversion = 1.0d;
+		if (!currency.equalsIgnoreCase("USD")) {
+			
+			String url = "http://currencies.apps.grandtrunk.net/getlatest/" + currency + "/usd";
+			
+			HttpClient client = new HttpClient();
+			GetMethod method = new GetMethod(url);
+		}
+		
+		return conversion;
+	}
+
 	private boolean isFirstPortfolio(long investorId) {
 		
 		boolean first = false;
