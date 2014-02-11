@@ -28,7 +28,7 @@
 			FROM 
 				fing_Asset a, 
 				fing_Portfolio b, 
-				fing_PortfolIoitem c, 
+				fing_PortfolioItem c, 
 				Country d
 			WHERE 
 				b.portfolioId = ?
