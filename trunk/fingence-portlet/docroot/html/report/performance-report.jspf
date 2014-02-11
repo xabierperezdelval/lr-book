@@ -1,12 +1,12 @@
-<aui:row>
-	<aui:column columnWidth="50">
+<liferay-ui:panel-container accordion="<%= true %>">	
+	<liferay-ui:panel title="top-gainers" extended="<%= true %>" collapsible="<%= true %>" defaultState="open">
 		<div id="topGainers"></div>
-	</aui:column>
+	</liferay-ui:panel>		
 	
-	<aui:column>
+	<liferay-ui:panel title="top-losers" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
 		<div id="topLosers"></div>
-	</aui:column>	
-</aui:row>
+	</liferay-ui:panel>
+</liferay-ui:panel-container>	
 
 <aui:script>
 	AUI().ready(function(A) {

@@ -31,14 +31,6 @@
 			</aui:column>
 		</aui:row>		
 	</liferay-ui:panel>	
-	
-	<liferay-ui:panel title="top-gainers" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
-		<div id="topGainers"></div>
-	</liferay-ui:panel>		
-	
-	<liferay-ui:panel title="top-losers" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
-		<div id="topLosers"></div>
-	</liferay-ui:panel>		
 </liferay-ui:panel-container>
 
 <aui:script>
