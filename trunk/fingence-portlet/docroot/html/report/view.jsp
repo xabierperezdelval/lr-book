@@ -46,11 +46,11 @@
 <c:choose>
 
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT) %>">
-		<%@ include file="/html/report/asset-reports.jspf"%>
+		<%@ include file="/html/report/asset-report.jspf"%>
 	</c:when>
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME_REPORT) %>">
-		<%@ include file="/html/report/security-holding.jspf"%>
+		<%@ include file="/html/report/fixed-income-report.jspf"%>
 	</c:when>
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_RISK_REPORT) %>">
