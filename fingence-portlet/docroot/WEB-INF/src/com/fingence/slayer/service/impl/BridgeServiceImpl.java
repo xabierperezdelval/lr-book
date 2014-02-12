@@ -421,4 +421,17 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		return exists;
 	}
+	
+	public boolean isFirmExists(long companyId, String firmName) {
+        boolean exists = false;
+        
+        try {
+            Organization firm = organizationLocalService.fetchOrganization(companyId, firmName);
+            exists = Validator.isNotNull(firm);
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+        
+        return exists;
+    }
 }
