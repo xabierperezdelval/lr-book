@@ -163,7 +163,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
 			portfolioItem.setPurchaseQty((int)CellUtil.getDouble(row.getCell(4)));
-			portfolioItem.setConversion(1.0d);
+			portfolioItem.setPurchasedFx(1.0d);
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -199,10 +199,10 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			String currency = asset.getCurrency();
 			
-			if (!currency.equalsIgnoreCase("usd") && portfolioItem.getConversion() != 1.0d) {
+			if (!currency.equalsIgnoreCase("usd") && portfolioItem.getPurchasedFx() != 1.0d) {
 				double conversion = getConversion(currency, portfolioItem.getPurchaseDate());
 				
-				portfolioItem.setConversion(conversion);
+				portfolioItem.setPurchasedFx(conversion);
 				try {
 					portfolioItemLocalService.updatePortfolioItem(portfolioItem);
 				} catch (SystemException e) {
