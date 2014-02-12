@@ -9,11 +9,13 @@
 				a.security_ticker, 
 				a.id_isin,
 				a.name, 
-				a.current_price,	
+				a.current_price,
+				a.purchased_fx,
+				e.conversion as current_fx,
 				a.security_des,
 				a.security_typ,
 				a.security_typ2,	
-				a.parent_comp_name,	
+				a.parent_comp_name,
 				c.purchaseQty,
 				a.security_class,	
 				a.country as countryId, 
@@ -29,12 +31,14 @@
 				fing_Asset a, 
 				fing_Portfolio b, 
 				fing_PortfolioItem c, 
-				Country d
+				Country d,
+				fing_CountryExt e
 			WHERE 
 				b.portfolioId = ?
 				and a.assetId = c.assetId 
 				and b.portfolioId = c.portfolioId 
 				and a.country = d.countryId
+				and d.countryId = e.countryId
 		]]>
 	</sql>
 </custom-sql>

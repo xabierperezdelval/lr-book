@@ -19,12 +19,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -37,6 +41,7 @@ import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
@@ -154,12 +159,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         	} else {
         		portfolioItem.setModifiedDate(new java.util.Date());
         	}
-        	
-        	Date purchaseDate = CellUtil.getDate(row.getCell(2));
-			portfolioItem.setPurchaseDate(purchaseDate);
+       
+			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
 			portfolioItem.setPurchaseQty((int)CellUtil.getDouble(row.getCell(4)));
-			portfolioItem.setConversion(getConversion(asset.getCurrency(), purchaseDate));
+			portfolioItem.setConversion(1.0d);
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -167,19 +171,88 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 				e.printStackTrace();
 			}
         }
+        
+        // invoke JMS
+        applyConversion(portfolioId);
+	}
+	
+	public void applyConversion(long portfolioId) {
+		
+		List<PortfolioItem> portfolioItems = null;
+		try {
+			portfolioItems = portfolioItemPersistence.findByPortfolioId(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(portfolioItems)) return;
+		
+		for (PortfolioItem portfolioItem: portfolioItems) {
+			Asset asset = null;
+			try {
+				asset = assetLocalService.fetchAsset(portfolioItem.getAssetId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(asset)) continue;
+			
+			String currency = asset.getCurrency();
+			
+			if (!currency.equalsIgnoreCase("usd") && portfolioItem.getConversion() != 1.0d) {
+				double conversion = getConversion(currency, portfolioItem.getPurchaseDate());
+				
+				portfolioItem.setConversion(conversion);
+				try {
+					portfolioItemLocalService.updatePortfolioItem(portfolioItem);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	private double getConversion(String currency, Date purchaseDate) {
-		
+
 		double conversion = 1.0d;
-		if (!currency.equalsIgnoreCase("USD")) {
-			
-			String url = "http://currencies.apps.grandtrunk.net/getlatest/" + currency + "/usd";
-			
-			HttpClient client = new HttpClient();
-			GetMethod method = new GetMethod(url);
-		}
+
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		
+		StringBuilder sb = new StringBuilder()
+			.append("http://currencies.apps.grandtrunk.net/getrate/")
+			.append(formatter.format(purchaseDate))
+			.append(StringPool.SLASH)
+			.append(currency)
+			.append(StringPool.SLASH)
+			.append("usd");
+			
+
+		HttpClient client = new HttpClient();
+		GetMethod method = new GetMethod(sb.toString());
+
+		try {
+			client.executeMethod(method);
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		InputStream inputStream = null;
+		try {
+			inputStream = method.getResponseBodyAsStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			conversion = Double.parseDouble(IOUtils.toString(inputStream));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
 		return conversion;
 	}
 
