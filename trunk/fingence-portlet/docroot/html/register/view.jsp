@@ -42,7 +42,7 @@
 				<aui:validator name="email"/>
 				<aui:validator name="custom" errorMessage="email-already-exists">
 					function() {
-						return emailNotExists();					
+						return notExists('email');					
 					}
 				</aui:validator>
 			</aui:input>
@@ -75,7 +75,13 @@
 					<aui:input name="firmName" readonly="true" value="<%= BridgeServiceUtil.getFirmName(userId) %>"/>
 				</c:when>
 				<c:otherwise>
-					<aui:input name="firmName" required="true" />
+					<aui:input name="firmName" required="true">
+						<aui:validator name="custom" errorMessage="firm-already-exists">
+							function() {
+								return notExists('firm');					
+							}
+						</aui:validator>					
+					</aui:input>
 				</c:otherwise>
 			</c:choose>
 		</aui:column>
@@ -85,13 +91,19 @@
 </aui:form>
 
 <aui:script>
-	function emailNotExists() {
-		var ele = document.<portlet:namespace/>fm.<portlet:namespace/>emailAddress;
+	function notExists(fld) {
+		var frm = document.<portlet:namespace/>fm;
+		
+		var ele = frm.<portlet:namespace/>emailAddress;
+		if (fld == 'firm') {
+			ele = frm.<portlet:namespace/>firmName;
+		}
 	
 		var ajaxURL = Liferay.PortletURL.createResourceURL();
 		ajaxURL.setPortletId('register_WAR_fingenceportlet');
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_DUPLICATE %>');
-		ajaxURL.setParameter('emailAddress', ele.value);
+		ajaxURL.setParameter('fieldName', fld);
+		ajaxURL.setParameter('fieldValue', ele.value);
 		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
 		
 		var notExists = true;

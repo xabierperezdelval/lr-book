@@ -66,9 +66,16 @@ public class RegisterPortlet extends MVCPortlet {
 		
 		if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_DUPLICATE)) { 
 			long companyId = PortalUtil.getCompanyId(resourceRequest);
-	        String emailAddress = ParamUtil.getString(resourceRequest, "emailAddress");     
+	        String fieldValue = ParamUtil.getString(resourceRequest, "fieldValue");
+	        String fieldName = ParamUtil.getString(resourceRequest, "fieldName");
 	        PrintWriter writer = resourceResponse.getWriter();
-	        writer.println(BridgeServiceUtil.isEmailExists(companyId, emailAddress));
+	        
+	        if (fieldName.equalsIgnoreCase("email")) {
+	        	writer.println(BridgeServiceUtil.isEmailExists(companyId, fieldValue));
+	        } else if (fieldName.equalsIgnoreCase("firm")) {
+	        	writer.println(BridgeServiceUtil.isFirmExists(companyId, fieldValue));
+	        }
+	        
 	        writer.flush();
 		}
     }

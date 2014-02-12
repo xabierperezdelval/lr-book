@@ -16,6 +16,7 @@ package com.fingence.slayer.service.impl;
 
 import java.util.List;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
 import com.liferay.portal.kernel.util.Validator;
@@ -55,10 +56,17 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		
 		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
 		
-		for (Portfolio portfolio: portfolios) {
-			if (portfolio.isPrimary()) {
-				portfolioId = portfolio.getPortfolioId();
-				break;
+		if (Validator.isNotNull(portfolios) && portfolios.size() > 0) {
+			if (portfolios.size() == 1) {
+				portfolioId = portfolios.get(0).getPortfolioId();
+			} else {
+				int userType = bridgeService.getUserType(userId);
+				for (Portfolio portfolio: portfolios) {
+					if ((portfolio.isPrimary() && userType == IConstants.USER_TYPE_INVESTOR) || (userType != IConstants.USER_TYPE_INVESTOR)) {
+						portfolioId = portfolio.getPortfolioId();
+						break;
+					}
+				}				
 			}
 		}
 		
