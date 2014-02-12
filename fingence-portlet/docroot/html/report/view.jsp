@@ -14,7 +14,7 @@
 
 <aui:row>
 	<aui:column columnWidth="50">
-		<h3><%= layoutName.toUpperCase() + " for " + portfolioId %></h3>
+		<h4><%= layoutName.toUpperCase() + " for " + portfolioId %></h4>
 	</aui:column>
 	<aui:column>
 		<c:choose>
@@ -55,40 +55,62 @@
 	
 </c:choose>
 
-<c:if test="<%= (portfolioCount > 2) %>">
-	<aui:script>
-		function changePortfolio(list) {
-			var ajaxURL = Liferay.PortletURL.createResourceURL();
-			ajaxURL.setPortletId('report_WAR_fingenceportlet');
-			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
-			ajaxURL.setParameter('portfolioId', list.value);
-			ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
-			
-			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
-				sync: true,
-				on: {
-					success: function() {
-						location.reload();
+<aui:script>
+	<c:if test="<%= (portfolioCount > 2) %>">
+		
+			function changePortfolio(list) {
+				var ajaxURL = Liferay.PortletURL.createResourceURL();
+				ajaxURL.setPortletId('report_WAR_fingenceportlet');
+				ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
+				ajaxURL.setParameter('portfolioId', list.value);
+				ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+				
+				AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+					sync: true,
+					on: {
+						success: function() {
+							location.reload();
+						}
 					}
-				}
-			});	
-		}
+				});	
+			}
+		
+			AUI().ready(function(A) {
+				var list = document.getElementById('<portlet:namespace/>portfolioList');
+				Liferay.Service(
+		  			'/fingence-portlet.portfolio/get-portfolios',
+		  			{
+		    			userId: '<%= userId %>'
+		  			},
+		  			function(data) {
+		    			for (var i=0; i<(data.length); i++) {
+		    				var obj = data[i];
+		    				list.options[i] = new Option(obj.portfolioName, obj.portfolioId);
+		    				list.options[i].selected = (obj.portfolioId == '<%= portfolioId %>');
+		    			}
+		  			}
+				);
+			});
+	</c:if>
+
+	function showInMillions(figure){
+		return accounting.formatMoney((figure / 1000000)) + ' Million';
+	}
 	
-		AUI().ready(function(A) {
-			var list = document.getElementById('<portlet:namespace/>portfolioList');
-			Liferay.Service(
-	  			'/fingence-portlet.portfolio/get-portfolios',
-	  			{
-	    			userId: '<%= userId %>'
-	  			},
-	  			function(data) {
-	    			for (var i=0; i<(data.length); i++) {
-	    				var obj = data[i];
-	    				list.options[i] = new Option(obj.portfolioName, obj.portfolioId);
-	    				list.options[i].selected = (obj.portfolioId == '<%= portfolioId %>');
-	    			}
-	  			}
-			);
-		});
-	</aui:script>
-</c:if>
+	function display(number, format) {
+	
+		var text = '';
+		
+		if (format == 'amount') {
+			text = showInMillions(Math.abs(number));
+		} else {
+			text = (Math.abs(number)).toFixed(2) + '%';
+		}
+		
+		if (number < 0) {
+			text = text.fontcolor('red');
+		}
+		
+		return text;
+	}
+</aui:script>

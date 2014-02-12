@@ -45,7 +45,7 @@
   				var netWorth = getTotalNetWorth(data);
   			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(accounting.formatMoney(netWorth / 1000000) + ' Million');
+				A.one('#<portlet:namespace/>networthLabel').text(showInMillions(netWorth));
 				
 				//2. Pie Chart - By Currency
 				renderChart(data, 'currency_', '#container1', 'By Currency');

@@ -28,12 +28,21 @@
 		
 	function showDataTable(data, sortOrder, divId, title){
 		var sorted = _.sortBy(data,'gain_loss');
-		var dataTableHeading = new String();
 		
 		if (sortOrder == 'desc') {
 			sorted = sorted.reverse();
-		}
+		} 
+		
 		sorted = sorted.slice(0,7);
+		
+		if (sortOrder == 'asc') {
+			for (var i=0; i<sorted.length; i++) {
+				var item = sorted[i];
+				if (item.gain_loss >= 0) {
+					sorted.splice(i);
+				}
+			}
+		}
 		
 		YUI().use(
 			'aui-datatable',
@@ -44,9 +53,18 @@
 			 			key: 'gain_loss',
 			 			label: title,
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value) + ' (' + (obj.data.gain_loss_percent).toFixed(2) +  '%)';
-			 			} 
-			 		}
+			 				obj.value = display(obj.value, 'amount');
+			 			},
+			 			allowHTML: true
+			 		},
+					{
+						key: 'gain_loss_percent',
+						label: title + '%' ,
+						formatter: function(obj) {
+							obj.value = display(obj.value, 'percent');
+						},
+			 			allowHTML: true
+					}				 		
 		   	 	];
 		   
 		   		new Y.DataTable.Base({
