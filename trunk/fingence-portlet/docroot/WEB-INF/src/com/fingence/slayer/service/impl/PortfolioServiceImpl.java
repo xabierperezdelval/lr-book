@@ -19,6 +19,7 @@ import java.util.List;
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -84,5 +85,18 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		}
 		
 		return count;
+	}
+	
+	public Portfolio getPortfolio(long portfolioId) {
+		
+		Portfolio portfolio = null;
+		
+		try {
+			portfolio = portfolioLocalService.fetchPortfolio(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return portfolio;
 	}
 }
