@@ -31,5 +31,8 @@ public interface IConstants {
 	String LBL_BREAKUP_BY_RISK_COUNTRY = "Risk Country";
 	String LBL_BREAKUP_BY_CURRENCY = "Currency";
 	String LBL_BREAKUP_BY_SECURITY_TYPE = "Security Type";
-	String LBL_BREAKUP_BY_SECTOR = "Sector";	
+	String LBL_BREAKUP_BY_SECTOR = "Sector";
+	
+	String THEME_ICON_EDIT = "/common/edit.png";
+	String THEME_ICON_DELETE = "/common/delete.png";
 }

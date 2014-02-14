@@ -15,9 +15,9 @@
 
 <c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">
 	<aui:button-row>
-		<aui:button href="<%= addPortfolioURL %>" value="add-portfolio" />
+		<aui:button cssClass="btn-primary btn" href="<%= addPortfolioURL %>" value="add-portfolio" />
 		<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
-			<aui:button href="<%= PortalUtil.getCreateAccountURL(request, themeDisplay) %>" value="add-user" />
+			<aui:button cssClass="btn-primary btn" href="<%= PortalUtil.getCreateAccountURL(request, themeDisplay) %>" value="add-user" />
 		</c:if>
 	</aui:button-row>
 </c:if>
@@ -49,9 +49,15 @@
        			</c:otherwise>
        		</c:choose>
        	</liferay-ui:search-container-column-text>
+       	
+       	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+            <liferay-ui:search-container-column-text name="Edit">
+            	<a href="javascript:void(0);" onClick="javascript:showPopupForEdit('<%= portfolioId %>');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>
+            </liferay-ui:search-container-column-text>
+        </c:if>
 	
-		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator searchContainer="<%= searchContainer %>"/>
+	</liferay-ui:search-container-row>
+	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>"/>
 </liferay-ui:search-container>
 
 <aui:script>
@@ -66,4 +72,35 @@
   			}
 		);
 	}
+	
+	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+		function showPopupForEdit(portfolioId) {
+		
+			var ajaxURL = Liferay.PortletURL.createRenderURL();
+			ajaxURL.setPortletId('portfolio_WAR_fingenceportlet');
+			ajaxURL.setParameter('jspPage', '/html/portfolio/update.jsp');
+			ajaxURL.setParameter('portfolioId', portfolioId);
+			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
+					
+			AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
+				Liferay.Util.openWindow({
+                	dialog: {
+                    	centered: true,
+                    	modal: true,
+                       	width: 600,
+                    	height: 400                
+                	},
+                	id: '<portlet:namespace/>editPortfolioPopup',
+                	title: 'Update Portfolio Info...',
+                	uri: ajaxURL
+            	});
+            	
+            	Liferay.provide(
+                 	window, '<portlet:namespace/>reloadPortlet', function() {
+                        Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+                    }
+                );			
+			}); 
+		}
+	</c:if>
 </aui:script>
