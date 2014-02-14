@@ -1,7 +1,7 @@
+<%@ include file="/html/common/init.jsp" %>
+
 <%@page import="com.inikah.slayer.service.InvitationLocalServiceUtil"%>
 <%@page import="com.inikah.slayer.model.Invitation"%>
-
-<%@ include file="/html/common/init.jsp" %>
 
 <% 
 	PortletURL createAccountURL = PortletURLFactoryUtil.create(request, "58", plid, PortletRequest.ACTION_PHASE);
@@ -37,6 +37,11 @@
 			
 			<aui:input name="emailAddress" required="<%= true %>" value="<%= emailAddress %>" helpMessage="help-msg-email-address">
 				<aui:validator name="email"/>
+				<aui:validator name="custom" errorMessage="email-already-exists">
+					function() {
+						return emailNotExists();					
+					}
+				</aui:validator>				
 			</aui:input>		
 		</aui:column>
 		
@@ -71,5 +76,28 @@
 				frm.<%= PORTLET_NSPACE %>male.value = '0';
 			}
 		}
+	}
+
+	function emailNotExists() {
+		var frm = document.<%= PORTLET_NSPACE %>fm;
+		var ele = frm.<%= PORTLET_NSPACE %>emailAddress;
+	
+		var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('register_WAR_inikahportlet');
+		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_DUPLICATE %>');
+		ajaxURL.setParameter('emailAddress', ele.value);
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		
+		var notExists = true;
+		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+			sync: true,
+			on: {
+				success: function() {
+					notExists = (!(eval(this.get('responseData'))));
+				}
+			}
+		});
+		
+		return notExists;
 	}
 </aui:script>

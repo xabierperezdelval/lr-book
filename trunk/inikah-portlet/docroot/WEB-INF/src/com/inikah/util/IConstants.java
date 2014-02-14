@@ -67,6 +67,8 @@ public interface IConstants {
 	int RELATION_FRIEND = 8;
 	int RELATION_REFERENCE = 9;
 	
+	String CMD_CHECK_DUPLICATE = "checkDuplicate";
+	
 	String BACOFIS_STATUS_PAID = String.valueOf(PROFILE_STATUS_PAYMENT_DONE);
 	String BACOFIS_STATUS_PLAN_PICKED = 
 			String.valueOf(PROFILE_STATUS_PLAN_PICKED);

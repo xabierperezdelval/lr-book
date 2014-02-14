@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -167,5 +168,19 @@ public class BridgeLocalServiceImpl extends BridgeLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isEmailExists(long companyId, String emailAddress) {
+		boolean exists = false;
+		
+		try {
+			User user = userLocalService.fetchUserByEmailAddress(companyId, emailAddress);
+			
+			exists = Validator.isNotNull(user);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return exists;
 	}
 }
