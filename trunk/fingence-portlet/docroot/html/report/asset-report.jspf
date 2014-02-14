@@ -5,6 +5,7 @@
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "sector"};
 	String[] groupByTitle = {"By Risk Country", "By Currency", "By Security Type", "By Sector"};
 %>
+
 <aui:row>
 	<aui:column>
 		<div id="chartContainer"></div>
@@ -13,35 +14,6 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
-
-<%--
-<liferay-ui:panel-container accordion="<%= true %>">
-	<liferay-ui:panel title="breakup-by-currency" extended="<%= true %>" collapsible="<%= true %>">
-		<aui:row>
-			<aui:column cssClass="chart-container">
-				<div id="container1"></div>
-			</aui:column>
-			<aui:column>
-				<div id="currencyWeightage"></div>
-			</aui:column>
-		</aui:row>
-	</liferay-ui:panel>
-	
-	<liferay-ui:panel title="breakup-by-country-of-risk" extended="<%= true %>" collapsible="<%= true %>" defaultState="close">
-		<aui:row>
-			<aui:column>
-				<div id="container2"></div>
-			</aui:column>
-		</aui:row>
-		<hr/>
-		<aui:row>
-			<aui:column>
-				<div id="countryOfRiskWeightage"></div>
-			</aui:column>
-		</aui:row>		
-	</liferay-ui:panel>	
-</liferay-ui:panel-container>
- --%>
 
 <aui:script>
 	AUI().ready(function(A) {
