@@ -119,7 +119,10 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setSecurity_typ(CellUtil.getString(row.getCell(52)));
 			asset.setSecurity_typ2(CellUtil.getString(row.getCell(53)));
 			asset.setParent_comp_name(CellUtil.getString(row.getCell(59)));
-			asset.setSecurity_class(CellUtil.getString(row.getCell(63)));
+			
+			String securityClass = CellUtil.getString(row.getCell(63));
+			asset.setSecurity_class(securityClass);
+			
 			asset.setVolatility_30d(CellUtil.getDouble(row.getCell(77)));
 			asset.setVolatility_90d(CellUtil.getDouble(row.getCell(78)));
 			asset.setVolatility_180d(CellUtil.getDouble(row.getCell(79)));
@@ -153,9 +156,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				asset.setCurrent_price(CellUtil.getDouble(row.getCell(28)));
 			}
 			
-			String assetType = CellUtil.getString(row.getCell(63));
-			asset.setAssetType(assetType);
-			
 			try {
 				updateAsset(asset);
 			} catch (SystemException e) {
@@ -164,7 +164,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			long assetId = asset.getAssetId();
 			
-			if (assetType.equalsIgnoreCase("FixedIncome")) {
+			if (securityClass.equalsIgnoreCase("FixedIncome")) {
 				Bond bond = getBond(assetId);
 				
              	bond.setIssuer_bulk(CellUtil.getString(row.getCell(23)));
@@ -189,7 +189,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					e.printStackTrace();
 				}
 				
-			} else if (assetType.equalsIgnoreCase("Fund")) {
+			} else if (securityClass.equalsIgnoreCase("Fund")) {
 				MutualFund mutualFund = getMutualFund(assetId);
 				
              	mutualFund.setFund_total_assets(CellUtil.getDouble(row.getCell(22)));
@@ -202,7 +202,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					e.printStackTrace();
 				}
 				
-			} else if (assetType.equalsIgnoreCase("Equity")) {
+			} else if (securityClass.equalsIgnoreCase("Equity")) {
 				Equity equity = getEquity(assetId);
 				
              	equity.setEqy_alpha(CellUtil.getDouble(row.getCell(20)));
