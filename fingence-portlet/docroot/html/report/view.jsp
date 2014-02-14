@@ -20,55 +20,62 @@
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
-<aui:row>
-	<aui:column columnWidth="50">
-		<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
-	</aui:column>
-	<aui:column>
-		<c:choose>
-			<c:when test="<%= portfolioCount == 1 %>">
-				&nbsp;
-			</c:when>
-			<c:when test="<%= portfolioCount == 2 %>">
-				<%
-					String otherPortolio = null;
-					long otherPortfolioId = 0l;
-					List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-					for (Portfolio _portfolio: _portfolios) {
-						if (portfolioId != _portfolio.getPortfolioId()) {
-							otherPortfolioId = _portfolio.getPortfolioId();
-							otherPortolio = _portfolio.getPortfolioName();
-						}
-					}
-				%>
-				<a href="javascript:void(0);" onClick="javascript:changePortfolio('<%= otherPortfolioId %>');">Show Reports for <%= otherPortolio %> &raquo;</a>
-			</c:when>			
-			<c:otherwise>
-				<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value);"/>
-			</c:otherwise>
-		</c:choose>
-	</aui:column>
-	<c:if test="<%= showAllocationSwitch %>">
-		<aui:column>
-			<aui:select name="allocationBy" onChange="javascript:switchAllocationBy(this.value);">
-				<aui:option value="<%=IConstants.BREAKUP_BY_RISK_COUNTRY%>"
-					label="<%=IConstants.LBL_BREAKUP_BY_RISK_COUNTRY%>"
-					selected="<%=(allocationBy == IConstants.BREAKUP_BY_RISK_COUNTRY)%>" />
-				<aui:option value="<%=IConstants.BREAKUP_BY_CURRENCY%>"
-					label="<%=IConstants.LBL_BREAKUP_BY_CURRENCY%>"
-					selected="<%=(allocationBy == IConstants.BREAKUP_BY_CURRENCY)%>" />
-				<aui:option value="<%=IConstants.BREAKUP_BY_SECURITY_TYPE%>"
-					label="<%=IConstants.LBL_BREAKUP_BY_SECURITY_TYPE%>"
-					selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECURITY_TYPE)%>" />
-				<aui:option value="<%=IConstants.BREAKUP_BY_SECTOR%>"
-					label="<%=IConstants.LBL_BREAKUP_BY_SECTOR%>"
-					selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECTOR)%>" />
-			</aui:select>
+<c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
+	<aui:row>
+		<aui:column columnWidth="50">
+			<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
 		</aui:column>
-	</c:if>
-</aui:row>
+		<aui:column>
+			<c:choose>
+				<c:when test="<%= portfolioCount == 1 %>">
+					&nbsp;
+				</c:when>
+				<c:when test="<%= portfolioCount == 2 %>">
+					<%
+						String otherPortolio = null;
+						long otherPortfolioId = 0l;
+						List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+						for (Portfolio _portfolio: _portfolios) {
+							if (portfolioId != _portfolio.getPortfolioId()) {
+								otherPortfolioId = _portfolio.getPortfolioId();
+								otherPortolio = _portfolio.getPortfolioName();
+							}
+						}
+					%>
+					<a href="javascript:void(0);" onClick="javascript:changePortfolio('<%= otherPortfolioId %>');">Show Reports for <%= otherPortolio %> &raquo;</a>
+				</c:when>			
+				<c:otherwise>
+					<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value);"/>
+				</c:otherwise>
+			</c:choose>
+		</aui:column>
+		<c:if test="<%= showAllocationSwitch %>">
+			<aui:column>
+				<aui:select name="allocationBy" onChange="javascript:switchAllocationBy(this.value);">
+					<aui:option value="<%=IConstants.BREAKUP_BY_RISK_COUNTRY%>"
+						label="<%=IConstants.LBL_BREAKUP_BY_RISK_COUNTRY%>"
+						selected="<%=(allocationBy == IConstants.BREAKUP_BY_RISK_COUNTRY)%>" />
+					<aui:option value="<%=IConstants.BREAKUP_BY_CURRENCY%>"
+						label="<%=IConstants.LBL_BREAKUP_BY_CURRENCY%>"
+						selected="<%=(allocationBy == IConstants.BREAKUP_BY_CURRENCY)%>" />
+					<aui:option value="<%=IConstants.BREAKUP_BY_SECURITY_TYPE%>"
+						label="<%=IConstants.LBL_BREAKUP_BY_SECURITY_TYPE%>"
+						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECURITY_TYPE)%>" />
+					<aui:option value="<%=IConstants.BREAKUP_BY_SECTOR%>"
+						label="<%=IConstants.LBL_BREAKUP_BY_SECTOR%>"
+						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECTOR)%>" />
+				</aui:select>
+			</aui:column>
+		</c:if>
+	</aui:row>
+</c:if>
 
 <c:choose>
+
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
+		<%@ include file="/html/report/reports-home.jspf"%>
+	</c:when>
+	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT) %>">
 		<%@ include file="/html/report/asset-report.jspf"%>
 	</c:when>
