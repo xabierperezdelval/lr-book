@@ -8,6 +8,8 @@ public interface IConstants {
 	
 	String ROLE_RELATIONSHIP_MANAGER = "Relationship Manager";
 
+	String PAGE_PORTFOLIO = "portfolio";
+	String PAGE_REPORTS_HOME = "reports";
 	String PAGE_ASSET_REPORT = "Asset Report";
 	String PAGE_FIXED_INCOME_REPORT = "Fixed Income Report";
 	String PAGE_RISK_REPORT = "Risk Report";
@@ -16,8 +18,6 @@ public interface IConstants {
 	
 	String PARENT_ORG_FIRMS = "Firms";
 	String PARENT_ORG_BANKS = "Banks";
-	
-	String PAGE_PORTFOLIO = "portfolio";
 	
 	String CMD_CHECK_DUPLICATE = "checkDuplicate";
 	String CMD_SET_PORTFOLIO_ID = "setPortfolioId";
