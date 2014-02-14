@@ -4,6 +4,10 @@
 
 <%@ include file="/html/init.jsp"%>
 
+<c:if test="<%= themeDisplay.isSignedIn() %>">
+	<liferay-ui:header title="add-new-user"/>
+</c:if>	
+
 <portlet:actionURL var="registerURL" name="register" />
 
 <aui:form action="<%= registerURL %>">

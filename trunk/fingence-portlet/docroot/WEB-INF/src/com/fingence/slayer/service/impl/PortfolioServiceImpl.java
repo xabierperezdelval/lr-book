@@ -63,7 +63,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			} else {
 				int userType = bridgeService.getUserType(userId);
 				for (Portfolio portfolio: portfolios) {
-					if ((portfolio.isPrimary() && userType == IConstants.USER_TYPE_INVESTOR) || (userType != IConstants.USER_TYPE_INVESTOR)) {
+					if ((portfolio.isPrimary() && userType == IConstants.USER_TYPE_INVESTOR)
+							|| (userType != IConstants.USER_TYPE_INVESTOR)) {
 						portfolioId = portfolio.getPortfolioId();
 						break;
 					}
@@ -72,7 +73,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		}
 		
 		return portfolioId;
-	}
+	}	
 	
 	public int getPortoliosCount(long userId) {
 		
@@ -102,5 +103,15 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	
 	public String getPortfolioName(long portfolioId) {
 		return getPortfolio(portfolioId).getPortfolioName();
+	}
+	
+	public void updatePortfolio(long portfolioId, long userId,
+			String portfolioName, long investorId, long institutionId,
+			long wealthAdvisorId, boolean trial, long relationshipManagerId,
+			boolean social) {
+		
+		portfolioLocalService.updatePortfolio(portfolioId, userId,
+				portfolioName, investorId, institutionId, wealthAdvisorId,
+				trial, relationshipManagerId, social, null);
 	}
 }

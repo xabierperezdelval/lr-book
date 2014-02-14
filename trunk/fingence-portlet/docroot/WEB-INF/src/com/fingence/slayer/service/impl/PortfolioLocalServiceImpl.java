@@ -92,6 +92,8 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
+		if (Validator.isNull(excelFile)) return;
+		
 		InputStream is = null;
 		try {
 			is = new FileInputStream(excelFile);

@@ -125,6 +125,10 @@
 		<column name="userId" type="long"/>
 		<column name="userName" type="String"/>
 		
+		<order by="desc">
+			<order-column name="primary"/>
+		</order>		
+		
 		<finder return-type="Collection" name="InvestorId">
 			<finder-column name="investorId"/>
 		</finder>
@@ -139,8 +143,8 @@
 		
 		<finder return-type="Collection" name="InstitutionId">
 			<finder-column name="institutionId"/>
-		</finder>						
-		 
+		</finder>
+		
 	</entity>
 	
 	<entity name="PortfolioItem" local-service="true" remote-service="true">

@@ -46,7 +46,14 @@
                         {key: 'purchasedMarketValue', label: 'Purchased Value'},
                         {key: 'currentMarketValue', label: 'Current Value'},
                         {key: 'current_price', label: 'Current Price'},
-                        {key: 'purchaseQty', label: 'Quantity'}
+                        {key: 'purchaseQty', label: 'Quantity'},
+                        {
+                             key: 'itemId',
+                             label: 'Action',
+                             formatter: '<a href="javascript:void(0);" onclick="javascript:updateItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:deleteItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>',
+                             allowHTML: true
+                         }
+                        
 					];	
 								 	
 					new Y.DataTable.Base({
@@ -57,4 +64,42 @@
 			);
 		}
 	);
+	
+    function deleteItem(itemId) {
+        if (confirm('Are you sure to delete this item from portfolio?')) {
+            Liferay.Service(
+                '/fingence-portlet.portfolioitem/delete-item',
+                {
+                    itemId: itemId
+                },
+                function(obj) {
+                    Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+                }
+            );
+        }
+    }
+    
+ 	function updateItem(itemId) {  
+    
+        AUI().use('aui-dialog', function(A) {
+        
+			var ajaxURL = Liferay.PortletURL.createRenderURL();
+			ajaxURL.setPortletId('portfolio_WAR_fingenceportlet');
+			ajaxURL.setParameter('jspPage', '/html/portfolio/update-item.jsp');
+			ajaxURL.setParameter('itemId', itemId);
+			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
+			        
+			Liferay.Util.openWindow({
+            	dialog: {
+                	centered: true,
+                    modal: true,
+                    width: 600,
+                    height: 400                
+               	},
+                id: '<portlet:namespace/>editPortfolioItemPopup',
+                title: 'Add/Edit Portfolio Item',
+               	uri: ajaxURL
+           	});        
+        });
+    }   
 </aui:script>

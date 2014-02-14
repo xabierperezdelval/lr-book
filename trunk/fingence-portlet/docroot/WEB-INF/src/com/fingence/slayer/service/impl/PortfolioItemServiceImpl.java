@@ -14,11 +14,16 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import com.fingence.slayer.NoSuchAssetException;
+import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioItemServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the portfolio item remote service.
@@ -52,5 +57,76 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 		
 		return portfolioItems;
+	}
+	
+	public void deleteItem(long itemId) {
+		try {
+			portfolioItemLocalService.deletePortfolioItem(itemId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateItem(long itemId, long portfolioId, String isinId, String ticker, double purchasePrice, int purchaseQty, Date purchaseDate) {
+		PortfolioItem portfolioItem = null;
+		
+		if (itemId > 0l) {
+			try {
+				portfolioItem = portfolioItemLocalService.fetchPortfolioItem(itemId);
+				portfolioItem.setModifiedDate(new java.util.Date());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				itemId = counterLocalService.increment(PortfolioItem.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			portfolioItem = portfolioItemLocalService.createPortfolioItem(itemId);
+			portfolioItem.setCreateDate(new java.util.Date());
+			try {
+				portfolioItem = portfolioItemLocalService.addPortfolioItem(portfolioItem);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		Asset asset = null;
+		try {
+			asset = assetPersistence.findByIdISIN(isinId);
+		} catch (NoSuchAssetException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(asset)) {
+			long assetId = 0l;
+			try {
+				assetId = counterLocalService.increment(Asset.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			asset = assetLocalService.createAsset(assetId);
+			asset.setCreateDate(new java.util.Date());
+			asset.setId_isin(isinId);
+			asset.setSecurity_ticker(ticker);
+			
+			// invoke XIGNITE web service to get all other information
+			try {
+				asset = assetLocalService.addAsset(asset);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		portfolioItem.setAssetId(asset.getAssetId());
+		portfolioItem.setPortfolioId(portfolioId);
+		portfolioItem.setPurchaseDate(purchaseDate);
+		portfolioItem.setPurchasePrice(purchasePrice);
+		portfolioItem.setPurchaseQty(purchaseQty);
 	}
 }
