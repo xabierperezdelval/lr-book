@@ -3,7 +3,7 @@
 <%
 	int index = allocationBy - 1;
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "sector"};
-	String[] groupByTitle = {"By Risk Country", "By Currency", "By Security Type", "By Sector"};
+	String[] groupByTitle = {"Risk Country", "Currency", "Security Type", "Sector"};
 %>
 
 <aui:row>
