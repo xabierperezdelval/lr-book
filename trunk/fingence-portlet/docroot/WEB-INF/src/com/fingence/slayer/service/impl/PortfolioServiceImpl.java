@@ -99,4 +99,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		
 		return portfolio;
 	}
+	
+	public String getPortfolioName(long portfolioId) {
+		return getPortfolio(portfolioId).getPortfolioName();
+	}
 }

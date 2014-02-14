@@ -21,4 +21,15 @@ public interface IConstants {
 	
 	String CMD_CHECK_DUPLICATE = "checkDuplicate";
 	String CMD_SET_PORTFOLIO_ID = "setPortfolioId";
+	String CMD_SET_ALLOCATION_BY = "setAllocationBy";
+	
+	int BREAKUP_BY_RISK_COUNTRY = 1;
+	int BREAKUP_BY_CURRENCY = 2;
+	int BREAKUP_BY_SECURITY_TYPE = 3;
+	int BREAKUP_BY_SECTOR = 4;
+	
+	String LBL_BREAKUP_BY_RISK_COUNTRY = "Risk Country";
+	String LBL_BREAKUP_BY_CURRENCY = "Currency";
+	String LBL_BREAKUP_BY_SECURITY_TYPE = "Security Type";
+	String LBL_BREAKUP_BY_SECTOR = "Sector";	
 }

@@ -21,14 +21,18 @@ public class ReportPortlet extends MVCPortlet {
 			PortletException {
 		
 		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
+		PortletSession portletSession = resourceRequest.getPortletSession();
 		
 		if (cmd.equalsIgnoreCase(IConstants.CMD_SET_PORTFOLIO_ID)) {
 			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId");
-			
-			PortletSession portletSession = resourceRequest.getPortletSession();
 			portletSession.setAttribute("PORTFOLIO_ID",
 					String.valueOf(portfolioId),
 					PortletSession.APPLICATION_SCOPE);
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ALLOCATION_BY)) {
+			int allocationBy = ParamUtil.getInteger(resourceRequest, "allocationBy");
+			portletSession.setAttribute("ALLOCATION_BY",
+					String.valueOf(allocationBy),
+					PortletSession.APPLICATION_SCOPE);			
 		}
     }
 }

@@ -1,11 +1,20 @@
+<h5>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h5>
+
+<%
+	int index = allocationBy - 1;
+	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "sector"};
+	String[] groupByTitle = {"By Risk Country", "By Currency", "By Security Type", "By Sector"};
+%>
 <aui:row>
 	<aui:column>
-		<h5>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h5>
+		<div id="chartContainer"></div>
 	</aui:column>
 	<aui:column>
+		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
 
+<%--
 <liferay-ui:panel-container accordion="<%= true %>">
 	<liferay-ui:panel title="breakup-by-currency" extended="<%= true %>" collapsible="<%= true %>">
 		<aui:row>
@@ -32,6 +41,7 @@
 		</aui:row>		
 	</liferay-ui:panel>	
 </liferay-ui:panel-container>
+ --%>
 
 <aui:script>
 	AUI().ready(function(A) {
@@ -48,16 +58,10 @@
 				A.one('#<portlet:namespace/>networthLabel').text(showInMillions(netWorth));
 				
 				//2. Pie Chart - By Currency
-				renderChart(data, 'currency_', '#container1', 'By Currency');
-				
-				//3. Pie Chart - By Country of Risk
-				renderChart(data,'countryOfRiskName', '#container2', 'By Country Of Risk');
+				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
 				
 				//4. Group By currency with Weightage.
-				showWeightage(data, 'currency_', '#currencyWeightage', 'Currency', netWorth);
-				
-				//5. Group By Country of Risk with Weightage.
-				showWeightage(data, 'countryOfRiskName', '#countryOfRiskWeightage', 'Country Of Risk', netWorth);				
+				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
   			}
 		);
 	});
