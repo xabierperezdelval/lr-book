@@ -153,13 +153,14 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				asset.setCurrent_price(CellUtil.getDouble(row.getCell(28)));
 			}
 			
+			String assetType = CellUtil.getString(row.getCell(63));
+			asset.setAssetType(assetType);
+			
 			try {
 				updateAsset(asset);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			
-			String assetType = CellUtil.getString(row.getCell(63));
 			
 			long assetId = asset.getAssetId();
 			
