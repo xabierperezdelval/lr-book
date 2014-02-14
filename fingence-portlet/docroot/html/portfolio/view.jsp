@@ -7,6 +7,8 @@
 	PortletURL detailsURL = renderResponse.createRenderURL();
 	detailsURL.setParameter("jspPage", "/html/portfolio/details.jsp");
 	detailsURL.setParameter("backURL", themeDisplay.getURLCurrent());
+	
+	AssetLocalServiceUtil.importFromExcel(userId, null);
 %>
 
 <portlet:renderURL var="addPortfolioURL">
