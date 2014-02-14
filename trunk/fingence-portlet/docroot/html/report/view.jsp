@@ -34,7 +34,7 @@
 						}
 					}
 				%>
-				<a href="javascript:void(0);" onClick="javascript:changePortfolio('<%= otherPortfolioId %>');">Show Reports for <%= otherPortolio %> raquo;</a>
+				<a href="javascript:void(0);" onClick="javascript:changePortfolio('<%= otherPortfolioId %>');">Show Reports for <%= otherPortolio %> &raquo;</a>
 			</c:when>			
 			<c:otherwise>
 				<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value);"/>
