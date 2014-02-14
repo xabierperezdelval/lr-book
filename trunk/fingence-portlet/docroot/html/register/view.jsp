@@ -34,7 +34,7 @@
 			<% 
 				List<Country> countries = CountryServiceUtil.getCountries(true);
 				for (Country country: countries) {
-					%><aui:option value="<%= country.getCountryId() %>" label="<%= TextFormatter.formatName(country.getName()) %>"/><%
+					%><aui:option value="<%= country.getCountryId() %>" label="<%= TextFormatter.format(country.getName(), TextFormatter.J) %>"/><%
 				}
 			%>
 		</aui:select>
