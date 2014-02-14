@@ -41,6 +41,8 @@ import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
@@ -173,7 +175,10 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         }
         
         // invoke JMS
-        applyConversion(portfolioId);
+        Message message = new Message();
+        message.put("MESSAGE_NAME", "setConvertionRate");
+        message.put("portfolioId", portfolioId);
+        MessageBusUtil.sendMessage("fingence/destination", message);
 	}
 	
 	public void applyConversion(long portfolioId) {
