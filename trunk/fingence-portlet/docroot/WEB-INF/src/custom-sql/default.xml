@@ -9,7 +9,6 @@
 				a.security_ticker, 
 				a.id_isin,
 				a.name,
-				a.assetType,
 				a.current_price,
 				c.purchasedFx,
 				e.conversion as current_fx,
