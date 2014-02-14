@@ -18,9 +18,6 @@
 		<action-url-redirect>true</action-url-redirect>		
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>register-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
