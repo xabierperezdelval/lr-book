@@ -148,3 +148,28 @@
     filter: progid:DXImageTransform.Microsoft.gradient(enabled = false) !important;
     background: none !important;
 }
+
+/* ---------- Chlid Navigation ---------- */
+
+#navigation .dropdown-menu li:last-child, .aui #navigation .dropdown-menu  > li:last-child {
+    float: none;
+}
+
+.aui #navigation .nav .dropdown-menu {
+    height: inherit;
+    background: #6E6E6E !important;
+}
+
+#navigation .dropdown-menu li a, #navigation .dropdown-menu li:first-child a {
+    width: inherit;
+    border: none;
+}
+
+#navigation .dropdown-menu li {
+    margin-top: -5px;
+}
+
+.aui #navigation .dropdown-menu li a.hover {
+    background: none;
+    height: inherit;
+}
