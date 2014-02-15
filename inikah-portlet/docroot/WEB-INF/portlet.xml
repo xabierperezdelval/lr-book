@@ -41,7 +41,7 @@
 	<portlet>
 		<portlet-name>register</portlet-name>
 		<display-name>Register</display-name>
-		<portlet-class>com.inikah.resigter.RegisterPortlet</portlet-class>
+		<portlet-class>com.inikah.register.RegisterPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/register/view.jsp</value>
