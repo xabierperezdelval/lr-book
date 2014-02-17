@@ -51,15 +51,13 @@
         Liferay.Service(
             '/fingence-portlet.portfolioitem/update-item',
             {
-            portfolioItemId : '<%= portfolioItemId %>',
+            portfolioItemId : '<%= itemId %>',
             purchasePrice : purchasePrice,
             purchaseQuantity : purchaseQuantity
            
           },
             function(data) {
                 Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
-
-
                 Liferay.Util.getOpener().<portlet:namespace />reloadPortlet();
             }
         );          
