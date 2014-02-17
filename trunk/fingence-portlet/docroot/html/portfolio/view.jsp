@@ -89,9 +89,7 @@
 			ajaxURL.setParameter('jspPage', '/html/portfolio/update.jsp');
 			ajaxURL.setParameter('portfolioId', portfolioId);
 			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
-			
-			alert(ajaxURL);
-					
+								
 			AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
 				Liferay.Util.openWindow({
                 	dialog: {

@@ -94,7 +94,8 @@
                 	centered: true,
                     modal: true,
                     width: 600,
-                    height: 400                
+                    height: 400,
+                    destroyOnHide: true           
                	},
                 id: '<portlet:namespace/>editPortfolioItemPopup',
                 title: 'Add/Edit Portfolio Item',
