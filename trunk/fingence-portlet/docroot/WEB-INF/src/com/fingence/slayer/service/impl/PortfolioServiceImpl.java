@@ -20,6 +20,9 @@ import com.fingence.IConstants;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -113,5 +116,22 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		portfolioLocalService.updatePortfolio(portfolioId, userId,
 				portfolioName, investorId, institutionId, wealthAdvisorId,
 				trial, relationshipManagerId, social, null);
+	}
+	
+	public JSONArray getPortfolioSummary(long userId) {
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+				
+		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
+		
+		for (Portfolio portfolio: portfolios) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("Manager", bridgeService.getUserName(portfolio.getRelationshipManagerId()));
+			jsonObject.put("portfolioId", portfolio.getPortfolioId());
+			jsonObject.put("portfolioName", portfolio.getPortfolioName());
+			jsonArray.put(jsonObject);			
+		}
+		
+		return jsonArray;
 	}
 }
