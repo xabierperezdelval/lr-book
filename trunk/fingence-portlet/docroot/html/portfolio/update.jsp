@@ -75,7 +75,7 @@
 	</aui:row>
 	
 		<c:if test="<%= (portfolioId == 0l) %>">
-			<aui:input type="file" name="excelFile" label="portfolio-assets"/>
+			<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
 		</c:if>	
 		
 		<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="primary-btn"/>
