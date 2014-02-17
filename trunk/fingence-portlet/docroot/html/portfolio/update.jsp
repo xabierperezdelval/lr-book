@@ -14,10 +14,6 @@
 	}
 %>
 
-<c:if test="<%= (portfolioId == 0l) %>">
-	<liferay-ui:header title="add-portfolio"/>
-</c:if>
-
 <aui:form action="#" enctype="multipart/form-data">
 	<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
 	<aui:row>
