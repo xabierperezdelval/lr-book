@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -125,10 +126,20 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
 		
 		for (Portfolio portfolio: portfolios) {
+			
+			long portfolioId = portfolio.getPortfolioId();
+			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put("Manager", bridgeService.getUserName(portfolio.getRelationshipManagerId()));
-			jsonObject.put("portfolioId", portfolio.getPortfolioId());
+			jsonObject.put("portfolioId", portfolioId);
 			jsonObject.put("portfolioName", portfolio.getPortfolioName());
+			
+			try {
+				List<PortfolioItem> portfolioItems = portfolioItemPersistence.findByPortfolioId(portfolioId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
 			jsonArray.put(jsonObject);			
 		}
 		
