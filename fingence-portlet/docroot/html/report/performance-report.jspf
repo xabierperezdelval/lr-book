@@ -1,9 +1,11 @@
 <aui:row>
 	<aui:column>
+		<liferay-ui:header title="top-gainers"/>
 		<div id="topGainers"></div>
 	</aui:column>
-		<div id="topLosers"></div>
 	<aui:column>
+		<liferay-ui:header title="top-losers"/>
+		<div id="topLosers"></div>
 	</aui:column>	
 </aui:row>	
 

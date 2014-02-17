@@ -87,11 +87,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		portfolio.setSocial(social);
 		
 		try {
-			updatePortfolio(portfolio);
+			portfolio = updatePortfolio(portfolio);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
+				
 		if (Validator.isNull(excelFile)) return;
 		
 		InputStream is = null;
@@ -176,11 +176,13 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			}
         }
         
-        // invoke JMS
-        Message message = new Message();
-        message.put("MESSAGE_NAME", "setConvertionRate");
-        message.put("portfolioId", portfolioId);
-        MessageBusUtil.sendMessage("fingence/destination", message);
+        if (Validator.isNotNull(excelFile)) {
+            // invoke JMS
+            Message message = new Message();
+            message.put("MESSAGE_NAME", "setConvertionRate");
+            message.put("portfolioId", portfolioId);
+            MessageBusUtil.sendMessage("fingence/destination", message);        	
+        }
 	}
 	
 	public void applyConversion(long portfolioId) {

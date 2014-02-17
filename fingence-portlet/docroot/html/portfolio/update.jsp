@@ -1,10 +1,9 @@
-<%@page import="com.fingence.slayer.model.impl.PortfolioImpl"%>
-
 <%@ include file="/html/portfolio/init.jsp"%>
 
-<portlet:renderURL var="defaultViewURL"/>
+<%@page import="com.fingence.slayer.model.impl.PortfolioImpl"%>
 
-<portlet:actionURL name="savePortfolio" var="savePortfolioURL"/>
+<portlet:actionURL name="savePortfolio" var="savePortfolioURL"
+	windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
 
 <%
 	long portfolioId = ParamUtil.getLong(request, "portfolioId");
@@ -19,7 +18,8 @@
 	<liferay-ui:header title="add-portfolio"/>
 </c:if>
 
-<aui:form action="<%= savePortfolioURL %>" enctype="multipart/form-data">
+<aui:form action="#" enctype="multipart/form-data">
+	<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
 	<aui:row>
 		<aui:column>
 			<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"/>
@@ -78,49 +78,24 @@
 		</aui:column>		
 	</aui:row>
 	
-	<c:choose>
-		<c:when test="<%= (portfolioId == 0l) %>">
-			<aui:row>
-				<aui:column>
-					<aui:input type="file" name="excelFile" label="portfolio-assets"/>
-				</aui:column>		
-			</aui:row>
-			
-			<aui:button-row>
-				<aui:button type="submit" />
-				<aui:a href="<%= defaultViewURL %>" label="cancel"/>
-			</aui:button-row>		
-		</c:when>	
+		<c:if test="<%= (portfolioId == 0l) %>">
+			<aui:input type="file" name="excelFile" label="portfolio-assets"/>
+		</c:if>	
 		
-		<c:otherwise>
-			<aui:button onclick="javascript:updateInfo();" value="save"/>
-		</c:otherwise>
-	</c:choose>
+		<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="primary-btn"/>
 </aui:form>
 
-<c:if test="<%= (portfolioId > 0l) %>">
-	<aui:script>
-		function updateInfo() {
-        	var frm = document.<portlet:namespace/>fm;
-        	        	
-			Liferay.Service(
-			  	'/fingence-portlet.portfolio/update-portfolio',
-			  	{
-			    	portfolioId: '<%= portfolioId %>',
-			    	userId: '<%= userId %>',
-			    	portfolioName: frm.<portlet:namespace/>portfolioName.value,
-			    	investorId: frm.<portlet:namespace/>investorId.value,
-			    	institutionId: frm.<portlet:namespace/>institutionId.value,
-			    	wealthAdvisorId: frm.<portlet:namespace/>wealthAdvisorId.value,
-			    	trial: frm.<portlet:namespace/>trial.value,
-			    	relationshipManagerId: frm.<portlet:namespace/>relationshipManagerId.value,
-			    	social: true
-			  	},
-			  	function(obj) {
-			    	Liferay.Util.getWindow('<portlet:namespace/>editPortfolioPopup').destroy();
-	                Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
-			  	}
-			);
-        }	 
-	</aui:script>
-</c:if>
+<aui:script>
+	function updateInfo() {
+		AUI().io.request('<%= savePortfolioURL %>',{
+			method: 'POST',
+			form: { id: '<portlet:namespace/>fm' },
+			on: {
+				success: function() {
+					Liferay.Util.getWindow('<portlet:namespace/>editPortfolioPopup').destroy();
+                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
+    			}
+  			}
+ 		});
+	}
+</aui:script >

@@ -20,7 +20,7 @@ public class PortfolioPortlet extends MVCPortlet {
  
 	public void savePortfolio(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-
+		
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
 		long userId = PortalUtil.getUserId(actionRequest);
