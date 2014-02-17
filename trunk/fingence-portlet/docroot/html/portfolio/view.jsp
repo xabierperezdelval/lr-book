@@ -3,10 +3,6 @@
 
 <%
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-	
-	PortletURL detailsURL = renderResponse.createRenderURL();
-	detailsURL.setParameter("jspPage", "/html/portfolio/details.jsp");
-	detailsURL.setParameter("backURL", themeDisplay.getURLCurrent());
 %>
 
 <portlet:renderURL var="addPortfolioURL">
@@ -27,9 +23,10 @@
 	<liferay-ui:search-container-row className="com.fingence.slayer.model.Portfolio" modelVar="portfolio">
 		<%
 			long portfolioId = portfolio.getPortfolioId();
-			detailsURL.setParameter("portfolioId", String.valueOf(portfolioId));
 		%>
-		<liferay-ui:search-container-column-text name="portfolioName" href="<%= detailsURL.toString() %>"/>
+		<liferay-ui:search-container-column-text name="portfolioName">
+			<a href="javascript:void(0);" onClick="javascript:showDetails('<%= portfolioId %>');"><%= portfolio.getPortfolioName() %></a>
+		</liferay-ui:search-container-column-text>
 		<liferay-ui:search-container-column-text name="institution">
 			<%= BridgeServiceUtil.getOrganizationName(portfolio.getInstitutionId()) %>
 		</liferay-ui:search-container-column-text>
@@ -73,6 +70,17 @@
 		);
 	}
 	
+	function showDetails(portfolioId) {
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('portfolio_WAR_fingenceportlet');
+		ajaxURL.setParameter('jspPage', '/html/portfolio/details.jsp');
+		ajaxURL.setParameter('portfolioId', portfolioId);
+		ajaxURL.setParameter("backURL", '<%= themeDisplay.getURLCurrent() %>');
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+				
+		AUI().one('#p_p_id<portlet:namespace/>').load('<%= themeDisplay.getURLPortal() %>' + ajaxURL);		
+	}
+	
 	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
 		function showPopupForEdit(portfolioId) {
 		
@@ -81,6 +89,8 @@
 			ajaxURL.setParameter('jspPage', '/html/portfolio/update.jsp');
 			ajaxURL.setParameter('portfolioId', portfolioId);
 			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
+			
+			alert(ajaxURL);
 					
 			AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
 				Liferay.Util.openWindow({
@@ -97,7 +107,7 @@
             	
             	Liferay.provide(
                  	window, '<portlet:namespace/>reloadPortlet', function() {
-                        Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+                        Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
                     }
                 );			
 			}); 
