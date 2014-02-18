@@ -1,15 +1,15 @@
+<%@page import="java.util.Locale"%>
 <%@page import="com.fingence.util.PageUtil"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@ include file="/html/portfolio/init.jsp"%>
 
 <%
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-	AssetLocalServiceUtil.importFromExcel(userId, null);
 %>
 
 <c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">
 	<aui:button-row>
-		<aui:button cssClass="btn-primary btn" value="add-portfolio" onClick="javascript:showPopupForEdit(0);"/>
+		<aui:button cssClass="btn-primary" value="add-portfolio" onClick="javascript:showPopupForEdit(0);"/>
 		<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
 			<aui:button cssClass="btn-primary" value="add-user" onClick="javascript:showAddUserPopup();"/>
 		</c:if>
