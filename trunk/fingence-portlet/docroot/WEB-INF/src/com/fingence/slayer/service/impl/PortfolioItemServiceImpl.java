@@ -59,9 +59,9 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		return portfolioItems;
 	}
 	
-	public void deleteItem(long itemId) {
+	public void deleteItem(long portfolioItemId) {
 		try {
-			portfolioItemLocalService.deletePortfolioItem(itemId);
+			portfolioItemLocalService.deletePortfolioItem(portfolioItemId);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -69,23 +69,23 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 	}
 	
-	public void updateItem(long itemId, long portfolioId, String isinId, String ticker, double purchasePrice, int purchaseQty, Date purchaseDate) {
+	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, int purchaseQty, Date purchaseDate) {
 		PortfolioItem portfolioItem = null;
-		
-		if (itemId > 0l) {
+				
+		if (portfolioItemId > 0l) {
 			try {
-				portfolioItem = portfolioItemLocalService.fetchPortfolioItem(itemId);
+				portfolioItem = portfolioItemLocalService.fetchPortfolioItem(portfolioItemId);
 				portfolioItem.setModifiedDate(new java.util.Date());
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				itemId = counterLocalService.increment(PortfolioItem.class.getName());
+				portfolioItemId = counterLocalService.increment(PortfolioItem.class.getName());
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			portfolioItem = portfolioItemLocalService.createPortfolioItem(itemId);
+			portfolioItem = portfolioItemLocalService.createPortfolioItem(portfolioItemId);
 			portfolioItem.setCreateDate(new java.util.Date());
 			try {
 				portfolioItem = portfolioItemLocalService.addPortfolioItem(portfolioItem);
@@ -128,5 +128,11 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		portfolioItem.setPurchaseDate(purchaseDate);
 		portfolioItem.setPurchasePrice(purchasePrice);
 		portfolioItem.setPurchaseQty(purchaseQty);
+		
+		try {
+			portfolioItemLocalService.updatePortfolioItem(portfolioItem);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 }

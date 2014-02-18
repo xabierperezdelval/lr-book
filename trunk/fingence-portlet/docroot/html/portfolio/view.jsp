@@ -1,3 +1,4 @@
+<%@page import="com.fingence.util.PageUtil"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@ include file="/html/portfolio/init.jsp"%>
 
@@ -5,15 +6,11 @@
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
 %>
 
-<portlet:renderURL var="addPortfolioURL">
-	<portlet:param name="jspPage" value="/html/portfolio/update.jsp"/>
-</portlet:renderURL>
-
 <c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">
 	<aui:button-row>
-		<aui:button cssClass="btn-primary btn" href="<%= addPortfolioURL %>" value="add-portfolio" />
+		<aui:button cssClass="btn-primary btn" value="add-portfolio" onClick="javascript:showPopupForEdit(0);"/>
 		<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
-			<aui:button cssClass="btn-primary btn" href="<%= PortalUtil.getCreateAccountURL(request, themeDisplay) %>" value="add-user" />
+			<aui:button cssClass="btn-primary" value="add-user" onClick="javascript:showAddUserPopup();"/>
 		</c:if>
 	</aui:button-row>
 </c:if>
@@ -93,13 +90,15 @@
 			AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
 				Liferay.Util.openWindow({
                 	dialog: {
+                		destroyOnHide: true,
                     	centered: true,
                     	modal: true,
                        	width: 600,
-                    	height: 400                
+                    	height: 500,
+                    	resizable: false               
                 	},
                 	id: '<portlet:namespace/>editPortfolioPopup',
-                	title: 'Update Portfolio Info...',
+                	title: 'Add/Update Portfolio...',
                 	uri: ajaxURL
             	});
             	
@@ -110,5 +109,35 @@
                 );			
 			}); 
 		}
+		
+		function showAddUserPopup() {
+            var ajaxURL = Liferay.PortletURL.createRenderURL();
+            ajaxURL.setPortletId('register_WAR_fingenceportlet');
+            ajaxURL.setPlid('<%= PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), "register", locale) %>');
+            ajaxURL.setParameter('jspPage', '/html/register/view.jsp');
+            ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>'); 
+                    
+            AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
+                Liferay.Util.openWindow({
+                    dialog: {
+                        destroyOnHide: true,
+                        centered: true,
+                        modal: true,
+                        width: 600,
+                        height: 550,
+                        resizable: false       
+                    },
+                    id: '<portlet:namespace/>addUserPopup',
+                    title: 'Add Investor / Manager...',
+                    uri: ajaxURL
+                });
+                
+                Liferay.provide(
+                     window, '<portlet:namespace/>reloadPortlet', function() {
+                        Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+                    }
+                );            
+            }); 
+        }		
 	</c:if>
 </aui:script>

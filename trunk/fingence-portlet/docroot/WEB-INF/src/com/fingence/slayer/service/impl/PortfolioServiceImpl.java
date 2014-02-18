@@ -109,16 +109,6 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		return getPortfolio(portfolioId).getPortfolioName();
 	}
 	
-	public void updatePortfolio(long portfolioId, long userId,
-			String portfolioName, long investorId, long institutionId,
-			long wealthAdvisorId, boolean trial, long relationshipManagerId,
-			boolean social) {
-		
-		portfolioLocalService.updatePortfolio(portfolioId, userId,
-				portfolioName, investorId, institutionId, wealthAdvisorId,
-				trial, relationshipManagerId, social, null);
-	}
-	
 	public JSONArray getPortfolioSummary(long userId) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();

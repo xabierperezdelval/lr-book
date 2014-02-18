@@ -7,6 +7,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
+import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -41,4 +42,21 @@ public class PortfolioPortlet extends MVCPortlet {
 				portfolioName, investorId, institutionId, wealthAdvisorId,
 				trial, relationshipManagerId, social, excelFile);
 	}
+	
+	public void updatePortfolioItem(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		System.out.println("coming inside....");
+				
+		String isinId = ParamUtil.getString(actionRequest, "isinId");
+		long portfolioItemId = ParamUtil.getLong(actionRequest, "portfolioItemId");
+		long portfolioId = ParamUtil.getLong(actionRequest, "portfolioId");
+		String ticker = ParamUtil.getString(actionRequest, "ticker");
+		Double purchasePrice = ParamUtil.getDouble(actionRequest, "purchasePrice");
+		String purchaseDate = ParamUtil.getString(actionRequest, "purchaseDate");
+		int purchaseQty = ParamUtil.getInteger(actionRequest, "purchaseQty");
+
+		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId, isinId,
+				ticker, purchasePrice, purchaseQty, null);		
+	}	
 }
