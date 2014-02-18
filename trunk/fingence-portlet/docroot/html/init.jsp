@@ -27,6 +27,8 @@
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
+
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
 

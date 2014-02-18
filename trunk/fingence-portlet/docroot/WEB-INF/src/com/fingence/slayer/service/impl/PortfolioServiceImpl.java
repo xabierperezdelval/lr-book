@@ -17,9 +17,11 @@ package com.fingence.slayer.service.impl;
 import java.util.List;
 
 import com.fingence.IConstants;
+import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -110,29 +112,73 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	}
 	
 	public JSONArray getPortfolioSummary(long userId) {
-		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-				
-		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
-		
-		for (Portfolio portfolio: portfolios) {
-			
+
+		int userType = bridgeService.getUserType(userId);
+		double totalPurchasedValue = 0d;
+		double totalCurrentValue = 0d;
+
+		List<Portfolio> portfolios = portfolioLocalService
+				.getPortfolios(userId);
+
+		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
-			
+			double portfolioPurchasedPrice = 0d;
+			double portfolioCurrentPrice = 0d;
+
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-			jsonObject.put("Manager", bridgeService.getUserName(portfolio.getRelationshipManagerId()));
+
+			jsonObject.put("manager", bridgeService.getUserName(portfolio
+					.getRelationshipManagerId()));
 			jsonObject.put("portfolioId", portfolioId);
 			jsonObject.put("portfolioName", portfolio.getPortfolioName());
-			
+
+			if (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
+				jsonObject.put("investorOrAdvisor",
+						bridgeService.getUserName(portfolio.getInvestorId()));
+			} else if (userType == IConstants.USER_TYPE_INVESTOR) {
+				jsonObject.put("investorOrAdvisor", bridgeService
+						.getUserName(portfolio.getWealthAdvisorId()));
+			}
 			try {
-				List<PortfolioItem> portfolioItems = portfolioItemPersistence.findByPortfolioId(portfolioId);
+				List<PortfolioItem> portfolioItems = portfolioItemPersistence
+						.findByPortfolioId(portfolioId);
+				for (PortfolioItem portfolioItem : portfolioItems) {
+					Asset asset = null;
+					try {
+						asset = assetLocalService.getAsset(portfolioItem
+								.getAssetId());
+						portfolioPurchasedPrice += portfolioItem
+								.getPurchasePrice();
+						portfolioCurrentPrice += asset.getCurrent_price();
+					} catch (PortalException e) {
+						e.printStackTrace();
+					}
+				}
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			
-			jsonArray.put(jsonObject);			
+			totalPurchasedValue += portfolioPurchasedPrice;
+			totalCurrentValue += portfolioCurrentPrice;
+
+			jsonObject.put("purchasePrice", totalPurchasedValue);
+			jsonObject.put("currentPrice", totalCurrentValue);
+			jsonObject.put("performance", 0d);
+
+			jsonArray.put(jsonObject);
 		}
 		
+		// To Add the a final row for Total
+		JSONObject jsonTotal = JSONFactoryUtil.createJSONObject();
+		jsonTotal.put("portfolioName", "<b>Total</b>");
+		jsonTotal.put("manager", "");
+		jsonTotal.put("investorOrAdvisor", "");
+		jsonTotal.put("purchasePrice", "<b>" + totalPurchasedValue + "</b>");
+		jsonTotal.put("currentPrice", "<b>" + totalCurrentValue + "</b>");
+		jsonTotal.put("performance", 0d);
+		
+		jsonArray.put(jsonTotal);
+
 		return jsonArray;
 	}
 }

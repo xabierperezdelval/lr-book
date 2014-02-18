@@ -38,7 +38,9 @@
 		<column name="currency" type="String"/>
 		<column name="country" type="long"/>
 		<column name="country_of_risk" type="long"/>
-		<column name="assetType" type="String"/>
+		<column name="industry_sector" type="String"/>
+		<column name="industry_group" type="String"/>
+		<column name="industry_subgroup" type="String"/>
 		
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
@@ -182,6 +184,9 @@
 		<column name="security_ticker" type="String"/>
 		<column name="id_isin" type="String"/>
 		<column name="name" type="String"/>
+		<column name="industry_sector" type="String"/>
+		<column name="industry_group" type="String"/>
+		<column name="industry_subgroup" type="String"/>
 		<column name="purchaseQty" type="int"/>
 		<column name="current_price" type="double"/>
 		<column name="purchasedFx" type="double"/>

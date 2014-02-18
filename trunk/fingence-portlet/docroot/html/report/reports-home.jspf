@@ -1,1 +1,63 @@
-<liferay-ui:header title="summary-of-portfolios"/>
+<liferay-ui:header title="summary-of-portfolios" />
+
+<div id="portfolioContainer"></div>
+
+<%
+	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)?
+			"Advisor" : "Investor";
+%>
+
+<aui:script>
+	AUI().ready(function(A) {
+		Liferay.Service(
+  			'/fingence-portlet.portfolio/get-portfolio-summary',
+  			{
+    			userId: '<%= userId %>'
+  			},
+  			function(data) {
+  				YUI().use(
+					'aui-datatable',
+  					function(Y) {
+	    				var columns = [
+	    					{
+	    						key: 'portfolioName',
+	    						label: 'Portfolio',
+	    						allowHTML : 'true'
+	   				 		},
+	    					{
+	    						key: 'investorOrAdvisor',
+	    						label: '<%= columnLabel %>',
+	    						allowHTML : 'true'
+	    					},
+	    					{
+	    						key: 'manager',
+	    						label: 'Manager',
+	    						allowHTML : 'true'
+	    					},
+	    					{
+	    						key: 'purchasePrice',
+	    						label: 'Purchased Value',
+	    						allowHTML : 'true'
+	    					},
+	    					{
+	    						key: 'currentPrice',
+	    						label: 'Current Value',
+	    						allowHTML : 'true'
+	    					},
+	    					{
+	    						key: 'performance',
+	    						label: 'Performance',
+	    						allowHTML : 'true'
+	    					}
+	   					];
+	   
+	   					new Y.DataTable.Base({
+							columnset: columns,
+	    					recordset: data
+						}).render('#portfolioContainer');
+	  				}
+				);
+	  		}
+		);
+	});
+</aui:script>
