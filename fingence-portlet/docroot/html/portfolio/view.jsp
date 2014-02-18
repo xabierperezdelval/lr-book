@@ -4,6 +4,7 @@
 
 <%
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+	AssetLocalServiceUtil.importFromExcel(userId, null);
 %>
 
 <c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">

@@ -115,6 +115,11 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setAsk_price(CellUtil.getDouble(row.getCell(29)));
 			asset.setChg_pct_high_52week(CellUtil.getDouble(row.getCell(44)));
 			asset.setChg_pct_low_52week(CellUtil.getDouble(row.getCell(45)));
+			
+			asset.setIndustry_sector(CellUtil.getString(row.getCell(46)));
+			asset.setIndustry_group(CellUtil.getString(row.getCell(47)));
+			asset.setIndustry_subgroup(CellUtil.getString(row.getCell(48)));
+			
 			asset.setSecurity_des(CellUtil.getString(row.getCell(51)));
 			asset.setSecurity_typ(CellUtil.getString(row.getCell(52)));
 			asset.setSecurity_typ2(CellUtil.getString(row.getCell(53)));

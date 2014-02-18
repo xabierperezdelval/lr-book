@@ -1,8 +1,8 @@
 <h5>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h5>
 
 <%
-	int index = allocationBy - 1;
-	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "sector"};
+	int index = (allocationBy - 1);
+	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
 	String[] groupByTitle = {"Risk Country", "Currency", "Security Type", "Sector"};
 %>
 
