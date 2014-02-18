@@ -26,6 +26,7 @@
 </aui:fieldset>
 
 <hr/>
+<aui:a href="javascript:void(0);" onClick="javasript:updateItem(0);" label="Add Asset &raquo;"/>
 
 <div id="myDataTable"></div>
 
@@ -70,7 +71,7 @@
             Liferay.Service(
                 '/fingence-portlet.portfolioitem/delete-item',
                 {
-                    itemId: itemId
+                    portfolioItemId: portfolioItemId
                 },
                 function(obj) {
                     Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
@@ -79,14 +80,14 @@
         }
     }
     
- 	function updateItem(itemId) {  
+ 	function updateItem(portfolioItemId) {  
     
         AUI().use('aui-dialog', function(A) {
         
 			var ajaxURL = Liferay.PortletURL.createRenderURL();
 			ajaxURL.setPortletId('portfolio_WAR_fingenceportlet');
 			ajaxURL.setParameter('jspPage', '/html/portfolio/update-item.jsp');
-			ajaxURL.setParameter('itemId', itemId);
+			ajaxURL.setParameter('portfolioItemId', portfolioItemId);
 			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
 			        
 			Liferay.Util.openWindow({

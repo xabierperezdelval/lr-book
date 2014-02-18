@@ -1,65 +1,70 @@
-<%@page import="com.fingence.slayer.service.PortfolioItemLocalServiceUtil"%>
 <%@ include file="/html/portfolio/init.jsp"%>
+
+<%@page import="com.fingence.slayer.model.impl.AssetImpl"%>
+<%@page import="com.fingence.slayer.model.Asset"%>
+<%@page import="com.fingence.slayer.service.PortfolioItemLocalServiceUtil"%>
 
 <%@page import="com.fingence.slayer.model.impl.PortfolioItemImpl"%>
 <%@page import="com.fingence.slayer.model.PortfolioItem"%>
 
 <%
-	long itemId = ParamUtil.getLong(request, "itemId");
+	long portfolioItemId = ParamUtil.getLong(request, "portfolioItemId");
 
+	Asset asset = new AssetImpl();
 	PortfolioItem portfolioItem = new PortfolioItemImpl();
-	if (itemId > 0l) {
-		portfolioItem = PortfolioItemLocalServiceUtil.fetchPortfolioItem(itemId);
+	if (portfolioItemId > 0l) {
+		portfolioItem = PortfolioItemLocalServiceUtil.fetchPortfolioItem(portfolioItemId);
+		asset = AssetLocalServiceUtil.fetchAsset(portfolioItem.getAssetId());
 	}
+	
+	String readonly = (portfolioItemId > 0l)? "readonly" : StringPool.BLANK;
 %>
 
-<aui:form>
+<aui:form action="#">
+	<aui:input type="hidden" name="portfolioItemId" value="<%= portfolioItemId %>"/>
 	<aui:row>
 		<aui:column>
-			<aui:input name="isinId" />
+			<aui:input name="isinId" value="<%= asset.getId_isin() %>" />
 		</aui:column>
 		<aui:column>
-			<aui:input name="ticker" />
+			<aui:input name="ticker" value="<%= asset.getSecurity_ticker() %>" />
 		</aui:column>
 	</aui:row>
 	
 	<aui:row>
 		<aui:column>
-			<aui:input name="purchasePrice" />
+			<aui:input name="purchasePrice" value="<%= portfolioItem.getPurchasePrice() %>" />
 		</aui:column>
 		<aui:column>
-			<aui:input name="purchaseDate" />
+			<aui:input name="purchaseDate" value="<%= portfolioItem.getPurchaseDate() %>" />
 		</aui:column>
 	</aui:row>
 	
 	<aui:row>
 		<aui:column>
-			<aui:input name="purchaseQty" />
+			<aui:input name="purchaseQty" value="<%= portfolioItem.getPurchaseQty() %>" />
 		</aui:column>
 		<aui:column>
-			<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>
+			&nbsp;
 		</aui:column>
 	</aui:row>
+	<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>
 </aui:form>
 
+<portlet:actionURL name="updatePortfolioItem" var="updateItemURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
+
 <aui:script>
-    function saveItem(){
-        var frm = document.<portlet:namespace/>fm;
-        var purchasePrice = frm.<portlet:namespace/>purchasePrice.value;
-        var purchaseQuantity = frm.<portlet:namespace/>purchaseQuantity.value;
-        
-        Liferay.Service(
-            '/fingence-portlet.portfolioitem/update-item',
-            {
-            portfolioItemId : '<%= itemId %>',
-            purchasePrice : purchasePrice,
-            purchaseQuantity : purchaseQuantity
-           
-          },
-            function(data) {
-                Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
-                Liferay.Util.getOpener().<portlet:namespace />reloadPortlet();
-            }
-        );          
-    }
+    function saveItem() {
+		AUI().io.request('<%= updateItemURL %>',{
+            sync: true,
+            method: 'POST',
+            form: { id: '<portlet:namespace/>fm' },
+            on: {
+                success: function() {
+                    Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
+                    Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
+                }
+          	}
+     	});         
+	}
 </aui:script>

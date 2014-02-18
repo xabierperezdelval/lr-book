@@ -4,10 +4,6 @@
 
 <%@ include file="/html/init.jsp"%>
 
-<c:if test="<%= themeDisplay.isSignedIn() %>">
-	<liferay-ui:header title="add-new-user"/>
-</c:if>	
-
 <portlet:actionURL var="registerURL" name="register" />
 
 <aui:form action="<%= registerURL %>">
@@ -91,7 +87,14 @@
 		</aui:column>
 	</aui:row>	
 
-	<aui:button type="submit" />
+	<c:choose>
+		<c:when test="<%= themeDisplay.isSignedIn() %>">
+			<aui:button value="create" onClick="javascript:addUser();"/>
+		</c:when>
+		<c:otherwise>
+			<aui:button type="submit" />
+		</c:otherwise>
+	</c:choose>
 </aui:form>
 
 <aui:script>
@@ -122,4 +125,21 @@
 		
 		return notExists;
 	}
+	
+	<c:if test="<%= themeDisplay.isSignedIn() %>">
+		function addUser(){
+	        AUI().io.request('<%= registerURL %>',{
+	
+	            sync: true,
+	            method: 'POST',
+	            form: { id: '<portlet:namespace/>fm' },
+	            on: {
+	                success: function() {
+	                    Liferay.Util.getWindow('_portfolio_WAR_fingenceportlet_addUserPopup').destroy();
+	                    Liferay.Util.getOpener()._portfolio_WAR_fingenceportlet_reloadPortlet();
+	                }
+	              }
+	         });
+	    }	
+	</c:if>
 </aui:script>

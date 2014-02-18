@@ -78,7 +78,7 @@
 			<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
 		</c:if>	
 		
-		<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="primary-btn"/>
+		<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
 </aui:form>
 
 <aui:script>
