@@ -9,4 +9,3 @@
 <script src="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
 <script src="//code.highcharts.com/adapters/mootools-adapter.js"></script>
 <script src="//underscorejs.org/underscore-min.js"></script>
-<script src="//rawgithub.com/josscrowcroft/accounting.js/master/accounting.min.js"></script>
