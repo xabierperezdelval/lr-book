@@ -22,66 +22,75 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class RegisterPortlet
  */
 public class ReportPortlet extends MVCPortlet {
-	
+
 	public void serveResource(ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) throws IOException,
 			PortletException {
-		
+
 		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
 		PortletSession portletSession = resourceRequest.getPortletSession();
-		
+
 		if (cmd.equalsIgnoreCase(IConstants.CMD_SET_PORTFOLIO_ID)) {
-			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId");
+			long portfolioId = ParamUtil
+					.getLong(resourceRequest, "portfolioId");
 			portletSession.setAttribute("PORTFOLIO_ID",
 					String.valueOf(portfolioId),
 					PortletSession.APPLICATION_SCOPE);
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ALLOCATION_BY)) {
-			int allocationBy = ParamUtil.getInteger(resourceRequest, "allocationBy");
+			int allocationBy = ParamUtil.getInteger(resourceRequest,
+					"allocationBy");
 			portletSession.setAttribute("ALLOCATION_BY",
 					String.valueOf(allocationBy),
-					PortletSession.APPLICATION_SCOPE);			
+					PortletSession.APPLICATION_SCOPE);
 		}
-    }
-	
+	}
+
 	public void savePortfolio(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-		
-		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-		
+
+		UploadPortletRequest uploadPortletRequest = PortalUtil
+				.getUploadPortletRequest(actionRequest);
+
 		long userId = PortalUtil.getUserId(actionRequest);
-		String portfolioName = ParamUtil.getString(uploadPortletRequest, "portfolioName");
-		
-		long portfolioId = ParamUtil.getLong(uploadPortletRequest, "portfolioId");
+		String portfolioName = ParamUtil.getString(uploadPortletRequest,
+				"portfolioName");
+
+		long portfolioId = ParamUtil.getLong(uploadPortletRequest,
+				"portfolioId");
 		long investorId = ParamUtil.getLong(uploadPortletRequest, "investorId");
-		long institutionId = ParamUtil.getLong(uploadPortletRequest, "institutionId");
-		long wealthAdvisorId = ParamUtil.getLong(uploadPortletRequest, "wealthAdvisorId");
-		long relationshipManagerId = ParamUtil.getLong(uploadPortletRequest, "relationshipManagerId");
-		
-		boolean trial = ParamUtil.getBoolean(uploadPortletRequest, "trial", false);
-		boolean social = ParamUtil.getBoolean(uploadPortletRequest, "social", false);
+		long institutionId = ParamUtil.getLong(uploadPortletRequest,
+				"institutionId");
+		long wealthAdvisorId = ParamUtil.getLong(uploadPortletRequest,
+				"wealthAdvisorId");
+		long relationshipManagerId = ParamUtil.getLong(uploadPortletRequest,
+				"relationshipManagerId");
+
+		boolean trial = ParamUtil.getBoolean(uploadPortletRequest, "trial",
+				false);
+		boolean social = ParamUtil.getBoolean(uploadPortletRequest, "social",
+				false);
 
 		File excelFile = uploadPortletRequest.getFile("excelFile");
-		
+
 		PortfolioLocalServiceUtil.updatePortfolio(portfolioId, userId,
 				portfolioName, investorId, institutionId, wealthAdvisorId,
 				trial, relationshipManagerId, social, excelFile);
 	}
-	
+
 	public void updatePortfolioItem(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-		
-		System.out.println("inside updatePortfolioItem....");
-		
 		String isinId = ParamUtil.getString(actionRequest, "isinId");
-		long itemId = ParamUtil.getLong(actionRequest, "itemId");
+		long portfolioItemId = ParamUtil.getLong(actionRequest, "itemId");
 		long portfolioId = ParamUtil.getLong(actionRequest, "portfolioId");
 		String ticker = ParamUtil.getString(actionRequest, "ticker");
 		Double purchasePrice = ParamUtil.getDouble(actionRequest,
 				"purchasePrice");
-		String purchaseDate = ParamUtil.getString(actionRequest, "startDate");
+		String purchaseDate = ParamUtil
+				.getString(actionRequest, "purchaseDate");
 		int purchaseQty = ParamUtil.getInteger(actionRequest, "purchaseQty");
 
-		PortfolioItemServiceUtil.updateItem(itemId, portfolioId, isinId,
-				ticker, purchasePrice, purchaseQty, null);
+		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
+				isinId, ticker, purchasePrice, purchaseQty, purchaseDate);
+
 	}
 }

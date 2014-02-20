@@ -22,7 +22,14 @@
 	    					{
 	    						key: 'portfolioName',
 	    						label: 'Portfolio',
-	    						allowHTML : 'true'
+	    						allowHTML : 'true',
+	    						formatter: function(obj) {
+	    							var portfolioId = obj.data.portfolioId;
+	    							if(obj.value.indexOf('Total') == -1){
+	    								obj.value = '<a href=\"javascript:void(0);\" onclick=\"javascript:showDetails(\'' + portfolioId + '\');\">'+ obj.value +  '</a>'
+	    							}
+	    							
+	    						}
 	   				 		},
 	    					{
 	    						key: 'investorOrAdvisor',
@@ -37,18 +44,35 @@
 	    					{
 	    						key: 'purchasePrice',
 	    						label: 'Purchased Value',
-	    						allowHTML : 'true'
+	    						allowHTML : 'true',
+	    						formatter: function(obj) {
+					 				obj.value = accounting.formatMoney(obj.value);
+					 			}
 	    					},
 	    					{
 	    						key: 'currentPrice',
 	    						label: 'Current Value',
-	    						allowHTML : 'true'
+	    						allowHTML : 'true',
+	    						formatter: function(obj) {
+					 				obj.value = accounting.formatMoney(obj.value);
+					 			}
 	    					},
 	    					{
 	    						key: 'performance',
 	    						label: 'Performance',
 	    						allowHTML : 'true'
+	    					},
+	    					{
+	    						key: 'portfolioId',
+	    						label: 'Allocation',
+	    						allowHTML : 'true',
+	    						formatter: function(obj) {
+	    							if(obj.value >= 0){
+	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:viewAllocationStrategy(\'' + obj.value +'\');">View Allocation Strategy</a>'
+	    							}
+					 			}	
 	    					}
+	    					
 	   					];
 	   
 	   					new Y.DataTable.Base({
@@ -60,4 +84,45 @@
 	  		}
 		);
 	});
+	
+	function viewAllocationStrategy(portfolioId){
+		var portfolioDetailsURL = Liferay.PortletURL.createRenderURL();
+	 	portfolioDetailsURL.setPortletId('report_WAR_fingenceportlet');
+	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/allocationStrategy.jsp');
+	 	portfolioDetailsURL.setParameter('portfolioId', portfolioId);
+		portfolioDetailsURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
+								
+		AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
+			Liferay.Util.openWindow({
+               	dialog: {
+               		destroyOnHide: true,
+                   	centered: true,
+                   	modal: true,
+                    width: 900,
+                   	height: 750,
+                   	resizable: true               
+               	},
+               	id: '<portlet:namespace/>allocationStrategyListing',
+               	title: 'Asset Allocation Strategy',
+               	uri: portfolioDetailsURL
+           	});
+           	Liferay.provide(
+                	window, '<portlet:namespace/>reloadPortlet', function() {
+                       Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+                   }
+               );			
+		});
+	}
+	
+	function showDetails(portfolioId) {
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('jspPage', '/html/report/details.jsp');
+		ajaxURL.setParameter('portfolioId', portfolioId);
+		ajaxURL.setParameter("backURL", '<%= themeDisplay.getURLCurrent() %>');
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+				
+		AUI().one('#p_p_id<portlet:namespace/>').load('<%= themeDisplay.getURLPortal() %>' + ajaxURL);		
+	}
+	
 </aui:script>
