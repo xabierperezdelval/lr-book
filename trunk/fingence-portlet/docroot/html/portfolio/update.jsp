@@ -14,7 +14,7 @@
 	}
 %>
 
-<aui:form action="#" enctype="multipart/form-data">
+<aui:form action="<%=savePortfolioURL %>" enctype="multipart/form-data">
 	<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
 	<aui:row>
 		<aui:column>
@@ -78,7 +78,16 @@
 			<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
 		</c:if>	
 		
-		<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
+		<c:choose>
+			<c:when test="<%= (portfolioId == 0l) %>">
+				<aui:button type="submit" />
+			</c:when>
+			<c:otherwise>
+				<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
+			</c:otherwise>
+		</c:choose>
+		
+		
 </aui:form>
 
 <aui:script>

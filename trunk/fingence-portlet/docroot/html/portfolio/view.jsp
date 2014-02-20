@@ -7,9 +7,13 @@
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
 %>
 
+<portlet:renderURL var="addPortfolioURL">
+	<portlet:param name="jspPage" value="/html/portfolio/update.jsp"/>
+</portlet:renderURL>
+
 <c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">
 	<aui:button-row>
-		<aui:button cssClass="btn-primary" value="add-portfolio" onClick="javascript:showPopupForEdit(0);"/>
+		<aui:button cssClass="btn-primary btn" href="<%= addPortfolioURL %>" value="add-portfolio" />
 		<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
 			<aui:button cssClass="btn-primary" value="add-user" onClick="javascript:showAddUserPopup();"/>
 		</c:if>
