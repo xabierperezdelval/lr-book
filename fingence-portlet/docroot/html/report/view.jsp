@@ -71,7 +71,6 @@
 </c:if>
 
 <c:choose>
-
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
 		<%@ include file="/html/report/reports-home.jspf"%>
 	</c:when>
