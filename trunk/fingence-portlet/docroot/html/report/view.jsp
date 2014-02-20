@@ -120,19 +120,21 @@
 	<c:if test="<%= (portfolioCount > 2) %>">	
 		AUI().ready(function(A) {
 			var list = document.getElementById('<portlet:namespace/>portfolioList');
-			Liferay.Service(
-	  			'/fingence-portlet.portfolio/get-portfolios',
-	  			{
-	    			userId: '<%= userId %>'
-	  			},
-	  			function(data) {
-	    			for (var i=0; i<(data.length); i++) {
-	    				var obj = data[i];
-	    				list.options[i] = new Option(obj.portfolioName, obj.portfolioId);
-	    				list.options[i].selected = (obj.portfolioId == '<%= portfolioId %>');
-	    			}
-	  			}
-			);
+			if(list != null){
+				Liferay.Service(
+		  			'/fingence-portlet.portfolio/get-portfolios',
+		  			{
+		    			userId: '<%= userId %>'
+		  			},
+		  			function(data) {
+		    			for (var i=0; i<(data.length); i++) {
+		    				var obj = data[i];
+		    				list.options[i] = new Option(obj.portfolioName, obj.portfolioId);
+		    				list.options[i].selected = (obj.portfolioId == '<%= portfolioId %>');
+		    			}
+		  			}
+				);
+			}
 		});
 	</c:if>
 

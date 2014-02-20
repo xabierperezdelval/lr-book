@@ -113,16 +113,18 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	
 	public JSONArray getPortfolioSummary(long userId) {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-
-		int userType = bridgeService.getUserType(userId);
+		
 		double totalPurchasedValue = 0d;
 		double totalCurrentValue = 0d;
+
+		int userType = bridgeService.getUserType(userId);
 
 		List<Portfolio> portfolios = portfolioLocalService
 				.getPortfolios(userId);
 
 		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
+			
 			double portfolioPurchasedPrice = 0d;
 			double portfolioCurrentPrice = 0d;
 
@@ -161,8 +163,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			totalPurchasedValue += portfolioPurchasedPrice;
 			totalCurrentValue += portfolioCurrentPrice;
 
-			jsonObject.put("purchasePrice", totalPurchasedValue);
-			jsonObject.put("currentPrice", totalCurrentValue);
+			jsonObject.put("purchasePrice", portfolioPurchasedPrice);
+			jsonObject.put("currentPrice", portfolioCurrentPrice);
 			jsonObject.put("performance", 0d);
 
 			jsonArray.put(jsonObject);

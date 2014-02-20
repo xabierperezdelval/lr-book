@@ -3,7 +3,7 @@
 <%
 	int index = (allocationBy - 1);
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
-	String[] groupByTitle = {"Risk Country", "Currency", "Security Type", "Sector"};
+	String[] groupByTitle = {"Risk Country", "Currency", "Security Type", "Sector"};	
 %>
 
 <aui:row>
@@ -38,31 +38,51 @@
 		);
 	});
 	
-	function showWeightage(data, groupBy, divId, title, netWorth) {
-	
-		var jsonArr = [];
-		var dataArray = getModifiedArray(data, groupBy);
-		
-		for (var i=0; i<dataArray.length; i++) {
-			var obj = dataArray[i];
-			jsonArr.push({
-				_key: obj[0],
-				currentMarketValue: obj[1],
-				weightage: (obj[1] / netWorth * 100)
+	function getDataGroupedBy(data, groupBy, netWorth) {
+		var resultantDataArray = [];
+		_(_.groupBy(data, groupBy)).map(function(item, key) {
+			var resultantObj ={};
+			var totalCurrentValue = 0;
+			var totalUsdInvested = 0;
+			_.each(item,function(item){
+				totalCurrentValue += item.currentMarketValue;
+				totalUsdInvested += (item.currentMarketValue * item.current_fx);
 			});
-		}
-		
+			resultantObj._key = key;
+			resultantObj.currentMarketValue = totalCurrentValue;
+			resultantObj.usdInvested = totalUsdInvested;
+			resultantObj.weightage = totalCurrentValue/netWorth*100;
+			
+			resultantDataArray.push(resultantObj);
+		});	
+		return resultantDataArray;
+	}
+	
+	function showWeightage(data, groupBy, divId, title, netWorth) {
+		var jsonArr = getDataGroupedBy(data, groupBy, netWorth);
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
 		    	var columns = [
-		    		{key: '_key', label: title},
+		    		{
+		    			key: '_key',
+		    			label: title,
+		    			formatter: '<a href="javascript:void(0);" onclick="javascript:sliceChart(\'{value}\');">{value}</a>'
+	    			},
 			 		{
 			 			key: 'currentMarketValue', 
 			 			label: 'Current Value',
 			 			formatter: function(obj) {
 			 				obj.value = accounting.formatMoney(obj.value);
 			 			}			 			
+			 		},
+			 		{
+			 			key: 'usdInvested', 
+			 			label: 'USD Invested',
+			 			formatter: function(obj) {
+			 				obj.value = accounting.formatMoney(obj.value);
+			 			},
+			 			className: (title !='Currency')?'hideColumn':''
 			 		},
 			 		{
 			 			key: 'weightage', 
@@ -91,7 +111,6 @@
 		  	});
 		  	dataArray.push(new Array(key, value));
 		});	
-		
 		return dataArray;	
 	}	
 	
@@ -103,7 +122,7 @@
 	        chart: {
 	            plotBackgroundColor: null,
 	            plotBorderWidth: null,
-	            plotShadow: false
+	            plotShadow: false,
 	        },
 	        title: {
 	            text: title
@@ -126,9 +145,59 @@
 	        series: [{
 	            type: 'pie',
 	            name: title,
-	            data: dataArray
+	            data: dataArray,
+	            events:{
+	                click: function (event) {
+	                    sliceChart(event.point.name);
+	                }
+              	}
 	        }]
 	    });	
+	}
+	
+	function sliceChart(sliceBy){
+		var portfolioId = '<%= portfolioId %>';
+		var allocationBy = '<%= allocationBy %>'
+		var allocationParam = new String();
+		
+		if(allocationBy == <%= IConstants.BREAKUP_BY_RISK_COUNTRY %>){
+			allocationParam = '<%= groupByField[0] %>';
+		} else if(allocationBy == <%= IConstants.BREAKUP_BY_CURRENCY %>){
+			allocationParam = '<%= groupByField[1] %>';
+		} else if(allocationBy == <%= IConstants.BREAKUP_BY_SECURITY_TYPE %>){
+			allocationParam = '<%= groupByField[2] %>';
+		}else if(allocationBy == <%= IConstants.BREAKUP_BY_SECTOR %>){
+			allocationParam = '<%= groupByField[3] %>';
+		}
+		
+	 	var portfolioDetailsURL = Liferay.PortletURL.createRenderURL();
+	 	portfolioDetailsURL.setPortletId('report_WAR_fingenceportlet');
+	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/portfolioDetails.jsp');
+	 	portfolioDetailsURL.setParameter('portfolioId', portfolioId);
+	 	portfolioDetailsURL.setParameter('allocationParam', allocationParam);
+	 	portfolioDetailsURL.setParameter('sliceBy', sliceBy);
+		portfolioDetailsURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
+								
+		AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
+			Liferay.Util.openWindow({
+               	dialog: {
+               		destroyOnHide: true,
+                   	centered: true,
+                   	modal: true,
+                    width: 900,
+                   	height: 750,
+                   	resizable: true               
+               	},
+               	id: '<portlet:namespace/>portfolioItemsListing',
+               	title: 'Portfolio Items Details',
+               	uri: portfolioDetailsURL
+           	});
+           	Liferay.provide(
+                	window, '<portlet:namespace/>reloadPortlet', function() {
+                       Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+                   }
+               );			
+		}); 
 	}
 	
 	function getTotalNetWorth(data){

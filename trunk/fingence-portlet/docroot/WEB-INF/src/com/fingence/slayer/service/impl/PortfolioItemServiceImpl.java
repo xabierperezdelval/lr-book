@@ -14,6 +14,8 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -69,7 +71,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 	}
 	
-	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, int purchaseQty, Date purchaseDate) {
+	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, int purchaseQty, String purchaseDate) {
 		PortfolioItem portfolioItem = null;
 				
 		if (portfolioItemId > 0l) {
@@ -123,9 +125,17 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 			}
 		}
 		
+		Date _purchaseDate = null;
+		if(Validator.isNotNull(purchaseDate)){
+			try {
+				_purchaseDate = new SimpleDateFormat("MM/dd/yyyy").parse(purchaseDate);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+		}	
 		portfolioItem.setAssetId(asset.getAssetId());
 		portfolioItem.setPortfolioId(portfolioId);
-		portfolioItem.setPurchaseDate(purchaseDate);
+		portfolioItem.setPurchaseDate(_purchaseDate);
 		portfolioItem.setPurchasePrice(purchasePrice);
 		portfolioItem.setPurchaseQty(purchaseQty);
 		
