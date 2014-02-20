@@ -13,9 +13,9 @@
 
 <c:if test="<%= (userType != IConstants.USER_TYPE_BANK_ADMIN) %>">
 	<aui:button-row>
-		<aui:button cssClass="btn-primary btn" href="<%= addPortfolioURL %>" value="add-portfolio" />
+		<aui:a href="<%= addPortfolioURL %>" ><aui:button cssClass="btn-primary btn" value="add-portfolio" /></aui:a>
 		<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
-			<aui:button cssClass="btn-primary" value="add-user" onClick="javascript:showAddUserPopup();"/>
+			<aui:a href="javascript:void(0);" onClick="javascript:showAddUserPopup();"><aui:button cssClass="btn-primary" value="add-user"/></aui:a>
 		</c:if>
 	</aui:button-row>
 </c:if>
