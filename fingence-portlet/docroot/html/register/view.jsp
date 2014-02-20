@@ -20,7 +20,7 @@
 	
 	<aui:row>
 		<aui:column>
-			<aui:select name="male">
+			<aui:select name="male" label="gender">
 				<aui:option value="true" label="male"/>
 				<aui:option value="false" label="female"/>
 			</aui:select>
