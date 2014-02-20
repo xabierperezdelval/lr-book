@@ -17,3 +17,7 @@
 .chart-container {
 	width: 50%;
 }
+
+.hideColumn{
+	display: none;
+}
