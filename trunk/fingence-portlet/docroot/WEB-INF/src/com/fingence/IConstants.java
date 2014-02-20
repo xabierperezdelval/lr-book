@@ -11,10 +11,10 @@ public interface IConstants {
 	String PAGE_PORTFOLIO = "portfolio";
 	String PAGE_REPORTS_HOME = "reports";
 	String PAGE_ASSET_REPORT = "Asset Report";
-	String PAGE_FIXED_INCOME_REPORT = "Fixed Income Report";
+	String PAGE_FIXED_INCOME_REPORT = "Fixed Income";
 	String PAGE_RISK_REPORT = "Risk Report";
-	String PAGE_PERFORMANCE_REPORT = "Performance Report";
-	String PAGE_VIOLATION_REPORT = "Violation Report";
+	String PAGE_PERFORMANCE_REPORT = "Performance";
+	String PAGE_VIOLATION_REPORT = "Violations";
 	
 	String PARENT_ORG_FIRMS = "Firms";
 	String PARENT_ORG_BANKS = "Banks";

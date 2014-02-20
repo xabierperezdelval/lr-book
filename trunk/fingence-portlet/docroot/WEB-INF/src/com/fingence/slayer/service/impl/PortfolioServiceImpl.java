@@ -108,7 +108,14 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	}
 	
 	public String getPortfolioName(long portfolioId) {
-		return getPortfolio(portfolioId).getPortfolioName();
+		
+		String portfolioName = StringPool.BLANK;
+		
+		if (portfolioId > 0l) {
+			portfolioName = getPortfolio(portfolioId).getPortfolioName();
+		}
+		
+		return portfolioName;
 	}
 	
 	public JSONArray getPortfolioSummary(long userId) {
