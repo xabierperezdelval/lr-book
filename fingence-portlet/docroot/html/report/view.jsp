@@ -96,6 +96,14 @@
 </c:choose>
 
 <aui:script>
+
+		AUI().ready(function(A) {
+			Liferay.on('navigationMenu', function(event) {
+	        	alert(event.name);
+	    	});
+		});
+
+
 	<c:if test="<%= (portfolioCount > 1) %>">
 		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();

@@ -1,11 +1,5 @@
-<%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
-<%@page import="javax.portlet.ResourceURL"%>
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@ include file="/html/portfolio/init.jsp"%>
 
-<%@page import="com.fingence.slayer.model.impl.PortfolioImpl"%>
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery.form.js"></script>
+<%@ include file="/html/report/init.jsp"%>
 
 <portlet:actionURL name="savePortfolio" var="savePortfolioURL"
 	windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />

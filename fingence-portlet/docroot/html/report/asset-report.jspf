@@ -184,9 +184,8 @@
                		destroyOnHide: true,
                    	centered: true,
                    	modal: true,
-                    width: 900,
-                   	height: 750,
-                   	resizable: true               
+                    width: 600,
+                   	height: 500
                	},
                	id: '<portlet:namespace/>portfolioItemsListing',
                	title: 'Portfolio Items Details',
