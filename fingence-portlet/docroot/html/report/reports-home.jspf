@@ -88,7 +88,7 @@
 	function viewAllocationStrategy(portfolioId){
 		var portfolioDetailsURL = Liferay.PortletURL.createRenderURL();
 	 	portfolioDetailsURL.setPortletId('report_WAR_fingenceportlet');
-	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/allocationStrategy.jsp');
+	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/allocation-strategy.jsp');
 	 	portfolioDetailsURL.setParameter('portfolioId', portfolioId);
 		portfolioDetailsURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
 								
