@@ -6,7 +6,6 @@
 <%@ include file="/html/report/init.jsp"%>
 
 <%
-	String layoutName = layout.getName(locale);
 	long portfolioId = GetterUtil.getLong(portletSession.getAttribute(
 			"PORTFOLIO_ID", PortletSession.APPLICATION_SCOPE),
 			PortfolioServiceUtil.getDefault(userId));
