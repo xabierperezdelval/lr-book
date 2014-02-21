@@ -1,4 +1,4 @@
-<%@ include file="/html/portfolio/init.jsp"%>
+<%@ include file="/html/report/init.jsp"%>
 
 <%
 	long portfolioId = ParamUtil.getLong(renderRequest, "portfolioId");

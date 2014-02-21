@@ -1,18 +1,4 @@
-<%@page import="com.fingence.slayer.service.PortfolioItemLocalServiceUtil"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@page import="com.fingence.slayer.model.impl.AssetImpl"%>
-<%@page import="com.fingence.slayer.model.Asset"%>
-<%@ include file="/html/portfolio/init.jsp"%>
-
-<%@page import="com.fingence.slayer.model.impl.PortfolioItemImpl"%>
-<%@page import="com.fingence.slayer.model.PortfolioItem"%>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="/resources/demos/style.css">
+<%@ include file="/html/report/init.jsp"%>
 <portlet:actionURL name="updatePortfolioItem" var="updateItemURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
 <%
 	long itemId = ParamUtil.getLong(request, "portfolioItemId");
