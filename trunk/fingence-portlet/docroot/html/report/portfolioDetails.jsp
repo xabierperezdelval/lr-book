@@ -17,7 +17,6 @@
     			portfolioId: '<%= portfolioId %>'
   			},
   			function(data) {
-  			
   				showPortfolioItems(data, '<%= slicingParameter %>', '<%= allocationParam %>', '#slicePortfolio');
   			}
 		);
@@ -84,5 +83,4 @@
 		  	}
 		);
 	}
-
 </aui:script>
