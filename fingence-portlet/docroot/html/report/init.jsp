@@ -19,5 +19,3 @@
 <%
 	String layoutName = GetterUtil.getString(portletSession.getAttribute("MENU_ITEM",PortletSession.APPLICATION_SCOPE), IConstants.PAGE_REPORTS_HOME);
 %>
-
-<script src="//underscorejs.org/underscore-min.js"></script>

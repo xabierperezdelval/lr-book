@@ -18,7 +18,6 @@
 <aui:script>
 	AUI().ready(function(A) {
 	
-		alert('inside rendering code.....');
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
@@ -154,9 +153,7 @@
 	                }
               	}
 	        }]
-	    });
-	    
-	    alert('finished... render chart...');	
+	    });	    
 	}
 	
 	function sliceChart(sliceBy){
@@ -176,7 +173,7 @@
 		
 	 	var portfolioDetailsURL = Liferay.PortletURL.createRenderURL();
 	 	portfolioDetailsURL.setPortletId('report_WAR_fingenceportlet');
-	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/portfolioDetails.jsp');
+	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/portfolio-details.jsp');
 	 	portfolioDetailsURL.setParameter('portfolioId', portfolioId);
 	 	portfolioDetailsURL.setParameter('allocationParam', allocationParam);
 	 	portfolioDetailsURL.setParameter('sliceBy', sliceBy);
