@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
 <%@page import="com.liferay.portal.model.Country"%>
 <%@page import="com.liferay.portal.service.CountryServiceUtil"%>
 
