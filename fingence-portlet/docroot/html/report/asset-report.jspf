@@ -17,6 +17,8 @@
 
 <aui:script>
 	AUI().ready(function(A) {
+	
+		alert('inside rendering code.....');
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
@@ -115,9 +117,9 @@
 	}	
 	
 	function renderChart(data, groupBy, divId, title){
-	
-		var dataArray = getModifiedArray(data, groupBy);
 		
+		var dataArray = getModifiedArray(data, groupBy);
+				
 		$(divId).highcharts({
 	        chart: {
 	            plotBackgroundColor: null,
@@ -152,7 +154,9 @@
 	                }
               	}
 	        }]
-	    });	
+	    });
+	    
+	    alert('finished... render chart...');	
 	}
 	
 	function sliceChart(sliceBy){
@@ -160,7 +164,7 @@
 		var allocationBy = '<%= allocationBy %>'
 		var allocationParam = new String();
 		
-		if(allocationBy == <%= IConstants.BREAKUP_BY_RISK_COUNTRY %>){
+		if (allocationBy == <%= IConstants.BREAKUP_BY_RISK_COUNTRY %>){
 			allocationParam = '<%= groupByField[0] %>';
 		} else if(allocationBy == <%= IConstants.BREAKUP_BY_CURRENCY %>){
 			allocationParam = '<%= groupByField[1] %>';
@@ -192,10 +196,10 @@
                	uri: portfolioDetailsURL
            	});
            	Liferay.provide(
-                	window, '<portlet:namespace/>reloadPortlet', function() {
-                       Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
-                   }
-               );			
+                window, '<portlet:namespace/>reloadPortlet', function() {
+                	Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+               	}
+           	);			
 		}); 
 	}
 	

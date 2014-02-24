@@ -20,6 +20,12 @@
 %>
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//code.highcharts.com/highcharts.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
+	<script src="//code.highcharts.com/adapters/mootools-adapter.js"></script>
+
 	<aui:row>
 		<aui:column columnWidth="50">
 			<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
@@ -78,7 +84,7 @@
 		<%@ include file="/html/report/asset-report.jspf"%>
 	</c:when>
 	
-	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME_REPORT) %>">
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME) %>">
 		<%@ include file="/html/report/fixed-income-report.jspf"%>
 	</c:when>
 	
@@ -86,7 +92,7 @@
 		<%@ include file="/html/report/risk-report.jspf"%>
 	</c:when>
 	
-	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE_REPORT) %>">
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE) %>">
 		<%@ include file="/html/report/performance-report.jspf"%>
 	</c:when>		
 	
@@ -96,13 +102,6 @@
 </c:choose>
 
 <aui:script>
-
-		AUI().ready(function(A) {
-			Liferay.on('navigationMenu', function(event) {
-	        	alert(event.name);
-	    	});
-		});
-
 
 	<c:if test="<%= (portfolioCount > 1) %>">
 		function changePortfolio(value) {
@@ -126,7 +125,7 @@
 	<c:if test="<%= (portfolioCount > 2) %>">	
 		AUI().ready(function(A) {
 			var list = document.getElementById('<portlet:namespace/>portfolioList');
-			if(list != null){
+			if (list != null){
 				Liferay.Service(
 		  			'/fingence-portlet.portfolio/get-portfolios',
 		  			{
