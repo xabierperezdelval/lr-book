@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@ include file="/html/init.jsp"%>
 
 <%@page import="java.util.Date"%>
@@ -20,25 +21,7 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 
 <%
-	String layoutName = StringPool.BLANK;
-	if(portletSession.getAttribute("navigationParam",PortletSession.APPLICATION_SCOPE) != null){
-		layoutName = (String)portletSession.getAttribute("navigationParam",PortletSession.APPLICATION_SCOPE);
-	} else{
-		layoutName = layout.getName(locale);
-	}
-	
+	String layoutName = GetterUtil.getString(portletSession.getAttribute("MENU_ITEM",PortletSession.APPLICATION_SCOPE), IConstants.PAGE_REPORTS_HOME);
 %>
 
-<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery.form.js"></script>
-
-<c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="//code.highcharts.com/highcharts.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
-	<script src="//code.highcharts.com/adapters/mootools-adapter.js"></script>
-</c:if>
 <script src="//underscorejs.org/underscore-min.js"></script>

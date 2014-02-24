@@ -76,13 +76,17 @@
 		</security-role-ref>
 	</portlet> 
 	<portlet>
-		<portlet-name>fingenceMenu</portlet-name>
+		<portlet-name>menu</portlet-name>
 		<display-name>Fingence Menu</display-name>
-		<portlet-class>com.fingence.FingenceMenu</portlet-class>
+		<portlet-class>com.fingence.MenuPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/fingence-menu/view.jsp</value>
+			<value>/html/report/menu.jsp</value>
 		</init-param>
+		<init-param>
+			<name>check-auth-token</name>
+			<value>false</value>
+		</init-param>		
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
