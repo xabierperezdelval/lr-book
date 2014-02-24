@@ -9,11 +9,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-
-
 <%@page import="javax.portlet.ResourceURL"%>
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
-
 
 <%@page import="java.util.List"%>
 
@@ -34,6 +31,7 @@
 
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>

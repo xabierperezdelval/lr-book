@@ -21,11 +21,6 @@
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="//code.highcharts.com/highcharts.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js"></script>
-	<script src="//code.highcharts.com/adapters/mootools-adapter.js"></script>
-
 	<aui:row>
 		<aui:column columnWidth="50">
 			<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
@@ -115,7 +110,7 @@
 				sync: true,
 				on: {
 					success: function() {
-						location.reload();
+						Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
 					}
 				}
 			});	
@@ -176,7 +171,7 @@
 				sync: true,
 				on: {
 					success: function() {
-						location.reload();
+						Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
 					}
 				}
 			});
