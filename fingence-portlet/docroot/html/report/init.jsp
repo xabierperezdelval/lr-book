@@ -23,8 +23,6 @@
 	String layoutName = null;
 	if(portletSession.getAttribute("navigationParam") != null){
 		layoutName = (String)portletSession.getAttribute("navigationParam");
-	} else{
-		layoutName = IConstants.PAGE_ASSET_REPORT;
 	}
 	
 %>
