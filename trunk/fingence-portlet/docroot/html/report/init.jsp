@@ -20,9 +20,11 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 
 <%
-	String layoutName = null;
-	if(portletSession.getAttribute("navigationParam") != null){
-		layoutName = (String)portletSession.getAttribute("navigationParam");
+	String layoutName = StringPool.BLANK;
+	if(portletSession.getAttribute("navigationParam",PortletSession.APPLICATION_SCOPE) != null){
+		layoutName = (String)portletSession.getAttribute("navigationParam",PortletSession.APPLICATION_SCOPE);
+	} else{
+		layoutName = layout.getName(locale);
 	}
 	
 %>
