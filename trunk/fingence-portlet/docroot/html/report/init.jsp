@@ -16,10 +16,6 @@
 <%@page import="com.fingence.slayer.model.impl.PortfolioItemImpl"%>
 <%@page import="com.fingence.slayer.model.PortfolioItem"%>
 
-
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-
 <%
 	String layoutName = GetterUtil.getString(portletSession.getAttribute("MENU_ITEM",PortletSession.APPLICATION_SCOPE), IConstants.PAGE_REPORTS_HOME);
 %>
