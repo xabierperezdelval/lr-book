@@ -42,7 +42,10 @@
 		</footer-portlet-javascript>
 		<footer-portlet-javascript>
 			http://underscorejs.org/underscore-min.js
-		</footer-portlet-javascript>			
+		</footer-portlet-javascript>
+		<footer-portlet-javascript>	
+			http://code.jquery.com/ui/1.10.4/jquery-ui.js
+		</footer-portlet-javascript>	
 		<css-class-wrapper>report-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
