@@ -19,7 +19,7 @@
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
-<c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
+<c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>
 		<aui:column columnWidth="50">
@@ -89,7 +89,15 @@
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE) %>">
 		<%@ include file="/html/report/performance-report.jspf"%>
-	</c:when>		
+	</c:when>	
+	
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO) %>">
+		<%@ include file="/html/report/update.jspf"%>
+	</c:when>
+	
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_USER) %>">
+		<%@ include file="/html/register/register.jspf"%>
+	</c:when>
 	
 	<c:otherwise>
 		<%@ include file="/html/report/violations-report.jspf"%>
@@ -139,6 +147,7 @@
 	</c:if>
 
 	function showInMillions(figure){
+		console.info("Figure: " + figure);
 		return accounting.formatMoney((figure / 1000000)) + ' Mil';
 	}
 	

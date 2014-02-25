@@ -46,7 +46,7 @@
 	    						label: 'Purchased Value',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-					 				obj.value = accounting.formatMoney(obj.value);
+					 				obj.value = showInMillions(obj.value);
 					 			}
 	    					},
 	    					{
@@ -54,7 +54,7 @@
 	    						label: 'Current Value',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-					 				obj.value = accounting.formatMoney(obj.value);
+					 				obj.value = showInMillions(obj.value);
 					 			}
 	    					},
 	    					{
@@ -67,11 +67,21 @@
 	    						label: 'Allocation',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							if(obj.value >= 0){
+	    							if(obj.value > 0){
 	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:viewAllocationStrategy(\'' + obj.value +'\');">View Allocation Strategy</a>'
 	    							}
 					 			}	
-	    					}
+	    					},
+			 				{
+                             	key: 'portfolioId',
+                             	label: 'Action',
+                             	formatter: function(obj) {
+	    							if(obj.value > 0){
+	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>'
+	    							}
+					 			},	
+                             	allowHTML: true
+                         	}
 	    					
 	   					];
 	   
@@ -124,5 +134,49 @@
 				
 		AUI().one('#p_p_id<portlet:namespace/>').load('<%= themeDisplay.getURLPortal() %>' + ajaxURL);		
 	}
+	
+	function deletePortfolio(portfolioId) {
+        if (confirm('Are you sure to delete this item from portfolio?')) {
+            Liferay.Service(
+                '/fingence-portlet.portfolio/delete-portfolio',
+                {
+                    portfolioId: portfolioId
+                },
+                function(obj) {
+                    Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+                }
+            );
+        }
+    }
+    
+    function updatePortfolio(portfolioId) {
+    
+        AUI().use('aui-dialog', function(A) {
+        
+			var ajaxURL = Liferay.PortletURL.createRenderURL();
+			ajaxURL.setPortletId('report_WAR_fingenceportlet');
+			ajaxURL.setParameter('jspPage', '/html/report/update-container.jsp');
+			ajaxURL.setParameter('portfolioId', portfolioId);
+			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
+			        
+			Liferay.Util.openWindow({
+            	dialog: {
+                	centered: true,
+                    modal: true,
+                    width: 600,
+                    height: 400,
+                    destroyOnHide: true           
+               	},
+                id: '<portlet:namespace/>editPortfolioPopup',
+                title: 'Add/Edit Portfolio',
+               	uri: ajaxURL
+           	});  
+           	Liferay.provide(
+                  window, '<portlet:namespace/>reloadPortlet', function() {
+                     Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+                 }
+             );       
+        });
+    }
 	
 </aui:script>

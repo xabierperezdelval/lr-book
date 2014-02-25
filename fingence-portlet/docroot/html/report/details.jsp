@@ -41,13 +41,30 @@
 				},
 					
 				function(data) {
-				var fmtTotal = function(o) { return Y.DataType.Number.format( o.value, { prefix:"$ ", thousandsSeparator:",", decimalPlaces:2 } ); }
 					var columns = [
                     	{key: 'name', label: 'Name'},
                         {key: 'security_ticker', label: 'TICKER'},
-                        {key: 'purchasedMarketValue', label: 'Purchased Value',formatter: fmtTotal},
-                        {key: 'currentMarketValue', label: 'Current Value',formatter: fmtTotal},
-                        {key: 'current_price', label: 'Current Price',formatter: fmtTotal},
+                        {
+                        	key: 'purchasedMarketValue', 
+                        	label: 'Purchased Value',
+                        	formatter: function(obj) {
+				 				obj.value = showInMillions(obj.value);
+				 			}
+                       	},
+                        {
+                        	key: 'currentMarketValue', 
+                        	label: 'Current Value',
+	                        formatter: function(obj) {
+				 				obj.value = showInMillions(obj.value);
+				 			}
+			 			},
+                        {
+                        	key: 'current_price', 
+                        	label: 'Current Price',
+                        	formatter: function(obj) {
+				 				obj.value = showInMillions(obj.value);
+				 			}
+                       	},
                         {key: 'purchaseQty', label: 'Quantity'},
                         {
                              key: 'itemId',
