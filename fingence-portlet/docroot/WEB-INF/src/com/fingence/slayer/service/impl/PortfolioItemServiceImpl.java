@@ -71,7 +71,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 	}
 	
-	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, int purchaseQty, String purchaseDate) {
+	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, double purchaseQty, String purchaseDate) {
 		PortfolioItem portfolioItem = null;
 				
 		if (portfolioItemId > 0l) {

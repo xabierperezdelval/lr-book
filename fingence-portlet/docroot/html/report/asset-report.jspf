@@ -133,7 +133,7 @@
 	        },
 	        plotOptions: {
 	            pie: {
-	            	size:'60%',
+	            	size:'40%',
 	                allowPointSelect: true,
 	                cursor: 'pointer',
 	                dataLabels: {

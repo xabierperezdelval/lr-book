@@ -1,12 +1,15 @@
-<%@page import="com.liferay.portal.model.Country"%>
-<%@page import="com.liferay.portal.service.CountryServiceUtil"%>
-
 <portlet:renderURL var="renderDasboardURL">
 	<portlet:param name="jspPage" value="/html/report/view.jsp" />
 </portlet:renderURL>
-<portlet:actionURL var="registerURL" name="register" />
+<%  String portletId = "register_WAR_fingenceportlet";
+    long targetPlId = PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), "register", locale);
+    PortletURL registerURL = PortletURLFactoryUtil.create(renderRequest, portletId, targetPlId, PortletRequest.ACTION_PHASE);
+    registerURL.setParameter(ActionRequest.ACTION_NAME , "register");
+    registerURL.setWindowState(WindowState.NORMAL);
+    String portletNamespace = StringPool.UNDERLINE + portletId + StringPool.UNDERLINE;
+   %>
 
-<aui:form action="<%= registerURL %>">
+<aui:form action="<%= registerURL.toString() %>" method="post" portletNamespace="<%= portletNamespace %>">
 
 	<aui:row>
 		<aui:column>
@@ -101,16 +104,17 @@
 
 <aui:script>
 	function notExists(fld) {
-		var frm = document.<portlet:namespace/>fm;
-		
-		var ele = frm.<portlet:namespace/>emailAddress;
+		var frm = document._register_WAR_fingenceportlet_fm;
+
+		var ele = frm._register_WAR_fingenceportlet_emailAddress;
 		if (fld == 'firm') {
-			ele = frm.<portlet:namespace/>firmName;
+			ele = frm._register_WAR_fingenceportlet_firstName;
 		}
 	
 		var ajaxURL = Liferay.PortletURL.createResourceURL();
 		ajaxURL.setPortletId('register_WAR_fingenceportlet');
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_DUPLICATE %>');
+		ajaxURL.setPlid('<%= targetPlId %>');
 		ajaxURL.setParameter('fieldName', fld);
 		ajaxURL.setParameter('fieldValue', ele.value);
 		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
