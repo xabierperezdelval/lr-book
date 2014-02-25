@@ -181,14 +181,54 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		// To Add the a final row for Total
 		JSONObject jsonTotal = JSONFactoryUtil.createJSONObject();
 		jsonTotal.put("portfolioName", "<b>Total</b>");
+		jsonTotal.put("portfolioId", "");
 		jsonTotal.put("manager", "");
 		jsonTotal.put("investorOrAdvisor", "");
-		jsonTotal.put("purchasePrice", "<b>" + totalPurchasedValue + "</b>");
-		jsonTotal.put("currentPrice", "<b>" + totalCurrentValue + "</b>");
+		jsonTotal.put("purchasePrice", totalPurchasedValue);
+		jsonTotal.put("currentPrice", totalCurrentValue);
 		jsonTotal.put("performance", 0d);
 		
 		jsonArray.put(jsonTotal);
 
 		return jsonArray;
+	}
+	
+	public void deletePortfolio(long portfolioId) {
+		Portfolio portfolio = null;
+		
+		try {
+			portfolio = portfolioLocalService.fetchPortfolio(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if(Validator.isNull(portfolio)) return;
+		List<PortfolioItem> portfolioItems = null;
+		try {
+			portfolioItems = portfolioItemPersistence.findByPortfolioId(portfolioId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		if(Validator.isNull(portfolioItems)){
+			try {
+				portfolioLocalService.deletePortfolio(portfolio);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}else{
+			for(PortfolioItem portfolioItem:portfolioItems){
+				try {
+					portfolioItemLocalService.deletePortfolioItem(portfolioItem);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				portfolioLocalService.deletePortfolio(portfolio);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }
