@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -30,11 +31,12 @@ public class RegisterPortlet extends MVCPortlet {
 		String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
 		String firstName = ParamUtil.getString(actionRequest, "firstName");
 		String lastName = ParamUtil.getString(actionRequest, "lastName");
-		boolean male = ParamUtil.getBoolean(actionRequest, "male");
+		boolean male = ParamUtil.getBoolean(actionRequest, "gender");
 		String jobTitle = ParamUtil.getString(actionRequest, "jobTitle");
 		long countryId = ParamUtil.getLong(actionRequest, "countryId");
 		
 		long creatorUserId = PortalUtil.getUserId(actionRequest);
+		
 		
 		User user = BridgeServiceUtil.addUser(creatorUserId, firstName,
 				lastName, emailAddress, male, countryId, jobTitle);
@@ -49,8 +51,9 @@ public class RegisterPortlet extends MVCPortlet {
 				
 		if (themeDisplay.isSignedIn() && isWealthAdvisor) {
 			BridgeServiceUtil.assignRole(creatorUserId, user.getUserId(), userType);
-			actionResponse.sendRedirect(PortalUtil.getPortalURL(actionRequest)
-					+ StringPool.SLASH + IConstants.PAGE_PORTFOLIO);
+			PortletSession portletSession = actionRequest.getPortletSession();
+			portletSession.setAttribute("MENU_ITEM", IConstants.PAGE_REPORTS_HOME, PortletSession.APPLICATION_SCOPE);
+			actionResponse.sendRedirect(ParamUtil.getString(actionRequest, "redirectURL"));
 		} else if (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
 			String firmName = ParamUtil.getString(actionRequest, "firmName");
 			BridgeServiceUtil.addWealthAdvisorFirm(firmName, user.getUserId());
