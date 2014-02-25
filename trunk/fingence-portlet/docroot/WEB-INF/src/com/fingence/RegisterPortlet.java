@@ -50,7 +50,7 @@ public class RegisterPortlet extends MVCPortlet {
 		if (themeDisplay.isSignedIn() && isWealthAdvisor) {
 			BridgeServiceUtil.assignRole(creatorUserId, user.getUserId(), userType);
 			actionResponse.sendRedirect(PortalUtil.getPortalURL(actionRequest)
-					+ StringPool.SLASH + IConstants.PAGE_REPORTS_HOME);
+					+ StringPool.SLASH + IConstants.PAGE_PORTFOLIO);
 		} else if (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
 			String firmName = ParamUtil.getString(actionRequest, "firmName");
 			BridgeServiceUtil.addWealthAdvisorFirm(firmName, user.getUserId());

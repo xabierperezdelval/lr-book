@@ -14,6 +14,10 @@ public interface IConstants {
 	String PAGE_RISK_REPORT = "Risk Report";
 	String PAGE_PERFORMANCE = "Performance";
 	String PAGE_VIOLATIONS = "Violations";
+	String ADD_PORTFOLIO = "Add Portfolio";
+	String ADD_USER = "Add User";
+	
+	String PAGE_PORTFOLIO = "Portfolio";
 	
 	String[] REPORT_MENU_ITEMS = {
 			PAGE_REPORTS_HOME,
@@ -21,7 +25,9 @@ public interface IConstants {
 			PAGE_FIXED_INCOME,
 			PAGE_RISK_REPORT,
 			PAGE_PERFORMANCE,
-			PAGE_VIOLATIONS
+			PAGE_VIOLATIONS,
+			ADD_PORTFOLIO,
+			ADD_USER
 	};
 	
 	String PARENT_ORG_FIRMS = "Firms";

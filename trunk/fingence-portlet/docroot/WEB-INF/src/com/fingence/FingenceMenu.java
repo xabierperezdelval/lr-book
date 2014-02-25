@@ -22,8 +22,9 @@ public class FingenceMenu extends MVCPortlet {
 			PortletException {
 
 		PortletSession portletSession = resourceRequest.getPortletSession();
-		String item =  ParamUtil.getString(resourceRequest, "navigationMenuItem");
+		String item =  ParamUtil.getString(resourceRequest, "MENU_ITEM");
 		
-		portletSession.setAttribute("navigationParam", item, PortletSession.APPLICATION_SCOPE);
+		portletSession.setAttribute("MENU_ITEM", item, PortletSession.APPLICATION_SCOPE);
 	}
+	
 }

@@ -156,7 +156,7 @@
 		<column name="portfolioId" type="long"/>
 		<column name="purchaseDate" type="Date"/>
 		<column name="purchasePrice" type="double"/>
-		<column name="purchaseQty" type="int"/>
+		<column name="purchaseQty" type="double"/>
 		<column name="purchasedFx" type="double"/>
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
@@ -187,7 +187,7 @@
 		<column name="industry_sector" type="String"/>
 		<column name="industry_group" type="String"/>
 		<column name="industry_subgroup" type="String"/>
-		<column name="purchaseQty" type="int"/>
+		<column name="purchaseQty" type="double"/>
 		<column name="current_price" type="double"/>
 		<column name="purchasedFx" type="double"/>
 		<column name="current_fx" type="double"/>
