@@ -126,11 +126,6 @@
 	            plotBorderWidth: null,
 	            plotShadow: false,
 	        },
-	        colors: [
-			   '#A8A8A8', 
-			   '#505050', 
-			   '#202020', 
-			],
 	        title: {
 	            text: title
 	        },
@@ -139,7 +134,7 @@
 	        },
 	        plotOptions: {
 	            pie: {
-	            	size: "75%",
+	            	size: "65%",
 	                allowPointSelect: true,
 	                cursor: 'pointer',
 	                dataLabels: {
