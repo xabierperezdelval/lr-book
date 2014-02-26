@@ -29,7 +29,6 @@
 			sync: true,
 			on: {
 				success: function() {
-					Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
 					Liferay.Portlet.refresh('#p_p_id_report_WAR_fingenceportlet_');
 				}
 			}
