@@ -1,5 +1,3 @@
-<liferay-ui:header title="summary-of-portfolios" />
-
 <div id="portfolioContainer"></div>
 
 <%

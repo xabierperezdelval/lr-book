@@ -6,7 +6,6 @@
 	String[] groupByTitle = {"Risk Country", "Currency", "Security Type", "Sector"};	
 %>
 
-
 <aui:row>
 	<aui:column columnWidth="50">
 		<div id="chartContainer"></div>

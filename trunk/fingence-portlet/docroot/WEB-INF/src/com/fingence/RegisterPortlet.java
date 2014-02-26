@@ -13,7 +13,6 @@ import javax.portlet.ResourceResponse;
 import com.fingence.slayer.service.BridgeServiceUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -36,7 +35,6 @@ public class RegisterPortlet extends MVCPortlet {
 		long countryId = ParamUtil.getLong(actionRequest, "countryId");
 		
 		long creatorUserId = PortalUtil.getUserId(actionRequest);
-		
 		
 		User user = BridgeServiceUtil.addUser(creatorUserId, firstName,
 				lastName, emailAddress, male, countryId, jobTitle);

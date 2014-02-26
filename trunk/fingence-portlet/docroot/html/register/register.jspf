@@ -1,13 +1,15 @@
 <portlet:renderURL var="renderDasboardURL">
 	<portlet:param name="jspPage" value="/html/report/view.jsp" />
 </portlet:renderURL>
-<%  String portletId = "register_WAR_fingenceportlet";
+
+<%  
+	String portletId = "register_WAR_fingenceportlet";
     long targetPlId = PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), "register", locale);
     PortletURL registerURL = PortletURLFactoryUtil.create(renderRequest, portletId, targetPlId, PortletRequest.ACTION_PHASE);
     registerURL.setParameter(ActionRequest.ACTION_NAME , "register");
     registerURL.setWindowState(WindowState.NORMAL);
     String portletNamespace = StringPool.UNDERLINE + portletId + StringPool.UNDERLINE;
-   %>
+%>
 
 <aui:form action="<%= registerURL.toString() %>" method="post" portletNamespace="<%= portletNamespace %>">
 
@@ -89,16 +91,8 @@
 				</c:otherwise>
 			</c:choose>
 		</aui:column>
-	</aui:row>	
-
-	<%-- <c:choose>
-		<c:when test="<%= themeDisplay.isSignedIn() %>">
-			<aui:button value="create" onClick="javascript:addUser();"/>
-		</c:when>
-		<c:otherwise>
-			<aui:button type="submit" />
-		</c:otherwise>
-	</c:choose> --%>
+	</aui:row>
+	
 	<aui:button type="submit" />
 </aui:form>
 
@@ -131,21 +125,4 @@
 		
 		return notExists;
 	}
-	
-<%-- 	<c:if test="<%= themeDisplay.isSignedIn() %>">
-		function addUser(){
-	        AUI().io.request('<%= registerURL %>',{
-	
-	            sync: true,
-	            method: 'POST',
-	            form: { id: '<portlet:namespace/>fm' },
-	            on: {
-	                success: function() {
-	                    Liferay.Util.getWindow('_portfolio_WAR_fingenceportlet_addUserPopup').destroy();
-	                    Liferay.Util.getOpener()._portfolio_WAR_fingenceportlet_reloadPortlet();
-	                }
-	              }
-	         });
-	    }	
-	</c:if> --%>
 </aui:script>
