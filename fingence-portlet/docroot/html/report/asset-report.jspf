@@ -75,14 +75,14 @@
 			 			key: 'currentMarketValue', 
 			 			label: 'Current Value',
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value);
+			 				obj.value = showInMillions(obj.value);
 			 			}			 			
 			 		},
 			 		{
 			 			key: 'usdInvested', 
 			 			label: 'USD Invested',
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value);
+			 				obj.value = showInMillions(obj.value);
 			 			},
 			 			className: (title !='Currency')?'hideColumn':''
 			 		},
@@ -126,6 +126,11 @@
 	            plotBorderWidth: null,
 	            plotShadow: false,
 	        },
+	        colors: [
+			   '#A8A8A8', 
+			   '#505050', 
+			   '#202020', 
+			],
 	        title: {
 	            text: title
 	        },
@@ -134,6 +139,7 @@
 	        },
 	        plotOptions: {
 	            pie: {
+	            	size: "75%",
 	                allowPointSelect: true,
 	                cursor: 'pointer',
 	                dataLabels: {
@@ -154,7 +160,9 @@
 	                }
               	}
 	        }]
-	    });	    
+	    });
+    
+	    
 	}
 	
 	function sliceChart(sliceBy){
