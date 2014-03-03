@@ -120,6 +120,7 @@
 		<column name="trial" type="boolean"/>
 		<column name="primary" type="boolean"/>
 		<column name="social" type="boolean"/>
+		<column name="baseCurrency" type="String"/>
 		
 		<column name="createDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
@@ -191,6 +192,7 @@
 		<column name="current_price" type="double"/>
 		<column name="purchasedFx" type="double"/>
 		<column name="current_fx" type="double"/>
+		<column name="baseCurrency" type="String"/>
 		<column name="security_des" type="String"/>
 		<column name="security_typ" type="String"/>
 		<column name="security_typ2" type="String"/>

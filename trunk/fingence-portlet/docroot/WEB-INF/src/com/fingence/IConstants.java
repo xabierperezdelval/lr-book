@@ -49,4 +49,5 @@ public interface IConstants {
 	
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
+	String THEME_ICON_VIEW = "/apple/view-details.png";
 }

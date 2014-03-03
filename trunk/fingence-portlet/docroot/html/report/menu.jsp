@@ -14,8 +14,8 @@
 	}
 %>
 </ul>
-
 <hr/>
+
 
 <aui:script>
 	function triggerRequest(item) {

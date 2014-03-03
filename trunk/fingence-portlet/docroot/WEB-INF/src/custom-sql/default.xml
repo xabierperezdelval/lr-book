@@ -5,7 +5,7 @@
 			SELECT
 				c.itemId,
 				b.portfolioId,
-				a.assetId, 
+				a.assetId,
 				a.security_ticker, 
 				a.id_isin,
 				a.name,
@@ -15,9 +15,10 @@
 				a.current_price,
 				c.purchasedFx,
 				e.conversion as current_fx,
+				b.baseCurrency,
 				a.security_des,
 				a.security_typ,
-				a.security_typ2,	
+				a.security_typ2,
 				a.parent_comp_name,
 				c.purchaseQty,
 				a.security_class,
@@ -26,19 +27,19 @@
 				a.country_of_risk as countryOfRisk,
 				a.country_of_risk as countryOfRiskName,
 				a.currency_,
-				(c.purchasePrice * c.purchaseQty) as purchasedMarketValue,
+				(c.purchasePrice * c.purchaseQty * c.purchasedFx) as purchasedMarketValue,
 				(a.current_price * c.purchaseQty) as currentMarketValue,
 				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty) as gain_loss,
 				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty)/(c.purchasePrice * c.purchaseQty) * 100 as gain_loss_percent
 			FROM 
-				fing_Asset a, 
-				fing_Portfolio b, 
-				fing_PortfolioItem c, 
+				fing_Asset a,
+				fing_Portfolio b,
+				fing_PortfolioItem c,
 				Country d,
 				fing_CountryExt e
 			WHERE 
 				b.portfolioId = ?
-				and a.assetId = c.assetId 
+				and a.assetId = c.assetId
 				and b.portfolioId = c.portfolioId 
 				and a.country = d.countryId
 				and d.countryId = e.countryId

@@ -72,7 +72,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	public void updatePortfolio(long portfolioId, long userId,
 			String portfolioName, long investorId, long institutionId,
 			long wealthAdvisorId, boolean trial, long relationshipManagerId,
-			boolean social, File excelFile) {
+			boolean social, String baseCurrency, File excelFile) {
 		
 		Portfolio portfolio = getPortfolioObj(portfolioId, userId);
 		
@@ -85,6 +85,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		portfolio.setTrial(trial);
 		portfolio.setPrimary(isFirstPortfolio(investorId));
 		portfolio.setSocial(social);
+		portfolio.setBaseCurrency(baseCurrency);
 		
 		try {
 			portfolio = updatePortfolio(portfolio);

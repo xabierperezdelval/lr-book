@@ -138,11 +138,6 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-			jsonObject.put("manager", bridgeService.getUserName(portfolio
-					.getRelationshipManagerId()));
-			jsonObject.put("portfolioId", portfolioId);
-			jsonObject.put("portfolioName", portfolio.getPortfolioName());
-
 			if (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
 				jsonObject.put("investorOrAdvisor",
 						bridgeService.getUserName(portfolio.getInvestorId()));
@@ -158,9 +153,9 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 					try {
 						asset = assetLocalService.getAsset(portfolioItem
 								.getAssetId());
-						portfolioPurchasedPrice += portfolioItem
-								.getPurchasePrice();
-						portfolioCurrentPrice += asset.getCurrent_price();
+						portfolioPurchasedPrice += (portfolioItem
+								.getPurchasePrice() * portfolioItem.getPurchaseQty());
+						portfolioCurrentPrice += (asset.getCurrent_price() + portfolioItem.getPurchaseQty() );
 					} catch (PortalException e) {
 						e.printStackTrace();
 					}
@@ -170,11 +165,17 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			}
 			totalPurchasedValue += portfolioPurchasedPrice;
 			totalCurrentValue += portfolioCurrentPrice;
-
-			jsonObject.put("purchasePrice", portfolioPurchasedPrice);
-			jsonObject.put("currentPrice", portfolioCurrentPrice);
-			jsonObject.put("performance", 0d);
-
+			
+			if(totalPurchasedValue>0){
+				jsonObject.put("manager", bridgeService.getUserName(portfolio
+						.getRelationshipManagerId()));
+				jsonObject.put("portfolioId", portfolioId);
+				jsonObject.put("portfolioName", portfolio.getPortfolioName());
+				jsonObject.put("purchasePrice", portfolioPurchasedPrice);
+				jsonObject.put("currentPrice", portfolioCurrentPrice);
+				jsonObject.put("performance", 0d);
+			}
+			
 			jsonArray.put(jsonObject);
 		}
 		

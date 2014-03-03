@@ -17,9 +17,20 @@
 	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
 	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
+	String baseCurrency = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency();
+	
+	if(Validator.isNull(baseCurrency)){
+		baseCurrency = "USD";
+	}
 %>
 
 <liferay-ui:header title="<%= TextFormatter.format(layoutName, TextFormatter.J) %>" />
+
+<c:if test="<%= portfolioCount == 0 %>">
+	<%
+		layoutName = IConstants.ADD_PORTFOLIO;
+	%>
+</c:if>
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
@@ -107,7 +118,6 @@
 </c:choose>
 
 <aui:script>
-
 	<c:if test="<%= (portfolioCount > 1) %>">
 		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
@@ -148,17 +158,19 @@
 		});
 	</c:if>
 
-	function showInMillions(figure){
-		console.info("Figure: " + figure);
-		return accounting.formatMoney((figure / 1000000)) + ' Mil';
+	function showInMillions(figure, baseCurrency){
+		console.info("baseCurrency : " + baseCurrency);
+	
+		//return accounting.formatMoney((figure)) + ' Million';
+		return accounting.formatMoney(figure, { symbol: baseCurrency,  format: "%v %s" });
 	}
 	
-	function display(number, format) {
+	function display(number, format, baseCurrency) {
 	
 		var text = '';
 		
 		if (format == 'amount') {
-			text = showInMillions(Math.abs(number));
+			text = showInMillions(Math.abs(number), baseCurrency);
 		} else {
 			text = (Math.abs(number)).toFixed(2) + '%';
 		}

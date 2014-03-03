@@ -1,5 +1,19 @@
+<%@page import="com.fingence.slayer.service.AssetLocalServiceUtil"%>
+<%@page import="com.fingence.util.CellUtil"%>
+<%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil"%>
+<%@page import="com.fingence.slayer.service.CountryExtLocalServiceUtil"%>
+<%@page import="com.fingence.slayer.model.CountryExt"%>
+<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
+<%@page import="com.fingence.slayer.service.impl.PortfolioServiceImpl"%>
+<%@page import="com.fingence.slayer.service.PortfolioLocalServiceUtil"%>
+
 <portlet:actionURL name="savePortfolio" var="savePortfolioURL"
 	windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
+	
+<portlet:renderURL var="renderDasboardURL">
+	<portlet:param name="jspPage" value="/html/report/view.jsp" />
+</portlet:renderURL>
 
 <%
 	long _portfolioId = ParamUtil.getLong(request, "portfolioId");
@@ -9,11 +23,12 @@
 	}
 %>
 
-<aui:form action="<%= savePortfolioURL %>" enctype="multipart/form-data">
+<aui:form cssClass="popupForm" action="<%= savePortfolioURL %>" enctype="multipart/form-data">
 	<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
+	<aui:input type="hidden" name="redirectURL" value="<%= renderDasboardURL.toString() %>"/>
 	<aui:row>
 		<aui:column>
-			<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"/>
+			<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30"></aui:input>
 		</aui:column>
 		
 		<aui:column cssClass="display-down">
@@ -49,7 +64,7 @@
 	
 	<aui:row>
 		<aui:column>
-			<aui:select name="relationshipManagerId" label="relationship-manager" required="true" showEmptyOption="true">
+			<aui:select name="relationshipManagerId" label="relationship-manager" showEmptyOption="true">
 				<%
 					List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_REL_MANAGER);
 					for (User _user: users) {
@@ -73,28 +88,59 @@
 		</aui:column>		
 	</aui:row>
 	
-	<c:choose>
+	<aui:row>
+		<aui:column>
+			<aui:select name="base-currency" label="base-currency" required="true" showEmptyOption="true">
+				<%
+					List<String> currencies = CellUtil.getCurrencies();
+					for (String currency: currencies) {
+				%>
+						<aui:option value="<%= currency %>" label="<%= currency %>"  selected="<%= (currency.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/>
+				<% 
+					}
+				%>
+			</aui:select>
+		</aui:column>
+		<aui:column>
+			<c:choose>
 		<c:when test="<%= (_portfolioId == 0l) %>">
-			<aui:input type="file" name="excelFile" label="portfolio-assets"/>
+			<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
 			<aui:button type="submit" />
 		</c:when>
 		<c:otherwise>
 			<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
 		</c:otherwise>
 	</c:choose>
+		</aui:column>
+	</aui:row>
+	
+	
 </aui:form>
 
 <aui:script>
 	function updateInfo() {
-		AUI().io.request('<%= savePortfolioURL %>',{
-			method: 'POST',
-			form: { id: '<portlet:namespace/>fm' },
-			on: {
-				success: function() {
-					Liferay.Util.getWindow('<portlet:namespace/>editPortfolioPopup').destroy();
-                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
-    			}
-  			}
- 		});
+	
+		var portfolioName = document.getElementById('<portlet:namespace/>portfolioName').value;
+		console.info("Portfolio Name: " + portfolioName);
+		var investorId = document.getElementById('<portlet:namespace/>investorId').value;
+		var wealthAdvisorId = document.getElementById('<portlet:namespace/>wealthAdvisorId').value;
+		var relationshipManagerId = document.getElementById('<portlet:namespace/>relationshipManagerId').value;
+		var institutionId = document.getElementById('<portlet:namespace/>institutionId').value;
+		
+		if(!(portfolioName == "" || investorId == "" || wealthAdvisorId =="" || relationshipManagerId == "" || institutionId == "")){
+		
+		
+			AUI().io.request('<%= savePortfolioURL %>',{
+				method: 'POST',
+				form: { id: '<portlet:namespace/>fm' },
+				on: {
+					success: function() {
+						Liferay.Util.getWindow('<portlet:namespace/>editPortfolioPopup').destroy();
+	                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
+	    			}
+	  			}
+	 		});
+		}
+		
 	}
 </aui:script >
