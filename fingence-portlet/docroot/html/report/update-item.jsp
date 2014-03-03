@@ -4,6 +4,10 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 
 <portlet:actionURL name="updatePortfolioItem" var="updateItemURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
+
+<portlet:renderURL var="renderDasboardURL">
+	<portlet:param name="jspPage" value="/html/report/details.jsp" />
+</portlet:renderURL>
 <%
 	long itemId = ParamUtil.getLong(request, "portfolioItemId");
 	long portfolioId = ParamUtil.getLong(request, "portfolioId");
@@ -20,11 +24,12 @@
 	}
 %>
 
-<aui:form>
+<aui:form  inlineLabel="true" cssClass="popupForm">
 	<aui:row>
 		<aui:column>
 			<aui:input name="isinId" value="<%=asset.getId_isin() %>" required="true"/>
 			<aui:input name="itemId" type="hidden" value="<%= itemId %>"/>
+			<aui:input name="redirectURL" type="hidden" value="<%= renderDasboardURL %>"/>
 			<aui:input name="portfolioId" type="hidden" value="<%= portfolioId %>"/>
 		</aui:column>
 		<aui:column>
@@ -49,30 +54,49 @@
 			<aui:input name="purchaseQty" value="<%=portfolioItem.getPurchaseQty() %>" required="true"/>
 		</aui:column>
 		<aui:column>
+			<aui:input name="purchasedFx" value="<%=portfolioItem.getPurchasedFx() %>" required="true"/>
+		</aui:column>
+	</aui:row>
+	<aui:row>
+		<aui:column>
 			<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>
 		</aui:column>
 	</aui:row>
 </aui:form>
 
 <aui:script>
-$(function() {
-	$( "#<portlet:namespace />datepicker" ).datepicker({
-		changeMonth: true,
-		changeYear: true
+	$(function() {
+		$( "#<portlet:namespace />datepicker" ).datepicker({
+			changeMonth: true,
+			changeYear: true
+		});
 	});
-});
 
     function saveItem(){
-        AUI().io.request('<%= updateItemURL %>',{
-			sync: true,
-			method: 'POST',
-			form: { id: '<portlet:namespace/>fm' },
-			on: {
-				success: function() {
-					Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
-                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
-    			}
-  			}
- 		});          
+    	var isinId = document.getElementById('<portlet:namespace/>isinId').value;
+		var ticker = document.getElementById('<portlet:namespace/>ticker').value;
+		var purchasePrice = document.getElementById('<portlet:namespace/>purchasePrice').value;
+		var datepicker = document.getElementById('<portlet:namespace/>datepicker').value;
+		var purchaseQty = document.getElementById('<portlet:namespace/>purchaseQty').value;
+		var purchasedFx = document.getElementById('<portlet:namespace/>purchasedFx').value;
+		
+		if(!(isinId == "" || ticker == "" || purchasePrice =="" || datepicker == "" || purchaseQty == "" || purchasedFx =="")){
+		
+			document.getElementById('<portlet:namespace/>purchasePrice').value = parseFloat(purchasePrice).toFixed(2);
+			document.getElementById('<portlet:namespace/>purchaseQty').value = parseFloat(purchaseQty).toFixed(2);
+			document.getElementById('<portlet:namespace/>purchasedFx').value = parseFloat(purchasedFx).toFixed(2);
+		
+			AUI().io.request('<%= updateItemURL %>',{
+				sync: true,
+				method: 'POST',
+				form: { id: '<portlet:namespace/>fm' },
+				on: {
+					success: function() {
+						Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
+	                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
+	    			}
+	  			}
+	 		}); 
+ 		}         
     }
 </aui:script>

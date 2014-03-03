@@ -14,10 +14,17 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
@@ -49,8 +56,33 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
 		
+		Map<String, Double> fxRates = getFxRates();
+		
 		for (MyResult myResult: myResults) {
 			
+			double updatedCurrentValueinUSD = myResult.getCurrentMarketValue()
+					+ ((myResult.getCurrent_fx() - myResult.getPurchasedFx()) * myResult.getPurchaseQty());
+			
+			if(!myResult.getCurrency_().equals("USD")){
+				//Updated Purchased and Curent Value in USD
+				if (!myResult.getBaseCurrency().equalsIgnoreCase("USD")) {
+					
+					myResult = getValueInBaseCurrency(myResult, fxRates, updatedCurrentValueinUSD);
+				} else {
+					try{
+						double updatedCurrentMarketValue = myResult.getCurrentMarketValue() * myResult.getCurrent_fx();
+						
+						double gain_loss = updatedCurrentMarketValue - myResult.getPurchasedMarketValue();
+						
+						myResult.setCurrentMarketValue(updatedCurrentMarketValue);
+						myResult.setGain_loss(gain_loss);
+						myResult.setGain_loss_percent(gain_loss/myResult.getPurchasedMarketValue() * 100);
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+				
+			}
 			long countryOfRisk = myResult.getCountryOfRisk();
 			
 			if (countryOfRisk > 0l) {
@@ -68,7 +100,55 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				myResult.setCountryOfRiskName("Un-Specified");
 			}
 		}
-		
 		return myResults;
+	}
+	private MyResult getValueInBaseCurrency(MyResult myResult, Map<String, Double> fxRates, double updatedCurrentValueinUSD){
+		
+		if (!myResult.getBaseCurrency().equalsIgnoreCase("USD")) {
+			if(Validator.isNotNull(myResult.getBaseCurrency())){
+				double conversionRate = fxRates.get(myResult.getBaseCurrency());
+				double purchasedValueinBaseCurrency = myResult.getPurchasedMarketValue() * (1/conversionRate);
+				double currentValueinBaseCurrency = updatedCurrentValueinUSD * (1/conversionRate);
+				double gainLoss = currentValueinBaseCurrency - purchasedValueinBaseCurrency;
+				myResult.setPurchasedMarketValue(purchasedValueinBaseCurrency);
+				myResult.setCurrentMarketValue(currentValueinBaseCurrency);
+				myResult.setGain_loss(gainLoss);
+				if(purchasedValueinBaseCurrency > 0){
+					myResult.setGain_loss_percent(gainLoss/purchasedValueinBaseCurrency * 100);
+				} else {
+					myResult.setGain_loss_percent(0);
+				}
+				
+			}
+		}
+		return myResult;
+	}
+	
+	private Map<String, Double> getFxRates() {
+		
+		Map<String, Double> fxRates = new HashMap<String, Double>();
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			Statement stmt = conn.createStatement();
+			
+			String sql = "SELECT distinct currency_, conversion FROM fing_CountryExt where currency_ != 'USD'";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next()) {
+				String currency = rs.getString(1);
+				double fxRate = rs.getDouble(2);
+				
+				fxRates.put(currency, fxRate);
+			}
+			
+		} catch (SQLException sqle) {
+			
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return fxRates;
 	}
 }

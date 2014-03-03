@@ -4,6 +4,10 @@
 	long portfolioId = ParamUtil.getLong(renderRequest, "portfolioId");
 	Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(portfolioId);
 	String backURL = ParamUtil.getString(request, "backURL");
+	String managerName = BridgeServiceUtil.getUserName(portfolio.getRelationshipManagerId());
+	
+	System.out.println("portfolioId : " + portfolioId);
+	System.out.println("portfolio : " + portfolio);
 %>
 
 <liferay-ui:header backLabel="back-to-list"
@@ -19,7 +23,7 @@
 	
 	<aui:row>
 		<aui:column columnWidth="25"><%= BridgeServiceUtil.getUserName(portfolio.getInvestorId()) %></aui:column>
-		<aui:column columnWidth="25"><%= BridgeServiceUtil.getUserName(portfolio.getRelationshipManagerId()) %></aui:column>
+		<aui:column columnWidth="25"><%= (Validator.isNull(managerName) ? "Not Assigned" : managerName) %></aui:column>
 		<aui:column columnWidth="25"><%= BridgeServiceUtil.getUserName(portfolio.getWealthAdvisorId()) %></aui:column>
 		<aui:column columnWidth="25"><%= BridgeServiceUtil.getOrganizationName(portfolio.getInstitutionId())  %></aui:column>
 	</aui:row>	
@@ -42,7 +46,7 @@
 					
 				function(data) {
 					var columns = [
-                    	{key: 'name', label: 'Name'},
+                    	{key: 'name', label: 'Security Name'},
                         {key: 'security_ticker', label: 'TICKER'},
                         {
                         	key: 'purchasedMarketValue', 
@@ -119,7 +123,7 @@
                     resizable: false           
                	},
                 id: '<portlet:namespace/>editPortfolioItemPopup',
-                title: 'Add/Edit Portfolio Item',
+                title: 'Edit Portfolio Item',
                	uri: ajaxURL
            	}); 
            	Liferay.provide(

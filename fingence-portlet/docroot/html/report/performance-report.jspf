@@ -19,22 +19,28 @@
   			function(data) {
 				
 				//1. Top Gainers Grid
-				showDataTable(data, 'desc','#topGainers', 'Gain');
+				showDataTable(data, 'desc','#topGainers', 'Gain', "<%=baseCurrency %>");
 				
 				//2.Top Losers Grid
-				showDataTable(data, 'asc','#topLosers', 'Loss');
+				showDataTable(data, 'asc','#topLosers', 'Loss', "<%=baseCurrency %>");
   			}
 		);
 	});
 		
-	function showDataTable(data, sortOrder, divId, title){
+	function showDataTable(data, sortOrder, divId, title, baseCurrency){
 		var sorted = _.sortBy(data,'gain_loss');
+		
+		var totalInvestment = getAssetItemWeightage(data);
 		
 		if (sortOrder == 'desc') {
 			sorted = sorted.reverse();
+			for (var i=0; i<sorted.length; i++) {
+				var item = sorted[i];
+				if (item.gain_loss < 0) {
+					sorted.splice(i);
+				}
+			}
 		} 
-		
-		sorted = sorted.slice(0,7);
 		
 		if (sortOrder == 'asc') {
 			for (var i=0; i<sorted.length; i++) {
@@ -45,34 +51,61 @@
 			}
 		}
 		
-		YUI().use(
-			'aui-datatable',
-		  	function(Y) {
-		    	var columns = [
-		    		{key: 'name', label: 'Asset Name'},
-			 		{
-			 			key: 'gain_loss',
-			 			label: title,
-			 			formatter: function(obj) {
-			 				obj.value = display(obj.value, 'amount');
-			 			},
-			 			allowHTML: true
-			 		},
-					{
-						key: 'gain_loss_percent',
-						label: title + '%' ,
-						formatter: function(obj) {
-							obj.value = display(obj.value, 'percent');
+		sorted = sorted.slice(0,7);
+		
+		if(sorted.length > 0){
+		
+			YUI().use(
+				'aui-datatable',
+			  	function(Y) {
+			    	var columns = [
+			    		{key: 'name', label: 'Asset Name'},
+				 		{
+				 			key: 'gain_loss',
+				 			label: title,
+				 			formatter: function(obj) {
+				 				obj.value = display(obj.value, 'amount', baseCurrency);
+				 			},
+				 			allowHTML: true
+				 		},
+						{
+							key: 'gain_loss_percent',
+							label: title + '%' ,
+							formatter: function(obj) {
+								obj.value = display(obj.value, 'percent', baseCurrency);
+							},
+				 			allowHTML: true
 						},
-			 			allowHTML: true
-					}				 		
-		   	 	];
-		   
-		   		new Y.DataTable.Base({
-					columnset: columns,
-			    	recordset: sorted
-				}).render(divId);
-		  	}
-		);
+						{
+							key: 'gain_loss',
+							label: 'Weightage(%)' ,
+							formatter: function(obj) {
+								obj.value = display((obj.value/totalInvestment) * 100, 'percent', baseCurrency);
+							},
+				 			allowHTML: true
+						}				 		
+			   	 	];
+			   
+			   		new Y.DataTable.Base({
+						columnset: columns,
+				    	recordset: sorted
+					}).render(divId);
+			  	}
+			);
+		} else{
+			//document.getElementById(divId).innerHTML = "Currently there is no data to be displayed";
+		}
 	}
+	
+	function getAssetItemWeightage(data){
+		var total = 0;
+		_.each(data, function(item){
+			console.info("Item Id: " + item.itemId)
+			console.info("Gain_Loss for " + item.portfolioId + " is: " + item.gain_loss);
+			total += item.gain_loss;
+		});
+		console.info("Total Gain_Loss is: " + total);
+		return total;
+	}
+	
 </aui:script>

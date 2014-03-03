@@ -28,13 +28,13 @@
   				var netWorth = getTotalNetWorth(data);
   			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(showInMillions(netWorth));
+				A.one('#<portlet:namespace/>networthLabel').text(showInMillions(netWorth, "<%=baseCurrency %>"));
 				
 				//2. Pie Chart - By Currency
-				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
+				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>', "<%= baseCurrency %>");
 				
 				//4. Group By currency with Weightage.
-				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
+				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', "<%= baseCurrency %>", netWorth);
   			}
 		);
 	});
@@ -49,6 +49,7 @@
 				totalCurrentValue += item.currentMarketValue;
 				totalUsdInvested += (item.currentMarketValue * item.current_fx);
 			});
+			console.info("Key : " + key);
 			resultantObj._key = key;
 			resultantObj.currentMarketValue = totalCurrentValue;
 			resultantObj.usdInvested = totalUsdInvested;
@@ -59,7 +60,7 @@
 		return resultantDataArray;
 	}
 	
-	function showWeightage(data, groupBy, divId, title, netWorth) {
+	function showWeightage(data, groupBy, divId, title, baseCurrency, netWorth) {
 		var jsonArr = getDataGroupedBy(data, groupBy, netWorth);
 		YUI().use(
 			'aui-datatable',
@@ -74,14 +75,14 @@
 			 			key: 'currentMarketValue', 
 			 			label: 'Current Value',
 			 			formatter: function(obj) {
-			 				obj.value = showInMillions(obj.value);
+			 				obj.value = showInMillions(obj.value, baseCurrency);
 			 			}			 			
 			 		},
 			 		{
 			 			key: 'usdInvested', 
 			 			label: 'USD Invested',
 			 			formatter: function(obj) {
-			 				obj.value = showInMillions(obj.value);
+			 				obj.value = showInMillions(obj.value, baseCurrency);
 			 			},
 			 			className: (title !='Currency')?'hideColumn':''
 			 		},
@@ -115,7 +116,7 @@
 		return dataArray;	
 	}	
 	
-	function renderChart(data, groupBy, divId, title){
+	function renderChart(data, groupBy, divId, title, baseCurrency){
 		
 		var dataArray = getModifiedArray(data, groupBy);
 				
