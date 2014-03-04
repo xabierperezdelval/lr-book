@@ -66,7 +66,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			if(!myResult.getCurrency_().equals("USD")){
 				//Updated Purchased and Curent Value in USD
 				if (!myResult.getBaseCurrency().equalsIgnoreCase("USD")) {
-					
 					myResult = getValueInBaseCurrency(myResult, fxRates, updatedCurrentValueinUSD);
 				} else {
 					try{
@@ -81,8 +80,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 						e.printStackTrace();
 					}
 				}
-				
 			}
+			
 			long countryOfRisk = myResult.getCountryOfRisk();
 			
 			if (countryOfRisk > 0l) {
