@@ -121,7 +121,6 @@
 	function updateInfo() {
 	
 		var portfolioName = document.getElementById('<portlet:namespace/>portfolioName').value;
-		console.info("Portfolio Name: " + portfolioName);
 		var investorId = document.getElementById('<portlet:namespace/>investorId').value;
 		var wealthAdvisorId = document.getElementById('<portlet:namespace/>wealthAdvisorId').value;
 		var relationshipManagerId = document.getElementById('<portlet:namespace/>relationshipManagerId').value;
