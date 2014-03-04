@@ -159,9 +159,6 @@
 	</c:if>
 
 	function showInMillions(figure, baseCurrency){
-		console.info("baseCurrency : " + baseCurrency);
-	
-		//return accounting.formatMoney((figure)) + ' Million';
 		return accounting.formatMoney(figure, { symbol: baseCurrency,  format: "%v %s" });
 	}
 	

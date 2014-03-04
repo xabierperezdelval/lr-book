@@ -8,6 +8,7 @@
 <%@page import="com.fingence.slayer.model.impl.PortfolioImpl"%>
 <%@page import="com.fingence.slayer.model.impl.AssetImpl"%>
 <%@page import="com.fingence.slayer.model.Asset"%>
+<%@page import="com.fingence.util.CellUtil"%>
 
 <%@page import="com.fingence.slayer.model.Portfolio"%>
 <%@page import="com.fingence.slayer.service.AssetLocalServiceUtil"%>

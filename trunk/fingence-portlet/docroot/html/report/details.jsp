@@ -5,9 +5,6 @@
 	Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(portfolioId);
 	String backURL = ParamUtil.getString(request, "backURL");
 	String managerName = BridgeServiceUtil.getUserName(portfolio.getRelationshipManagerId());
-	
-	System.out.println("portfolioId : " + portfolioId);
-	System.out.println("portfolio : " + portfolio);
 %>
 
 <liferay-ui:header backLabel="back-to-list"

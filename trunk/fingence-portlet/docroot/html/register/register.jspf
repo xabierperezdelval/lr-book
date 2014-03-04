@@ -15,12 +15,12 @@
 
 	<aui:row>
 		<aui:column>
-			<aui:input name="firstName" required="true" autoFocus="true"/>
+			<aui:input name="firstName" required="true" autoFocus="true" maxLength="75"/>
 			<aui:input type="hidden" name="redirectURL" value="<%= renderDasboardURL.toString() %>"/>
 		</aui:column>
 		
 		<aui:column>
-			<aui:input name="lastName" />
+			<aui:input name="lastName"   maxLength="75"/>
 		</aui:column>
 	</aui:row>
 	

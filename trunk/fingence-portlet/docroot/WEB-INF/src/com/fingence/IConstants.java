@@ -8,7 +8,7 @@ public interface IConstants {
 	
 	String ROLE_RELATIONSHIP_MANAGER = "Relationship Manager";
 
-	String PAGE_REPORTS_HOME = "Dashboard";
+	String PAGE_REPORTS_HOME = "Summary";
 	String PAGE_ASSET_REPORT = "Asset Report";
 	String PAGE_FIXED_INCOME = "Fixed Income";
 	String PAGE_RISK_REPORT = "Risk Report";
@@ -22,9 +22,9 @@ public interface IConstants {
 	String[] REPORT_MENU_ITEMS = {
 			PAGE_REPORTS_HOME,
 			PAGE_ASSET_REPORT,
+			PAGE_PERFORMANCE,
 			PAGE_FIXED_INCOME,
 			PAGE_RISK_REPORT,
-			PAGE_PERFORMANCE,
 			PAGE_VIOLATIONS,
 			ADD_PORTFOLIO,
 			ADD_USER

@@ -59,6 +59,28 @@
 	</aui:row>
 	<aui:row>
 		<aui:column>
+		<c:choose>
+			<c:when test="<%= itemId > 0 %>">
+				<aui:input name="currency-type" value="<%= asset.getCurrency() %>" required="true" readonly="true" />
+			</c:when>
+			<c:otherwise>
+				<aui:select name="currency-type" label="Currency Type" required="true" showEmptyOption="true">
+				<%
+					List<String> currencies = CellUtil.getCurrencies();
+					for (String currency: currencies) {
+				%>
+						<aui:option value="<%= currency %>" label="<%= currency  %>"  selected="<%= (currency.equalsIgnoreCase(asset.getCurrency())) %>"/>
+				<% 
+					}
+				%>
+			</aui:select>
+			</c:otherwise>
+		</c:choose>
+			
+		</aui:column>
+	</aui:row>
+	<aui:row>
+		<aui:column>
 			<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>
 		</aui:column>
 	</aui:row>
