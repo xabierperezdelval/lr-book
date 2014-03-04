@@ -100,11 +100,8 @@
 	function getAssetItemWeightage(data){
 		var total = 0;
 		_.each(data, function(item){
-			console.info("Item Id: " + item.itemId)
-			console.info("Gain_Loss for " + item.portfolioId + " is: " + item.gain_loss);
 			total += item.gain_loss;
 		});
-		console.info("Total Gain_Loss is: " + total);
 		return total;
 	}
 	
