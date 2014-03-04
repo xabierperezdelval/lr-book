@@ -16,21 +16,19 @@
 	
 	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
 	
+	if (portfolioCount == 0 && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR)) {
+		layoutName = IConstants.ADD_PORTFOLIO;
+	}
+	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 	String baseCurrency = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency();
 	
-	if(Validator.isNull(baseCurrency)){
+	if (Validator.isNull(baseCurrency)){
 		baseCurrency = "USD";
 	}
 %>
 
 <liferay-ui:header title="<%= TextFormatter.format(layoutName, TextFormatter.J) %>" />
-
-<c:if test="<%= portfolioCount == 0 %>">
-	<%
-		layoutName = IConstants.ADD_PORTFOLIO;
-	%>
-</c:if>
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
