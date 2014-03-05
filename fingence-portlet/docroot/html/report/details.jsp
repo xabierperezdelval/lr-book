@@ -25,9 +25,8 @@
 		<aui:column columnWidth="25"><%= BridgeServiceUtil.getOrganizationName(portfolio.getInstitutionId())  %></aui:column>
 	</aui:row>	
 </aui:fieldset>
-<br/>
-<aui:a href="javascript:void(0);" onClick="javasript:updateItem(0)" label="Add Asset"/>
-<hr/>
+
+<br/><aui:a href="javascript:void(0);" onClick="javasript:updateItem(0)" label="Add Asset"/><hr/>
 
 <div id="myDataTable"></div>
 
@@ -40,7 +39,6 @@
 				{
 					portfolioId : '<%= portfolioId %>'
 				},
-					
 				function(data) {
 					var columns = [
                     	{key: 'name', label: 'Security Name'},
@@ -49,21 +47,21 @@
                         	key: 'purchasedMarketValue', 
                         	label: 'Purchased Value',
                         	formatter: function(obj) {
-				 				obj.value = showInMillions(obj.value);
+				 				obj.value = accounting.formatMoney(obj.value);
 				 			}
                        	},
                         {
                         	key: 'currentMarketValue', 
                         	label: 'Current Value',
 	                        formatter: function(obj) {
-				 				obj.value = showInMillions(obj.value);
+				 				obj.value = accounting.formatMoney(obj.value);
 				 			}
 			 			},
                         {
                         	key: 'current_price', 
                         	label: 'Current Price',
                         	formatter: function(obj) {
-				 				obj.value = showInMillions(obj.value);
+				 				obj.value = accounting.formatMoney(obj.value);
 				 			}
                        	},
                         {
@@ -75,11 +73,10 @@
                        	},
                         {
                              key: 'itemId',
-                             label: 'Action',
+                             label: 'Actions',
                              formatter: '<a href="javascript:void(0);" onclick="javascript:updateItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:deleteItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>',
                              allowHTML: true
                          }
-                        
 					];	
 								 	
 					new Y.DataTable.Base({
@@ -105,17 +102,16 @@
         }
     }
     
- 	function updateItem(portfolioItemId) {  
+ 	function updateItem(portfolioItemId) {
+ 	
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('jspPage', '/html/report/update-item.jsp');
+		ajaxURL.setParameter('portfolioItemId', portfolioItemId);
+		ajaxURL.setParameter('portfolioId', '<%= portfolioId %>');
+		ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');	 
     
         AUI().use('aui-dialog', function(A) {
-        
-			var ajaxURL = Liferay.PortletURL.createRenderURL();
-			ajaxURL.setPortletId('report_WAR_fingenceportlet');
-			ajaxURL.setParameter('jspPage', '/html/report/update-item.jsp');
-			ajaxURL.setParameter('portfolioItemId', portfolioItemId);
-			ajaxURL.setParameter('portfolioId', '<%= portfolioId %>');
-			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
-			        
 			Liferay.Util.openWindow({
             	dialog: {
                 	centered: true,
@@ -130,11 +126,10 @@
                	uri: ajaxURL
            	}); 
            	Liferay.provide(
-                 	window, '<portlet:namespace/>reloadPortlet', function() {
-                        Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
-                    }
-                );   
-           	
+            	window, '<portlet:namespace/>reloadPortlet', function() {
+                	Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+                }
+            );
         });
     }   
 </aui:script>
