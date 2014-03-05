@@ -30,7 +30,13 @@ public class CellUtil {
 
 		double value = 0.0d;
 		
-		String cellValue = cell.toString();
+		String cellValue = StringPool.BLANK;
+		
+		try {
+			cellValue = cell.toString();
+		} catch (NullPointerException npe) {
+			
+		}
 		
 		if (Validator.isNotNull(cellValue) && !cellValue.trim().equalsIgnoreCase(StringPool.DASH)) {
 			try {
