@@ -25,6 +25,9 @@
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-css>
+			http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css
+		</footer-portlet-css>
 		<footer-portlet-javascript>
 			/js/accounting.min.js
 		</footer-portlet-javascript>
@@ -44,11 +47,8 @@
 			http://underscorejs.org/underscore-min.js
 		</footer-portlet-javascript>
 		<footer-portlet-javascript>	
-			http://code.jquery.com/ui/1.10.4/jquery-ui.js
+			http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js
 		</footer-portlet-javascript>
-		<footer-portlet-javascript>	
-			http://code.jquery.com/ui/1.10.4/jquery-ui.js
-		</footer-portlet-javascript>	
 		<css-class-wrapper>report-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
