@@ -1,14 +1,9 @@
 package com.fingence.util;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-import com.fingence.slayer.model.CountryExt;
-import com.fingence.slayer.service.CountryExtLocalServiceUtil;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -89,24 +84,5 @@ public class CellUtil {
 		}
 
 		return value;
-	}	
-	public static List<String> getCurrencies(){
-		
-		List<String> currencyList = new ArrayList<String>();
-		
-		List<CountryExt> countryExtLists = null;
-		try {
-			countryExtLists = CountryExtLocalServiceUtil.getCountryExts(0, CountryExtLocalServiceUtil.getCountryExtsCount());
-			for(CountryExt countryExt : countryExtLists){
-				String currency = countryExt.getCurrency();
-				if(!currencyList.contains(currency)){
-					currencyList.add(countryExt.getCurrency());
-				}	
-			}
-		} catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return currencyList;	
 	}
 }
