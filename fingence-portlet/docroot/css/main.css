@@ -1,4 +1,4 @@
-.register-portlet .help-inline {
+.register-portlet .help-inline, .report-portlet .help-inline {
     display: block;
     font-style: italic;
     color: maroon !important;
@@ -16,4 +16,8 @@
 
 .hideColumn{
 	display: none;
+}
+
+.aui .register-portlet .control-group, .aui .report-portlet .control-group {
+	margin-bottom: 12px;
 }
