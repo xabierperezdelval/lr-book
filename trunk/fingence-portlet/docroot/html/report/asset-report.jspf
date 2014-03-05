@@ -14,7 +14,7 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
-
+<hr/>
 <aui:row>
 	<aui:column columnWidth="100">
 		<div id="slicePortfolio"></div>
@@ -201,7 +201,7 @@
 	}
 	
 	function showPortfolioItems(data, allocationParam, sliceBy, divId){
-		
+	
 		var jsonArray = [];
 		_(_.groupBy(data, allocationParam)).map(function(itemList, key) {
 			
@@ -218,6 +218,11 @@
 				});
 			}
 		});	
+		
+		var divContent = document.getElementById('slicePortfolio');
+		if(divContent){
+			divContent.innerHTML = "";
+		}
 		
 		YUI().use(
 			'aui-datatable',

@@ -28,8 +28,6 @@
 	}
 %>
 
-<liferay-ui:header title="<%= TextFormatter.format(layoutName, TextFormatter.J) %>" />
-
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>

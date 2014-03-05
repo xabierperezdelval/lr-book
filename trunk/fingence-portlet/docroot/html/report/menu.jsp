@@ -1,7 +1,5 @@
 <%@ include file="/html/report/init.jsp" %>
 
-<liferay-ui:header title="Navigate"/>
-
 <ul>
 <%
 	for (int i=0; i<IConstants.REPORT_MENU_ITEMS.length; i++) {
@@ -12,7 +10,24 @@
 			</li>
 		<%
 	}
+	
 %>
+	<hr/>
+	<c:choose>
+		<c:when test = "<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+			<li>
+				<a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_PORTFOLIO %>');"><%= TextFormatter.format(IConstants.ADD_PORTFOLIO, TextFormatter.J) %></a>
+			</li>
+		</c:when>
+	</c:choose>
+	<c:choose>
+		<c:when test = "<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+			<li>
+				<a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_USER %>');"><%= TextFormatter.format(IConstants.ADD_USER, TextFormatter.J) %></a>
+			</li>
+		</c:when>
+	</c:choose>
+	
 </ul>
 <hr/>
 
