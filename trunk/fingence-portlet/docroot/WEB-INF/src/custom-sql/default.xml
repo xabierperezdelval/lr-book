@@ -31,7 +31,7 @@
 				(c.purchasePrice * c.purchaseQty * c.purchasedFx) as purchasedMarketValue,
 				(a.current_price * c.purchaseQty * e.conversion) as currentMarketValue,
 				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx)) as gain_loss,
-				((c.purchasePrice * c.purchaseQty * c.purchasedFx) - (a.current_price * c.purchaseQty * e.conversion))/(c.purchasePrice * c.purchaseQty * c.purchasedFx) * 100 as gain_loss_percent
+				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx))/(c.purchasePrice * c.purchaseQty * c.purchasedFx) * 100 as gain_loss_percent
 			FROM 
 				fing_Asset a,
 				fing_Portfolio b,
