@@ -189,6 +189,7 @@
 		<column name="industry_group" type="String"/>
 		<column name="industry_subgroup" type="String"/>
 		<column name="purchaseQty" type="double"/>
+		<column name="purchaseDate" type="Date"/>
 		<column name="current_price" type="double"/>
 		<column name="purchasedFx" type="double"/>
 		<column name="current_fx" type="double"/>

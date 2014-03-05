@@ -1,8 +1,7 @@
 <div id="portfolioContainer"></div>
 
 <%
-	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)?
-			"Advisor" : "Investor";
+	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)? "Advisor" : "Investor";
 %>
 
 <aui:script>
@@ -22,11 +21,7 @@
 	    						label: 'Portfolio',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							var portfolioId = obj.data.portfolioId;
-	    							if(obj.value.indexOf('Total') == -1){
-	    								obj.value = '<a href=\"javascript:void(0);\" onclick=\"javascript:showDetails(\'' + portfolioId + '\');\">'+ obj.value +  '</a>'
-	    							}
-	    							
+	    							obj.value = '<a href="javascript:void(0);" onclick="javascript:showDetails(' + obj.data.portfolioId +');">'+ obj.value +  '</a>';
 	    						}
 	   				 		},
 	    					{
@@ -41,36 +36,40 @@
 	    					},
 	    					{
 	    						key: 'purchasePrice',
-	    						label: 'Purchased Value',
+	    						label: 'Purchased Value (USD)',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-					 				obj.value = showInMillions(obj.value);
-					 			}
+	    							obj.value = accounting.formatMoney(obj.value);
+	    						}
 	    					},
 	    					{
 	    						key: 'currentPrice',
-	    						label: 'Current Value',
+	    						label: 'Current Value (USD)',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-					 				obj.value = showInMillions(obj.value);
-					 			}
+	    							obj.value = accounting.formatMoney(obj.value);
+	    						}
 	    					},
 	    					{
-	    						key: 'performance',
-	    						label: 'Performance',
-	    						allowHTML : 'true'
-	    					},
+	    						key: 'gainLossAbsValue',
+	    						label: 'Gain/Loss (USD)',
+	    						allowHTML : 'true',
+	    						formatter: function(obj) {
+	    							obj.value = accounting.formatMoney(obj.value);
+	    						}
+	    					},	    					
 			 				{
                              	key: 'portfolioId',
                              	label: 'Action',
                              	formatter: function(obj) {
 	    							if(obj.value > 0){
-	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>'
+	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
+	    									+ '&nbsp;<a href="javascript:void(0);" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+	    									+ '&nbsp;<a href="javascript:void(0);" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	    							}
 					 			},	
                              	allowHTML: true
                          	}
-	    					
 	   					];
 	   
 	   					new Y.DataTable.Base({
@@ -101,7 +100,7 @@
                    	resizable: true               
                	},
                	id: '<portlet:namespace/>allocationStrategyListing',
-               	title: 'Asset Allocation Strategy',
+               	title: 'Allocation Strategy',
                	uri: portfolioDetailsURL
            	});
            	Liferay.provide(
@@ -139,14 +138,13 @@
     
     function updatePortfolio(portfolioId) {
     
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('jspPage', '/html/report/update-container.jsp');
+		ajaxURL.setParameter('portfolioId', portfolioId);
+		ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');    
+    
         AUI().use('aui-dialog', function(A) {
-        
-			var ajaxURL = Liferay.PortletURL.createRenderURL();
-			ajaxURL.setPortletId('report_WAR_fingenceportlet');
-			ajaxURL.setParameter('jspPage', '/html/report/update-container.jsp');
-			ajaxURL.setParameter('portfolioId', portfolioId);
-			ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
-			        
 			Liferay.Util.openWindow({
             	dialog: {
                 	centered: true,
@@ -156,15 +154,15 @@
                     destroyOnHide: true           
                	},
                 id: '<portlet:namespace/>editPortfolioPopup',
-                title: 'Add/Edit Portfolio',
+                title: 'Update Portfolio',
                	uri: ajaxURL
-           	});  
+           	});
+           	  
            	Liferay.provide(
-                  window, '<portlet:namespace/>reloadPortlet', function() {
-                     Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
-                 }
-             );       
+           		window, '<portlet:namespace/>reloadPortlet', function() {
+                	Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+                }
+            );       
         });
     }
-	
 </aui:script>
