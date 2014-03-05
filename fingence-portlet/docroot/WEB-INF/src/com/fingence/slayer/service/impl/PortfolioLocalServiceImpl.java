@@ -167,8 +167,8 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
        
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
-			portfolioItem.setPurchaseQty((int)CellUtil.getDouble(row.getCell(4)));
-			portfolioItem.setPurchasedFx(1.0d);
+			portfolioItem.setPurchaseQty(CellUtil.getDouble(row.getCell(4)));
+			portfolioItem.setPurchasedFx(CellUtil.getDouble(row.getCell(5)));
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -209,16 +209,17 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			String currency = asset.getCurrency();
 			
-			if (!currency.equalsIgnoreCase("usd") && portfolioItem.getPurchasedFx() != 1.0d) {
-				double conversion = getConversion(currency, portfolioItem.getPurchaseDate());
-				
-				portfolioItem.setPurchasedFx(conversion);
-				try {
-					portfolioItemLocalService.updatePortfolioItem(portfolioItem);
-				} catch (SystemException e) {
-					e.printStackTrace();
-				}
+			double conversion = 1.0d;
+			if (!currency.equalsIgnoreCase("USD") && portfolioItem.getPurchasedFx() == 0.0d) {
+				conversion = getConversion(currency, portfolioItem.getPurchaseDate());
 			}
+		
+			portfolioItem.setPurchasedFx(conversion);
+			try {
+				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}			
 		}
 	}
 	
@@ -236,7 +237,6 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			.append(StringPool.SLASH)
 			.append("usd");
 			
-
 		HttpClient client = new HttpClient();
 		GetMethod method = new GetMethod(sb.toString());
 
