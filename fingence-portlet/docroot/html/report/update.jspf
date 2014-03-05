@@ -1,11 +1,8 @@
-<%@page import="com.fingence.slayer.service.AssetLocalServiceUtil"%>
-<%@page import="com.fingence.util.CellUtil"%>
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.fingence.util.ConversionUtil"%>
 <%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil"%>
-<%@page import="com.fingence.slayer.service.CountryExtLocalServiceUtil"%>
-<%@page import="com.fingence.slayer.model.CountryExt"%>
-<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
-<%@page import="com.fingence.slayer.service.impl.PortfolioServiceImpl"%>
 <%@page import="com.fingence.slayer.service.PortfolioLocalServiceUtil"%>
 
 <portlet:actionURL name="savePortfolio" var="savePortfolioURL"
@@ -42,9 +39,7 @@
 				<%
 					List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_INVESTOR);
 					for (User _user: users) {
-						if(_user.getStatus()==WorkflowConstants.STATUS_APPROVED){
-						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getInvestorId()) %>" /><% 
-						}
+						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getInvestorId()) %>" /><%
 					}	
 				%>
 			</aui:select>			
@@ -90,31 +85,31 @@
 	
 	<aui:row>
 		<aui:column>
-			<aui:select name="base-currency" label="base-currency" required="true" showEmptyOption="true">
+			<aui:select name="baseCurrency" required="true">
 				<%
-					List<String> currencies = CellUtil.getCurrencies();
-					for (String currency: currencies) {
-				%>
-						<aui:option value="<%= currency %>" label="<%= currency %>"  selected="<%= (currency.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/>
-				<% 
+					Map<String, String> currencies = ConversionUtil.getCurrencies();
+				
+					Iterator<String> itr = currencies.keySet().iterator();
+					while (itr.hasNext()) {
+						String key = itr.next();
+						String value = currencies.get(key);
+						%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/><%
 					}
 				%>
 			</aui:select>
 		</aui:column>
 		<aui:column>
 			<c:choose>
-		<c:when test="<%= (_portfolioId == 0l) %>">
-			<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
-			<aui:button type="submit" />
-		</c:when>
-		<c:otherwise>
-			<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
-		</c:otherwise>
-	</c:choose>
+				<c:when test="<%= (_portfolioId == 0l) %>">
+					<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
+					<aui:button type="submit" />
+				</c:when>
+				<c:otherwise>
+					<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
+				</c:otherwise>
+			</c:choose>
 		</aui:column>
 	</aui:row>
-	
-	
 </aui:form>
 
 <aui:script>
@@ -127,8 +122,6 @@
 		var institutionId = document.getElementById('<portlet:namespace/>institutionId').value;
 		
 		if(!(portfolioName == "" || investorId == "" || wealthAdvisorId =="" || relationshipManagerId == "" || institutionId == "")){
-		
-		
 			AUI().io.request('<%= savePortfolioURL %>',{
 				method: 'POST',
 				form: { id: '<portlet:namespace/>fm' },
@@ -140,6 +133,5 @@
 	  			}
 	 		});
 		}
-		
 	}
-</aui:script >
+</aui:script>

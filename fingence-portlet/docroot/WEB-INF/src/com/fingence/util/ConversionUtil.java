@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.util.Validator;
@@ -20,7 +21,7 @@ public class ConversionUtil {
 			
 			Statement stmt = conn.createStatement();
 			
-			String sql = "SELECT distinct currency_, conversion FROM fing_CountryExt where currency_ != 'USD'";
+			String sql = "SELECT distinct currency_, conversion FROM fing_CountryExt";
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while (rs.next()) {
@@ -50,5 +51,33 @@ public class ConversionUtil {
 		} else {
 			return currentFxMap.get(currency);
 		}
+	}
+	
+	public static Map<String, String> getCurrencies() {
+		
+		Map<String, String> currencies = new TreeMap<String, String>();
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			Statement stmt = conn.createStatement();
+			
+			String sql = "SELECT distinct currency_, currencyDesc FROM fing_CountryExt";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next()) {
+				String currency = rs.getString(1);
+				String currencyDesc = rs.getString(2);
+				
+				currencies.put(currency, currencyDesc);
+			}
+			
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return currencies;
 	}
 }
