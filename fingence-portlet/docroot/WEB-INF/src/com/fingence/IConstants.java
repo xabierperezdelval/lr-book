@@ -25,9 +25,7 @@ public interface IConstants {
 			PAGE_PERFORMANCE,
 			PAGE_FIXED_INCOME,
 			PAGE_RISK_REPORT,
-			PAGE_VIOLATIONS,
-			ADD_PORTFOLIO,
-			ADD_USER
+			PAGE_VIOLATIONS
 	};
 	
 	String PARENT_ORG_FIRMS = "Firms";

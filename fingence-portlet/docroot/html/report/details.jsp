@@ -66,7 +66,13 @@
 				 				obj.value = showInMillions(obj.value);
 				 			}
                        	},
-                        {key: 'purchaseQty', label: 'Quantity'},
+                        {
+                        	key: 'purchaseQty',
+                         	label: 'Quantity',
+                         	formatter: function(obj) {
+				 				obj.value = obj.value.toFixed(2);
+				 			}
+                       	},
                         {
                              key: 'itemId',
                              label: 'Action',
