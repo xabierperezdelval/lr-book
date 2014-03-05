@@ -28,7 +28,7 @@ public class CellUtil {
 
 	public static double getDouble(Cell cell) {
 
-		double value = 0;
+		double value = 0.0d;
 		
 		String cellValue = cell.toString();
 		
