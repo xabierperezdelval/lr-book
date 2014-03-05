@@ -1,11 +1,14 @@
-<%@page import="com.fingence.slayer.model.Portfolio"%>
 <%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
-<%@page import="com.fingence.slayer.service.PortfolioLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 
 <%@ include file="/html/report/init.jsp"%>
 
 <%
+	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
+
+	if (portfolioCount == 0 && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR)) {
+		layoutName = IConstants.ADD_PORTFOLIO;
+	}
+
 	long portfolioId = GetterUtil.getLong(portletSession.getAttribute(
 			"PORTFOLIO_ID", PortletSession.APPLICATION_SCOPE),
 			PortfolioServiceUtil.getDefault(userId));
@@ -14,24 +17,13 @@
 			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE),
 			IConstants.BREAKUP_BY_RISK_COUNTRY);
 	
-	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
-	
-	if (portfolioCount == 0 && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR)) {
-		layoutName = IConstants.ADD_PORTFOLIO;
-	}
-	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
-	String baseCurrency = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency();
-	
-	if (Validator.isNull(baseCurrency)){
-		baseCurrency = "USD";
-	}
 %>
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>
-		<aui:column columnWidth="50">
+		<aui:column columnWidth="40">
 			<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
 		</aui:column>
 		<aui:column>
@@ -58,6 +50,7 @@
 				</c:otherwise>
 			</c:choose>
 		</aui:column>
+		
 		<c:if test="<%= showAllocationSwitch %>">
 			<aui:column>
 				<aui:select name="allocationBy" onChange="javascript:switchAllocationBy(this.value);">
@@ -98,6 +91,10 @@
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE) %>">
 		<%@ include file="/html/report/performance-report.jspf"%>
+	</c:when>
+	
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_VIOLATIONS) %>">
+		<%@ include file="/html/report/violations-report.jspf"%>
 	</c:when>	
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO) %>">
@@ -107,13 +104,26 @@
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_USER) %>">
 		<%@ include file="/html/register/register.jspf"%>
 	</c:when>
-	
-	<c:otherwise>
-		<%@ include file="/html/report/violations-report.jspf"%>
-	</c:otherwise>
 </c:choose>
 
 <aui:script>
+ 	function display(number, format) {
+	
+		var text = '';
+		
+		if (format == 'amount') {
+			text = accounting.formatMoney(Math.abs(number));
+		} else {
+			text = (Math.abs(number)).toFixed(2) + '%';
+		}
+		
+		if (number < 0) {
+			text = text.fontcolor('red');
+		}
+		
+		return text;
+	}
+	
 	<c:if test="<%= (portfolioCount > 1) %>">
 		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
@@ -153,27 +163,6 @@
 			}
 		});
 	</c:if>
-
-	function showInMillions(figure, baseCurrency){
-		return accounting.formatMoney(figure, { symbol: baseCurrency,  format: "%v %s" });
-	}
-	
-	function display(number, format, baseCurrency) {
-	
-		var text = '';
-		
-		if (format == 'amount') {
-			text = showInMillions(Math.abs(number), baseCurrency);
-		} else {
-			text = (Math.abs(number)).toFixed(2) + '%';
-		}
-		
-		if (number < 0) {
-			text = text.fontcolor('red');
-		}
-		
-		return text;
-	}
 	
 	<c:if test="<%= showAllocationSwitch %>">
 		function switchAllocationBy(value) {
@@ -192,5 +181,5 @@
 				}
 			});
 		}
-	</c:if>
+	</c:if>	
 </aui:script>

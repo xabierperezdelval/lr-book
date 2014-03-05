@@ -20,12 +20,12 @@ public interface IConstants {
 	String PAGE_PORTFOLIO = "Portfolio";
 	
 	String[] REPORT_MENU_ITEMS = {
-			PAGE_REPORTS_HOME,
-			PAGE_ASSET_REPORT,
-			PAGE_PERFORMANCE,
-			PAGE_FIXED_INCOME,
-			PAGE_RISK_REPORT,
-			PAGE_VIOLATIONS
+		PAGE_REPORTS_HOME,
+		PAGE_ASSET_REPORT,
+		PAGE_PERFORMANCE,
+		PAGE_FIXED_INCOME,
+		PAGE_RISK_REPORT,
+		PAGE_VIOLATIONS
 	};
 	
 	String PARENT_ORG_FIRMS = "Firms";
@@ -47,5 +47,5 @@ public interface IConstants {
 	
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
-	String THEME_ICON_VIEW = "/apple/view-details.png";
+	String THEME_ICON_VIEW = "/common/portlet.png";
 }

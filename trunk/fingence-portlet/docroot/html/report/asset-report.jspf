@@ -19,7 +19,6 @@
 	<aui:column columnWidth="100">
 		<div id="slicePortfolio"></div>
 	</aui:column>
-	
 </aui:row>
 
 
@@ -36,13 +35,13 @@
   				var netWorth = getTotalNetWorth(data);
   			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(showInMillions(netWorth, "<%=baseCurrency %>"));
+				A.one('#<portlet:namespace/>networthLabel').text(accounting.formatMoney(netWorth));
 				
 				//2. Pie Chart - By Currency
-				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>', "<%= baseCurrency %>");
+				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
 				
 				//4. Group By currency with Weightage.
-				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', "<%= baseCurrency %>", netWorth);
+				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
   			}
 		);
 	});
@@ -67,7 +66,7 @@
 		return resultantDataArray;
 	}
 	
-	function showWeightage(data, groupBy, divId, title, baseCurrency, netWorth) {
+	function showWeightage(data, groupBy, divId, title, netWorth) {
 		var jsonArr = getDataGroupedBy(data, groupBy, netWorth);
 		YUI().use(
 			'aui-datatable',
@@ -82,14 +81,14 @@
 			 			key: 'currentMarketValue', 
 			 			label: 'Current Value',
 			 			formatter: function(obj) {
-			 				obj.value = showInMillions(obj.value, baseCurrency);
+			 				obj.value = accounting.formatMoney(obj.value);
 			 			}			 			
 			 		},
 			 		{
 			 			key: 'usdInvested', 
 			 			label: 'USD Invested',
 			 			formatter: function(obj) {
-			 				obj.value = showInMillions(obj.value, baseCurrency);
+			 				obj.value = accounting.formatMoney(obj.value);
 			 			},
 			 			className: (title !='Currency')?'hideColumn':''
 			 		},
@@ -123,7 +122,7 @@
 		return dataArray;	
 	}	
 	
-	function renderChart(data, groupBy, divId, title, baseCurrency){
+	function renderChart(data, groupBy, divId, title){
 		
 		var dataArray = getModifiedArray(data, groupBy);
 				

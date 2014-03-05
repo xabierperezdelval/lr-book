@@ -15,19 +15,21 @@
 package com.fingence.slayer.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
+import com.fingence.util.ConversionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the portfolio remote service.
@@ -122,20 +124,18 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	public JSONArray getPortfolioSummary(long userId) {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		
-		double totalPurchasedValue = 0d;
-		double totalCurrentValue = 0d;
-
 		int userType = bridgeService.getUserType(userId);
 
-		List<Portfolio> portfolios = portfolioLocalService
-				.getPortfolios(userId);
+		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
 
+		double totalPurchasedValue = 0.0d;
+		double totalCurrentValue = 0.0d;
+		
+		Map<String, Double> currentFxMap = ConversionUtil.getFxRates();
+		
 		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
 			
-			double portfolioPurchasedPrice = 0d;
-			double portfolioCurrentPrice = 0d;
-
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 			if (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) {
@@ -145,91 +145,92 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 				jsonObject.put("investorOrAdvisor", bridgeService
 						.getUserName(portfolio.getWealthAdvisorId()));
 			}
+			
+			String baseCurrency = portfolio.getBaseCurrency();
+			jsonObject.put("baseCurrency", baseCurrency);
+			
+			List<PortfolioItem> portfolioItems = null;
 			try {
-				List<PortfolioItem> portfolioItems = portfolioItemPersistence
+				portfolioItems = portfolioItemPersistence
 						.findByPortfolioId(portfolioId);
-				for (PortfolioItem portfolioItem : portfolioItems) {
-					Asset asset = null;
-					try {
-						asset = assetLocalService.getAsset(portfolioItem
-								.getAssetId());
-						portfolioPurchasedPrice += (portfolioItem
-								.getPurchasePrice() * portfolioItem.getPurchaseQty());
-						portfolioCurrentPrice += (asset.getCurrent_price() + portfolioItem.getPurchaseQty() );
-					} catch (PortalException e) {
-						e.printStackTrace();
-					}
-				}
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			totalPurchasedValue += portfolioPurchasedPrice;
-			totalCurrentValue += portfolioCurrentPrice;
 			
-			if(totalPurchasedValue>0){
-				jsonObject.put("manager", bridgeService.getUserName(portfolio
-						.getRelationshipManagerId()));
-				jsonObject.put("portfolioId", portfolioId);
-				jsonObject.put("portfolioName", portfolio.getPortfolioName());
-				jsonObject.put("purchasePrice", portfolioPurchasedPrice);
-				jsonObject.put("currentPrice", portfolioCurrentPrice);
-				jsonObject.put("performance", 0d);
+			double usdPurchasePrice = 0.0d;
+			double usdCurrentPrice = 0.0d;
+			
+			for (PortfolioItem portfolioItem : portfolioItems) {
+				
+				double itemPurchasePrice = portfolioItem.getPurchasePrice() * portfolioItem.getPurchaseQty() * portfolioItem.getPurchasedFx();
+				usdPurchasePrice += itemPurchasePrice;
+				
+				Asset asset = null;
+				try {
+					asset = assetLocalService.fetchAsset(portfolioItem.getAssetId());
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				if (Validator.isNotNull(asset)) {
+					usdCurrentPrice += 	(asset.getCurrent_price() * portfolioItem.getPurchaseQty() * ConversionUtil.getCurrentFx(asset.getCurrency(), currentFxMap));	
+				}
 			}
 			
+			jsonObject.put("manager", bridgeService.getUserName(portfolio.getRelationshipManagerId()));
+			jsonObject.put("portfolioId", portfolioId);
+			jsonObject.put("portfolioName", portfolio.getPortfolioName());
+			jsonObject.put("purchasePrice", usdPurchasePrice);
+			jsonObject.put("currentPrice", usdCurrentPrice);
+			jsonObject.put("gainLossAbsValue", Math.abs(usdCurrentPrice - usdPurchasePrice));
+			jsonObject.put("gainOrLoss", ((usdCurrentPrice - usdPurchasePrice) > 0)? true : false);
+
 			jsonArray.put(jsonObject);
+			
+			totalPurchasedValue += usdPurchasePrice;
+			totalCurrentValue += usdCurrentPrice;
 		}
 		
 		// To Add the a final row for Total
 		JSONObject jsonTotal = JSONFactoryUtil.createJSONObject();
 		jsonTotal.put("portfolioName", "<b>Total</b>");
-		jsonTotal.put("portfolioId", "");
-		jsonTotal.put("manager", "");
-		jsonTotal.put("investorOrAdvisor", "");
+		jsonTotal.put("portfolioId", "--");
+		jsonTotal.put("manager", "--");
+		jsonTotal.put("investorOrAdvisor", "--");
 		jsonTotal.put("purchasePrice", totalPurchasedValue);
 		jsonTotal.put("currentPrice", totalCurrentValue);
 		jsonTotal.put("performance", 0d);
 		
 		jsonArray.put(jsonTotal);
-
+		
 		return jsonArray;
 	}
 	
 	public void deletePortfolio(long portfolioId) {
-		Portfolio portfolio = null;
-		
-		try {
-			portfolio = portfolioLocalService.fetchPortfolio(portfolioId);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if(Validator.isNull(portfolio)) return;
+
 		List<PortfolioItem> portfolioItems = null;
 		try {
 			portfolioItems = portfolioItemPersistence.findByPortfolioId(portfolioId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		if(Validator.isNull(portfolioItems)){
+		
+		for(PortfolioItem portfolioItem : portfolioItems) {
 			try {
-				portfolioLocalService.deletePortfolio(portfolio);
+				portfolioItemLocalService.deletePortfolioItem(portfolioItem.getItemId());
 			} catch (SystemException e) {
 				e.printStackTrace();
-			}
-		}else{
-			for(PortfolioItem portfolioItem:portfolioItems){
-				try {
-					portfolioItemLocalService.deletePortfolioItem(portfolioItem);
-				} catch (SystemException e) {
-					e.printStackTrace();
-				}
-			}
-			try {
-				portfolioLocalService.deletePortfolio(portfolio);
-			} catch (SystemException e) {
+			} catch (PortalException e) {
 				e.printStackTrace();
-			}
+			}	
 		}
 		
+		try {
+			portfolioLocalService.deletePortfolio(portfolioId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 }

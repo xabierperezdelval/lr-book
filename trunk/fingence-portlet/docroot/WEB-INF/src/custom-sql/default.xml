@@ -21,6 +21,7 @@
 				a.security_typ2,
 				a.parent_comp_name,
 				c.purchaseQty,
+				c.purchaseDate,
 				a.security_class,
 				a.country as countryId, 
 				d.name as countryName, 
@@ -28,9 +29,9 @@
 				a.country_of_risk as countryOfRiskName,
 				a.currency_,
 				(c.purchasePrice * c.purchaseQty * c.purchasedFx) as purchasedMarketValue,
-				(a.current_price * c.purchaseQty) as currentMarketValue,
-				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty) as gain_loss,
-				(a.current_price * c.purchaseQty - c.purchasePrice * c.purchaseQty)/(c.purchasePrice * c.purchaseQty) * 100 as gain_loss_percent
+				(a.current_price * c.purchaseQty * e.conversion) as currentMarketValue,
+				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx)) as gain_loss,
+				((c.purchasePrice * c.purchaseQty * c.purchasedFx) - (a.current_price * c.purchaseQty * e.conversion))/(c.purchasePrice * c.purchaseQty * c.purchasedFx) * 100 as gain_loss_percent
 			FROM 
 				fing_Asset a,
 				fing_Portfolio b,
