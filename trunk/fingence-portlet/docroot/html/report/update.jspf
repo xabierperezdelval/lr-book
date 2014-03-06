@@ -19,6 +19,9 @@
 	if (_portfolioId > 0l) {
 		portfolio = PortfolioLocalServiceUtil.fetchPortfolio(_portfolioId);
 	}
+	if (Validator.isNull(portfolio.getBaseCurrency())) {
+		portfolio.setBaseCurrency(IConstants.USD);
+	}
 %>
 
 <aui:fieldset>
