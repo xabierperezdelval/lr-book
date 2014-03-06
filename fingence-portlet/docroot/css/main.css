@@ -21,3 +21,7 @@
 .aui .register-portlet .control-group, .aui .report-portlet .control-group {
 	margin-bottom: 12px;
 }
+
+.width-85 {
+	width: 85px !important;
+}

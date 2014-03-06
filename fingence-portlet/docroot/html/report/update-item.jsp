@@ -11,15 +11,10 @@
 	long portfolioId = ParamUtil.getLong(request, "portfolioId");
 	PortfolioItem portfolioItem = new PortfolioItemImpl();
 	Asset asset = new AssetImpl();
-	String purchaseDate = StringPool.BLANK;
 	
 	if (itemId > 0l) {
 		portfolioItem = PortfolioItemLocalServiceUtil.fetchPortfolioItem(itemId);
 		asset = AssetLocalServiceUtil.fetchAsset(portfolioItem.getAssetId());
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date pDate = portfolioItem.getPurchaseDate();
-		if (Validator.isNotNull(pDate))
-			purchaseDate = dateFormat.format(pDate);
 	}
 %>
 
@@ -38,22 +33,26 @@
 	
 	<aui:row>
 		<aui:column>
-			<aui:input name="purchasePrice" value="<%=portfolioItem.getPurchasePrice() %>" required="true"/>
+			<aui:input name="purchasePrice" value="<%= portfolioItem.getPurchasePrice() %>" required="true"/>
 		</aui:column>
 		<aui:column>
-			<div class="aui-datepicker aui-helper-clearfix" id="#<portlet:namespace />startDatePicker">
-				<aui:input name="purchaseDate" id="datepicker" size="30" readonly="true"  value="<%=purchaseDate %>" required="true"/>
-			</div>
-			<!-- <input type="text" id="datepicker"> -->
+			<aui:input name="purchaseDate" required="true" value="<%= PageUtil.getFormattedDate(portfolioItem.getPurchaseDate()) %>" />	
 		</aui:column>
 	</aui:row>
 	
 	<aui:row>
 		<aui:column>
-			<aui:input name="purchaseQty" value="<%=portfolioItem.getPurchaseQty() %>" required="true"/>
+			<aui:input name="purchaseQty" value="<%= portfolioItem.getPurchaseQty() %>" required="true"/>
 		</aui:column>
 		<aui:column>
-			<aui:input name="purchasedFx" value="<%=portfolioItem.getPurchasedFx() %>" required="true"/>
+			<c:choose>
+				<c:when test="<%= itemId > 0l && !asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD) %>">
+					<aui:input name="purchasedFx" cssClass="width-85" value="<%= portfolioItem.getPurchasedFx() %>" prefix="<%= IConstants.CURRENCY_UNIT + StringPool.SPACE + asset.getCurrency() + StringPool.EQUAL %>" suffix="<%= IConstants.CURRENCY_USD %>" />
+				</c:when>
+				<c:otherwise>
+					&nbsp;
+				</c:otherwise>
+			</c:choose>
 		</aui:column>
 	</aui:row>
 
@@ -63,26 +62,25 @@
 
 <aui:script>
 	$(function() {
-		$('#<portlet:namespace/>datepicker').datepicker({
-			changeMonth: true,
+		var maxDate = new Date();
+		var minDate = new Date(maxDate.getFullYear()-2, 0, 0);
+		
+		$('#<portlet:namespace/>purchaseDate').datepicker({
+			minDate: minDate, 
+			maxDate: maxDate, 
+			changeMonth: true, 
 			changeYear: true
 		});
 	});
 
-    function saveItem(){
+    function saveItem() {
     	var isinId = document.getElementById('<portlet:namespace/>isinId').value;
 		var ticker = document.getElementById('<portlet:namespace/>ticker').value;
 		var purchasePrice = document.getElementById('<portlet:namespace/>purchasePrice').value;
-		var datepicker = document.getElementById('<portlet:namespace/>datepicker').value;
+		var datepicker = document.getElementById('<portlet:namespace/>purchaseDate').value;
 		var purchaseQty = document.getElementById('<portlet:namespace/>purchaseQty').value;
-		var purchasedFx = document.getElementById('<portlet:namespace/>purchasedFx').value;
 		
-		if(!(isinId == "" || ticker == "" || purchasePrice =="" || datepicker == "" || purchaseQty == "" || purchasedFx =="")){
-		
-			document.getElementById('<portlet:namespace/>purchasePrice').value = parseFloat(purchasePrice).toFixed(2);
-			document.getElementById('<portlet:namespace/>purchaseQty').value = parseFloat(purchaseQty).toFixed(2);
-			document.getElementById('<portlet:namespace/>purchasedFx').value = parseFloat(purchasedFx).toFixed(2);
-		
+		if(!(isinId == "" || ticker == "" || purchasePrice =="" || datepicker == "" || purchaseQty == "")) {		
 			AUI().io.request('<%= updateItemURL %>',{
 				sync: true,
 				method: 'POST',
