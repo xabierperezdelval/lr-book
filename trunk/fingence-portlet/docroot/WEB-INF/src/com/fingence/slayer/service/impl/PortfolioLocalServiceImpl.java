@@ -163,7 +163,9 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
 			portfolioItem.setPurchaseQty(CellUtil.getDouble(row.getCell(4)));
-			portfolioItem.setPurchasedFx(CellUtil.getDouble(row.getCell(5)));
+			
+			double purchasedFx = asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)? 1.0d : CellUtil.getDouble(row.getCell(5));
+			portfolioItem.setPurchasedFx(purchasedFx);
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -204,17 +206,15 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			String currency = asset.getCurrency();
 			
-			double conversion = 1.0d;
-			if (!currency.equalsIgnoreCase("USD") && portfolioItem.getPurchasedFx() == 0.0d) {
-				conversion = ConversionUtil.getConversion(currency, portfolioItem.getPurchaseDate());
+			if (portfolioItem.getPurchasedFx() == 0.0d) {
+				portfolioItem.setPurchasedFx(ConversionUtil.getConversion(currency, portfolioItem.getPurchaseDate()));
+				
+				try {
+					portfolioItemLocalService.updatePortfolioItem(portfolioItem);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}				
 			}
-		
-			portfolioItem.setPurchasedFx(conversion);
-			try {
-				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}			
 		}
 	}
 
