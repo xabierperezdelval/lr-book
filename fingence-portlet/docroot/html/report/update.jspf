@@ -21,97 +21,106 @@
 	}
 %>
 
-<aui:form cssClass="popupForm" action="<%= savePortfolioURL %>" enctype="multipart/form-data">
-	<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
-	<aui:input type="hidden" name="redirectURL" value="<%= renderDasboardURL.toString() %>"/>
-	<aui:row>
-		<aui:column>
-			<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30"></aui:input>
-		</aui:column>
-		
-		<aui:column cssClass="display-down">
-			<aui:input type="checkbox" name="trial" label="this-is-a-trial" value="<%= portfolio.isTrial() %>"/>
-		</aui:column>		
-	</aui:row>
-
-	<aui:row>
-		<aui:column>
-			<aui:select name="investorId" label="investor" required="true" showEmptyOption="true">
-				<%
-					List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_INVESTOR);
-					for (User _user: users) {
-						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getInvestorId()) %>" /><%
-					}	
-				%>
-			</aui:select>			
-		</aui:column>
-		
-		<aui:column>
-			<aui:select name="wealthAdvisorId" label="wealth-advisor" required="true" showEmptyOption="true">
-				<%
-					List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_WEALTH_ADVISOR);
-					for (User _user: users) {
-						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getWealthAdvisorId()) %>" /><% 
-					}
-				%>
-			</aui:select>			
-		</aui:column>		
-	</aui:row>
-	
-	<aui:row>
-		<aui:column>
-			<aui:select name="relationshipManagerId" label="relationship-manager" showEmptyOption="true">
-				<%
-					List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_REL_MANAGER);
-					for (User _user: users) {
-						if(_user.getStatus()==WorkflowConstants.STATUS_APPROVED){
-						%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getRelationshipManagerId()) %>" /><% 
-						}
-					}	
-				%>
-			</aui:select>			
-		</aui:column>
-		
-		<aui:column>
-			<aui:select name="institutionId" label="institution" required="true" showEmptyOption="true">
-				<%
-					List<Organization> institutions = BridgeServiceUtil.getInstitutions();
-					for (Organization institution: institutions) {
-						%><aui:option value="<%= institution.getOrganizationId() %>" label="<%= institution.getName() %>" selected="<%= (institution.getOrganizationId() == portfolio.getInstitutionId()) %>" /><% 
-					}
-				%>
-			</aui:select>
-		</aui:column>		
-	</aui:row>
-	
-	<aui:row>
-		<aui:column>
-			<aui:select name="baseCurrency" required="true">
-				<%
-					Map<String, String> currencies = ConversionUtil.getCurrencies();
+<aui:fieldset>
+	<aui:column>
+		<aui:form cssClass="popupForm" action="<%= savePortfolioURL %>" enctype="multipart/form-data">
+			<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
+			<aui:input type="hidden" name="redirectURL" value="<%= renderDasboardURL.toString() %>"/>
+			<aui:row>
+				<aui:column>
+					<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30"></aui:input>
+				</aui:column>
 				
-					Iterator<String> itr = currencies.keySet().iterator();
-					while (itr.hasNext()) {
-						String key = itr.next();
-						String value = currencies.get(key);
-						%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/><%
-					}
-				%>
-			</aui:select>
-		</aui:column>
-		<aui:column>
-			<c:choose>
-				<c:when test="<%= (_portfolioId == 0l) %>">
-					<aui:input type="file" name="excelFile" label="portfolio-assets" />
-					<aui:button type="submit" />
-				</c:when>
-				<c:otherwise>
-					<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
-				</c:otherwise>
-			</c:choose>
-		</aui:column>
-	</aui:row>
-</aui:form>
+				<aui:column cssClass="display-down">
+					<aui:input type="checkbox" name="trial" label="this-is-a-trial" value="<%= portfolio.isTrial() %>"/>
+				</aui:column>		
+			</aui:row>
+		
+			<aui:row>
+				<aui:column>
+					<aui:select name="investorId" label="investor" required="true" showEmptyOption="true">
+						<%
+							List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_INVESTOR);
+							for (User _user: users) {
+								%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getInvestorId()) %>" /><%
+							}	
+						%>
+					</aui:select>			
+				</aui:column>
+				
+				<aui:column>
+					<aui:select name="wealthAdvisorId" label="wealth-advisor" required="true" showEmptyOption="true">
+						<%
+							List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_WEALTH_ADVISOR);
+							for (User _user: users) {
+								%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getWealthAdvisorId()) %>" /><% 
+							}
+						%>
+					</aui:select>			
+				</aui:column>		
+			</aui:row>
+			
+			<aui:row>
+				<aui:column>
+					<aui:select name="relationshipManagerId" label="relationship-manager" showEmptyOption="true">
+						<%
+							List<User> users = BridgeServiceUtil.getUsersByTargetType(userId, IConstants.USER_TYPE_REL_MANAGER);
+							for (User _user: users) {
+								if(_user.getStatus()==WorkflowConstants.STATUS_APPROVED){
+								%><aui:option value="<%= _user.getUserId() %>" label="<%= _user.getFullName() %>" selected="<%= (_user.getUserId() == portfolio.getRelationshipManagerId()) %>" /><% 
+								}
+							}	
+						%>
+					</aui:select>			
+				</aui:column>
+				
+				<aui:column>
+					<aui:select name="institutionId" label="institution" required="true" showEmptyOption="true">
+						<%
+							List<Organization> institutions = BridgeServiceUtil.getInstitutions();
+							for (Organization institution: institutions) {
+								%><aui:option value="<%= institution.getOrganizationId() %>" label="<%= institution.getName() %>" selected="<%= (institution.getOrganizationId() == portfolio.getInstitutionId()) %>" /><% 
+							}
+						%>
+					</aui:select>
+				</aui:column>		
+			</aui:row>
+			
+			<aui:row>
+				<aui:column>
+					<aui:select name="baseCurrency" required="true">
+						<%
+							Map<String, String> currencies = ConversionUtil.getCurrencies();
+						
+							Iterator<String> itr = currencies.keySet().iterator();
+							while (itr.hasNext()) {
+								String key = itr.next();
+								String value = currencies.get(key);
+								%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/><%
+							}
+						%>
+					</aui:select>
+				</aui:column>
+				<aui:column>
+					<c:choose>
+						<c:when test="<%= (_portfolioId == 0l) %>">
+							<aui:input type="file" name="excelFile" label="portfolio-assets" />
+							<aui:button type="submit" />
+						</c:when>
+						<c:otherwise>
+							<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
+						</c:otherwise>
+					</c:choose>
+				</aui:column>
+			</aui:row>
+		</aui:form>	
+	</aui:column>
+
+	<aui:column>
+		<h5>Sample EXCEL sheet with assets of a portfolio...</h5>
+		<img src="http://devj0rvnpri9y.cloudfront.net/sample-portfolio-excel" width="500" height="266"/>
+	</aui:column>
+</aui:fieldset>
 
 <aui:script>
 	function updateInfo() {
