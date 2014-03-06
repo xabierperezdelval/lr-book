@@ -92,9 +92,9 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		try {
 			is = new FileInputStream(excelFile);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		
+				
 		if (Validator.isNull(is)) return;
 		 
         //Create Workbook instance holding reference to .xlsx file
