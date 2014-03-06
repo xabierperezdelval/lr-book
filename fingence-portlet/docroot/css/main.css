@@ -25,3 +25,36 @@
 .width-85 {
 	width: 85px !important;
 }
+
+/*-----------------------------------
+	For Menu Items 
+-----------------------------------*/
+.menu-portlet .taglib-header {
+    margin-bottom:0px;
+    width: 167px;
+}
+
+.menu-portlet ul{
+    margin:0px;
+    list-style: none outside none;
+    padding: 0;
+}
+
+.menu-portlet ul li a, .menu-portlet ul li a:hover {
+    background:url(../images/menu-bg.png) repeat-x scroll right -35px rgba(0, 0, 0, 0);
+    border-left: 1px solid #C4C4C5;  
+    cursor: pointer;
+    list-style: none outside none;
+    margin: 0;
+    line-height:35px;
+    text-indent: 10px;
+    transition: color 0.3s ease 0s;
+    color: #777777;
+    display:block;
+    text-decoration:none;
+    width:100%;
+}
+
+.menu-portlet ul .selected a {
+    background-position: right 0;
+}
