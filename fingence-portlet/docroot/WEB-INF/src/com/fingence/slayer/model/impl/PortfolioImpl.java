@@ -14,7 +14,7 @@
 
 package com.fingence.slayer.model.impl;
 
-import com.fingence.util.IConstants;
+import com.fingence.IConstants;
 
 /**
  * The extended model implementation for the Portfolio service. Represents a row in the &quot;fing_Portfolio&quot; database table, with each column mapped to a property of this class.
