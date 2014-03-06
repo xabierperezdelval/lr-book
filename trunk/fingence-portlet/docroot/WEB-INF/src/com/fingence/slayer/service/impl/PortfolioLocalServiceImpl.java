@@ -19,7 +19,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,7 +37,6 @@ import com.fingence.util.ConversionUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
@@ -96,6 +94,8 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		if (Validator.isNull(is)) return;
 		 
         //Create Workbook instance holding reference to .xlsx file
         XSSFWorkbook workbook = null;
