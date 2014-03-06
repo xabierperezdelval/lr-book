@@ -118,7 +118,7 @@
 
 	<aui:column>
 		<h5>Sample EXCEL sheet with assets of a portfolio...</h5>
-		<img src="http://devj0rvnpri9y.cloudfront.net/sample-portfolio-excel" width="500" height="266"/>
+		<img src="http://devj0rvnpri9y.cloudfront.net/sample-portfolio-excel" width="450" height="240"/>
 	</aui:column>
 </aui:fieldset>
 
