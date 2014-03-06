@@ -16,7 +16,7 @@
 		portfolio = PortfolioLocalServiceUtil.fetchPortfolio(_portfolioId);
 	}
 	if (Validator.isNull(portfolio.getBaseCurrency())) {
-		portfolio.setBaseCurrency(IConstants.USD);
+		portfolio.setBaseCurrency(IConstants.CURRENCY_USD);
 	}
 %>
 
