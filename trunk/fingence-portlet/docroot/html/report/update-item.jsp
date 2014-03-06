@@ -2,10 +2,6 @@
 
 <portlet:actionURL name="updatePortfolioItem" var="updateItemURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
 
-<portlet:renderURL var="renderDasboardURL">
-	<portlet:param name="jspPage" value="/html/report/details.jsp" />
-</portlet:renderURL>
-
 <%
 	long itemId = ParamUtil.getLong(request, "portfolioItemId");
 	long portfolioId = ParamUtil.getLong(request, "portfolioId");
@@ -18,13 +14,13 @@
 	}
 %>
 
-<aui:form  inlineLabel="true" cssClass="popupForm">
+<aui:form>
+	<aui:input name="itemId" type="hidden" value="<%= itemId %>"/>
+	<aui:input name="portfolioId" type="hidden" value="<%= portfolioId %>"/>
+			
 	<aui:row>
 		<aui:column>
 			<aui:input name="isinId" value="<%= asset.getId_isin() %>" required="true" />
-			<aui:input name="itemId" type="hidden" value="<%= itemId %>"/>
-			<aui:input name="redirectURL" type="hidden" value="<%= renderDasboardURL %>"/>
-			<aui:input name="portfolioId" type="hidden" value="<%= portfolioId %>"/>
 		</aui:column>
 		<aui:column>
 			<aui:input name="ticker" value="<%=asset.getSecurity_ticker() %>" required="true"/>
@@ -56,8 +52,7 @@
 		</aui:column>
 	</aui:row>
 
-	<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>
-	
+	<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>	
 </aui:form>
 
 <aui:script>

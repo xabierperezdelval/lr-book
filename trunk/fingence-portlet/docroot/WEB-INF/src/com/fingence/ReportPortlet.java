@@ -75,7 +75,6 @@ public class ReportPortlet extends MVCPortlet {
 		
 		PortletSession portletSession = actionRequest.getPortletSession();
 		portletSession.setAttribute("MENU_ITEM", IConstants.PAGE_REPORTS_HOME, PortletSession.APPLICATION_SCOPE);
-		actionResponse.sendRedirect(ParamUtil.getString(uploadPortletRequest, "redirectURL"));
 	}
 
 	public void updatePortfolioItem(ActionRequest actionRequest,
@@ -84,20 +83,11 @@ public class ReportPortlet extends MVCPortlet {
 		long portfolioItemId = ParamUtil.getLong(actionRequest, "itemId");
 		long portfolioId = ParamUtil.getLong(actionRequest, "portfolioId");
 		String ticker = ParamUtil.getString(actionRequest, "ticker");
-		Double purchasePrice = ParamUtil.getDouble(actionRequest,
-				"purchasePrice");
-		String purchaseDate = ParamUtil
-				.getString(actionRequest, "purchaseDate");
+		Double purchasePrice = ParamUtil.getDouble(actionRequest, "purchasePrice");
+		String purchaseDate = ParamUtil.getString(actionRequest, "purchaseDate");
 		double purchaseQty = ParamUtil.getDouble(actionRequest, "purchaseQty");
 		
-
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
 				isinId, ticker, purchasePrice, purchaseQty, purchaseDate);
-		
-		PortletSession portletSession = actionRequest.getPortletSession();
-		
-		String redirectURL = ParamUtil.getString(actionRequest,"redirectURL") + "&portfolioId=" + portfolioId;
-		
-		portletSession.setAttribute("MENU_ITEM", redirectURL);
 	}
 }
