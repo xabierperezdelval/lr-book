@@ -4,7 +4,7 @@
 <%
 	for (int i=0; i<IConstants.REPORT_MENU_ITEMS.length; i++) {
 		String item = IConstants.REPORT_MENU_ITEMS[i];	
-		%><li class="<%= (i == 0)? IConstants.SELECTED : StringPool.BLANK %>" id="li_<%= item %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= item %>');"><%= TextFormatter.format(item, TextFormatter.J) %></a><%
+		%><li class="<%= (layoutName.equalsIgnoreCase(item))? IConstants.SELECTED : StringPool.BLANK %>" id="li_<%= item %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= item %>');"><%= TextFormatter.format(item, TextFormatter.J) %></a><%
 	}
 %>
 
