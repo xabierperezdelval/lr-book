@@ -14,6 +14,8 @@
 
 package com.fingence.slayer.model.impl;
 
+import com.fingence.util.IConstants;
+
 /**
  * The extended model implementation for the Portfolio service. Represents a row in the &quot;fing_Portfolio&quot; database table, with each column mapped to a property of this class.
  *
@@ -30,6 +32,6 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 	 * Never reference this class directly. All methods that expect a portfolio model instance should use the {@link com.fingence.slayer.model.Portfolio} interface instead.
 	 */
 	public PortfolioImpl() {
-		setBaseCurrency("USD");
+		setBaseCurrency(IConstants.CURRENCY_USD);
 	}
 }
