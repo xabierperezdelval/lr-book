@@ -9,10 +9,6 @@
 <portlet:actionURL name="savePortfolio" var="savePortfolioURL"
 	windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
 	
-<portlet:renderURL var="renderDasboardURL">
-	<portlet:param name="jspPage" value="/html/report/view.jsp" />
-</portlet:renderURL>
-
 <%
 	long _portfolioId = ParamUtil.getLong(request, "portfolioId");
 	Portfolio portfolio = new PortfolioImpl();
@@ -24,11 +20,12 @@
 	}
 %>
 
+<%= portfolio.getBaseCurrency() %>
+
 <aui:fieldset>
 	<aui:column>
 		<aui:form cssClass="popupForm" action="<%= savePortfolioURL %>" enctype="multipart/form-data">
 			<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
-			<aui:input type="hidden" name="redirectURL" value="<%= renderDasboardURL.toString() %>"/>
 			<aui:row>
 				<aui:column>
 					<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30"></aui:input>
