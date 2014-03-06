@@ -24,6 +24,7 @@ import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.PortfolioItem;
 import com.fingence.slayer.service.base.PortfolioItemServiceBaseImpl;
+import com.fingence.util.ConversionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
@@ -72,7 +73,9 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 	}
 	
-	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, double purchaseQty, double purchasedFx, String purchaseDate) {
+	public void updateItem(long portfolioItemId, long portfolioId,
+			String isinId, String ticker, double purchasePrice,
+			double purchaseQty, double purchasedFx, String purchaseDate) {
 		PortfolioItem portfolioItem = null;
 				
 		if (portfolioItemId > 0l) {
@@ -127,22 +130,28 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 		
 		Date _purchaseDate = null;
-		if(Validator.isNotNull(purchaseDate)){
-			try {
-				_purchaseDate = new SimpleDateFormat("MM/dd/yyyy").parse(purchaseDate);
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-		}	
+		try {
+			_purchaseDate = new SimpleDateFormat("MM/dd/yyyy").parse(purchaseDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(purchaseDate)) {
+			portfolioItem.setPurchaseDate(_purchaseDate);
+		}
+		
 		portfolioItem.setAssetId(asset.getAssetId());
 		portfolioItem.setPortfolioId(portfolioId);
-		portfolioItem.setPurchaseDate(_purchaseDate);
 		portfolioItem.setPurchasePrice(purchasePrice);
 		portfolioItem.setPurchaseQty(purchaseQty);
-		if(purchasedFx !=0 && !asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)){
-			portfolioItem.setPurchasedFx(purchasedFx);
-		} else if(asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)){
+		
+		if (asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)) {
 			portfolioItem.setPurchasedFx(1.0d);
+		} else if (purchasedFx > 0.0d) {
+			portfolioItem.setPurchasedFx(purchasedFx);
+		} else { // if user has not entered a value
+			portfolioItem.setPurchasedFx(ConversionUtil.getConversion(
+					asset.getCurrency(), _purchaseDate));
 		}
 		
 		try {
