@@ -127,10 +127,9 @@
 		var portfolioName = document.getElementById('<portlet:namespace/>portfolioName').value;
 		var investorId = document.getElementById('<portlet:namespace/>investorId').value;
 		var wealthAdvisorId = document.getElementById('<portlet:namespace/>wealthAdvisorId').value;
-		var relationshipManagerId = document.getElementById('<portlet:namespace/>relationshipManagerId').value;
 		var institutionId = document.getElementById('<portlet:namespace/>institutionId').value;
 		
-		if(!(portfolioName == "" || investorId == "" || wealthAdvisorId =="" || relationshipManagerId == "" || institutionId == "")){
+		if(!(portfolioName == "" || investorId == "" || wealthAdvisorId =="" || institutionId == "")){
 			AUI().io.request('<%= savePortfolioURL %>',{
 				method: 'POST',
 				form: { id: '<portlet:namespace/>fm' },
