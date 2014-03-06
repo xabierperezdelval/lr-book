@@ -1,3 +1,6 @@
+<%@page import="com.fingence.slayer.service.PortfolioItemServiceUtil"%>
+<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
+
 <%@ include file="/html/report/init.jsp"%>
 
 <%
@@ -5,6 +8,8 @@
 	Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(portfolioId);
 	String backURL = ParamUtil.getString(request, "backURL");
 	String managerName = BridgeServiceUtil.getUserName(portfolio.getRelationshipManagerId());
+	
+	int portfolioItemCount = PortfolioItemServiceUtil.getPortfolioItems(portfolioId).size();
 %>
 
 <liferay-ui:header backLabel="back-to-list"
@@ -28,65 +33,70 @@
 
 <br/><aui:a href="javascript:void(0);" onClick="javasript:updateItem(0)" label="Add Asset"/><hr/>
 
-<div id="myDataTable"></div>
+
+	<div id="myDataTable"></div>
+
+
 
 <aui:script>
-	YUI().use(
-		'aui-base','aui-datatable',
-		function(Y) {
-			Liferay.Service(
-				'/fingence-portlet.myresult/get-my-results',
-				{
-					portfolioId : '<%= portfolioId %>'
-				},
-				function(data) {
-					var columns = [
-                    	{key: 'name', label: 'Security Name'},
-                        {key: 'security_ticker', label: 'TICKER'},
-                        {
-                        	key: 'purchasedMarketValue', 
-                        	label: 'Purchased Value',
-                        	formatter: function(obj) {
-				 				obj.value = accounting.formatMoney(obj.value);
-				 			}
-                       	},
-                        {
-                        	key: 'currentMarketValue', 
-                        	label: 'Current Value',
-	                        formatter: function(obj) {
-				 				obj.value = accounting.formatMoney(obj.value);
-				 			}
-			 			},
-                        {
-                        	key: 'current_price', 
-                        	label: 'Current Price',
-                        	formatter: function(obj) {
-				 				obj.value = accounting.formatMoney(obj.value);
-				 			}
-                       	},
-                        {
-                        	key: 'purchaseQty',
-                         	label: 'Quantity',
-                         	formatter: function(obj) {
-				 				obj.value = obj.value.toFixed(2);
-				 			}
-                       	},
-                        {
-                             key: 'itemId',
-                             label: 'Actions',
-                             formatter: '<a href="javascript:void(0);" onclick="javascript:updateItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:deleteItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>',
-                             allowHTML: true
-                         }
-					];	
-								 	
-					new Y.DataTable.Base({
-						columnset: columns,
-					    recordset: data
-					}).render('#myDataTable');
-				}
-			);
-		}
-	);
+	<c:if test="<%= portfolioItemCount > 0 %>">
+		YUI().use(
+			'aui-base','aui-datatable',
+			function(Y) {
+				Liferay.Service(
+					'/fingence-portlet.myresult/get-my-results',
+					{
+						portfolioId : '<%= portfolioId %>'
+					},
+					function(data) {
+						var columns = [
+	                    	{key: 'name', label: 'Security Name'},
+	                        {key: 'security_ticker', label: 'TICKER'},
+	                        {
+	                        	key: 'purchasedMarketValue', 
+	                        	label: 'Purchased Value',
+	                        	formatter: function(obj) {
+					 				obj.value = accounting.formatMoney(obj.value);
+					 			}
+	                       	},
+	                        {
+	                        	key: 'currentMarketValue', 
+	                        	label: 'Current Value',
+		                        formatter: function(obj) {
+					 				obj.value = accounting.formatMoney(obj.value);
+					 			}
+				 			},
+	                        {
+	                        	key: 'current_price', 
+	                        	label: 'Current Price',
+	                        	formatter: function(obj) {
+					 				obj.value = accounting.formatMoney(obj.value);
+					 			}
+	                       	},
+	                        {
+	                        	key: 'purchaseQty',
+	                         	label: 'Quantity',
+	                         	formatter: function(obj) {
+					 				obj.value = obj.value.toFixed(2);
+					 			}
+	                       	},
+	                        {
+	                             key: 'itemId',
+	                             label: 'Actions',
+	                             formatter: '<a href="javascript:void(0);" onclick="javascript:updateItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;<a href="javascript:void(0);" onclick="javascript:deleteItem({value});"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>',
+	                             allowHTML: true
+	                         }
+						];	
+									 	
+						new Y.DataTable.Base({
+							columnset: columns,
+						    recordset: data
+						}).render('#myDataTable');
+					}
+				);
+			}
+		);
+	</c:if>
 	
     function deleteItem(portfolioItemId) {
         if (confirm('Are you sure to delete this item from portfolio?')) {
@@ -133,3 +143,4 @@
         });
     }   
 </aui:script>
+
