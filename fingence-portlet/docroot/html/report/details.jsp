@@ -1,5 +1,4 @@
 <%@page import="com.fingence.slayer.service.PortfolioItemServiceUtil"%>
-<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
 
 <%@ include file="/html/report/init.jsp"%>
 
@@ -11,9 +10,6 @@
 	
 	int portfolioItemCount = PortfolioItemServiceUtil.getPortfolioItems(portfolioId).size();
 %>
-
-<liferay-ui:header backLabel="back-to-list"
-	title="portfolio-details" backURL="<%= backURL %>" />
 	
 <aui:fieldset>
 	<aui:row>
@@ -33,10 +29,7 @@
 
 <br/><aui:a href="javascript:void(0);" onClick="javasript:updateItem(0)" label="Add Asset"/><hr/>
 
-
-	<div id="myDataTable"></div>
-
-
+<div id="myDataTable"></div>
 
 <aui:script>
 	<c:if test="<%= portfolioItemCount > 0 %>">
@@ -96,24 +89,23 @@
 				);
 			}
 		);
+		
+	    function deleteItem(portfolioItemId) {
+	        if (confirm('Are you sure to delete this item from portfolio?')) {
+	            Liferay.Service(
+	                '/fingence-portlet.portfolioitem/delete-item',
+	                {
+	                    portfolioItemId: portfolioItemId
+	                },
+	                function(obj) {
+	                    Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+	                }
+	            );
+	        }
+	    }		
 	</c:if>
-	
-    function deleteItem(portfolioItemId) {
-        if (confirm('Are you sure to delete this item from portfolio?')) {
-            Liferay.Service(
-                '/fingence-portlet.portfolioitem/delete-item',
-                {
-                    portfolioItemId: portfolioItemId
-                },
-                function(obj) {
-                    Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
-                }
-            );
-        }
-    }
     
  	function updateItem(portfolioItemId) {
- 	
 		var ajaxURL = Liferay.PortletURL.createRenderURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('jspPage', '/html/report/update-item.jsp');
@@ -141,6 +133,5 @@
                 }
             );
         });
-    }   
+    }
 </aui:script>
-

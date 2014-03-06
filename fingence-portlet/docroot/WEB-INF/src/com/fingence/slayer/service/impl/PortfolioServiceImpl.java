@@ -185,8 +185,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			jsonObject.put("portfolioName", portfolio.getPortfolioName());
 			jsonObject.put("purchasePrice", usdPurchasePrice);
 			jsonObject.put("currentPrice", usdCurrentPrice);
-			jsonObject.put("gainLossAbsValue", Math.abs(usdCurrentPrice - usdPurchasePrice));
-			jsonObject.put("gainOrLoss", ((usdCurrentPrice - usdPurchasePrice) > 0)? true : false);
+			jsonObject.put("gainLossAbsValue", Math.abs(gainLoss));
+			jsonObject.put("gainOrLoss", (gainLoss > 0)? true : false);
 
 			jsonArray.put(jsonObject);
 			
