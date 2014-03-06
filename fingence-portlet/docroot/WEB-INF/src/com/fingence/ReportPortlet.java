@@ -15,7 +15,6 @@ import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -66,8 +65,6 @@ public class ReportPortlet extends MVCPortlet {
 		boolean social = ParamUtil.getBoolean(uploadPortletRequest, "social", false);
 
 		File excelFile = uploadPortletRequest.getFile("excelFile");
-		if(Validator.isNull(excelFile))
-			excelFile = null;
 		
 		PortfolioLocalServiceUtil.updatePortfolio(portfolioId, userId,
 				portfolioName, investorId, institutionId, wealthAdvisorId,
@@ -75,6 +72,8 @@ public class ReportPortlet extends MVCPortlet {
 		
 		PortletSession portletSession = actionRequest.getPortletSession();
 		portletSession.setAttribute("MENU_ITEM", IConstants.PAGE_REPORTS_HOME, PortletSession.APPLICATION_SCOPE);
+		
+		actionResponse.sendRedirect("/reports");
 	}
 
 	public void updatePortfolioItem(ActionRequest actionRequest,
