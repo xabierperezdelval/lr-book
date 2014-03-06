@@ -47,7 +47,6 @@ public class CellUtil {
 		}
 		
 		return value;
-
 	}
 	
 	public static String getString(Cell cell) {

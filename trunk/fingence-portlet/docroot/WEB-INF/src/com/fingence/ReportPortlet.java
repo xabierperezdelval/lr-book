@@ -10,16 +10,12 @@ import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import com.fingence.slayer.service.BridgeServiceUtil;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -57,26 +53,17 @@ public class ReportPortlet extends MVCPortlet {
 				.getUploadPortletRequest(actionRequest);
 
 		long userId = PortalUtil.getUserId(actionRequest);
-		String portfolioName = ParamUtil.getString(uploadPortletRequest,
-				"portfolioName");
-		
-		String baseCurrency = ParamUtil.getString(uploadPortletRequest,
-				"base-currency");
+		String portfolioName = ParamUtil.getString(uploadPortletRequest, "portfolioName");
+		String baseCurrency = ParamUtil.getString(uploadPortletRequest, "baseCurrency");
 
-		long portfolioId = ParamUtil.getLong(uploadPortletRequest,
-				"portfolioId");
+		long portfolioId = ParamUtil.getLong(uploadPortletRequest, "portfolioId");
 		long investorId = ParamUtil.getLong(uploadPortletRequest, "investorId");
-		long institutionId = ParamUtil.getLong(uploadPortletRequest,
-				"institutionId");
-		long wealthAdvisorId = ParamUtil.getLong(uploadPortletRequest,
-				"wealthAdvisorId");
-		long relationshipManagerId = ParamUtil.getLong(uploadPortletRequest,
-				"relationshipManagerId");
+		long institutionId = ParamUtil.getLong(uploadPortletRequest, "institutionId");
+		long wealthAdvisorId = ParamUtil.getLong(uploadPortletRequest, "wealthAdvisorId");
+		long relationshipManagerId = ParamUtil.getLong(uploadPortletRequest, "relationshipManagerId");
 
-		boolean trial = ParamUtil.getBoolean(uploadPortletRequest, "trial",
-				false);
-		boolean social = ParamUtil.getBoolean(uploadPortletRequest, "social",
-				false);
+		boolean trial = ParamUtil.getBoolean(uploadPortletRequest, "trial", false);
+		boolean social = ParamUtil.getBoolean(uploadPortletRequest, "social", false);
 
 		File excelFile = uploadPortletRequest.getFile("excelFile");
 		if(Validator.isNull(excelFile))
@@ -88,8 +75,7 @@ public class ReportPortlet extends MVCPortlet {
 		
 		PortletSession portletSession = actionRequest.getPortletSession();
 		portletSession.setAttribute("MENU_ITEM", IConstants.PAGE_REPORTS_HOME, PortletSession.APPLICATION_SCOPE);
-		actionResponse.sendRedirect(ParamUtil.getString(uploadPortletRequest,
-				"redirectURL"));
+		actionResponse.sendRedirect(ParamUtil.getString(uploadPortletRequest, "redirectURL"));
 	}
 
 	public void updatePortfolioItem(ActionRequest actionRequest,
@@ -113,6 +99,5 @@ public class ReportPortlet extends MVCPortlet {
 		String redirectURL = ParamUtil.getString(actionRequest,"redirectURL") + "&portfolioId=" + portfolioId;
 		
 		portletSession.setAttribute("MENU_ITEM", redirectURL);
-
 	}
 }

@@ -94,16 +94,7 @@
 					while (itr.hasNext()) {
 						String key = itr.next();
 						String value = currencies.get(key);
-						%>
-						<c:choose>
-							<c:when test="<%= _portfolioId > 0 %>">
-								<aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/>
-							</c:when>
-							<c:otherwise>
-								<aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(IConstants.CURRENCY_USD)) %>"/>
-							</c:otherwise>
-						</c:choose>
-						<%
+						%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/><%
 					}
 				%>
 			</aui:select>
@@ -111,7 +102,7 @@
 		<aui:column>
 			<c:choose>
 				<c:when test="<%= (_portfolioId == 0l) %>">
-					<aui:input type="file" name="excelFile" label="portfolio-assets" required="true"/>
+					<aui:input type="file" name="excelFile" label="portfolio-assets" />
 					<aui:button type="submit" />
 				</c:when>
 				<c:otherwise>
@@ -124,7 +115,6 @@
 
 <aui:script>
 	function updateInfo() {
-	
 		var portfolioName = document.getElementById('<portlet:namespace/>portfolioName').value;
 		var investorId = document.getElementById('<portlet:namespace/>investorId').value;
 		var wealthAdvisorId = document.getElementById('<portlet:namespace/>wealthAdvisorId').value;

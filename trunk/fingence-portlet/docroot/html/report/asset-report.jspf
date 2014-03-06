@@ -1,4 +1,4 @@
-<h5>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h5>
+<h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
 
 <%
 	int index = (allocationBy - 1);
@@ -15,12 +15,7 @@
 	</aui:column>	
 </aui:row>
 <hr/>
-<aui:row>
-	<aui:column columnWidth="100">
-		<div id="slicePortfolio"></div>
-	</aui:column>
-</aui:row>
-
+<div id="slicePortfolio"></div>
 
 <aui:script>
 	AUI().ready(function(A) {
@@ -202,9 +197,8 @@
 	function showPortfolioItems(data, allocationParam, sliceBy, divId){
 	
 		var jsonArray = [];
-		_(_.groupBy(data, allocationParam)).map(function(itemList, key) {
-			
-			if(key == sliceBy){
+		_(_.groupBy(data, allocationParam)).map(function(itemList, key) {	
+			if (key == sliceBy) {
 				_.each(itemList, function(item){
 					var jsonObj = {};
 					jsonObj.name = item.name;
@@ -216,10 +210,10 @@
 					jsonArray.push(jsonObj);
 				});
 			}
-		});	
+		});
 		
 		var divContent = document.getElementById('slicePortfolio');
-		if(divContent){
+		if (divContent) {
 			divContent.innerHTML = "";
 		}
 		

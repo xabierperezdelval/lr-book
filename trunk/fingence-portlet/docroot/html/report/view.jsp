@@ -23,13 +23,10 @@
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>
-		<aui:column columnWidth="40">
-			<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
-		</aui:column>
 		<aui:column>
 			<c:choose>
 				<c:when test="<%= portfolioCount == 1 %>">
-					&nbsp;
+					<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
 				</c:when>
 				<c:when test="<%= portfolioCount == 2 %>">
 					<%

@@ -31,8 +31,6 @@ public interface IConstants {
 	String PARENT_ORG_FIRMS = "Firms";
 	String PARENT_ORG_BANKS = "Banks";
 	
-	String CURRENCY_USD = "USD";
-	
 	String CMD_CHECK_DUPLICATE = "checkDuplicate";
 	String CMD_SET_PORTFOLIO_ID = "setPortfolioId";
 	String CMD_SET_ALLOCATION_BY = "setAllocationBy";
@@ -50,4 +48,7 @@ public interface IConstants {
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
 	String THEME_ICON_VIEW = "/common/portlet.png";
+	
+	String CURRENCY_USD = "USD";
+	String CURRENCY_UNIT = "1";
 }
