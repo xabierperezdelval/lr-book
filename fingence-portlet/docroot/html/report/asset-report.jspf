@@ -70,7 +70,7 @@
 		    		{
 		    			key: '_key',
 		    			label: title,
-		    			formatter: '<a href="javascript:void(0);" onclick="javascript:sliceChart(\'{value}\');">{value}</a>'
+		    			formatter: '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'{value}\');">{value}</a>'
 	    			},
 			 		{
 			 			key: 'currentMarketValue', 

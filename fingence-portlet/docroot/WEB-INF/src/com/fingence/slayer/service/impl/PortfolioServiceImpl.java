@@ -130,6 +130,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 
 		double totalPurchasedValue = 0.0d;
 		double totalCurrentValue = 0.0d;
+		double totalGainLoss = 0.0d;
 		
 		Map<String, Double> currentFxMap = ConversionUtil.getFxRates();
 		
@@ -159,7 +160,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			
 			double usdPurchasePrice = 0.0d;
 			double usdCurrentPrice = 0.0d;
-			
+
 			for (PortfolioItem portfolioItem : portfolioItems) {
 				
 				double itemPurchasePrice = portfolioItem.getPurchasePrice() * portfolioItem.getPurchaseQty() * portfolioItem.getPurchasedFx();
@@ -177,6 +178,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 				}
 			}
 			
+			double gainLoss = usdCurrentPrice - usdPurchasePrice;
+			
 			jsonObject.put("manager", bridgeService.getUserName(portfolio.getRelationshipManagerId()));
 			jsonObject.put("portfolioId", portfolioId);
 			jsonObject.put("portfolioName", portfolio.getPortfolioName());
@@ -189,6 +192,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			
 			totalPurchasedValue += usdPurchasePrice;
 			totalCurrentValue += usdCurrentPrice;
+			totalGainLoss += gainLoss;
 		}
 		
 		// To Add the a final row for Total
@@ -199,7 +203,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		jsonTotal.put("investorOrAdvisor", "--");
 		jsonTotal.put("purchasePrice", totalPurchasedValue);
 		jsonTotal.put("currentPrice", totalCurrentValue);
-		jsonTotal.put("performance", 0d);
+		jsonTotal.put("gainLossAbsValue", Math.abs(totalGainLoss));
+		jsonTotal.put("gainOrLoss", (totalGainLoss > 0)? true : false);
 		
 		jsonArray.put(jsonTotal);
 		

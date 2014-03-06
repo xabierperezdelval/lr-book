@@ -85,8 +85,9 @@ public class ReportPortlet extends MVCPortlet {
 		Double purchasePrice = ParamUtil.getDouble(actionRequest, "purchasePrice");
 		String purchaseDate = ParamUtil.getString(actionRequest, "purchaseDate");
 		double purchaseQty = ParamUtil.getDouble(actionRequest, "purchaseQty");
+		double purchasedFx = ParamUtil.getDouble(actionRequest, "purchasedFx");
 		
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
-				isinId, ticker, purchasePrice, purchaseQty, purchaseDate);
+				isinId, ticker, purchasePrice, purchaseQty, purchasedFx, purchaseDate);
 	}
 }

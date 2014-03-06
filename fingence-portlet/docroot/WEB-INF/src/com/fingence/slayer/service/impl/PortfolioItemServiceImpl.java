@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.PortfolioItem;
@@ -71,7 +72,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		}
 	}
 	
-	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, double purchaseQty, String purchaseDate) {
+	public void updateItem(long portfolioItemId, long portfolioId, String isinId, String ticker, double purchasePrice, double purchaseQty, double purchasedFx, String purchaseDate) {
 		PortfolioItem portfolioItem = null;
 				
 		if (portfolioItemId > 0l) {
@@ -138,6 +139,11 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		portfolioItem.setPurchaseDate(_purchaseDate);
 		portfolioItem.setPurchasePrice(purchasePrice);
 		portfolioItem.setPurchaseQty(purchaseQty);
+		if(purchasedFx !=0 && !asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)){
+			portfolioItem.setPurchasedFx(purchasedFx);
+		} else if(asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)){
+			portfolioItem.setPurchasedFx(1.0d);
+		}
 		
 		try {
 			portfolioItemLocalService.updatePortfolioItem(portfolioItem);
