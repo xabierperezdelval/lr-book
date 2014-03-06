@@ -58,3 +58,7 @@
 .menu-portlet ul .selected a, .menu-portlet ul .selected a:hover {
     background-position: right 0;
 }
+
+.aui .menu-portlet a:focus {
+  	outline: none;
+}
