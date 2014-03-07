@@ -1,4 +1,5 @@
 <div id="portfolioContainer"></div>
+<div id="load-mask"></div>
 
 <%
 	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)? "Advisor" : "Investor";
@@ -11,7 +12,7 @@
   			{
     			userId: '<%= userId %>'
   			},
-  			function(data) {
+  			function(data) {	
   				YUI().use(
 					'aui-datatable',
   					function(Y) {
@@ -63,9 +64,9 @@
                              	label: 'Action',
                              	formatter: function(obj) {
 	    							if(obj.value > 0){
-	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
-	    									+ '&nbsp;<a href="javascript:void(0);" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
-	    									+ '&nbsp;<a href="javascript:void(0);" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	    								obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
+	    									+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+	    									+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	    							}
 					 			},	
                              	allowHTML: true

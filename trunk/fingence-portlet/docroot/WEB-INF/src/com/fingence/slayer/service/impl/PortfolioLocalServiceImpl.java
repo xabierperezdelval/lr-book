@@ -165,6 +165,10 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			portfolioItem.setPurchaseQty(CellUtil.getDouble(row.getCell(4)));
 			
 			double purchasedFx = asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)? 1.0d : CellUtil.getDouble(row.getCell(5));
+			
+			if(purchasedFx == 0.0d){
+				portfolioItem.setPurchasedFx(ConversionUtil.getConversion(asset.getCurrency(), portfolioItem.getPurchaseDate()));
+			}
 			portfolioItem.setPurchasedFx(purchasedFx);
 			
         	try {
