@@ -168,8 +168,9 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			if(purchasedFx == 0.0d){
 				portfolioItem.setPurchasedFx(ConversionUtil.getConversion(asset.getCurrency(), portfolioItem.getPurchaseDate()));
+			} else {
+				portfolioItem.setPurchasedFx(purchasedFx);
 			}
-			portfolioItem.setPurchasedFx(purchasedFx);
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
