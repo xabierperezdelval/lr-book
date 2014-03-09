@@ -1,5 +1,3 @@
-<%@page import="com.fingence.IConstants"%>
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.fingence.util.ConversionUtil"%>
