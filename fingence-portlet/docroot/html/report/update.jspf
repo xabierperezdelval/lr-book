@@ -20,8 +20,6 @@
 	}
 %>
 
-<%= portfolio.getBaseCurrency() %>
-
 <aui:fieldset>
 	<aui:column>
 		<aui:form cssClass="popupForm" action="<%= savePortfolioURL %>" enctype="multipart/form-data">
