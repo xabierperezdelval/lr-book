@@ -166,11 +166,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			
 			double purchasedFx = asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)? 1.0d : CellUtil.getDouble(row.getCell(5));
 			
-			if(purchasedFx == 0.0d){
-				portfolioItem.setPurchasedFx(ConversionUtil.getConversion(asset.getCurrency(), portfolioItem.getPurchaseDate()));
-			} else {
-				portfolioItem.setPurchasedFx(purchasedFx);
-			}
+			if (purchasedFx == 0.0d) {
+				purchasedFx = ConversionUtil.getConversion(asset.getCurrency(), portfolioItem.getPurchaseDate());
+			} 
+			
+			portfolioItem.setPurchasedFx(purchasedFx);
 			
         	try {
 				portfolioItemLocalService.updatePortfolioItem(portfolioItem);
@@ -184,7 +184,9 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
             Message message = new Message();
             message.put("MESSAGE_NAME", "setConvertionRate");
             message.put("portfolioId", portfolioId);
-            MessageBusUtil.sendMessage("fingence/destination", message);        	
+            
+            // Temporarily commenting this out
+            //MessageBusUtil.sendMessage("fingence/destination", message);        	
         }
 	}
 	

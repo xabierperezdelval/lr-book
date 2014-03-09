@@ -1,5 +1,4 @@
 <div id="portfolioContainer"></div>
-<div id="load-mask"></div>
 
 <%
 	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)? "Advisor" : "Investor";
