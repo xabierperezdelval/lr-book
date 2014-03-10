@@ -34,6 +34,7 @@ public interface IConstants {
 	String CMD_CHECK_DUPLICATE = "checkDuplicate";
 	String CMD_SET_PORTFOLIO_ID = "setPortfolioId";
 	String CMD_SET_ALLOCATION_BY = "setAllocationBy";
+	String CMD_CHECK_PORTFOLIO_DUPLICACY = "checkportfolioDuplicacy";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;
@@ -48,6 +49,7 @@ public interface IConstants {
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
 	String THEME_ICON_VIEW = "/common/portlet.png";
+	String LOADING_MASK = "/apple/ajax-loader.gif";
 	
 	String CURRENCY_USD = "USD";
 	String CURRENCY_UNIT = "1";

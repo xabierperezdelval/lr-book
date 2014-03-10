@@ -6,6 +6,7 @@
 
 <aui:script>
 	AUI().ready(function(A) {
+		loadMask();
 		Liferay.Service(
   			'/fingence-portlet.portfolio/get-portfolio-summary',
   			{
@@ -21,7 +22,9 @@
 	    						label: 'Portfolio',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							obj.value = '<a href="javascript:void(0);" onclick="javascript:showDetails(' + obj.data.portfolioId +');">'+ obj.value +  '</a>';
+	    							if(obj.value.indexOf('Total') == -1){
+	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:showDetails(' + obj.data.portfolioId +');">'+ obj.value +  '</a>';
+	    							}
 	    						}
 	   				 		},
 	    					{
@@ -80,6 +83,7 @@
 				);
 	  		}
 		);
+		removeMask();
 	});
 	
 	function viewAllocationStrategy(portfolioId){
@@ -164,5 +168,23 @@
                 }
             );       
         });
+    }
+    
+    function loadMask(){
+    	AUI().use( 'aui-loading-mask', function(A){
+	        if (A.one('#portfolioContainer').loadingmask == null){
+		        A.one('#portfolioContainer').plug(A.LoadingMask, { background: '#000' });
+	         	A.one('#portfolioContainer').loadingmask.toggle();
+	        }
+	       
+	        
+       });
+
+    }
+    
+    function removeMask(){
+    	AUI().use( 'aui-loading-mask', function(A){
+        	A.one('#portfolioContainer').loadingmask.toggle();
+     	});
     }
 </aui:script>
