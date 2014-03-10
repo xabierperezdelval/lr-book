@@ -49,7 +49,6 @@ public interface IConstants {
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
 	String THEME_ICON_VIEW = "/common/portlet.png";
-	String LOADING_MASK = "/apple/ajax-loader.gif";
 	
 	String CURRENCY_USD = "USD";
 	String CURRENCY_UNIT = "1";
