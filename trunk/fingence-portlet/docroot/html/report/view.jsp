@@ -5,7 +5,7 @@
 <%
 	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
 
-	if (portfolioCount == 0 && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR)) {
+	if (portfolioCount == 0 && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)) {
 		layoutName = IConstants.ADD_PORTFOLIO;
 	}
 

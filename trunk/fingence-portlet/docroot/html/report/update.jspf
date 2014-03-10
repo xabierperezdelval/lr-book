@@ -24,7 +24,13 @@
 			<aui:input type="hidden" name="portfolioId" value="<%= portfolio.getPortfolioId() %>"/>
 			<aui:row>
 				<aui:column>
-					<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30"></aui:input>
+					<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30">
+						<aui:validator name="custom" errorMessage="duplicate-portfolio">
+							function() {
+								return isPortfolioDuplicate('portfolioName');					
+							}
+						</aui:validator>
+					</aui:input>
 				</aui:column>
 				
 				<aui:column cssClass="display-down">
@@ -125,7 +131,7 @@
 		var wealthAdvisorId = document.getElementById('<portlet:namespace/>wealthAdvisorId').value;
 		var institutionId = document.getElementById('<portlet:namespace/>institutionId').value;
 		
-		if(!(portfolioName == "" || investorId == "" || wealthAdvisorId =="" || institutionId == "")){
+		if(!(portfolioName.trim() == "" || investorId.trim() == "" || wealthAdvisorId.trim() =="" || institutionId.trim() == "")){
 			AUI().io.request('<%= savePortfolioURL %>',{
 				method: 'POST',
 				form: { id: '<portlet:namespace/>fm' },
@@ -138,4 +144,26 @@
 	 		});
 		}
 	}
+	
+	function isPortfolioDuplicate(){
+		var form = document._report_WAR_fingenceportlet_fm;
+		var portfolioName = form._report_WAR_fingenceportlet_portfolioName;
+		var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_PORTFOLIO_DUPLICACY %>');
+		ajaxURL.setParameter('portfolioName', portfolioName.value);
+		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		
+		var notExists = true;
+		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+			sync: true,
+			on: {
+				success: function() {
+					notExists = (!(eval(this.get('responseData'))));
+				}
+			}
+		});
+		
+		return notExists;
+	}	
 </aui:script>
