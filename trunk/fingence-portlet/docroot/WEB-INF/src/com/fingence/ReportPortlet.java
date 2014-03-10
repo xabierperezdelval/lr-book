@@ -3,6 +3,7 @@ package com.fingence;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -16,7 +17,8 @@ import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -50,21 +52,23 @@ public class ReportPortlet extends MVCPortlet {
 					PortletSession.APPLICATION_SCOPE);
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_PORTFOLIO_DUPLICACY)) {
 			String portfolioName = ParamUtil.getString(resourceRequest, "portfolioName");
-			try {
-				if(Validator.isNotNull(portfolioName)){
-					DynamicQuery dynamicQueryPortfolioName = DynamicQueryFactoryUtil.forClass(Portfolio.class).add(PropertyFactoryUtil.forName("portfolioName").eq(portfolioName));
-					PrintWriter writer = resourceResponse.getWriter();
-					if(PortfolioLocalServiceUtil.dynamicQuery(dynamicQueryPortfolioName).size() > 0){
-						writer.println(true);
-					} else {
-						writer.println(false);
-					}
-				}
+
+			boolean flag = false;
+			PrintWriter writer = resourceResponse.getWriter();
+			
+			if (Validator.isNotNull(portfolioName)){
+				DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Portfolio.class);
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("portfolioName", portfolioName));
 				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					@SuppressWarnings("unchecked")
+					List<Portfolio> results = PortfolioLocalServiceUtil.dynamicQuery(dynamicQuery);
+					flag = (Validator.isNotNull(results) && results.size() > 0);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
 			}
+			writer.println(flag);
 		}
 	}
 

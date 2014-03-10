@@ -146,8 +146,8 @@
 	}
 	
 	function isPortfolioDuplicate(){
-		var form = document._report_WAR_fingenceportlet_fm;
-		var portfolioName = form._report_WAR_fingenceportlet_portfolioName;
+		var frm = document.<portlet:namespace/>fm;
+		var portfolioName = frm.<portlet:namespace/>portfolioName;
 		var ajaxURL = Liferay.PortletURL.createResourceURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_PORTFOLIO_DUPLICACY %>');
