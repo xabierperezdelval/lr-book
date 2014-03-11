@@ -27,7 +27,7 @@
 					<aui:input name="portfolioName" required="true" autoFocus="true" value="<%= portfolio.getPortfolioName() %>"  maxlength="30">
 						<aui:validator name="custom" errorMessage="duplicate-portfolio">
 							function() {
-								return isPortfolioDuplicate('portfolioName');					
+								return isPortfolioDuplicate(<%= _portfolioId %>);					
 							}
 						</aui:validator>
 					</aui:input>
@@ -145,12 +145,13 @@
 		}
 	}
 	
-	function isPortfolioDuplicate(){
+	function isPortfolioDuplicate(portfolioId){
 		var frm = document.<portlet:namespace/>fm;
 		var portfolioName = frm.<portlet:namespace/>portfolioName;
 		var ajaxURL = Liferay.PortletURL.createResourceURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_PORTFOLIO_DUPLICACY %>');
+		ajaxURL.setParameter('portfolioId', portfolioId);
 		ajaxURL.setParameter('portfolioName', portfolioName.value);
 		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
 		

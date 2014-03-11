@@ -18,10 +18,12 @@ import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -51,7 +53,23 @@ public class ReportPortlet extends MVCPortlet {
 					String.valueOf(allocationBy),
 					PortletSession.APPLICATION_SCOPE);
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_PORTFOLIO_DUPLICACY)) {
+			String savedPortfolioName = StringPool.BLANK;
 			String portfolioName = ParamUtil.getString(resourceRequest, "portfolioName");
+			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0L);
+			
+			
+			
+			if(Validator.isNotNull(portfolioId)){
+				try {
+					savedPortfolioName = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getPortfolioName();
+				} catch (PortalException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SystemException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 			boolean flag = false;
 			PrintWriter writer = resourceResponse.getWriter();
@@ -63,7 +81,15 @@ public class ReportPortlet extends MVCPortlet {
 				try {
 					@SuppressWarnings("unchecked")
 					List<Portfolio> results = PortfolioLocalServiceUtil.dynamicQuery(dynamicQuery);
-					flag = (Validator.isNotNull(results) && results.size() > 0);
+					if(portfolioId > 0){ // Edit Portfolio Form
+						if(!savedPortfolioName.equalsIgnoreCase(portfolioName)){
+							flag = (Validator.isNotNull(results) && results.size() > 0);
+						}
+					} else{ // Add Portfolio Form
+						flag = (Validator.isNotNull(results) && results.size() > 0);
+					}
+					
+					
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
