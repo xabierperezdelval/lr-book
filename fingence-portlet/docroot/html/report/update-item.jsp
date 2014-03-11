@@ -42,6 +42,29 @@
 		</aui:column>
 		<aui:column>
 			<c:choose>
+				<c:when test="<%= itemId > 0 %>">
+					<aui:input name="currency-type" value="<%= asset.getCurrency() %>" readonly="true" />
+				</c:when>
+				<c:otherwise>
+					<aui:select name="currency-type" required="true">
+							<%
+								Map<String, String> currencies = ConversionUtil.getCurrencies();
+							
+								Iterator<String> itr = currencies.keySet().iterator();
+								while (itr.hasNext()) {
+									String key = itr.next();
+									String value = currencies.get(key);
+									%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(asset.getCurrency())) %>"/><%
+								}
+							%>
+					</aui:select>
+				</c:otherwise>
+			</c:choose>
+		</aui:column>
+	</aui:row>
+	<aui:row>
+		<aui:column>
+			<c:choose>
 				<c:when test="<%= itemId > 0l && !asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD) %>">
 					<aui:input name="purchasedFx" cssClass="width-85" value="<%= portfolioItem.getPurchasedFx() %>" prefix="<%= IConstants.CURRENCY_UNIT + StringPool.SPACE + asset.getCurrency() + StringPool.EQUAL %>" suffix="<%= IConstants.CURRENCY_USD %>" />
 				</c:when>
@@ -51,8 +74,10 @@
 			</c:choose>
 		</aui:column>
 	</aui:row>
-
-	<aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/>	
+	<aui:row>
+		<aui:column><aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/></aui:column>
+	</aui:row>
+		
 </aui:form>
 
 <aui:script>
