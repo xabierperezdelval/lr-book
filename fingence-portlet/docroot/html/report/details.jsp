@@ -60,13 +60,6 @@
 					 			}
 				 			},
 	                        {
-	                        	key: 'current_price', 
-	                        	label: 'Current Price',
-	                        	formatter: function(obj) {
-					 				obj.value = accounting.formatMoney(obj.value);
-					 			}
-	                       	},
-	                        {
 	                        	key: 'purchaseQty',
 	                         	label: 'Quantity',
 	                         	formatter: function(obj) {
