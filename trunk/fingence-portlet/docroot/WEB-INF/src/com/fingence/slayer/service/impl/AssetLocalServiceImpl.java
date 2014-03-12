@@ -143,7 +143,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setSecurity_typ2(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2"))));
 			asset.setParent_comp_name(CellUtil.getString(row.getCell(columnNames.get("PARENT_COMP_NAME"))));
 			
-			String securityClass = CellUtil.getString(row.getCell(columnNames.get("SECURITY_CLASS")));
+			String securityClass = CellUtil.getString(row.getCell(columnNames.get("BPIPE_REFERENCE_SECURITY_CLASS")));
 			asset.setSecurity_class(securityClass);
 			
 			asset.setVolatility_30d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_30D"))));
