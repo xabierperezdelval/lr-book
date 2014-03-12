@@ -112,6 +112,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				for (int i=0; i < columnCount; i++){
 					columnNames.put(CellUtil.getStringCaps(row.getCell(i)), i);
 				}
+				continue;
 			}
 
 			String id_isin = CellUtil.getString(row.getCell(columnNames.get("ID_ISIN")));
