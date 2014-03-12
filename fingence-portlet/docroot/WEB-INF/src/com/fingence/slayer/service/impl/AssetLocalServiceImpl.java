@@ -175,7 +175,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			}
 			
 			if (asset.getSecurity_class().equalsIgnoreCase("Fund")) {
-				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("FUND_NET_ASSET_VALUE"))));
+				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("FUND_NET_ASSET_VAL"))));
 			} else {
 				asset.setCurrent_price(asset.getBid_price());
 			}
