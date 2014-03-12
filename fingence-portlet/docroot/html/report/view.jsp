@@ -1,8 +1,7 @@
-<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
-
 <%@ include file="/html/report/init.jsp"%>
 
 <%
+
 	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
 
 	if (portfolioCount == 0 && (userType == IConstants.USER_TYPE_INVESTOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)) {
@@ -17,12 +16,17 @@
 			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE),
 			IConstants.BREAKUP_BY_RISK_COUNTRY);
 	
+	String baseCurrency = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency();
+	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>
+		<aui:column columnWidth="30">
+			<h4>Base Currency: <span id="baseCurrency"><%= baseCurrency %></span></h4>
+		</aui:column>
 		<aui:column>
 			<c:choose>
 				<c:when test="<%= portfolioCount == 1 %>">
