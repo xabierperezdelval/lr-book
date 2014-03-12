@@ -1,5 +1,7 @@
 <%@ include file="/html/report/init.jsp"%>
 
+<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
+
 <%
 
 	int portfolioCount = PortfolioServiceUtil.getPortoliosCount(userId);
