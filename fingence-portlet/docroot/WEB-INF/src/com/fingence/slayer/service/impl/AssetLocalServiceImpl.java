@@ -129,8 +129,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setChg_pct_3m(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_3M"))));
 			asset.setChg_pct_6m(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_6M"))));
 			asset.setChg_pct_ytd(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_YTD"))));
-			asset.setBid_price(CellUtil.getDouble(row.getCell(columnNames.get("BID_PRICE"))));
-			asset.setAsk_price(CellUtil.getDouble(row.getCell(columnNames.get("ASK_PRICE"))));
+			asset.setBid_price(CellUtil.getDouble(row.getCell(columnNames.get("PX_BID"))));
+			asset.setAsk_price(CellUtil.getDouble(row.getCell(columnNames.get("PX_ASK"))));
 			asset.setChg_pct_high_52week(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_HIGH_52WEEK"))));
 			asset.setChg_pct_low_52week(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_LOW_52WEEK"))));
 			
@@ -177,7 +177,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			if (asset.getSecurity_class().equalsIgnoreCase("Fund")) {
 				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("FUND_NET_ASSET_VALUE"))));
 			} else {
-				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("PX_BID"))));
+				asset.setCurrent_price(asset.getBid_price());
 			}
 			
 			try {
