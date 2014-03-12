@@ -64,7 +64,7 @@ public class ConversionUtil {
 		if (currency.equalsIgnoreCase("USD")) {
 			return 1.0d;
 		} else {
-			return currentFxMap.get(currency);
+			return currentFxMap.get(currency.toUpperCase());
 		}
 	}
 	
