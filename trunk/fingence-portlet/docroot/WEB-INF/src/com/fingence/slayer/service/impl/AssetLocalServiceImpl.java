@@ -152,7 +152,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setVolatility_180d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_180D"))));
 			asset.setVolatility_360d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_360D"))));
 			
-			asset.setCurrency(CellUtil.getString(row.getCell(columnNames.get("CRNCY"))));
+			asset.setCurrency(CellUtil.getString(row.getCell(columnNames.get("CRNCY"))).toUpperCase());
 			
 			Country country = null;
 			try {
