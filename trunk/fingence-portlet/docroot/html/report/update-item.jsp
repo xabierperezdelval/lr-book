@@ -1,7 +1,5 @@
 <%@ include file="/html/report/init.jsp"%>
 
-<portlet:actionURL name="updatePortfolioItem" var="updateItemURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
-
 <%
 	long itemId = ParamUtil.getLong(request, "portfolioItemId");
 	long portfolioId = ParamUtil.getLong(request, "portfolioId");
@@ -41,27 +39,13 @@
 			<aui:input name="purchaseQty" value="<%= portfolioItem.getPurchaseQty() %>" required="true"/>
 		</aui:column>
 		<aui:column>
-			<c:choose>
-				<c:when test="<%= itemId > 0 %>">
-					<aui:input name="currency-type" value="<%= asset.getCurrency() %>" readonly="true" />
-				</c:when>
-				<c:otherwise>
-					<aui:select name="currency-type" required="true">
-							<%
-								Map<String, String> currencies = ConversionUtil.getCurrencies();
-							
-								Iterator<String> itr = currencies.keySet().iterator();
-								while (itr.hasNext()) {
-									String key = itr.next();
-									String value = currencies.get(key);
-									%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(asset.getCurrency())) %>"/><%
-								}
-							%>
-					</aui:select>
-				</c:otherwise>
-			</c:choose>
+			<c:if test="<%= itemId > 0 %>">
+				<aui:input name="currency" value="<%= asset.getCurrency() %>" readonly="true" />
+			</c:if>
+			&nbsp;
 		</aui:column>
 	</aui:row>
+	
 	<aui:row>
 		<aui:column>
 			<c:choose>
@@ -79,6 +63,9 @@
 	</aui:row>
 		
 </aui:form>
+
+<portlet:actionURL name="updatePortfolioItem" var="updateItemURL" 
+	windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
 
 <aui:script>
 	$(function() {

@@ -93,6 +93,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 			}
 			portfolioItem = portfolioItemLocalService.createPortfolioItem(portfolioItemId);
 			portfolioItem.setCreateDate(new java.util.Date());
+
 			try {
 				portfolioItem = portfolioItemLocalService.addPortfolioItem(portfolioItem);
 			} catch (SystemException e) {

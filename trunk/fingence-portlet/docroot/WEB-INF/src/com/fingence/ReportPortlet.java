@@ -15,16 +15,9 @@ import javax.portlet.ResourceResponse;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -52,48 +45,24 @@ public class ReportPortlet extends MVCPortlet {
 			portletSession.setAttribute("ALLOCATION_BY",
 					String.valueOf(allocationBy),
 					PortletSession.APPLICATION_SCOPE);
-		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_PORTFOLIO_DUPLICACY)) {
-			String savedPortfolioName = StringPool.BLANK;
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_DUPLICATE_PORTFOLIO)) {
+			
+			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0l);
 			String portfolioName = ParamUtil.getString(resourceRequest, "portfolioName");
-			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0L);
 			
+			long userId = PortalUtil.getUserId(resourceRequest);
+			List<Portfolio> userPortfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
 			
-			
-			if(Validator.isNotNull(portfolioId)){
-				try {
-					savedPortfolioName = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getPortfolioName();
-				} catch (PortalException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SystemException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
 			boolean flag = false;
-			PrintWriter writer = resourceResponse.getWriter();
-			
-			if (Validator.isNotNull(portfolioName)){
-				DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Portfolio.class);
-				dynamicQuery.add(RestrictionsFactoryUtil.eq("portfolioName", portfolioName));
-				
-				try {
-					@SuppressWarnings("unchecked")
-					List<Portfolio> results = PortfolioLocalServiceUtil.dynamicQuery(dynamicQuery);
-					if(portfolioId > 0){ // Edit Portfolio Form
-						if(!savedPortfolioName.equalsIgnoreCase(portfolioName)){
-							flag = (Validator.isNotNull(results) && results.size() > 0);
-						}
-					} else{ // Add Portfolio Form
-						flag = (Validator.isNotNull(results) && results.size() > 0);
-					}
-					
-					
-				} catch (SystemException e) {
-					e.printStackTrace();
+			for (Portfolio portfolio: userPortfolios) {
+				if ((portfolioId == 0l && portfolio.getPortfolioName().equalsIgnoreCase(portfolioName)) 
+						|| (portfolioId > 0l && portfolioId != portfolio.getPortfolioId() && portfolio.getPortfolioName().equalsIgnoreCase(portfolioName))) {
+					flag = true;
+					break;
 				}
 			}
+			
+			PrintWriter writer = resourceResponse.getWriter();
 			writer.println(flag);
 		}
 	}
@@ -141,6 +110,7 @@ public class ReportPortlet extends MVCPortlet {
 		double purchasedFx = ParamUtil.getDouble(actionRequest, "purchasedFx");
 		
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
-				isinId, ticker, purchasePrice, purchaseQty, purchasedFx, purchaseDate);
+				isinId, ticker, purchasePrice, purchaseQty, purchasedFx,
+				purchaseDate);
 	}
 }

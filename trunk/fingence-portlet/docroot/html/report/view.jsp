@@ -16,8 +16,6 @@
 			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE),
 			IConstants.BREAKUP_BY_RISK_COUNTRY);
 	
-	String baseCurrency = PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency();
-	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
@@ -25,7 +23,7 @@
 
 	<aui:row>
 		<aui:column columnWidth="30">
-			<h4>Base Currency: <span id="baseCurrency"><%= baseCurrency %></span></h4>
+			<h4>Base Currency: <%= ConversionUtil.getBaseCurrency(portfolioId) %></h4>
 		</aui:column>
 		<aui:column>
 			<c:choose>
