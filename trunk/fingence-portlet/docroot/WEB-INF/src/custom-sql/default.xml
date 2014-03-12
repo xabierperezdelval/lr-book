@@ -37,13 +37,13 @@
 				fing_Portfolio b,
 				fing_PortfolioItem c,
 				Country d,
-				fing_CountryExt e
+				fing_Currency e
 			WHERE 
 				b.portfolioId = ?
 				and a.assetId = c.assetId
 				and b.portfolioId = c.portfolioId 
 				and a.country = d.countryId
-				and d.countryId = e.countryId
+				and a.currency_ = e.currencyCode
 		]]>
 	</sql>
 </custom-sql>
