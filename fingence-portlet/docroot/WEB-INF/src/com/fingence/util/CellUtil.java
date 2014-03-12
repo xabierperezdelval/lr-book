@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.poi.ss.usermodel.Cell;
 
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 
 public class CellUtil {
@@ -60,6 +61,12 @@ public class CellUtil {
 		}
 		
 		return value;
+	}
+	
+	public static String getStringCaps(Cell cell) {
+		String original = getString(cell);
+		
+		return TextFormatter.format(original, TextFormatter.A);
 	}
 	
 	public static Date getDate(Cell cell) {

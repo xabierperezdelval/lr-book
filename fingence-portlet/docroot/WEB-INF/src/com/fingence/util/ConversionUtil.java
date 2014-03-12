@@ -19,7 +19,10 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
+import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -134,5 +137,22 @@ public class ConversionUtil {
 		}
 
 		return conversion;
-	}	
+	}
+	
+	public static String getBaseCurrency(long portfolioId) {
+		
+		String baseCurrency = StringPool.BLANK;
+		
+		try {
+			Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(portfolioId);
+			
+			if (Validator.isNotNull(portfolio)) {
+				baseCurrency = getCurrencies().get(portfolio.getBaseCurrency());
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return baseCurrency;
+	}
 }
