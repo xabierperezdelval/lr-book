@@ -49,8 +49,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	
 	public List<MyResult> getMyResults(long portfolioId) {
 		
-		Map<String, Double> currentFxMap = ConversionUtil.getFxRates();
-		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
 		
 		for (MyResult myResult: myResults) {
@@ -58,7 +56,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			String baseCurrency = myResult.getBaseCurrency();
 			
 			if (!baseCurrency.equalsIgnoreCase("USD")) {
-				double conversionFactor = 1/ConversionUtil.getCurrentFx(baseCurrency, currentFxMap);
+				double conversionFactor = 1/ConversionUtil.getConversion(baseCurrency);
 				myResult.setPurchasedMarketValue(myResult.getPurchasedMarketValue() * conversionFactor);
 				myResult.setCurrentMarketValue(myResult.getPurchasedMarketValue() * conversionFactor);
 				myResult.setGain_loss(myResult.getGain_loss() * conversionFactor);

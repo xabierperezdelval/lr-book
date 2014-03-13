@@ -132,8 +132,6 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		double totalCurrentValue = 0.0d;
 		double totalGainLoss = 0.0d;
 		
-		Map<String, Double> currentFxMap = ConversionUtil.getFxRates();
-		
 		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
 			
@@ -174,7 +172,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 				}
 				
 				if (Validator.isNotNull(asset)) {
-					usdCurrentPrice += 	(asset.getCurrent_price() * portfolioItem.getPurchaseQty() * ConversionUtil.getCurrentFx(asset.getCurrency(), currentFxMap));	
+					usdCurrentPrice += 	(asset.getCurrent_price() * portfolioItem.getPurchaseQty() * ConversionUtil.getConversion(asset.getCurrency()));	
 				}
 			}
 			
@@ -237,5 +235,25 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getBaseCurrency(long portfolioId) {
+		
+		String baseCurrency = StringPool.BLANK;
+		
+		try {
+			Portfolio portfolio = fetchPortfolio(portfolioId);
+			
+			if (Validator.isNotNull(portfolio)) {
+				
+				Currency currency = currencyPersistence.findByCurrencyCode(portfolio.getBaseCurrency());
+
+				baseCurrency = currency.getCurrencyCode() + StringPool.DASH + currency.getCurrencyDesc();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return baseCurrency;
 	}
 }

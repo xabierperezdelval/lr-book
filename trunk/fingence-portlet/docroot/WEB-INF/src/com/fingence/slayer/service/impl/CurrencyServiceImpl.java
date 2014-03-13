@@ -14,6 +14,7 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.util.List;
 import com.fingence.slayer.service.base.CurrencyServiceBaseImpl;
 import com.fingence.slayer.model.Currency;
 import com.liferay.portal.kernel.util.Validator;
@@ -55,5 +56,9 @@ public class CurrencyServiceImpl extends CurrencyServiceBaseImpl {
 		}
 		
 		return conversion;
+	}
+	
+	public List<Currency> getCurrencies() {
+		return currencyPersistence.findAll();
 	}
 }

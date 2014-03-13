@@ -25,7 +25,7 @@
 
 	<aui:row>
 		<aui:column columnWidth="30">
-			<h4>Base Currency: <%= ConversionUtil.getBaseCurrency(portfolioId) %></h4>
+			<h4>Base Currency: <%= PortfolioServiceUtil.getBaseCurrency(portfolioId) %></h4>
 		</aui:column>
 		<aui:column>
 			<c:choose>
