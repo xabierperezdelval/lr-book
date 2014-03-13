@@ -245,7 +245,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			Portfolio portfolio = portfolioLocalService.fetchPortfolio(portfolioId);
 			
 			if (Validator.isNotNull(portfolio)) {
-				Currency currency = currencyPersistence.fetchByCurrencyCode(portfolio.getBaseCurrency());
+				Currency currency = currencyService.getCurrency(portfolio.getBaseCurrency());
 				baseCurrency = currency.getCurrencyCode() + StringPool.DASH + currency.getCurrencyDesc();
 			}
 		} catch (SystemException e) {
