@@ -83,6 +83,8 @@ public class UpdateXRates extends BaseMessageListener {
 			
 			if (Double.isNaN(xrate) || xrate == currency.getConversion()) continue;
 			
+			System.out.println("rates have got changed..." + currency.getCurrencyCode() + ":" + xrate);
+			
 			currency.setConversion(xrate);
 			
 			try {
