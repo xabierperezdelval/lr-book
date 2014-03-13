@@ -9,8 +9,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
-import com.fingence.slayer.model.CountryExt;
-import com.fingence.slayer.service.CountryExtLocalServiceUtil;
+import com.fingence.slayer.model.Currency;
+import com.fingence.slayer.service.CurrencyLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -66,35 +66,28 @@ public class UpdateXRates extends BaseMessageListener {
 		
 		int count = 0;
 		try {
-			count = CountryExtLocalServiceUtil.getCountryExtsCount();
+			count = CurrencyLocalServiceUtil.getCurrenciesCount();
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		List<CountryExt> countryExts = null;
+		List<Currency> currencies = null;
 		try {
-			countryExts = CountryExtLocalServiceUtil.getCountryExts(0, count);
+			currencies = CurrencyLocalServiceUtil.getCurrencies(0, count);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-								
-		for (CountryExt countryExt: countryExts) {
+		
+		for (Currency currency: currencies) {
 			
-			double conversion = 1.0d;
-			String currency = countryExt.getCurrency();
-			double xrate = rates.getDouble(currency);
+			String currencyCode = currency.getCurrencyCode();
+			double xrate = rates.getDouble(currencyCode);
 			
-			if (Double.isNaN(xrate)) {
-				countryExt.setCurrency("USD");
-				countryExt.setCurrencyDesc("US Dollar");
-
-			} else {
-				conversion = 1/xrate;
-			}
+			if (Double.isNaN(xrate)) continue;
 			
-			countryExt.setConversion(conversion);
+			currency.setConversion(1/xrate);
 			
 			try {
-				CountryExtLocalServiceUtil.updateCountryExt(countryExt);
+				CurrencyLocalServiceUtil.updateCurrency(currency);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

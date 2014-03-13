@@ -100,12 +100,15 @@
 		<column name="fund_geo_focus" type="String"/>
 	</entity>
 	
-	<entity name="CountryExt" local-service="true" remote-service="true">
-		<column name="countryId" type="long" primary="true"/>
-		<column name="currency" type="String"/>
+	<entity name="Currency" local-service="true" remote-service="true">
+		<column name="currencyId" type="long" primary="true"/>
+		<column name="currencyCode" type="String"/>
 		<column name="currencyDesc" type="String"/>
 		<column name="conversion" type="double"/>
-		<column name="marketType" type="String"/> <!-- developed, emerging, frontier -->
+		
+		<finder return-type="Currency" name="CurrencyCode">
+			<finder-column name="currencyCode"/>
+		</finder>
 	</entity>
 	
 	<entity name="Portfolio" local-service="true" remote-service="true" cache-enabled="false">
