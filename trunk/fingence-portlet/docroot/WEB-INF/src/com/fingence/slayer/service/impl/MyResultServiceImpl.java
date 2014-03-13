@@ -15,11 +15,10 @@
 package com.fingence.slayer.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fingence.slayer.model.MyResult;
+import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
-import com.fingence.util.ConversionUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
@@ -56,7 +55,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			String baseCurrency = myResult.getBaseCurrency();
 			
 			if (!baseCurrency.equalsIgnoreCase("USD")) {
-				double conversionFactor = 1/ConversionUtil.getConversion(baseCurrency);
+				double conversionFactor = CurrencyServiceUtil.getConversion(baseCurrency);
 				myResult.setPurchasedMarketValue(myResult.getPurchasedMarketValue() * conversionFactor);
 				myResult.setCurrentMarketValue(myResult.getPurchasedMarketValue() * conversionFactor);
 				myResult.setGain_loss(myResult.getGain_loss() * conversionFactor);
