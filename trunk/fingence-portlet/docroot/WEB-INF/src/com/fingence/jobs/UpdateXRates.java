@@ -13,7 +13,6 @@ import com.fingence.slayer.service.CurrencyLocalServiceUtil;
 import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -52,27 +51,26 @@ public class UpdateXRates extends BaseMessageListener {
 			e.printStackTrace();
 		}
 		
-		String json = null;
+		String jsonResponse = null;
 		try {
-			json = IOUtils.toString(inputStream);
+			jsonResponse = IOUtils.toString(inputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		JSONObject jsonObject = null;
 		try {
-			jsonObject = JSONFactoryUtil.createJSONObject(json);
+			jsonObject = JSONFactoryUtil.createJSONObject(jsonResponse);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		JSONArray jsonArray = jsonObject.getJSONArray("rates");
+		String[] results = JSONFactoryUtil.serialize(jsonObject.getJSONObject("rates")).split(StringPool.COMMA);
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@@");
+		System.out.println("@@@@@@@@@@@@@@@@@@@" + results[1]);
 		
-		for (int i=0; i<jsonArray.length(); i++) {
-			JSONObject item = jsonArray.getJSONObject(i);
-			String[] parts = item.toString().split(StringPool.COLON);
+		for (int i=0; i<results.length; i++) {
+			String[] parts = results[i].split(StringPool.COLON);
 			
 			String currencyCode = parts[0].replaceAll(StringPool.DOUBLE_QUOTE, StringPool.BLANK);
 			double xrate = Double.parseDouble(parts[1]);
