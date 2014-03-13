@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 public class UpdateXRates extends BaseMessageListener {
@@ -72,7 +73,9 @@ public class UpdateXRates extends BaseMessageListener {
 		for (int i=0; i<results.length; i++) {
 			String[] parts = results[i].split(StringPool.COLON);
 			
-			String currencyCode = parts[0].replaceAll(StringPool.DOUBLE_QUOTE, StringPool.BLANK);
+			System.out.println(parts[0] + ":" + parts[1]);
+			
+			String currencyCode = StringUtil.replace(parts[0], StringPool.DOUBLE_QUOTE, StringPool.BLANK);
 			double xrate = Double.parseDouble(parts[1]);
 			
 			System.out.println(currencyCode + StringPool.COLON + xrate);
