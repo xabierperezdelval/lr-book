@@ -15,14 +15,14 @@
 package com.fingence.slayer.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
+import com.fingence.slayer.model.Currency;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
+import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.PortfolioServiceBaseImpl;
-import com.fingence.util.ConversionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -172,7 +172,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 				}
 				
 				if (Validator.isNotNull(asset)) {
-					usdCurrentPrice += 	(asset.getCurrent_price() * portfolioItem.getPurchaseQty() * ConversionUtil.getConversion(asset.getCurrency()));	
+					usdCurrentPrice += 	(asset.getCurrent_price() * portfolioItem.getPurchaseQty() * CurrencyServiceUtil.getConversion(asset.getCurrency()));
 				}
 			}
 			
@@ -237,17 +237,15 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		}
 	}
 	
-	public static String getBaseCurrency(long portfolioId) {
+	public String getBaseCurrency(long portfolioId) {
 		
 		String baseCurrency = StringPool.BLANK;
 		
 		try {
-			Portfolio portfolio = fetchPortfolio(portfolioId);
+			Portfolio portfolio = portfolioLocalService.fetchPortfolio(portfolioId);
 			
 			if (Validator.isNotNull(portfolio)) {
-				
-				Currency currency = currencyPersistence.findByCurrencyCode(portfolio.getBaseCurrency());
-
+				Currency currency = currencyPersistence.fetchByCurrencyCode(portfolio.getBaseCurrency());
 				baseCurrency = currency.getCurrencyCode() + StringPool.DASH + currency.getCurrencyDesc();
 			}
 		} catch (SystemException e) {

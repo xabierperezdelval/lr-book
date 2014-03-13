@@ -59,6 +59,15 @@ public class CurrencyServiceImpl extends CurrencyServiceBaseImpl {
 	}
 	
 	public List<Currency> getCurrencies() {
-		return currencyPersistence.findAll();
+		
+		List<Currency> currencies = null;
+		
+		try {
+			currencies = currencyPersistence.findAll();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return currencies;
 	}
 }

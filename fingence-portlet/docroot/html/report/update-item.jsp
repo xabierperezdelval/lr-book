@@ -50,7 +50,7 @@
 		<aui:column>
 			<c:choose>
 				<c:when test="<%= itemId > 0l && !asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD) %>">
-					<aui:input name="purchasedFx" cssClass="width-85" value="<%= portfolioItem.getPurchasedFx() %>" prefix="<%= IConstants.CURRENCY_UNIT + StringPool.SPACE + asset.getCurrency() + StringPool.EQUAL %>" suffix="<%= IConstants.CURRENCY_USD %>" />
+					<aui:input name="purchasedFx" cssClass="width-85" value="<%= portfolioItem.getPurchasedFx() %>" prefix="<%= IConstants.CURRENCY_UNIT + StringPool.SPACE + IConstants.CURRENCY_USD + StringPool.EQUAL %>" suffix="<%= asset.getCurrency() %>" />
 				</c:when>
 				<c:otherwise>
 					&nbsp;

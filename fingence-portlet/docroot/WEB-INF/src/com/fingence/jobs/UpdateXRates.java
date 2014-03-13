@@ -22,7 +22,6 @@ public class UpdateXRates extends BaseMessageListener {
 	
 	@Override
 	protected void doReceive(Message arg) throws Exception {
-		
 		update();
 	}
 
@@ -82,9 +81,9 @@ public class UpdateXRates extends BaseMessageListener {
 			String currencyCode = currency.getCurrencyCode();
 			double xrate = rates.getDouble(currencyCode);
 			
-			if (Double.isNaN(xrate)) continue;
+			if (Double.isNaN(xrate) || xrate == currency.getConversion()) continue;
 			
-			currency.setConversion(1/xrate);
+			currency.setConversion(xrate);
 			
 			try {
 				CurrencyLocalServiceUtil.updateCurrency(currency);
