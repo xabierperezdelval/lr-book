@@ -1,5 +1,6 @@
 <%@ include file="/html/report/init.jsp"%>
 
+<%@page import="com.fingence.slayer.service.AssetLocalServiceUtil"%>
 <%@page import="com.fingence.slayer.service.PortfolioItemLocalServiceUtil"%>
 
 <%
