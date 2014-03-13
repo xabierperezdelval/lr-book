@@ -1,5 +1,7 @@
 <%@ include file="/html/report/init.jsp"%>
 
+<%@page import="com.fingence.slayer.service.PortfolioItemLocalServiceUtil"%>
+
 <%
 	long itemId = ParamUtil.getLong(request, "portfolioItemId");
 	long portfolioId = ParamUtil.getLong(request, "portfolioId");
