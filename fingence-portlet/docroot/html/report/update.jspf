@@ -1,6 +1,5 @@
-<%@page import="java.util.Iterator"%>
-<%@page import="java.util.Map"%>
-<%@page import="com.fingence.util.ConversionUtil"%>
+<%@page import="com.fingence.slayer.model.Currency"%>
+<%@page import="com.fingence.slayer.service.CurrencyServiceUtil"%>
 <%@page import="com.fingence.slayer.service.BridgeServiceUtil"%>
 <%@page import="com.fingence.slayer.service.PortfolioLocalServiceUtil"%>
 
@@ -92,12 +91,11 @@
 				<aui:column>
 					<aui:select name="baseCurrency" required="true">
 						<%
-							Map<String, String> currencies = ConversionUtil.getCurrencies();
+							List<Currency> currencies = CurrencyServiceUtil.getCurrencies();
 						
-							Iterator<String> itr = currencies.keySet().iterator();
-							while (itr.hasNext()) {
-								String key = itr.next();
-								String value = currencies.get(key);
+							for (Currency currency: currencies) {
+								String key = currency.getCurrencyCode();
+								String value = currency.getCurrencyDesc();
 								%><aui:option value="<%= key %>" label="<%= (key + StringPool.DASH + value) %>" selected="<%= (key.equalsIgnoreCase(portfolio.getBaseCurrency())) %>"/><%
 							}
 						%>
