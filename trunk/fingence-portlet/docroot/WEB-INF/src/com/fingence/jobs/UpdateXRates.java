@@ -2,6 +2,7 @@ package com.fingence.jobs;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -19,7 +20,6 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 public class UpdateXRates extends BaseMessageListener {
@@ -65,19 +65,18 @@ public class UpdateXRates extends BaseMessageListener {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+				
+		Iterator<String> itr = jsonObject.getJSONObject("rates").keys();
 		
-		String[] results = jsonObject.getJSONObject("rates").toString().split(StringPool.COMMA);
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@@" + results[1]);
+		//for (int i=0; i<results.length; i++) {
 		
-		for (int i=0; i<results.length; i++) {
-			String[] parts = results[i].split(StringPool.COLON);
+		while (itr.hasNext()) {
 			
-			System.out.println(parts[0] + ":" + parts[1]);
-			
-			String currencyCode = StringUtil.replace(parts[0], StringPool.DOUBLE_QUOTE, StringPool.BLANK);
-			double xrate = Double.parseDouble(parts[1]);
-			
+			String currencyCode = itr.next();
+		
+			double xrate = jsonObject.getJSONObject("rates").getDouble(currencyCode);
+						
 			System.out.println(currencyCode + StringPool.COLON + xrate);
 			
 			Currency currency = CurrencyServiceUtil.getCurrency(currencyCode);
