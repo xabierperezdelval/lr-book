@@ -66,7 +66,7 @@ public class UpdateXRates extends BaseMessageListener {
 			e.printStackTrace();
 		}
 		
-		String[] results = JSONFactoryUtil.serialize(jsonObject.getJSONObject("rates")).split(StringPool.COMMA);
+		String[] results = jsonObject.getJSONObject("rates").toString().split(StringPool.COMMA);
 		
 		System.out.println("@@@@@@@@@@@@@@@@@@@" + results[1]);
 		
