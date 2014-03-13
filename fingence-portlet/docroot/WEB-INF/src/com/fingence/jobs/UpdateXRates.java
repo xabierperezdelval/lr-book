@@ -2,7 +2,6 @@ package com.fingence.jobs;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -11,12 +10,17 @@ import org.apache.commons.io.IOUtils;
 
 import com.fingence.slayer.model.Currency;
 import com.fingence.slayer.service.CurrencyLocalServiceUtil;
+import com.fingence.slayer.service.CurrencyServiceUtil;
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 public class UpdateXRates extends BaseMessageListener {
 	
@@ -61,32 +65,41 @@ public class UpdateXRates extends BaseMessageListener {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JSONObject rates = jsonObject.getJSONObject("rates");
 		
-		int count = 0;
-		try {
-			count = CurrencyLocalServiceUtil.getCurrenciesCount();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		List<Currency> currencies = null;
-		try {
-			currencies = CurrencyLocalServiceUtil.getCurrencies(0, count);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		JSONArray jsonArray = jsonObject.getJSONArray("rates");
 		
-		for (Currency currency: currencies) {
+		System.out.println("@@@@@@@@@@@@@@@@@@@");
+		
+		for (int i=0; i<jsonArray.length(); i++) {
+			JSONObject item = jsonArray.getJSONObject(i);
+			String[] parts = item.toString().split(StringPool.COLON);
 			
-			String currencyCode = currency.getCurrencyCode();
-			double xrate = rates.getDouble(currencyCode);
+			String currencyCode = parts[0].replaceAll(StringPool.DOUBLE_QUOTE, StringPool.BLANK);
+			double xrate = Double.parseDouble(parts[1]);
 			
-			if (Double.isNaN(xrate) || xrate == currency.getConversion()) continue;
+			System.out.println(currencyCode + StringPool.COLON + xrate);
 			
-			System.out.println("rates have got changed..." + currency.getCurrencyCode() + ":" + xrate);
+			Currency currency = CurrencyServiceUtil.getCurrency(currencyCode);
+			
+			if (Validator.isNull(currency)) {
+				long currencyId = 0;
+				try {
+					currencyId = CounterLocalServiceUtil.increment(Currency.class.getName());
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				currency = CurrencyLocalServiceUtil.createCurrency(currencyId);
+				currency.setCurrencyCode(currencyCode);	
+				try {
+					currency = CurrencyLocalServiceUtil.addCurrency(currency);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (xrate == currency.getConversion()) continue;
 			
 			currency.setConversion(xrate);
-			
 			try {
 				CurrencyLocalServiceUtil.updateCurrency(currency);
 			} catch (SystemException e) {

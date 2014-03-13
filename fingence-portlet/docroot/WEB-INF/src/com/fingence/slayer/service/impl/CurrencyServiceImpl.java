@@ -15,9 +15,9 @@
 package com.fingence.slayer.service.impl;
 
 import java.util.List;
-import com.fingence.slayer.service.base.CurrencyServiceBaseImpl;
+
 import com.fingence.slayer.model.Currency;
-import com.liferay.portal.kernel.util.Validator;
+import com.fingence.slayer.service.base.CurrencyServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 
 /**
@@ -41,21 +41,8 @@ public class CurrencyServiceImpl extends CurrencyServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.CurrencyServiceUtil} to access the currency remote service.
 	 */
 	
-	public double getConversion(String currencyCode) {
-		
-		double conversion = 1.0d;
-		
-		try {
-			Currency currency = currencyPersistence.fetchByCurrencyCode(currencyCode);
-			
-			if (Validator.isNotNull(currency)) {
-				conversion = currency.getConversion();
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return conversion;
+	public double getConversion(String currencyCode) {		
+		return getCurrency(currencyCode).getConversion();
 	}
 	
 	public List<Currency> getCurrencies() {
@@ -69,5 +56,17 @@ public class CurrencyServiceImpl extends CurrencyServiceBaseImpl {
 		}
 		
 		return currencies;
+	}
+	
+	public Currency getCurrency(String currencyCode) {
+		Currency currency = null;
+		
+		try {
+			currency = currencyPersistence.fetchByCurrencyCode(currencyCode);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return currency;		
 	}
 }

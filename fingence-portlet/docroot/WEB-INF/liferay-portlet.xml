@@ -15,7 +15,7 @@
 			</trigger>
 		</scheduler-entry>
 		
-		<action-url-redirect>true</action-url-redirect>		
+		<action-url-redirect>true</action-url-redirect>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<css-class-wrapper>register-portlet</css-class-wrapper>

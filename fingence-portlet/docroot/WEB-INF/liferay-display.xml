@@ -7,4 +7,7 @@
 		<portlet id="report" />
 		<portlet id="menu" />
 	</category>
+	<category name="category.sample">
+		<portlet id="assets"></portlet>
+	</category>
 </display>
