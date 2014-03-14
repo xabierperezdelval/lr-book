@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 public class UpdateXRates extends BaseMessageListener {
@@ -67,18 +66,13 @@ public class UpdateXRates extends BaseMessageListener {
 		}
 				
 		Iterator<String> itr = jsonObject.getJSONObject("rates").keys();
-		
-		
-		//for (int i=0; i<results.length; i++) {
-		
+						
 		while (itr.hasNext()) {
 			
 			String currencyCode = itr.next();
 		
 			double xrate = jsonObject.getJSONObject("rates").getDouble(currencyCode);
-						
-			System.out.println(currencyCode + StringPool.COLON + xrate);
-			
+									
 			Currency currency = CurrencyServiceUtil.getCurrency(currencyCode);
 			
 			if (Validator.isNull(currency)) {
@@ -100,6 +94,7 @@ public class UpdateXRates extends BaseMessageListener {
 			if (xrate == currency.getConversion()) continue;
 			
 			currency.setConversion(xrate);
+			
 			try {
 				CurrencyLocalServiceUtil.updateCurrency(currency);
 			} catch (SystemException e) {
