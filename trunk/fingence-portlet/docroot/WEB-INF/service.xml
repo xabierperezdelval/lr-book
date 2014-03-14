@@ -106,6 +106,10 @@
 		<column name="currencyDesc" type="String"/>
 		<column name="conversion" type="double"/>
 		
+		<order by="ase">
+			<order-column name="currencyCode"/>
+		</order>		
+		
 		<finder return-type="Currency" name="CurrencyCode">
 			<finder-column name="currencyCode"/>
 		</finder>
