@@ -86,41 +86,47 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		
 		boolean havingRole = false;
 				
+		List<Organization> organizations = null;
 		try {
-			List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
+			organizations = organizationLocalService.getUserOrganizations(userId);
+		} catch (SystemException e1) {
+			e1.printStackTrace();
+		}
+		
+		for (Organization organization:organizations) {
 			
-			for (Organization organization:organizations) {
-				
-				boolean performRoleCheck = false;
-				
+			boolean performRoleCheck = false;
+			
+			List<Organization> parents = null;
+			try {
+				parents = organizationLocalService.getParentOrganizations(organization.getOrganizationId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			} catch (PortalException e) {
+				e.printStackTrace();
+			}
+			for (Organization parent: parents) {
+				if (parent.getName().equalsIgnoreCase(parentOrg)) {
+					performRoleCheck = true;
+					break;
+				} 
+			}					
+			
+			if (performRoleCheck) {
 				try {
-					List<Organization> parents = organizationLocalService.getParentOrganizations(organization.getOrganizationId());
-					for (Organization parent: parents) {
-						if (parent.getName().equalsIgnoreCase(parentOrg)) {
-							performRoleCheck = true;
-							break;
-						} 
-					}					
+					havingRole = userGroupRoleLocalService.hasUserGroupRole(
+							userId, organization.getGroupId(),
+							roleName);
+					
+					if (havingRole) {
+						break;
+					}
 				} catch (PortalException e) {
 					e.printStackTrace();
-				}
-				
-				if (performRoleCheck) {
-					try {
-						havingRole = userGroupRoleLocalService.hasUserGroupRole(
-								userId, organization.getGroupId(),
-								roleName);
-						
-						if (havingRole) {
-							break;
-						}
-					} catch (PortalException e) {
-						e.printStackTrace();
-					}					
-				}
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}						
 			}
-		} catch (SystemException e) {
-			e.printStackTrace();
 		}
 				
 		return havingRole;

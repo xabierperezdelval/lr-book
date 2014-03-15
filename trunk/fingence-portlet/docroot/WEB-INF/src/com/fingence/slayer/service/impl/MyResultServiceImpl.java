@@ -57,7 +57,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			if (!baseCurrency.equalsIgnoreCase("USD")) {
 				double conversionFactor = 1/CurrencyServiceUtil.getConversion(baseCurrency);
 				myResult.setPurchasedMarketValue(myResult.getPurchasedMarketValue() * conversionFactor);
-				myResult.setCurrentMarketValue(myResult.getPurchasedMarketValue() * conversionFactor);
+				myResult.setCurrentMarketValue(myResult.getCurrentMarketValue() * conversionFactor);
 				myResult.setGain_loss(myResult.getGain_loss() * conversionFactor);
 			}
 			
