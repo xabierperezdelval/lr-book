@@ -68,12 +68,13 @@
                              	label: 'Action',
                              	formatter: function(obj) {
 	    							if (obj.value > 0){
-    									obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
-    										+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
-    										+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	    								var _portfolioId = obj.data.portfolioId;
+    									obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
+    										+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+    										+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	    							
 	    								if (!obj.data.isPrimary && (<%= (userType == IConstants.USER_TYPE_INVESTOR) || (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>)){
-	    									obj.value += '<a href="javascript:void(0);" title="Make Portfolio Primary" onClick="javascript:makePrimary(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_PRIMARY_OPTIONS %>"/></a>';
+	    									obj.value += '<a href="javascript:void(0);" title="Make Portfolio Primary" onClick="javascript:makePrimary(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_PRIMARY_OPTIONS %>"/></a>';
 	    								}
 	    							}
 					 			},	

@@ -14,8 +14,8 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
-<hr/>
-<div id="slicePortfolio"></div>
+
+<hr/><div id="slicePortfolio"></div>
 
 <aui:script>
 	AUI().ready(function(A) {
