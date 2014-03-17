@@ -113,6 +113,9 @@
 		var dataArray = new Array();
 		
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
+			if(key=='' || key =='0'){
+				key = 'Un-Specified';
+			}
 			var value = item[0].currentMarketValue;
 			_.reduce(item, function(sum, obj) {
 			    value += obj.currentMarketValue;
