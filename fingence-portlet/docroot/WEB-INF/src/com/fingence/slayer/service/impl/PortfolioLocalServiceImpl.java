@@ -356,7 +356,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		return assets;
 	}
 	
-	public void makePrimary(long portfolioId, int userType) {
+	public void makePrimary(long portfolioId) {
 		
 		Portfolio portfolio = null;
 		try {
@@ -367,22 +367,23 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		
 		if (Validator.isNotNull(portfolio)) {
 			List<Portfolio> portfolios = null;
+			
 			try {
-				if(userType == IConstants.USER_TYPE_WEALTH_ADVISOR){
-					portfolios = portfolioPersistence.findByWealthAdvisorId(portfolio.getWealthAdvisorId());
-				} else if (userType == IConstants.USER_TYPE_INVESTOR) {
-					portfolios = portfolioPersistence.findByInvestorId(portfolio.getWealthAdvisorId());
-				}
-				Boolean primaryDisabled = CellUtil.disablePrimaryPortfolio(portfolios);
-				if(primaryDisabled) {
-					for (Portfolio obj: portfolios) {
-						obj.setPrimary(obj.getPortfolioId() == portfolioId);
-						updatePortfolio(obj);
-					}	
-				}
+				portfolios = portfolioPersistence.findByInvestorId(portfolio.getInvestorId());
 			} catch (SystemException e) {
 				e.printStackTrace();
-			}			
+			}
+			
+			if (Validator.isNotNull(portfolios)) {
+				for (Portfolio _portfolio: portfolios) {
+					_portfolio.setPrimary(_portfolio.getPortfolioId() == portfolioId);
+					try {
+						updatePortfolio(_portfolio);
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
+				}
+			}		
 		}
 	}
 }

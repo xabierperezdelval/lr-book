@@ -158,8 +158,7 @@
 			Liferay.Service(
 	  			'/fingence-portlet.portfolio/make-primary',
 	  			{
-	    			portfolioId: portfolioId,
-	    			userType : <%= userType  %>
+	    			portfolioId: portfolioId
 	  			},
 	  			function(obj) {
 	    			Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
