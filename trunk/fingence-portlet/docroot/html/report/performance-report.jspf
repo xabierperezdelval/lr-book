@@ -79,7 +79,7 @@
 							key: 'gain_loss',
 							label: 'Weightage(%)' ,
 							formatter: function(obj) {
-								obj.value = display((obj.value/totalInvestment) * 100, 'percent');
+								obj.value = display((obj.value/Math.abs(totalInvestment)) * 100, 'percent');
 							},
 				 			allowHTML: true
 						}				 		

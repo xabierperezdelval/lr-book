@@ -52,8 +52,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.PortfolioServiceUtil} to access the portfolio remote service.
 	 */
 	
-	public void makePrimary(long portfolioId) {
-		portfolioLocalService.makePrimary(portfolioId);
+	public void makePrimary(long portfolioId, int userType) {
+		portfolioLocalService.makePrimary(portfolioId, userType);
 	}
 	
 	public List<Portfolio> getPortfolios(long userId) {
@@ -144,6 +144,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 				jsonObject.put("investorOrAdvisor", bridgeService
 						.getUserName(portfolio.getWealthAdvisorId()));
 			}
+			
+			jsonObject.put("isPrimary", portfolio.isPrimary());
 			
 			String baseCurrency = portfolio.getBaseCurrency();
 			jsonObject.put("baseCurrency", baseCurrency);
