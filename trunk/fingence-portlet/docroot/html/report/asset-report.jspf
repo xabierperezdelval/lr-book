@@ -51,6 +51,11 @@
 				totalCurrentValue += item.currentMarketValue;
 				totalUsdInvested += (item.currentMarketValue * item.current_fx);
 			});
+			
+			if (key == '' || key == '0') {
+				key = 'Un-Specified';
+			}
+			
 			resultantObj._key = key;
 			resultantObj.currentMarketValue = totalCurrentValue;
 			resultantObj.usdInvested = totalUsdInvested;

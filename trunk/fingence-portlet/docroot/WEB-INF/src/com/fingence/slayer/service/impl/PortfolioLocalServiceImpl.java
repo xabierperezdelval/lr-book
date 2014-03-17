@@ -31,7 +31,6 @@ import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
-import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.fingence.slayer.service.base.PortfolioLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
 import com.fingence.util.ConversionUtil;
@@ -40,7 +39,6 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.util.PortalUtil;
 
 /**
  * The implementation of the portfolio local service.
