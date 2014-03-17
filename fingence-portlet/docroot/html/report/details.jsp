@@ -78,10 +78,9 @@
 	                             key: 'itemId',
 	                             label: 'Actions',
 	                             formatter: function(obj) {
-	                             
-	                              	obj.value = '<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
-	                             			'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>' +
-	                             			'<a id="viewMoreDetails" href="javascript:void(0);" onmouseover="javascript:showMoreDetails(' + obj.value + ',' + obj.data.purchasedFx + ','  + obj.data.current_fx + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_MORE_DETAILS %>"/></a>';
+	                              	obj.value = 
+	                              		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
+	                             		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	                             			
                        			},
 	                             allowHTML: true
@@ -140,26 +139,5 @@
                 }
             );
         });
-    }
-    
-    function showMoreDetails(assetId, purchasedFx, currentFx){
-    	AUI().ready(
-		  'aui-tooltip',
-		  function(A) {
-		    new A.Tooltip(
-		      {
-		        align: {
-		          points: ['bc', 'tc']
-		        },
-		        bodyContent: '<div>' +
-		        			 	'<ul>' +
-		        			 		'<li>Purchased Fx: ' + purchasedFx + '</li>' +	
-		        				'</ul>' +
-		        			 '</div>',
-		        trigger: '#viewMoreDetails'
-		      }
-		    ).render();
-		  }
-		);
     }
 </aui:script>

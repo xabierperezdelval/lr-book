@@ -74,9 +74,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				if (Validator.isNotNull(country)) {
 					myResult.setCountryOfRiskName(TextFormatter.format(country.getName(), TextFormatter.J));
 				}
-			} else {
-				myResult.setCountryOfRiskName("Un-Specified");
-			}			
+			}		
 		}
 		
 		return myResults;
