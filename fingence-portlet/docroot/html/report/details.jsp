@@ -70,7 +70,7 @@
 	                        	key: 'gain_loss',
 	                         	label: 'Gain/Loss',
 	                         	formatter: function(obj) {
-									obj.value = display(obj.value, 'amount') + '(' +display(obj.value/obj.data.purchasedMarketValue *100, 'percent')   + ')';
+									obj.value = formatNumber((accounting.formatMoney(obj.value) + '(' + accounting.toFixed((obj.value/obj.data.purchasedMarketValue *100), 2) + '%)'), obj.value);
 								},
 					 			allowHTML: true
 	                       	},

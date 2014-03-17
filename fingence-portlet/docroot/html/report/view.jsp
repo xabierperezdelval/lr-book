@@ -25,7 +25,7 @@
 
 	<aui:row>
 		<aui:column columnWidth="30">
-			<h4>Base Currency: <%= PortfolioServiceUtil.getBaseCurrency(portfolioId) %></h4>
+			<h4>Base Currency: <%= PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency() %></h4>
 		</aui:column>
 		<aui:column>
 			<c:choose>
@@ -108,18 +108,11 @@
 </c:choose>
 
 <aui:script>
- 	function display(number, format) {
-	
-		var text = '';
+	function formatNumber(data, number) {
+		var text = data;
 		
-		if (format == 'amount') {
-			text = accounting.formatMoney(Math.abs(number));
-		} else {
-			text = (Math.abs(number)).toFixed(2) + '%';
-		}
-		
-		if (number < 0) {
-			text = text.fontcolor('red');
+		if (number < 0 || number == false) {
+			text = data.fontcolor('red');
 		}
 		
 		return text;
