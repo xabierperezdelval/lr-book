@@ -52,8 +52,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.PortfolioServiceUtil} to access the portfolio remote service.
 	 */
 	
-	public void makePrimary(long portfolioId, int userType) {
-		portfolioLocalService.makePrimary(portfolioId, userType);
+	public void makePrimary(long portfolioId) {
+		portfolioLocalService.makePrimary(portfolioId);
 	}
 	
 	public List<Portfolio> getPortfolios(long userId) {
