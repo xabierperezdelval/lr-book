@@ -31,6 +31,7 @@ import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
+import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.fingence.slayer.service.base.PortfolioLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
 import com.fingence.util.ConversionUtil;
@@ -39,6 +40,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.util.PortalUtil;
 
 /**
  * The implementation of the portfolio local service.
@@ -356,7 +358,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		return assets;
 	}
 	
-	public void makePrimary(long portfolioId) {
+	public void makePrimary(long portfolioId, int userType) {
 		
 		Portfolio portfolio = null;
 		try {
@@ -366,13 +368,20 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		}
 		
 		if (Validator.isNotNull(portfolio)) {
+			List<Portfolio> portfolios = null;
 			try {
-				List<Portfolio> portfolios = portfolioPersistence.findByInvestorId(portfolio.getInvestorId());
-				
-				for (Portfolio obj: portfolios) {
-					obj.setPrimary(obj.getPortfolioId() == portfolioId);
-					updatePortfolio(obj);
-				}			
+				if(userType == IConstants.USER_TYPE_WEALTH_ADVISOR){
+					portfolios = portfolioPersistence.findByWealthAdvisorId(portfolio.getWealthAdvisorId());
+				} else if (userType == IConstants.USER_TYPE_INVESTOR) {
+					portfolios = portfolioPersistence.findByInvestorId(portfolio.getWealthAdvisorId());
+				}
+				Boolean primaryDisabled = CellUtil.disablePrimaryPortfolio(portfolios);
+				if(primaryDisabled) {
+					for (Portfolio obj: portfolios) {
+						obj.setPrimary(obj.getPortfolioId() == portfolioId);
+						updatePortfolio(obj);
+					}	
+				}
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}			

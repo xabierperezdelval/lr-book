@@ -1,9 +1,13 @@
 package com.fingence.util;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 
+import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.service.PortfolioLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
@@ -96,5 +100,25 @@ public class CellUtil {
 		}
 
 		return value;
+	}
+	
+	public static boolean disablePrimaryPortfolio(List<Portfolio> portfolios){
+		Boolean disabledPrimary = false;
+		
+		for(Portfolio portfolio: portfolios){
+			if(portfolio.isPrimary()){
+				portfolio.setPrimary(false);
+				try {
+					PortfolioLocalServiceUtil.updatePortfolio(portfolio);
+					disabledPrimary = true;
+				} catch (SystemException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+		return disabledPrimary;
+		
 	}
 }

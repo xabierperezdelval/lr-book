@@ -1,4 +1,6 @@
 <div id="portfolioContainer"></div>
+<hr/>
+<div id="viewAllocation"></div>
 
 <%
 	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)? "Advisor" : "Investor";
@@ -6,6 +8,7 @@
 
 <aui:script>
 	AUI().ready(function(A) {
+	var userType = <%= userType %>;
 		Liferay.Service(
   			'/fingence-portlet.portfolio/get-portfolio-summary',
   			{
@@ -65,9 +68,16 @@
                              	label: 'Action',
                              	formatter: function(obj) {
 	    							if(obj.value > 0){
-	    								obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
-	    									+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
-	    									+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	    								if(!obj.data.isPrimary && (<%= (userType == IConstants.USER_TYPE_INVESTOR) || (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>)){
+	    									obj.value = '<a href="javascript:void(0);" title="Make Portfolio Primary" onClick="javascript:makePrimary(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_PRIMARY_OPTIONS %>"/></a>'
+	    												+ '&nbsp;<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
+	    												+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+	    												+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';			
+	    								} else {
+	    									obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
+	    												+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+	    												+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	    								}
 	    							}
 					 			},	
                              	allowHTML: true
@@ -85,31 +95,8 @@
 	});
 	
 	function viewAllocationStrategy(portfolioId){
-		var portfolioDetailsURL = Liferay.PortletURL.createRenderURL();
-	 	portfolioDetailsURL.setPortletId('report_WAR_fingenceportlet');
-	 	portfolioDetailsURL.setParameter('jspPage', '/html/report/allocation-strategy.jsp');
-	 	portfolioDetailsURL.setParameter('portfolioId', portfolioId);
-		portfolioDetailsURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
-								
-		AUI().use('aui-dialog', 'aui-dialog-iframe', function(A) {
-			Liferay.Util.openWindow({
-               	dialog: {
-               		destroyOnHide: true,
-                   	centered: true,
-                   	modal: true,
-                    width: 600,
-                   	height: 500,
-                   	resizable: true               
-               	},
-               	id: '<portlet:namespace/>allocationStrategyListing',
-               	title: 'Allocation Strategy',
-               	uri: portfolioDetailsURL
-           	});
-           	Liferay.provide(
-                	window, '<portlet:namespace/>reloadPortlet', function() {
-                       Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
-                   }
-               );			
+		AUI().ready(function(A){
+			A.one('#viewAllocation').text("Coming Soon");
 		});
 	}
 	
@@ -167,4 +154,17 @@
             );       
         });
     }
+    function makePrimary(portfolioId) {
+		Liferay.Service(
+  			'/fingence-portlet.portfolio/make-primary',
+  			{
+    			portfolioId: portfolioId,
+    			userType : <%= userType  %>
+  			},
+  			function(obj) {
+    			Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+  			}
+		);
+	}
+    
 </aui:script>

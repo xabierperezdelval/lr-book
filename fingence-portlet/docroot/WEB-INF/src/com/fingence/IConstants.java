@@ -49,6 +49,8 @@ public interface IConstants {
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
 	String THEME_ICON_VIEW = "/common/portlet.png";
+	String THEME_ICON_MORE_DETAILS = "/common/open_window.png";
+	String THEME_ICON_PRIMARY_OPTIONS = "/portlet/pop_up.png";
 	
 	String CURRENCY_USD = "USD";
 	String CURRENCY_UNIT = "1";
