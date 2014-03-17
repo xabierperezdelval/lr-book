@@ -25,9 +25,9 @@ public class ConversionUtil {
 			.append("http://currencies.apps.grandtrunk.net/getrate/")
 			.append(formatter.format(purchaseDate))
 			.append(StringPool.SLASH)
-			.append("usd")
+			.append(currency)
 			.append(StringPool.SLASH)
-			.append(currency);
+			.append("usd");
 			
 		HttpClient client = new HttpClient();
 		GetMethod method = new GetMethod(sb.toString());

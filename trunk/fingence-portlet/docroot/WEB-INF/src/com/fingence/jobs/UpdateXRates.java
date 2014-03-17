@@ -93,7 +93,7 @@ public class UpdateXRates extends BaseMessageListener {
 			
 			if (xrate == currency.getConversion()) continue;
 			
-			currency.setConversion(xrate);
+			currency.setConversion(1/xrate);
 			
 			try {
 				CurrencyLocalServiceUtil.updateCurrency(currency);

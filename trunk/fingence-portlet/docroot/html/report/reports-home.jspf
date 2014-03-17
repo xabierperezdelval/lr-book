@@ -60,7 +60,7 @@
 	    						label: 'Gain/Loss (USD)',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							obj.value = accounting.formatMoney(obj.value);
+	    							obj.value = accounting.formatMoney(obj.value) + '('+ accounting.toFixed(obj.data.gainLossPercent,2) +'%)';
 	    						}
 	    					},	    					
 			 				{
@@ -70,13 +70,13 @@
 	    							if(obj.value > 0){
 	    								if(!obj.data.isPrimary && (<%= (userType == IConstants.USER_TYPE_INVESTOR) || (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>)){
 	    									obj.value = '<a href="javascript:void(0);" title="Make Portfolio Primary" onClick="javascript:makePrimary(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_PRIMARY_OPTIONS %>"/></a>'
-	    												+ '&nbsp;<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
-	    												+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
-	    												+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';			
+	    										+ '&nbsp;<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
+	    										+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+	    										+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';			
 	    								} else {
 	    									obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
-	    												+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
-	    												+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	    										+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+	    										+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + obj.value +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	    								}
 	    							}
 					 			},	
