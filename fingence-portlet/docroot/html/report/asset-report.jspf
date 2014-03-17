@@ -44,7 +44,7 @@
 	function getDataGroupedBy(data, groupBy, netWorth) {
 		var resultantDataArray = [];
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
-			var resultantObj ={};
+			var resultantObj = {};
 			var totalCurrentValue = 0;
 			var totalUsdInvested = 0;
 			_.each(item,function(item){
@@ -89,7 +89,7 @@
 			 		},
 			 		{
 			 			key: 'weightage', 
-			 			label: 'Weightage (%)',
+			 			label: 'Weight',
 			 			formatter:function(obj) {
 				 			obj.value = (obj.value).toFixed(2) + '%';
 				 		}

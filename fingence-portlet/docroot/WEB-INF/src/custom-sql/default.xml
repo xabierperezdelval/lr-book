@@ -28,10 +28,10 @@
 				a.country_of_risk as countryOfRisk,
 				a.country_of_risk as countryOfRiskName,
 				a.currency_,
-				(c.purchasePrice * c.purchaseQty * 1/c.purchasedFx) as purchasedMarketValue,
-				(a.current_price * c.purchaseQty * 1/e.conversion) as currentMarketValue,
-				((a.current_price * c.purchaseQty * 1/e.conversion) - (c.purchasePrice * c.purchaseQty * 1/c.purchasedFx)) as gain_loss,
-				((a.current_price * c.purchaseQty * 1/e.conversion) - (c.purchasePrice * c.purchaseQty * 1/c.purchasedFx))/(c.purchasePrice * c.purchaseQty * 1/c.purchasedFx) * 100 as gain_loss_percent
+				(c.purchasePrice * c.purchaseQty * c.purchasedFx) as purchasedMarketValue,
+				(a.current_price * c.purchaseQty * e.conversion) as currentMarketValue,
+				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx)) as gain_loss,
+				((a.current_price * c.purchaseQty) - (c.purchasePrice * c.purchaseQty))/(c.purchasePrice * c.purchaseQty) * 100 as gain_loss_percent
 			FROM 
 				fing_Asset a,
 				fing_Portfolio b,

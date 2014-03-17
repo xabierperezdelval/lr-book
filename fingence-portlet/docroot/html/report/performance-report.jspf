@@ -28,9 +28,9 @@
 	});
 		
 	function showDataTable(data, sortOrder, divId, title){
-		var sorted = _.sortBy(data,'gain_loss');
+		var sorted = _.sortBy(data,'gain_loss_percent');
 		
-		var totalInvestment = getAssetItemWeightage(data);
+		var totalInvestment = getAssetItemWeightage(data, sortOrder);
 		
 		if (sortOrder == 'desc') {
 			sorted = sorted.reverse();
@@ -77,7 +77,7 @@
 						},
 						{
 							key: 'gain_loss',
-							label: 'Weightage(%)' ,
+							label: 'Weight' ,
 							formatter: function(obj) {
 								obj.value = display((obj.value/Math.abs(totalInvestment)) * 100, 'percent');
 							},
@@ -94,10 +94,13 @@
 		} 
 	}
 	
-	function getAssetItemWeightage(data){
+	function getAssetItemWeightage(data, sortOrder){
 		var total = 0;
-		_.each(data, function(item){
-			total += item.gain_loss;
+		_.each(data, function(item) {
+			var value = item.gain_loss;
+			if ((sortOrder == 'asc' && value < 0) || (sortOrder == 'desc' && value > 0)) {
+				total += value;
+			}
 		});
 		return total;
 	}
