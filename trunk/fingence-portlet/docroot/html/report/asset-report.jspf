@@ -45,11 +45,16 @@
 		var resultantDataArray = [];
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
 			var resultantObj = {};
-			var totalCurrentValue = 0;
+			var gainLossPercent = 0;
 			var totalUsdInvested = 0;
-			_.each(item,function(item){
+			var totalCurrentValue = 0;
+			
+			var cntr = 0;
+			_.each(item, function(item){
 				totalCurrentValue += item.currentMarketValue;
+				gainLossPercent += item.gain_loss_percent;
 				totalUsdInvested += (item.currentMarketValue * item.current_fx);
+				cntr++;
 			});
 			
 			if (key == '' || key == '0') {
@@ -57,12 +62,13 @@
 			}
 			
 			resultantObj._key = key;
-			resultantObj.currentMarketValue = totalCurrentValue;
+			resultantObj.gainLossPercent = gainLossPercent/cntr;
 			resultantObj.usdInvested = totalUsdInvested;
-			resultantObj.weightage = totalCurrentValue/netWorth*100;
+			resultantObj.weightage = totalCurrentValue/netWorth * 100;
 			
 			resultantDataArray.push(resultantObj);
-		});	
+		});
+		
 		return resultantDataArray;
 	}
 	
@@ -83,10 +89,10 @@
     					allowHTML:true
 	    			},
 			 		{
-			 			key: 'currentMarketValue', 
-			 			label: 'Current Value',
+			 			key: 'gainLossPercent', 
+			 			label: 'Gain/Loss %',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'amount');
+			 				obj.value = formatCustom(obj.value, 'percent');
 			 			},
 			 			allowHTML:true		 			
 			 		},
