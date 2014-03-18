@@ -7,7 +7,7 @@
 %>
 
 <aui:row>
-	<aui:column columnWidth="50">
+	<aui:column>
 		<div id="chartContainer"></div>
 	</aui:column>
 	<aui:column>
