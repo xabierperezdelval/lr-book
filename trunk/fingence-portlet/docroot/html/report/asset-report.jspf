@@ -75,7 +75,12 @@
 		    		{
 		    			key: '_key',
 		    			label: title,
-		    			formatter: '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'{value}\');">{value}</a>'
+		    			formatter: function(obj){
+		    				if(obj.value != 'Un-Specified'){
+		    					obj.value = '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.value + '\');">' + obj.value + '</a>';
+		    				}
+    					},
+    					allowHTML:true
 	    			},
 			 		{
 			 			key: 'currentMarketValue', 
@@ -111,15 +116,15 @@
 	
 	function getModifiedArray(data, groupBy) {
 		var dataArray = new Array();
-		
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
-			if(key=='' || key =='0'){
-				key = 'Un-Specified';
-			}
 			var value = item[0].currentMarketValue;
 			_.reduce(item, function(sum, obj) {
 			    value += obj.currentMarketValue;
 		  	});
+		  	
+		  	if (key == '' || key == '0') {
+				key = 'Un-Specified';
+			}
 		  	dataArray.push(new Array(key, value));
 		});	
 		return dataArray;	
@@ -170,6 +175,7 @@
 	}
 	
 	function sliceChart(sliceBy){
+	
 		var portfolioId = '<%= portfolioId %>';
 		var allocationBy = '<%= allocationBy %>'
 		var allocationParam = new String();
