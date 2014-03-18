@@ -77,7 +77,7 @@
 							key: 'gain_loss',
 							label: 'Weight' ,
 							formatter: function(obj) {
-								obj.value = formatCustom((obj.value/totalInvestment * 100), 'percent');
+								obj.value = formatCustom((obj.value/totalInvestment * 100.0), 'percent');
 							},
 				 			allowHTML: true
 						}				 		

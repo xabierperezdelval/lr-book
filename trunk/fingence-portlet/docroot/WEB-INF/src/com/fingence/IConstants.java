@@ -55,5 +55,6 @@ public interface IConstants {
 	String CURRENCY_USD = "USD";
 	String CURRENCY_UNIT = "1";
 	
-	String SELECTED = "selected";	
+	String SELECTED = "selected";
+	String UN_SPECIFIED = "Un-Specified";
 }
