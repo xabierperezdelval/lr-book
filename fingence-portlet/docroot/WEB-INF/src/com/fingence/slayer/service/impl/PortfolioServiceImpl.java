@@ -174,6 +174,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 				}
 				
 				double conversion = CurrencyServiceUtil.getConversion(asset.getCurrency());
+				
 				if (Validator.isNotNull(asset)) {
 					double itemCurrentPrice = asset.getCurrent_price() * portfolioItem.getPurchaseQty() * conversion;
 					usdCurrentPrice += 	itemCurrentPrice;
@@ -188,7 +189,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			jsonObject.put("purchasePrice", usdPurchasePrice);
 			jsonObject.put("currentPrice", usdCurrentPrice);
 			jsonObject.put("gainLoss", gainLoss);
-			jsonObject.put("gainLossPercent", gainLoss/usdPurchasePrice*100);
+			jsonObject.put("gainLossPercent", gainLoss/usdPurchasePrice*100.0d);
 
 			jsonArray.put(jsonObject);
 			
@@ -206,7 +207,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		jsonTotal.put("purchasePrice", totalPurchasedValue);
 		jsonTotal.put("currentPrice", totalCurrentValue);
 		jsonTotal.put("gainLoss", totalGainLoss);
-		jsonTotal.put("gainLossPercent", totalGainLoss/totalPurchasedValue*100);
+		jsonTotal.put("gainLossPercent", totalGainLoss/totalPurchasedValue*100.0d);
 		
 		jsonArray.put(jsonTotal);
 		

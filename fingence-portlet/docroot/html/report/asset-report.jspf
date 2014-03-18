@@ -57,14 +57,10 @@
 				cntr++;
 			});
 			
-			if (key == '' || key == '0') {
-				key = 'Un-Specified';
-			}
-			
 			resultantObj._key = key;
 			resultantObj.gainLossPercent = gainLossPercent/cntr;
 			resultantObj.usdInvested = totalUsdInvested;
-			resultantObj.weightage = totalCurrentValue/netWorth * 100;
+			resultantObj.weightage = totalCurrentValue/netWorth * 100.0;
 			
 			resultantDataArray.push(resultantObj);
 		});
@@ -82,9 +78,7 @@
 		    			key: '_key',
 		    			label: title,
 		    			formatter: function(obj){
-		    				if(obj.value != 'Un-Specified'){
-		    					obj.value = '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.value + '\');">' + obj.value + '</a>';
-		    				}
+		    				obj.value = '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.value + '\');">' + obj.value + '</a>';
     					},
     					allowHTML:true
 	    			},

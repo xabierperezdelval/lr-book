@@ -16,6 +16,7 @@ package com.fingence.slayer.service.impl;
 
 import java.util.List;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
@@ -74,7 +75,21 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				if (Validator.isNotNull(country)) {
 					myResult.setCountryOfRiskName(TextFormatter.format(country.getName(), TextFormatter.J));
 				}
-			}		
+			} else {
+				myResult.setCountryOfRiskName(IConstants.UN_SPECIFIED);
+			}
+			
+			if (Validator.isNull(myResult.getCurrency_())) {
+				myResult.setCurrency_(IConstants.UN_SPECIFIED);
+			}
+			
+			if (Validator.isNull(myResult.getSecurity_class())) {
+				myResult.setSecurity_class(IConstants.UN_SPECIFIED);
+			}
+			
+			if (Validator.isNull(myResult.getIndustry_sector())) {
+				myResult.setIndustry_sector(IConstants.UN_SPECIFIED);
+			}
 		}
 		
 		return myResults;
