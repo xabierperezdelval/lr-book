@@ -25,7 +25,7 @@
 
 	<aui:row>
 		<aui:column columnWidth="30">
-			<h4>Base Currency: <%= PortfolioLocalServiceUtil.getPortfolio(portfolioId).getBaseCurrency() %></h4>
+			<h4>Base Currency: <%= PortfolioServiceUtil.getBaseCurrency(portfolioId) %></h4>
 		</aui:column>
 		<aui:column>
 			<c:choose>
@@ -108,14 +108,16 @@
 </c:choose>
 
 <aui:script>
-	function formatNumber(data, number) {
-		var text = data;
+
+	function formatCustom(value, _type) {
+		var _value = (_type == 'amount')? 
+			accounting.formatMoney(Math.abs(value)) : accounting.toFixed(Math.abs(value), 2) + '%';
 		
-		if (number < 0 || number == false) {
-			text = data.fontcolor('red');
+		if (value < 0) {
+			_value = _value.fontcolor('red');
 		}
 		
-		return text;
+		return _value;
 	}
 	
 	<c:if test="<%= (portfolioCount > 1) %>">

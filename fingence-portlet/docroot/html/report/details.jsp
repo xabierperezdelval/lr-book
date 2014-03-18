@@ -49,31 +49,39 @@
 	                        	key: 'purchasedMarketValue', 
 	                        	label: 'Purchased Value',
 	                        	formatter: function(obj) {
-					 				obj.value = accounting.formatMoney(obj.value);
+					 				obj.value = formatCustom(obj.value, 'amount');
 					 			}
 	                       	},
 	                        {
 	                        	key: 'currentMarketValue', 
 	                        	label: 'Current Value',
 		                        formatter: function(obj) {
-					 				obj.value = accounting.formatMoney(obj.value);
+					 				obj.value = formatCustom(obj.value, 'amount');
 					 			}
 				 			},
 	                        {
 	                        	key: 'purchaseQty',
 	                         	label: 'Quantity',
 	                         	formatter: function(obj) {
-					 				obj.value = obj.value.toFixed(2);
+					 				obj.value = accounting.toFixed(obj.value, 2);
 					 			}
 	                       	},
 	                       	{
 	                        	key: 'gain_loss',
 	                         	label: 'Gain/Loss',
 	                         	formatter: function(obj) {
-									obj.value = formatNumber((accounting.formatMoney(obj.value) + '(' + accounting.toFixed((obj.value/obj.data.purchasedMarketValue *100), 2) + '%)'), obj.value);
+									obj.value = formatCustom(obj.value, 'amount');
 								},
 					 			allowHTML: true
 	                       	},
+	                       	{
+	                        	key: 'gain_loss_percent',
+	                         	label: 'Gain/Loss%',
+	                         	formatter: function(obj) {
+	                         		obj.value = formatCustom(obj.value, 'percent');
+								},
+					 			allowHTML: true
+	                       	},	                       	
 	                        {
 	                             key: 'itemId',
 	                             label: 'Actions',
@@ -81,7 +89,7 @@
 	                              	obj.value = 
 	                              		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
 	                             		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
-	                             			
+	       
                        			},
 	                             allowHTML: true
 	                         }
