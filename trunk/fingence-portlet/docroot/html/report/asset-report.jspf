@@ -30,7 +30,7 @@
   				var netWorth = getTotalNetWorth(data);
   			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(accounting.formatMoney(netWorth));
+				A.one('#<portlet:namespace/>networthLabel').text(formatCustom(netWorth, 'amount'));
 				
 				//2. Pie Chart - By Currency
 				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
@@ -86,23 +86,26 @@
 			 			key: 'currentMarketValue', 
 			 			label: 'Current Value',
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value);
-			 			}			 			
+			 				obj.value = formatCustom(obj.value, 'amount');
+			 			},
+			 			allowHTML:true		 			
 			 		},
 			 		{
 			 			key: 'usdInvested', 
 			 			label: 'USD Invested',
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value);
+			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
-			 			className: (title !='Currency')?'hideColumn':''
+			 			className: (title !='Currency')?'hideColumn':'',
+			 			allowHTML:true
 			 		},
 			 		{
 			 			key: 'weightage', 
 			 			label: 'Weight',
 			 			formatter:function(obj) {
-				 			obj.value = (obj.value).toFixed(2) + '%';
-				 		}
+				 			obj.value = formatCustom(obj.value, 'percent');
+				 		},
+				 		allowHTML:true
 			 		}
 		   	 	];
 		   
@@ -241,29 +244,33 @@
 			 			key: 'purchasedValue', 
 			 			label: 'Purchased Value',
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value);
-			 			}			 			
+			 				obj.value = formatCustom(obj.value, 'amount');
+			 			},
+			 			allowHTML:true		 			
 			 		},
 			 		{
 			 			key: 'currentValue', 
 			 			label: 'Current Value',
 			 			formatter: function(obj) {
-			 				obj.value = accounting.formatMoney(obj.value);
-			 			}			 			
+			 				obj.value = formatCustom(obj.value, 'amount');
+			 			},
+			 			allowHTML:true		 			
 			 		},
 			 		{
 			 			key: 'gainLoss', 
 			 			label: 'Gain/Loss',
 			 			formatter: function(obj) {
-			 				obj.value = obj.value.toFixed(2);
-			 			}			 			
+			 				obj.value = formatCustom(obj.value, 'amount');
+			 			},
+			 			allowHTML:true		 			
 			 		},
 			 		{
 			 			key: 'gainLossPerc', 
-			 			label: 'Gain/Loss %',
+			 			label: 'Gain/Loss%',
 			 			formatter: function(obj) {
-			 				obj.value = obj.value.toFixed(2) + '%';
-			 			}			 			
+			 				obj.value = formatCustom(obj.value, 'percent');
+			 			},
+			 			allowHTML:true		 			
 			 		}
 		   	 	];
 		   

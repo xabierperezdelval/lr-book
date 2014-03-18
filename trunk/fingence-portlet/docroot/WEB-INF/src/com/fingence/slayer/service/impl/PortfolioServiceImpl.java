@@ -131,7 +131,6 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		double totalPurchasedValue = 0.0d;
 		double totalCurrentValue = 0.0d;
 		double totalGainLoss = 0.0d;
-		double totalGainLossPercent = 0.0d;
 		
 		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
@@ -161,7 +160,6 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			
 			double usdPurchasePrice = 0.0d;
 			double usdCurrentPrice = 0.0d;
-			double gainLossPercent = 0.0d;
 
 			for (PortfolioItem portfolioItem : portfolioItems) {
 				
@@ -175,13 +173,11 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 					e.printStackTrace();
 				}
 				
+				double conversion = CurrencyServiceUtil.getConversion(asset.getCurrency());
 				if (Validator.isNotNull(asset)) {
-					usdCurrentPrice += 	(asset.getCurrent_price() * portfolioItem.getPurchaseQty() * CurrencyServiceUtil.getConversion(asset.getCurrency()));
+					double itemCurrentPrice = asset.getCurrent_price() * portfolioItem.getPurchaseQty() * conversion;
+					usdCurrentPrice += 	itemCurrentPrice;
 				}
-								
-				gainLossPercent += 
-						((asset.getCurrent_price() * portfolioItem.getPurchaseQty()) - (portfolioItem.getPurchasePrice() * portfolioItem.getPurchaseQty()))
-						/ (portfolioItem.getPurchasePrice() * portfolioItem.getPurchaseQty()) * 100;
 			}
 			
 			double gainLoss = usdCurrentPrice - usdPurchasePrice;
@@ -191,16 +187,14 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			jsonObject.put("portfolioName", portfolio.getPortfolioName());
 			jsonObject.put("purchasePrice", usdPurchasePrice);
 			jsonObject.put("currentPrice", usdCurrentPrice);
-			jsonObject.put("gainLossAbsValue", Math.abs(gainLoss));
-			jsonObject.put("gainLossPercent", gainLossPercent/portfolioItems.size());
-			jsonObject.put("gainOrLoss", (gainLossPercent > 0)? true : false);
+			jsonObject.put("gainLoss", gainLoss);
+			jsonObject.put("gainLossPercent", gainLoss/usdPurchasePrice*100);
 
 			jsonArray.put(jsonObject);
 			
 			totalPurchasedValue += usdPurchasePrice;
 			totalCurrentValue += usdCurrentPrice;
 			totalGainLoss += gainLoss;
-			totalGainLossPercent += gainLossPercent/portfolioItems.size();
 		}
 		
 		// To Add the a final row for Total
@@ -211,9 +205,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		jsonTotal.put("investorOrAdvisor", "--");
 		jsonTotal.put("purchasePrice", totalPurchasedValue);
 		jsonTotal.put("currentPrice", totalCurrentValue);
-		jsonTotal.put("gainLossAbsValue", Math.abs(totalGainLoss));
-		jsonTotal.put("gainLossPercent", totalGainLossPercent/portfolios.size());
-		jsonTotal.put("gainOrLoss", (totalGainLossPercent > 0)? true : false);
+		jsonTotal.put("gainLoss", totalGainLoss);
+		jsonTotal.put("gainLossPercent", totalGainLoss/totalPurchasedValue*100);
 		
 		jsonArray.put(jsonTotal);
 		
