@@ -219,11 +219,13 @@
 				_.each(itemList, function(item){
 					var jsonObj = {};
 					jsonObj.name = item.name;
-					jsonObj.ticker = item.security_ticker;
-					jsonObj.purchasedValue = item.purchasedMarketValue;
-					jsonObj.currentValue = item.currentMarketValue;
-					jsonObj.gainLoss = item.gain_loss;
-					jsonObj.gainLossPerc = item.gain_loss_percent;
+					jsonObj.itemId = item.itemId;
+					jsonObj.security_ticker = item.security_ticker;
+					jsonObj.purchasedMarketValue = item.purchasedMarketValue;
+					jsonObj.currentMarketValue = item.currentMarketValue;
+					jsonObj.gain_loss_percent = item.gain_loss_percent;
+					jsonObj.gain_loss = item.gain_loss;
+					jsonObj.purchaseQty = item.purchaseQty;
 					jsonArray.push(jsonObj);
 				});
 			}
@@ -233,54 +235,7 @@
 		if (divContent) {
 			divContent.innerHTML = "";
 		}
-		
-		YUI().use(
-			'aui-datatable',
-		  	function(Y) {
-		    	var columns = [
-		    		{key: 'name', label: 'Portfolio'},
-		    		{key: 'ticker', label: 'Security Ticker'},
-		    		{
-			 			key: 'purchasedValue', 
-			 			label: 'Purchased Value',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'amount');
-			 			},
-			 			allowHTML:true		 			
-			 		},
-			 		{
-			 			key: 'currentValue', 
-			 			label: 'Current Value',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'amount');
-			 			},
-			 			allowHTML:true		 			
-			 		},
-			 		{
-			 			key: 'gainLoss', 
-			 			label: 'Gain/Loss',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'amount');
-			 			},
-			 			allowHTML:true		 			
-			 		},
-			 		{
-			 			key: 'gainLossPerc', 
-			 			label: 'Gain/Loss%',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'percent');
-			 			},
-			 			allowHTML:true		 			
-			 		}
-		   	 	];
-		   
-		   		new Y.DataTable.Base({
-					columnset: columns,
-			    	recordset: jsonArray
-				}).render(divId);
-		  	}
-		);
-		
+		displayPortfolioItemDetails(jsonArray, divId)
 	}
 	
 	function getTotalNetWorth(data){
