@@ -46,20 +46,17 @@
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
 			var resultantObj = {};
 			var gainLossPercent = 0;
-			var totalUsdInvested = 0;
-			var totalCurrentValue = 0;
+			var totalPurchaseValue = 0.0;
+			var totalCurrentValue = 0.0;
 			
-			var cntr = 0;
 			_.each(item, function(item){
 				totalCurrentValue += item.currentMarketValue;
-				gainLossPercent += item.gain_loss_percent;
-				totalUsdInvested += (item.currentMarketValue * item.current_fx);
-				cntr++;
+				totalPurchaseValue += item.purchasedMarketValue;
 			});
 			
 			resultantObj._key = key;
-			resultantObj.gainLossPercent = gainLossPercent/cntr;
-			resultantObj.usdInvested = totalUsdInvested;
+			resultantObj.gainLossPercent = (totalCurrentValue-totalPurchaseValue)/totalPurchaseValue * 100.0;
+			resultantObj.currentMarketValue = totalCurrentValue;
 			resultantObj.weightage = totalCurrentValue/netWorth * 100.0;
 			
 			resultantDataArray.push(resultantObj);
@@ -84,19 +81,18 @@
 	    			},
 			 		{
 			 			key: 'gainLossPercent', 
-			 			label: 'Gain/Loss %',
+			 			label: 'Gain/Loss',
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'percent');
 			 			},
 			 			allowHTML:true		 			
 			 		},
 			 		{
-			 			key: 'usdInvested', 
-			 			label: 'USD Invested',
+			 			key: 'currentMarketValue', 
+			 			label: 'Current Value',
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
-			 			className: (title !='Currency')?'hideColumn':'',
 			 			allowHTML:true
 			 		},
 			 		{
@@ -189,7 +185,7 @@
 			allocationParam = '<%= groupByField[1] %>';
 		} else if(allocationBy == <%= IConstants.BREAKUP_BY_SECURITY_TYPE %>){
 			allocationParam = '<%= groupByField[2] %>';
-		}else if(allocationBy == <%= IConstants.BREAKUP_BY_SECTOR %>){
+		} else if(allocationBy == <%= IConstants.BREAKUP_BY_SECTOR %>){
 			allocationParam = '<%= groupByField[3] %>';
 		}
 		
@@ -223,8 +219,8 @@
 					jsonObj.security_ticker = item.security_ticker;
 					jsonObj.purchasedMarketValue = item.purchasedMarketValue;
 					jsonObj.currentMarketValue = item.currentMarketValue;
-					jsonObj.gain_loss_percent = item.gain_loss_percent;
 					jsonObj.gain_loss = item.gain_loss;
+					jsonObj.gain_loss_percent = item.gain_loss_percent;
 					jsonObj.purchaseQty = item.purchaseQty;
 					jsonArray.push(jsonObj);
 				});
@@ -235,7 +231,7 @@
 		if (divContent) {
 			divContent.innerHTML = "";
 		}
-		displayPortfolioItemDetails(jsonArray, divId)
+		displayItemsGrid(jsonArray, divId);
 	}
 	
 	function getTotalNetWorth(data){
