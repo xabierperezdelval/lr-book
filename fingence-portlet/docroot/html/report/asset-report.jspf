@@ -10,7 +10,7 @@
 	<aui:column>
 		<div id="chartContainer"></div>
 	</aui:column>
-	<aui:column>
+	<aui:column columnWidth="40">
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
