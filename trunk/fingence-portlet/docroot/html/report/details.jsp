@@ -34,29 +34,15 @@
 <aui:script>
 	<c:if test="<%= portfolioItemCount > 0 %>">
 		AUI().ready(function(A) {
-				Liferay.Service(
-					'/fingence-portlet.myresult/get-my-results',
-					{
-						portfolioId : '<%= portfolioId %>'
-					},
-					function(data) {
-						displayPortfolioItemDetails(data, '#myDataTable');
-					}
-				);
+			Liferay.Service(
+				'/fingence-portlet.myresult/get-my-results',
+				{
+					portfolioId : '<%= portfolioId %>'
+				},
+				function(data) {
+					displayItemsGrid(data, '#myDataTable');
+				}
+			);
 		});
-		
-	    function deleteItem(portfolioItemId) {
-	        if (confirm('Are you sure to delete this item from portfolio?')) {
-	            Liferay.Service(
-	                '/fingence-portlet.portfolioitem/delete-item',
-	                {
-	                    portfolioItemId: portfolioItemId
-	                },
-	                function(obj) {
-	                    Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
-	                }
-	            );
-	        }
-	    }		
 	</c:if>
 </aui:script>

@@ -179,7 +179,7 @@
 		}
 	</c:if>	
 	
-	 	function updateItem(portfolioItemId) {
+	function updateItem(portfolioItemId) {
 		var ajaxURL = Liferay.PortletURL.createRenderURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('jspPage', '/html/report/update-item.jsp');
@@ -208,67 +208,81 @@
             );
         });
     }
+    
+    function deleteItem(portfolioItemId) {
+        if (confirm('Are you sure to delete this item from portfolio?')) {
+            Liferay.Service(
+                '/fingence-portlet.portfolioitem/delete-item',
+                {
+                    portfolioItemId: portfolioItemId
+                },
+                function(obj) {
+                    Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+                }
+            );
+        }
+    }    
 	
-	function displayPortfolioItemDetails(results, divId){
-		YUI().use(
-			'aui-datatable',
-		  	function(Y) {
-				var columns = [
-					{key: 'name', label: 'Security Name'},
-					{key: 'security_ticker', label: 'TICKER'},
-					{
-		               	key: 'purchasedMarketValue', 
-		               	label: 'Purchased Value',
-		               	formatter: function(obj) {
-							obj.value = formatCustom(obj.value, 'amount');
-						}
+	function displayItemsGrid(results, divId) {
+		YUI().use('aui-datatable', function(Y) {
+			var columns = [
+				{key: 'name', label: 'Security Name'},
+				{key: 'security_ticker', label: 'TICKER'},
+				{
+	               	key: 'purchasedMarketValue', 
+	               	label: 'Purchased Value',
+	               	formatter: function(obj) {
+						obj.value = formatCustom(obj.value, 'amount');
 					},
-		            {
-		            	key: 'currentMarketValue', 
-		               	label: 'Current Value',
-		                formatter: function(obj) {
-							obj.value = formatCustom(obj.value, 'amount');
-						}
+					allowHTML: true
+				},
+	            {
+	            	key: 'currentMarketValue', 
+	               	label: 'Current Value',
+	                formatter: function(obj) {
+						obj.value = formatCustom(obj.value, 'amount');
 					},
-		            {
-		           		key: 'purchaseQty',
-		             	label: 'Quantity',
-		             	formatter: function(obj) {
-							obj.value = accounting.toFixed(obj.value, 2);
-						}
-		           	},
-		            {
-		            	key: 'gain_loss',
-		                label: 'Gain/Loss',
-		                formatter: function(obj) {
-							obj.value = formatCustom(obj.value, 'amount');
-						},
-						allowHTML: true
-		           	},
-		            {
-		               	key: 'gain_loss_percent',
-		               	label: 'Gain/Loss%',
-		               	formatter: function(obj) {
-		             		obj.value = formatCustom(obj.value, 'percent');
-						},
-						allowHTML: true
-		            },	                       	
-		            {
-		                 key: 'itemId',
-		                 label: 'Actions',
-		                 formatter: function(obj) {
-		                  	obj.value = 
-		                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
-		                 		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
-		
-		     			},
-		                allowHTML: true
-		            }
-				];
-				new Y.DataTable.Base({
-					columnset: columns,
-				    recordset: results
-				}).render(divId);
+					allowHTML: true
+				},
+	            {
+	           		key: 'purchaseQty',
+	             	label: 'Quantity',
+	             	formatter: function(obj) {
+						obj.value = accounting.toFixed(obj.value, 2);
+					}
+	           	},
+	            {
+	            	key: 'gain_loss',
+	                label: 'Gain/Loss',
+	                formatter: function(obj) {
+						obj.value = formatCustom(obj.value, 'amount');
+					},
+					allowHTML: true
+	           	},
+	            {
+	               	key: 'gain_loss_percent',
+	               	label: 'Gain/Loss%',
+	               	formatter: function(obj) {
+	             		obj.value = formatCustom(obj.value, 'percent');
+					},
+					allowHTML: true
+	            },	                       	
+	            {
+	                 key: 'itemId',
+	                 label: 'Actions',
+	                 formatter: function(obj) {
+	                  	obj.value = 
+	                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
+	                 		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	     			},
+	                allowHTML: true
+	            }
+			];
+			
+			new Y.DataTable.Base({
+				columnset: columns,
+			    recordset: results
+			}).render(divId);
 		});
 	}
 </aui:script>
