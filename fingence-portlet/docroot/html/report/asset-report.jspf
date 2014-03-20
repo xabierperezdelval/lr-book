@@ -169,8 +169,6 @@
               	}
 	        }]
 	    });
-    
-	    
 	}
 	
 	function sliceChart(sliceBy){
