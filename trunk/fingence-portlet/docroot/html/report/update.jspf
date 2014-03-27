@@ -118,7 +118,8 @@
 	<c:if test="<%= _portfolioId == 0 %>">
 		<aui:column>
 			<h5>Sample EXCEL sheet with assets of a portfolio...</h5>
-			<img src="http://devj0rvnpri9y.cloudfront.net/sample-portfolio-excel" width="420" height="220"/>
+			<img src="http://devj0rvnpri9y.cloudfront.net/sample-portfolio.image" width="420" height="220"/>
+			<br/><a href="http://devj0rvnpri9y.cloudfront.net/sample-portfolio.xlsx">Download Sample Excel</a>
 		</aui:column>
 	</c:if>
 </aui:fieldset>
