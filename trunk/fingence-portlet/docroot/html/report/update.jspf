@@ -119,7 +119,7 @@
 		<aui:column>
 			<h5>Sample EXCEL sheet with assets of a portfolio...</h5>
 			<img src="http://devj0rvnpri9y.cloudfront.net/sample-portfolio.image" width="420" height="220"/>
-			<br/><a href="http://devj0rvnpri9y.cloudfront.net/sample-portfolio.xlsx">Download Sample Excel</a>
+			<h4><a href="http://devj0rvnpri9y.cloudfront.net/sample-portfolio.xlsx">Download Sample Excel &raquo;</a></h4>
 		</aui:column>
 	</c:if>
 </aui:fieldset>
