@@ -144,6 +144,11 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		portfolioItem.setAssetId(asset.getAssetId());
 		portfolioItem.setPortfolioId(portfolioId);
 		portfolioItem.setPurchasePrice(purchasePrice);
+		
+		if (asset.getSecurity_class().equalsIgnoreCase("Fixed Income")) {
+			portfolioItem.setPurchasePrice(portfolioItem.getPurchasePrice()/100);
+		}
+		
 		portfolioItem.setPurchaseQty(purchaseQty);
 		
 		if (asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)) {

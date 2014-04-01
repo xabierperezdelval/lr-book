@@ -117,7 +117,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         	if (row.getRowNum()==0) continue;
         	
         	String id_isin = CellUtil.getString(row.getCell(0));
-        	
+        	        	
         	Asset asset = null;
         	try {
 				asset = assetPersistence.findByIdISIN(id_isin);
@@ -161,6 +161,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
        
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
+			
+			if (asset.getSecurity_class().equalsIgnoreCase("Fixed Income")) {
+				portfolioItem.setPurchasePrice(portfolioItem.getPurchasePrice()/100);
+			}
+			
 			portfolioItem.setPurchaseQty(CellUtil.getDouble(row.getCell(4)));
 			
 			double purchasedFx = asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)? 1.0d : CellUtil.getDouble(row.getCell(5));

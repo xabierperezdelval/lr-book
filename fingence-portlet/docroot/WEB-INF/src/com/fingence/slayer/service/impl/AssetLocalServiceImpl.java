@@ -145,6 +145,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setParent_comp_name(CellUtil.getString(row.getCell(columnNames.get("PARENT_COMP_NAME"))));
 			
 			String securityClass = CellUtil.getString(row.getCell(columnNames.get("BPIPE_REFERENCE_SECURITY_CLASS")));
+			if (securityClass.equalsIgnoreCase("FixedIncome")) {
+				securityClass = "Fixed Income";
+			}
 			asset.setSecurity_class(securityClass);
 			
 			asset.setVolatility_30d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_30D"))));
@@ -175,10 +178,10 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				asset.setCountry_of_risk(country.getCountryId());
 			}
 			
-			if (asset.getSecurity_class().equalsIgnoreCase("Fund")) {
-				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("FUND_NET_ASSET_VAL"))));
+			if (asset.getSecurity_class().equalsIgnoreCase("Fixed Income")) {
+				asset.setCurrent_price(asset.getBid_price()/100);
 			} else {
-				asset.setCurrent_price(asset.getBid_price());
+				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("FUND_NET_ASSET_VAL"))));
 			}
 			
 			try {
@@ -189,7 +192,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			long assetId = asset.getAssetId();
 			
-			if (securityClass.equalsIgnoreCase("FixedIncome")) {
+			if (securityClass.equalsIgnoreCase("Fixed Income")) {
 				Bond bond = getBond(assetId);
              	bond.setIssuer_bulk(CellUtil.getString(row.getCell(columnNames.get("ISSUER_BULK"))));
              	bond.setCpn(CellUtil.getDouble(row.getCell(columnNames.get("CPN"))));
