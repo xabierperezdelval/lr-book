@@ -253,6 +253,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}
 			}
 		}
+		
+		System.out.println("uploading excel sheet completed....");
 	}
 	
 	private Equity getEquity(long assetId) {
