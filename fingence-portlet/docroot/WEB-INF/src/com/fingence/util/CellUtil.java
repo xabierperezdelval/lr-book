@@ -58,14 +58,10 @@ public class CellUtil {
 		
 		String value = StringPool.BLANK;
 		
-		try {
-			String cellValue = cell.toString();
-			
-			if (Validator.isNotNull(cellValue) && !cellValue.trim().equalsIgnoreCase(StringPool.DASH)) {
-				value = cellValue;
-			}
-		} catch (Exception e) {
-			System.out.println("Some exception " + e.getMessage());
+		String cellValue = cell.toString();
+		
+		if (Validator.isNotNull(cellValue) && !cellValue.trim().equalsIgnoreCase(StringPool.DASH)) {
+			value = cellValue;
 		}
 		
 		return value;
