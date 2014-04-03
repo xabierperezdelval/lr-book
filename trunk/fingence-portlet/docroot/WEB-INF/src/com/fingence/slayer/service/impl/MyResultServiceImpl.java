@@ -48,9 +48,9 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 */
 	
 	public List<MyResult> getMyResults(long portfolioId) {
-		
+				
 		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
-		
+				
 		for (MyResult myResult: myResults) {
 			
 			String baseCurrency = myResult.getBaseCurrency();

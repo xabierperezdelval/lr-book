@@ -77,7 +77,8 @@
 		    			formatter: function(obj){
 		    				obj.value = '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.value + '\');">' + obj.value + '</a>';
     					},
-    					allowHTML:true
+    					allowHTML:true,
+    					sortable: true
 	    			},
 			 		{
 			 			key: 'gainLossPercent', 
@@ -85,7 +86,8 @@
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'percent');
 			 			},
-			 			allowHTML:true		 			
+			 			allowHTML:true,
+			 			sortable: true 			
 			 		},
 			 		{
 			 			key: 'currentMarketValue', 
@@ -93,7 +95,8 @@
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
-			 			allowHTML:true
+			 			allowHTML:true,
+			 			sortable: true
 			 		},
 			 		{
 			 			key: 'weightage', 
@@ -101,11 +104,12 @@
 			 			formatter:function(obj) {
 				 			obj.value = formatCustom(obj.value, 'percent');
 				 		},
-				 		allowHTML:true
+				 		allowHTML:true,
+				 		sortable: true
 			 		}
 		   	 	];
 		   
-		   		new Y.DataTable.Base({
+		   		new Y.DataTable({
 					columnset: columns,
 			    	recordset: jsonArr
 				}).render(divId);

@@ -100,17 +100,18 @@ public class ReportPortlet extends MVCPortlet {
 
 	public void updatePortfolioItem(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
+				
 		String isinId = ParamUtil.getString(actionRequest, "isinId");
 		long portfolioItemId = ParamUtil.getLong(actionRequest, "itemId");
 		long portfolioId = ParamUtil.getLong(actionRequest, "portfolioId");
 		String ticker = ParamUtil.getString(actionRequest, "ticker");
-		Double purchasePrice = ParamUtil.getDouble(actionRequest, "purchasePrice");
+		double purchasePrice = ParamUtil.getDouble(actionRequest, "purchasePrice");
 		String purchaseDate = ParamUtil.getString(actionRequest, "purchaseDate");
 		double purchaseQty = ParamUtil.getDouble(actionRequest, "purchaseQty");
 		double purchasedFx = ParamUtil.getDouble(actionRequest, "purchasedFx");
-		
+				
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
 				isinId, ticker, purchasePrice, purchaseQty, purchasedFx,
-				purchaseDate);
+				purchaseDate);		
 	}
 }

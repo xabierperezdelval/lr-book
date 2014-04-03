@@ -77,7 +77,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 			String isinId, String ticker, double purchasePrice,
 			double purchaseQty, double purchasedFx, String purchaseDate) {
 		PortfolioItem portfolioItem = null;
-				
+						
 		if (portfolioItemId > 0l) {
 			try {
 				portfolioItem = portfolioItemLocalService.fetchPortfolioItem(portfolioItemId);
@@ -109,7 +109,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
+				
 		if (Validator.isNull(asset)) {
 			long assetId = 0l;
 			try {
@@ -136,7 +136,7 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+				
 		if (Validator.isNotNull(purchaseDate)) {
 			portfolioItem.setPurchaseDate(_purchaseDate);
 		}
@@ -164,6 +164,6 @@ public class PortfolioItemServiceImpl extends PortfolioItemServiceBaseImpl {
 			portfolioItemLocalService.updatePortfolioItem(portfolioItem);
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}
+		}		
 	}
 }

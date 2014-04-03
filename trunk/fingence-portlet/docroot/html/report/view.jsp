@@ -21,6 +21,8 @@
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
+<aui:container>
+
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>
@@ -107,6 +109,8 @@
 	</c:when>
 </c:choose>
 
+</aui:container>
+
 <aui:script>
 
 	function formatCustom(value, _type) {
@@ -177,38 +181,40 @@
 				}
 			});
 		}
-	</c:if>	
+	</c:if>
 	
-	function updateItem(portfolioItemId) {
+	function updateItem(portfolioItemId, portfolioId) {
+		
 		var ajaxURL = Liferay.PortletURL.createRenderURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('jspPage', '/html/report/update-item.jsp');
 		ajaxURL.setParameter('portfolioItemId', portfolioItemId);
-		ajaxURL.setParameter('portfolioId', '<%= portfolioId %>');
-		ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');	 
-    
-        AUI().use('aui-dialog', function(A) {
+		ajaxURL.setParameter('portfolioId', portfolioId);
+		ajaxURL.setWindowState('pop_up');
+	
+	    AUI().use('aui-dialog', function(A) {
 			Liferay.Util.openWindow({
-            	dialog: {
-                	centered: true,
-                    modal: true,
-                    width: 600,
-                    height: 400,
-                    destroyOnHide: true,
-                    resizable: false           
-               	},
-                id: '<portlet:namespace/>editPortfolioItemPopup',
-                title: 'Edit Portfolio Item',
-               	uri: ajaxURL
-           	}); 
-           	Liferay.provide(
-            	window, '<portlet:namespace/>reloadPortlet', function() {
-                	Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
-                }
-            );
-        });
-    }
-    
+	        	dialog: {
+	            	centered: true,
+	                modal: true,
+	                width: 600,
+	                height: 400,
+	                destroyOnHide: true,
+	                resizable: false           
+	           	},
+	            id: '<portlet:namespace/>editPortfolioItemPopup',
+	            title: 'Add/Update Asset',
+	           	uri: ajaxURL
+	       	});
+			
+	       	Liferay.provide(
+	        	window, '<portlet:namespace/>reloadPortlet', function() {
+	            	Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+	            }
+	        );
+	    });
+	}
+	
     function deleteItem(portfolioItemId) {
         if (confirm('Are you sure to delete this item from portfolio?')) {
             Liferay.Service(
@@ -226,15 +232,17 @@
 	function displayItemsGrid(results, divId) {
 		YUI().use('aui-datatable', function(Y) {
 			var columns = [
-				{key: 'name', label: 'Security Name'},
-				{key: 'security_ticker', label: 'TICKER'},
+				{key: 'name', label: 'Security Name', sortable: true},
+				{key: 'security_ticker', label: 'TICKER', sortable: true},
 				{
-	               	key: 'purchasedMarketValue', 
+	               	key: 'purchasedMarketValue',
+	               	sortable: true, 
 	               	label: 'Purchased Value',
 	               	formatter: function(obj) {
 						obj.value = formatCustom(obj.value, 'amount');
 					},
-					allowHTML: true
+					allowHTML: true,
+					sortable: true
 				},
 	            {
 	            	key: 'currentMarketValue', 
@@ -242,11 +250,13 @@
 	                formatter: function(obj) {
 						obj.value = formatCustom(obj.value, 'amount');
 					},
-					allowHTML: true
+					allowHTML: true,
+					sortable: true
 				},
 	            {
 	           		key: 'purchaseQty',
 	             	label: 'Quantity',
+	             	sortable: true,
 	             	formatter: function(obj) {
 						obj.value = accounting.toFixed(obj.value, 2);
 					}
@@ -257,7 +267,8 @@
 	                formatter: function(obj) {
 						obj.value = formatCustom(obj.value, 'amount');
 					},
-					allowHTML: true
+					allowHTML: true,
+					sortable: true
 	           	},
 	            {
 	               	key: 'gain_loss_percent',
@@ -265,21 +276,22 @@
 	               	formatter: function(obj) {
 	             		obj.value = formatCustom(obj.value, 'percent');
 					},
-					allowHTML: true
+					allowHTML: true,
+					sortable: true
 	            },	                       	
 	            {
 	                 key: 'itemId',
 	                 label: 'Actions',
 	                 formatter: function(obj) {
 	                  	obj.value = 
-	                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
-	                 		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.value + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
+	                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.data.itemId + ',<%= portfolioId %>);"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
+	                 		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.data.itemId + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	     			},
 	                allowHTML: true
 	            }
 			];
 			
-			new Y.DataTable.Base({
+			new Y.DataTable({
 				columnset: columns,
 			    recordset: results
 			}).render(divId);

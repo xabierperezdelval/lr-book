@@ -162,7 +162,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			double usdCurrentPrice = 0.0d;
 
 			for (PortfolioItem portfolioItem : portfolioItems) {
-				
+								
 				double itemPurchasePrice = portfolioItem.getPurchasePrice() * portfolioItem.getPurchaseQty() * portfolioItem.getPurchasedFx();
 				usdPurchasePrice += itemPurchasePrice;
 				

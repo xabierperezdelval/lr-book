@@ -83,8 +83,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				
 		if (Validator.isNull(is)) return;
 		
-		System.out.println("executing importFromExcel...");
-
 		// Create Workbook instance holding reference to .xlsx file
 		XSSFWorkbook workbook = null;
 		try {
@@ -159,7 +157,14 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			Country country = null;
 			try {
-				country = CountryServiceUtil.fetchCountryByA2(CellUtil.getString(row.getCell(columnNames.get("COUNTRY"))));
+				String countryCode = CellUtil.getString(row.getCell(columnNames.get("COUNTRY")));
+				
+				if (countryCode.equalsIgnoreCase("SP")) {
+					countryCode = "ES";
+				} else if (countryCode.equalsIgnoreCase("EN")) {
+					countryCode = "GB";
+				}
+				country = CountryServiceUtil.fetchCountryByA2(countryCode);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -252,9 +257,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					e.printStackTrace();
 				}
 			}
-		}
-		
-		System.out.println("uploading excel sheet completed....");
+		}		
 	}
 	
 	private Equity getEquity(long assetId) {
@@ -356,7 +359,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				assetId = asset.getAssetId();
 			}
 		} catch (NoSuchAssetException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
