@@ -27,7 +27,7 @@
 	</aui:row>	
 </aui:fieldset>
 
-<br/><aui:a href="javascript:void(0);" onClick="javasript:updateItem(0)" label="Add Asset"/><hr/>
+<br/><a href="javascript:void(0);" onClick="javascript:updateItem(0, <%= portfolioId %>)">Add Asset</a><hr/>
 
 <div id="myDataTable"></div>
 

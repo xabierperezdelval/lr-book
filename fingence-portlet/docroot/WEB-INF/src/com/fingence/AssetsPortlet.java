@@ -19,16 +19,12 @@ public class AssetsPortlet extends MVCPortlet {
  
 	public void uploadAssets(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-
-		System.out.println("starting to upload assets....");
 		
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 				.getUploadPortletRequest(actionRequest);
 		
 		File excelFile = uploadPortletRequest.getFile("assetsMaster");
 		long userId = PortalUtil.getUserId(uploadPortletRequest);
-		AssetLocalServiceUtil.importFromExcel(userId, excelFile);
-		
-		System.out.println("finished uploading assets....");
+		AssetLocalServiceUtil.importFromExcel(userId, excelFile);		
 	}
 }

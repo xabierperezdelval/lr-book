@@ -14,15 +14,15 @@ public class MyResultFinderImpl extends BasePersistenceImpl<MyResult> implements
 
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";
 	
-	public List<MyResult> findResults(long porfolioId) {
+	public List<MyResult> findResults(long portfolioId) {
 		Session session = openSession();
 		String sql = CustomSQLUtil.get(QUERY);
 		
 		SQLQuery query = session.createSQLQuery(sql);
-		
+				
 		query.addEntity("MyResult", MyResultImpl.class);
 		QueryPos qPos = QueryPos.getInstance(query);
-		qPos.add(porfolioId);
+		qPos.add(portfolioId);
 		
 		@SuppressWarnings("unchecked")
 		List<MyResult> results = query.list();
