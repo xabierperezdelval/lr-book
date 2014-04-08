@@ -21,8 +21,6 @@
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
-<aui:container>
-
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
 
 	<aui:row>
@@ -108,8 +106,6 @@
 		<%@ include file="/html/register/register.jspf"%>
 	</c:when>
 </c:choose>
-
-</aui:container>
 
 <aui:script>
 
