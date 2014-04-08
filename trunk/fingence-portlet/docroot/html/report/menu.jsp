@@ -33,11 +33,10 @@
 			on: {
 				success: function() {
 					Liferay.Portlet.refresh('#p_p_id_report_WAR_fingenceportlet_');
+					setTimeout('toggleLinks(false)',2000);
 				}
 			}
 		});
-		
-		setTimeout('toggleLinks(false)',2000);
 		
 		// change the CSS of "li" tag
 		$.each($("ul.left-nav li"), function(index, obj) {
