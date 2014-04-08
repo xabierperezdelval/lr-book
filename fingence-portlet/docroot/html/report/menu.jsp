@@ -4,7 +4,7 @@
 	<%
 		for (int i=0; i<IConstants.REPORT_MENU_ITEMS.length; i++) {
 			String item = IConstants.REPORT_MENU_ITEMS[i];	
-			%><li class="<%= (layoutName.equalsIgnoreCase(item))? IConstants.SELECTED : StringPool.BLANK %>" id="li_<%= item %>"><a class="fingence-link" id="<%= item %>" href="javascript:void(0);" onClick="javascript:triggerRequest('<%= item %>');"><%= TextFormatter.format(item, TextFormatter.J) %></a><%
+			%><li class="<%= (layoutName.equalsIgnoreCase(item))? IConstants.SELECTED : StringPool.BLANK %>" id="li_<%= item %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= item %>');"><%= TextFormatter.format(item, TextFormatter.J) %></a><%
 		}
 	%>
 	
@@ -18,10 +18,7 @@
 </ul>
 
 <aui:script>
-	function triggerRequest(item) {		
-	
-		toggleLinks(true);
-		
+	function triggerRequest(item) {				
 		var ajaxURL = Liferay.PortletURL.createActionURL();
 		ajaxURL.setPortletId('menu_WAR_fingenceportlet');
 		ajaxURL.setParameter('MENU_ITEM', item);
@@ -33,7 +30,6 @@
 			on: {
 				success: function() {
 					Liferay.Portlet.refresh('#p_p_id_report_WAR_fingenceportlet_');
-					setTimeout('toggleLinks(false)',2000);
 				}
 			}
 		});
@@ -47,14 +43,4 @@
  			}
 		});
 	}
-	
-	function toggleLinks(disable) {
-		$.each($(".fingence-link"), function(index, obj) {
-			if (disable) {
-				obj.setAttribute("onClick","");
-			} else {
-				obj.setAttribute("onClick","javascript:triggerRequest('" + obj.id + "')"); 
-			}
-		});
-	}	
 </aui:script>
