@@ -37,7 +37,7 @@
 			}
 		});
 		
-		setTimeout('toggleLinks(false)',1500);
+		setTimeout('toggleLinks(false)',2000);
 		
 		// change the CSS of "li" tag
 		$.each($("ul.left-nav li"), function(index, obj) {
