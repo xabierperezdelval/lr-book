@@ -1,6 +1,8 @@
-<div id="portfolioContainer"></div>
-<hr/>
-<div id="viewAllocation"></div>
+<aui:container>
+	<div id="portfolioContainer"></div>
+	<hr/>
+	<div id="viewAllocation"></div>
+</aui:container>
 
 <%
 	String columnLabel = (userType == IConstants.USER_TYPE_INVESTOR)? "Advisor" : "Investor";

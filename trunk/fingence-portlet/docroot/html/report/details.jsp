@@ -27,9 +27,10 @@
 	</aui:row>	
 </aui:fieldset>
 
-<br/><a href="javascript:void(0);" onClick="javascript:updateItem(0, <%= portfolioId %>)">Add Asset</a><hr/>
-
-<div id="myDataTable"></div>
+<aui:container>
+	<br/><a href="javascript:void(0);" onClick="javascript:updateItem(0, <%= portfolioId %>)">Add Asset</a><hr/>
+	<div id="myDataTable"></div>
+</aui:container>
 
 <aui:script>
 	<c:if test="<%= portfolioItemCount > 0 %>">

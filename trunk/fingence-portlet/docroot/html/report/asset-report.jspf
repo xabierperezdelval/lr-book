@@ -6,16 +6,18 @@
 	String[] groupByTitle = {"Risk Country", "Currency", "Security Type", "Sector"};	
 %>
 
-<aui:row>
-	<aui:column>
-		<div id="chartContainer"></div>
-	</aui:column>
-	<aui:column columnWidth="40">
-		<div id="gridContainer"></div>
-	</aui:column>	
-</aui:row>
-
-<hr/><div id="slicePortfolio"></div>
+<aui:container>
+	<aui:row>
+		<aui:column>
+			<div id="chartContainer"></div>
+		</aui:column>
+		<aui:column columnWidth="40">
+			<div id="gridContainer"></div>
+		</aui:column>	
+	</aui:row>
+	
+	<hr/><div id="slicePortfolio"></div>
+</aui:container>
 
 <aui:script>
 	AUI().ready(function(A) {

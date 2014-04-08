@@ -1,20 +1,20 @@
 <%@ include file="/html/report/init.jsp" %>
 
 <ul class="left-nav">
-<%
-	for (int i=0; i<IConstants.REPORT_MENU_ITEMS.length; i++) {
-		String item = IConstants.REPORT_MENU_ITEMS[i];	
-		%><li class="<%= (layoutName.equalsIgnoreCase(item))? IConstants.SELECTED : StringPool.BLANK %>" id="li_<%= item %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= item %>');"><%= TextFormatter.format(item, TextFormatter.J) %></a><%
-	}
-%>
-
-<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
-	<li id="li_<%= IConstants.ADD_PORTFOLIO %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_PORTFOLIO %>');"><%= TextFormatter.format(IConstants.ADD_PORTFOLIO, TextFormatter.J) %></a>
-</c:if>
-
-<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
-	<li id="li_<%= IConstants.ADD_USER %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_USER %>');"><%= TextFormatter.format(IConstants.ADD_USER, TextFormatter.J) %></a>
-</c:if>
+	<%
+		for (int i=0; i<IConstants.REPORT_MENU_ITEMS.length; i++) {
+			String item = IConstants.REPORT_MENU_ITEMS[i];	
+			%><li class="<%= (layoutName.equalsIgnoreCase(item))? IConstants.SELECTED : StringPool.BLANK %>" id="li_<%= item %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= item %>');"><%= TextFormatter.format(item, TextFormatter.J) %></a><%
+		}
+	%>
+	
+	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+		<li id="li_<%= IConstants.ADD_PORTFOLIO %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_PORTFOLIO %>');"><%= TextFormatter.format(IConstants.ADD_PORTFOLIO, TextFormatter.J) %></a>
+	</c:if>
+	
+	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
+		<li id="li_<%= IConstants.ADD_USER %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_USER %>');"><%= TextFormatter.format(IConstants.ADD_USER, TextFormatter.J) %></a>
+	</c:if>
 </ul>
 
 <aui:script>
