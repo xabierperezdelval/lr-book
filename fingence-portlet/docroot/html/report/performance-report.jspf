@@ -1,13 +1,15 @@
-<aui:row>
-	<aui:column>
-		<liferay-ui:header title="top-gainers"/>
-		<div id="topGainers"></div>
-	</aui:column>
-	<aui:column>
-		<liferay-ui:header title="top-losers"/>
-		<div id="topLosers"></div>
-	</aui:column>	
-</aui:row>
+<aui:container>
+	<aui:row>
+		<aui:column>
+			<liferay-ui:header title="top-gainers"/>
+			<div id="topGainers"></div>
+		</aui:column>
+		<aui:column>
+			<liferay-ui:header title="top-losers"/>
+			<div id="topLosers"></div>
+		</aui:column>	
+	</aui:row>
+</aui:container>
 
 <aui:script>
 	AUI().ready(function(A) {

@@ -21,8 +21,8 @@
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 %>
 
+<aui:container>
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
-
 	<aui:row>
 		<aui:column columnWidth="30">
 			<h4>Base Currency: <%= PortfolioServiceUtil.getBaseCurrency(portfolioId) %></h4>
@@ -72,6 +72,7 @@
 		</c:if>
 	</aui:row>
 </c:if>
+</aui:container>
 
 <c:choose>
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) %>">
