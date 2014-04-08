@@ -18,7 +18,7 @@
 </ul>
 
 <aui:script>
-	function triggerRequest(item) {
+	function triggerRequest(item) {		
 		var ajaxURL = Liferay.PortletURL.createActionURL();
 		ajaxURL.setPortletId('menu_WAR_fingenceportlet');
 		ajaxURL.setParameter('MENU_ITEM', item);
@@ -33,7 +33,7 @@
 				}
 			}
 		});
-		
+				
 		// change the CSS of "li" tag
 		$.each($("ul.left-nav li"), function(index, obj) {
  			if (obj.id == ('li_' + item)) {
