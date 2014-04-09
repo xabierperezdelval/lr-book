@@ -9,7 +9,7 @@
 	%>
 	
 	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR || userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
-		<li id="li_<%= IConstants.ADD_PORTFOLIO %>"><a href="javascript:void(0);" onClick="javascript:triggerRequest('<%= IConstants.ADD_PORTFOLIO %>');"><%= TextFormatter.format(IConstants.ADD_PORTFOLIO, TextFormatter.J) %></a>
+		<li id="li_<%= IConstants.ADD_PORTFOLIO %>"><a href="javascript:void(0);"  onClick="javascript:triggerRequest('<%= IConstants.ADD_PORTFOLIO %>');"><%= TextFormatter.format(IConstants.ADD_PORTFOLIO, TextFormatter.J) %></a>
 	</c:if>
 	
 	<c:if test="<%= (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>">
