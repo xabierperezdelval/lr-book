@@ -8,7 +8,15 @@
 
 <aui:script>
 	AUI().ready(function(A) {
-	var userType = <%= userType %>;
+	
+		// put the loading mask
+		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
+		if (divForMasking.loadingmask == null) {
+			divForMasking.plug(A.LoadingMask, { background: '#F0F0F0' });
+            divForMasking.loadingmask.toggle();
+		}
+	
+		var userType = <%= userType %>;
 		Liferay.Service(
   			'/fingence-portlet.portfolio/get-portfolio-summary',
   			{
@@ -96,14 +104,14 @@
 						}).render('#portfolioContainer');
 	  				}
 				);
+				
+				divForMasking.loadingmask.toggle();
 	  		}
 		);
 	});
 	
 	function viewAllocationStrategy(portfolioId){
-		AUI().ready(function(A){
-			A.one('#viewAllocation').text("Coming Soon");
-		});
+		$('#viewAllocation').text("Coming Soon");
 	}
 	
 	function showDetails(portfolioId) {

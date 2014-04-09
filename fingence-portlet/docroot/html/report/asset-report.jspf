@@ -20,6 +20,12 @@
 <aui:script>
 	AUI().ready(function(A) {
 	
+		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
+		if (divForMasking.loadingmask == null) {
+			divForMasking.plug(A.LoadingMask, { background: '#F0F0F0' });
+            divForMasking.loadingmask.toggle();
+		}
+			
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
@@ -37,6 +43,8 @@
 				
 				//4. Group By currency with Weightage.
 				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
+				
+				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
