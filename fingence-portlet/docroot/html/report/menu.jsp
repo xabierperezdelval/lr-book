@@ -53,7 +53,7 @@
 			if (disable) {
 				obj.setAttribute("onClick","");
 			} else {
-				obj.setAttribute("onClick","javascript:triggerRequest('" + obj.id + "')");
+				//obj.setAttribute("onClick","javascript:triggerRequest('" + obj.id + "')");
 			}
 		});
 	}	
