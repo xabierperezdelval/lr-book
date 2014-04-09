@@ -102,10 +102,10 @@
 							columnset: columns,
 	    					recordset: data
 						}).render('#portfolioContainer');
+						
+						divForMasking.loadingmask.toggle();
 	  				}
 				);
-				
-				divForMasking.loadingmask.toggle();
 	  		}
 		);
 	});
