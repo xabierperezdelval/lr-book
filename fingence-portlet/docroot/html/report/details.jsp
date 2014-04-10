@@ -13,17 +13,19 @@
 	
 <aui:fieldset>
 	<aui:row>
-		<aui:column columnWidth="25"><b>Investor</b></aui:column>
-		<aui:column columnWidth="25"><b>Managed By</b></aui:column>
-		<aui:column columnWidth="25"><b>Wealth Advisor</b></aui:column>
-		<aui:column columnWidth="25"><b>Institution</b></aui:column>
+		<aui:column columnWidth="20"><b>Investor</b></aui:column>
+		<aui:column columnWidth="20"><b>Managed By</b></aui:column>
+		<aui:column columnWidth="20"><b>Wealth Advisor</b></aui:column>
+		<aui:column columnWidth="20"><b>Institution</b></aui:column>
+		<aui:column columnWidth="20"><b>Base Currency</b></aui:column>
 	</aui:row>
 	
 	<aui:row>
-		<aui:column columnWidth="25"><%= BridgeServiceUtil.getUserName(portfolio.getInvestorId()) %></aui:column>
-		<aui:column columnWidth="25"><%= (Validator.isNull(managerName) ? "Not Assigned" : managerName) %></aui:column>
-		<aui:column columnWidth="25"><%= BridgeServiceUtil.getUserName(portfolio.getWealthAdvisorId()) %></aui:column>
-		<aui:column columnWidth="25"><%= BridgeServiceUtil.getOrganizationName(portfolio.getInstitutionId())  %></aui:column>
+		<aui:column columnWidth="20"><%= BridgeServiceUtil.getUserName(portfolio.getInvestorId()) %></aui:column>
+		<aui:column columnWidth="20"><%= (Validator.isNull(managerName) ? "Not Assigned" : managerName) %></aui:column>
+		<aui:column columnWidth="20"><%= BridgeServiceUtil.getUserName(portfolio.getWealthAdvisorId()) %></aui:column>
+		<aui:column columnWidth="20"><%= BridgeServiceUtil.getOrganizationName(portfolio.getInstitutionId()) %></aui:column>
+		<aui:column columnWidth="20"><%= portfolio.getBaseCurrency() %></aui:column>
 	</aui:row>	
 </aui:fieldset>
 

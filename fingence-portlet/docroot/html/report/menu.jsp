@@ -30,6 +30,7 @@
 			on: {
 				success: function() {
 					Liferay.Portlet.refresh('#p_p_id_report_WAR_fingenceportlet_');
+					Liferay.Portlet.refresh('#p_p_id_menu_WAR_fingenceportlet_');
 				}
 			}
 		});
