@@ -18,6 +18,7 @@ import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -105,11 +106,12 @@ public class ReportPortlet extends MVCPortlet {
 		long portfolioItemId = ParamUtil.getLong(actionRequest, "itemId");
 		long portfolioId = ParamUtil.getLong(actionRequest, "portfolioId");
 		String ticker = ParamUtil.getString(actionRequest, "ticker");
-		double purchasePrice = ParamUtil.getDouble(actionRequest, "purchasePrice");
 		String purchaseDate = ParamUtil.getString(actionRequest, "purchaseDate");
-		double purchaseQty = ParamUtil.getDouble(actionRequest, "purchaseQty");
-		double purchasedFx = ParamUtil.getDouble(actionRequest, "purchasedFx");
-				
+		
+		double purchasePrice = Double.parseDouble(ParamUtil.getString(actionRequest, "purchasePrice").replaceAll(StringPool.COMMA, StringPool.BLANK));
+		double purchaseQty = Double.parseDouble(ParamUtil.getString(actionRequest, "purchaseQty").replaceAll(StringPool.COMMA, StringPool.BLANK));
+		double purchasedFx = Double.parseDouble(ParamUtil.getString(actionRequest, "purchasedFx", "0.0").replaceAll(StringPool.COMMA, StringPool.BLANK));
+						
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
 				isinId, ticker, purchasePrice, purchaseQty, purchasedFx,
 				purchaseDate);		

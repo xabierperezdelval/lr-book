@@ -226,6 +226,7 @@
 					var jsonObj = {};
 					jsonObj.name = item.name;
 					jsonObj.itemId = item.itemId;
+					jsonObj.portfolioId = item.portfolioId;
 					jsonObj.security_ticker = item.security_ticker;
 					jsonObj.purchasedMarketValue = item.purchasedMarketValue;
 					jsonObj.currentMarketValue = item.currentMarketValue;

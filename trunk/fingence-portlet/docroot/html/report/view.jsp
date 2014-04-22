@@ -279,7 +279,7 @@
 	                 label: 'Actions',
 	                 formatter: function(obj) {
 	                  	obj.value = 
-	                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.data.itemId + ',<%= portfolioId %>);"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
+	                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.data.itemId + ',' + obj.data.portfolioId + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
 	                 		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.data.itemId + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	     			},
 	                allowHTML: true
