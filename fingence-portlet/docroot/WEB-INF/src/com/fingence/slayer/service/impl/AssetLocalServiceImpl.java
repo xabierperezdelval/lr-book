@@ -176,12 +176,22 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			country = null;
 			try {
 				//CNTRY_OF_RISK
-				country = CountryServiceUtil.fetchCountryByA2(CellUtil.getString(row.getCell(columnNames.get("CNTRY_OF_RISK"))));
+				String countryCode = CellUtil.getString(row.getCell(columnNames.get("CNTRY_OF_RISK")));
+				
+				if (countryCode.equalsIgnoreCase("SP")) {
+					countryCode = "ES";
+				} else if (countryCode.equalsIgnoreCase("EN")) {
+					countryCode = "GB";
+				}				
+				
+				country = CountryServiceUtil.fetchCountryByA2(countryCode);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 			if (Validator.isNotNull(country)) {
 				asset.setCountry_of_risk(country.getCountryId());
+			} else {
+				asset.setCountry_of_risk(asset.getCountry());
 			}
 			
 			if (asset.getSecurity_class().equalsIgnoreCase("Fixed Income")) {
