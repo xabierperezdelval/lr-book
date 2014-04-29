@@ -310,7 +310,7 @@ public class PhotoLocalServiceImpl extends PhotoLocalServiceBaseImpl {
 		URL url = null;
 		try {
 			url = new URL("http://res.cloudinary.com/" 
-					+ AppConfig.get(IConstants.CLDY_CLOUD_NAME) 
+					+ AppConfig.get(IConstants.CFG_CLDY_CLOUD_NAME) 
 					+ "/image/upload/w_80,h_100,c_thumb,g_face/" 
 					+ publicId);
 		} catch (MalformedURLException e) {

@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 import com.inikah.slayer.model.Profile;
-import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.util.AppListTypeUtil;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.util.StringPool;
@@ -42,7 +42,7 @@ public class DataInsertEvent extends SimpleAction {
 			String type = parts[0];
 			String value = parts[1];
 	
-			BridgeServiceUtil.createListItem(type, value);
+			AppListTypeUtil.createListItem(type, value);
 		}
 	}
 }

@@ -31,7 +31,7 @@ public class LanguageConfig extends SimpleAction {
 			e.printStackTrace();
 		}
 		
-		InputStream inputStream = CurrencyConfig.class.getClassLoader().getResourceAsStream("data/languages.csv");
+		InputStream inputStream = LanguageConfig.class.getClassLoader().getResourceAsStream("data/languages.csv");
 				
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		

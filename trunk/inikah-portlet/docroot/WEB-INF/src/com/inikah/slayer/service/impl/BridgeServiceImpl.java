@@ -80,49 +80,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		}
 		return countries;
 	}
-	
-	public void createListItem(String type, String value) {
 		
-		boolean itemExists = false;
-		
-		String prefix = Profile.class.getName() + StringPool.PERIOD;
-		
-		String name = prefix + type + StringPool.PERIOD + value;
-		
-		try {
-			List<ListType> items =  listTypePersistence.findByType(prefix + type);
-			
-			for (ListType item: items) {
-				if (item.getName().equalsIgnoreCase(name)) {
-					itemExists = true;
-					break;
-				}
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		// create item for the first time
-		if (itemExists) return;
-		
-		long listTypeId = 0l;
-		try {
-			listTypeId = counterLocalService.increment("list-item-id");
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		ListType listType = listTypePersistence.create((int)listTypeId);
-		
-		listType.setName(name);
-		listType.setType(prefix + type);
-		
-		try {
-			listTypePersistence.update(listType);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public int getListTypeId(String listName, String suffix) {
 		
 		int listTypeId = 0;

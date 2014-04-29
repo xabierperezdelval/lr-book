@@ -16,9 +16,9 @@ public class SMSUtil {
 						
 		String [] oldSubs = {"[$USERNAME$]", "[$PASSWORD$]", "[$API_ID$]", "[$TO$]", "[$MESSAGE$]"};
 		String [] newSubs = {
-				AppConfig.get(IConstants.CLICKATELL_USERNAME), 
-				AppConfig.get(IConstants.CLICKATELL_PASSWORD), 
-				AppConfig.get(IConstants.CLICKATELL_API_ID),
+				AppConfig.get(IConstants.CFG_CLICKATELL_USERNAME), 
+				AppConfig.get(IConstants.CFG_CLICKATELL_PASSWORD), 
+				AppConfig.get(IConstants.CFG_CLICKATELL_API_ID),
 				mobileNumber, 
 				HttpUtil.encodeURL("Your Vefication Code: " + verificationCode)
 		};

@@ -31,9 +31,9 @@ public class UpdateXRates extends BaseMessageListener {
 
 	private void update() {
 		
-		if (!IConstants.OPENXCHAGE_UPDATE) return;
+		if (!IConstants.CFG_OPENXCHAGE_UPDATE) return;
 				
-		String appId = AppConfig.get(IConstants.OPENXCHAGE_API_ID);
+		String appId = AppConfig.get(IConstants.CFG_OPENXCHAGE_API_ID);
 		String url = "http://openexchangerates.org/api/latest.json?app_id="+ appId;
 	
 		HttpClient client = new HttpClient();

@@ -27,7 +27,7 @@ public class DirectPay {
 	static Map<String, String> sdkConfig = null;
 	static {
 		sdkConfig = new HashMap<String, String>();
-		sdkConfig.put("mode", AppConfig.get(IConstants.PAYPAL_ENVIRONMENT));
+		sdkConfig.put("mode", AppConfig.get(IConstants.CFG_PAYPAL_ENVIRONMENT));
 	}
 	
 	private static String getAccessToken() {	
@@ -35,7 +35,7 @@ public class DirectPay {
 		
 		try {
 			
-			String ENVT = AppConfig.get(IConstants.PAYPAL_ENVIRONMENT);
+			String ENVT = AppConfig.get(IConstants.CFG_PAYPAL_ENVIRONMENT);
 			
 			accessToken = new OAuthTokenCredential(
 					AppConfig.get(ENVT + StringPool.PERIOD + IConstants.CFG_PAYPAL_CLIENT_ID),
