@@ -46,6 +46,10 @@
 			<name>view-template</name>
 			<value>/html/register/view.jsp</value>
 		</init-param>
+		<init-param>
+		    <name>add-process-action-success-action</name>
+		    <value>false</value>
+		</init-param>		
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -350,4 +354,4 @@
 		<identifier>profileId</identifier>
 		<qname xmlns:x="http://inikah.com">x:profileId</qname>
 	</public-render-parameter>
-</portlet-app>
+</portlet-app> 

@@ -31,6 +31,7 @@
 	<portlet>
 		<portlet-name>register</portlet-name>
 		<icon>/icon.png</icon>
+		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<css-class-wrapper>register-portlet</css-class-wrapper>
 	</portlet>
