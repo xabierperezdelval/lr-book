@@ -4,14 +4,6 @@
 <%@page import="com.inikah.slayer.model.Invitation"%>
 
 <% 
-	PortletURL createAccountURL = PortletURLFactoryUtil.create(request, "58", plid, PortletRequest.ACTION_PHASE);
-	createAccountURL.setWindowState(WindowState.NORMAL);
-	createAccountURL.setPortletMode(PortletMode.VIEW);
-	createAccountURL.setParameter("saveLastPath", "0");
-	createAccountURL.setParameter("struts_action", "/login/create_account");
-	
-	String PORTLET_NSPACE = "_58_";
-	
 	String emailAddress = StringPool.BLANK;
 	long invitationId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(request).getParameter("invitationId"), 0l);
 	if (invitationId > 0l) {
@@ -20,22 +12,21 @@
 	long inviterId = GetterUtil.getLong(PortalUtil.getOriginalServletRequest(request).getParameter("inviterId"), 0l);
 %>
 
-<aui:form portletNamespace="<%= PORTLET_NSPACE %>" action="<%= createAccountURL.toString() %>" onSubmit="javascript:setValues();">
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
+<portlet:actionURL name="createAccount" var="createAccountURL"/>
+
+<aui:form action="<%= createAccountURL %>" onSubmit="javascript:setValues();">
 	
 	<!-- birth day -->
 	<aui:input name="male" type="hidden" value="1" />
-	<aui:input name="birthdayDay" type="hidden" value="1" />
 	<aui:input name="firstName" type="hidden" value="<%= IConstants.PENDING_USR_FIRST_NAME %>" />
-	<aui:input name="customRegistration" type="hidden" value="<%= true %>"/>
 	<aui:input name="invitationId" type="hidden" value="<%= String.valueOf(invitationId) %>" />
 	<aui:input name="inviterId" type="hidden" value="<%= String.valueOf(inviterId) %>" />
 	
 	<aui:fieldset>
 		<aui:column>
-			<aui:input autoFocus="true" name="profileName" label="profile-name" helpMessage="help-msg-profile-name" required="<%= true %>" />
+			<aui:input autoFocus="true" name="profileName" label="profile-name" required="<%= true %>" />
 			
-			<aui:input name="emailAddress" required="<%= true %>" value="<%= emailAddress %>" helpMessage="help-msg-email-address">
+			<aui:input name="emailAddress" required="<%= true %>" value="<%= emailAddress %>">
 				<aui:validator name="email"/>
 				<aui:validator name="custom" errorMessage="email-already-exists">
 					function() {
@@ -46,13 +37,13 @@
 		</aui:column>
 		
 		<aui:column cssClass="mini-selection">
-			<aui:select name="bride" label="profile-type" helpMessage="help-msg-profile-type"
+			<aui:select name="bride" label="profile-type" 
 					showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>"> 
 				<aui:option value="1" label="bride"/>
 				<aui:option value="0" label="groom"/>
 			</aui:select>
 			
-			<aui:select name="creatingForSelf" label="creating-for" helpMessage="help-msg-creating-for"
+			<aui:select name="creatingForSelf" label="creating-for" 
 					showEmptyOption="<%= true %>" required="<%= true %>" showRequiredLabel="<%= true %>">
 				<aui:option value="1" label="self"/>
 				<aui:option value="0" label="others"/>
@@ -67,20 +58,24 @@
 
 <aui:script>
 	function setValues() {
-		var frm = document.<%= PORTLET_NSPACE %>fm;
-		var creatingForSelf = frm.<%= PORTLET_NSPACE %>creatingForSelf.value;
+		var frm = document.<portlet:namespace/>fm;
+		var creatingForSelf = frm.<portlet:namespace/>creatingForSelf.value;
 		if (creatingForSelf == 1) {
-			frm.<%= PORTLET_NSPACE %>firstName.value = frm.<%= PORTLET_NSPACE %>profileName.value;
+			frm.<portlet:namespace/>firstName.value = frm.<portlet:namespace/>profileName.value;
 			
-			if (frm.<%= PORTLET_NSPACE %>bride.value == 1) {
-				frm.<%= PORTLET_NSPACE %>male.value = '0';
+			if (frm.<portlet:namespace/>bride.value == 1) {
+				frm.<portlet:namespace/>male.value = '0';
+			} else {
+				frm.<portlet:namespace/>male.value = '1';
 			}
+		} else {
+			frm.<portlet:namespace/>firstName.value = '<%= IConstants.PENDING_USR_FIRST_NAME %>';
 		}
 	}
 
 	function emailNotExists() {
-		var frm = document.<%= PORTLET_NSPACE %>fm;
-		var ele = frm.<%= PORTLET_NSPACE %>emailAddress;
+		var frm = document.<portlet:namespace/>fm;
+		var ele = frm.<portlet:namespace/>emailAddress;
 	
 		var ajaxURL = Liferay.PortletURL.createResourceURL();
 		ajaxURL.setPortletId('register_WAR_inikahportlet');

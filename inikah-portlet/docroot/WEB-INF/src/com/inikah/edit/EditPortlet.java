@@ -59,7 +59,7 @@ public class EditPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		
-		Profile profile = ProfileLocalServiceUtil.init(bride, user.getEmailAddress(), profileName, createdForSelf, serviceContext);
+		Profile profile = ProfileLocalServiceUtil.init(user, bride, user.getEmailAddress(), profileName, createdForSelf, serviceContext);
 		
 		PortletSession portletSession = actionRequest.getPortletSession();
 		portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);

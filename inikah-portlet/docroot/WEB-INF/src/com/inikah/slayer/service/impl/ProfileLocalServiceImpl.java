@@ -67,14 +67,14 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	/**
 	 * 
 	 */
-	public Profile init(boolean bride, String emailAddress, String profileName, boolean createdForSelf, ServiceContext serviceContext) {
+	public Profile init(User user, boolean bride, String emailAddress, String profileName, boolean createdForSelf, ServiceContext serviceContext) {
 
 		Profile profile = createProfile(bride);
 				
 		// setting values from serviceContext
 		profile.setCompanyId(serviceContext.getCompanyId());
 		profile.setGroupId(serviceContext.getScopeGroupId());
-		profile.setUserId(serviceContext.getUserId());
+		profile.setUserId(user.getUserId());
 		profile.setCreateDate(new Date());
 		profile.setOwnerLastLogin(new Date());
 				
@@ -88,12 +88,24 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		if (createdForSelf) {
 			profile.setCreatedFor(BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self"));
 		}
+		
+		profile.setDefaultLocation(user);
 				
 		try {
 			profile = addProfile(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		if (user.getFirstName().equalsIgnoreCase(IConstants.PENDING_USR_FIRST_NAME)) {
+			user.setLdapServerId(IConstants.PENDING_USER_STATUS);
+			
+			try {
+				userLocalService.updateUser(user);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}		
 		
 		return profile;		
 	}
@@ -145,65 +157,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 
-	 * @param emailAddress
-	 * @return
-	 */
-	private Profile getProfileByEmail(String emailAddress) {
-		
-		long companyId = CompanyThreadLocal.getCompanyId();
-		
-		long userId = 0l;
-		try {
-			userId = userLocalService.getDefaultUserId(companyId);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-				
-		Profile profile = null;
-		try {
-			profile = profilePersistence.fetchByUserId_EmailAddress(userId, emailAddress);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-
-		return profile;
-	}
-	
-	/**
-	 * 
-	 * @param user
-	 * @param serviceContext
-	 */
-	public void attachProfileToUser(User user) {
-
-		Profile profile = getProfileByEmail(user.getEmailAddress());
-				
-		if (Validator.isNull(profile)) return; 
-		
-		profile.setUserId(user.getUserId());
-		profile.setDefaultLocation(user);
-				
-		try {
-			updateProfile(profile);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-				
-		if (user.getFirstName().equalsIgnoreCase(IConstants.PENDING_USR_FIRST_NAME)) {
-			user.setLdapServerId(IConstants.PENDING_USER_STATUS);
-			
-			try {
-				userLocalService.updateUser(user);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	

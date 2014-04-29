@@ -14,24 +14,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class InvitePortlet extends MVCPortlet {
 
-	/*
-	public void invite(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
-
-		String inviteeEmail = ParamUtil.getString(actionRequest, "inviteeEmail");
-		String inviteeName = ParamUtil.getString(actionRequest, "inviteeName");
-		
-		long inviterId = PortalUtil.getUserId(actionRequest);
-		long companyId = PortalUtil.getCompanyId(actionRequest);
-		
-		if (InvitationLocalServiceUtil.isNewEmail(companyId, inviteeEmail)) {
-			
-			InvitationLocalServiceUtil.sendInvitation(inviterId, inviteeName, inviteeEmail);
-		}
-	}
-	*/
-	
-	
 	public void invite(ActionRequest actionRequest,ActionResponse response)
 			throws Exception {
 		
