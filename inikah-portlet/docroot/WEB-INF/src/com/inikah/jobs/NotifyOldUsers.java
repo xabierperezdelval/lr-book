@@ -24,7 +24,7 @@ public class NotifyOldUsers extends BaseMessageListener {
 
 	private void update() {
 		
-		if (!IConstants.NOTIFY_OLD_USERS) return;
+		if (!IConstants.CFG_NOTIFY_OLD_USERS) return;
 		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 				User.class, PortalClassLoaderUtil.getClassLoader());
