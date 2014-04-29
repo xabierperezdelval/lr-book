@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.util.StringPool;
+
 
 public class AppConfig {
 	
 	public static String get(String key) {
 		
-		String value = null;
+		String value = StringPool.BLANK;
 		
 		Connection connection = null;
 		try {

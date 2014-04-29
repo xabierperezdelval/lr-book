@@ -89,6 +89,7 @@ public class CurrencyConfig extends SimpleAction {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(

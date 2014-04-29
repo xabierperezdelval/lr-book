@@ -350,5 +350,4 @@
 		<identifier>profileId</identifier>
 		<qname xmlns:x="http://inikah.com">x:profileId</qname>
 	</public-render-parameter>
-
 </portlet-app>

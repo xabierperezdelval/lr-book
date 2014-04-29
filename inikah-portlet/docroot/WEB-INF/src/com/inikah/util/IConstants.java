@@ -96,40 +96,40 @@ public interface IConstants {
 	// -------------------------------------------------------
 	
 	// maxmind
-	String MAX_MIND_USER_ID = "max.mind.user.id";
-	String MAX_MIND_LICENSE_KEY = "max.mind.license.key";
+	String CFG_MAX_MIND_USER_ID = "max-mind-user-id";
+	String CFG_MAX_MIND_LICENSE_KEY = "max-mind-license-key";
 	
 	// paypal
-	String PAYPAL_ENVIRONMENT = "paypal.environment";
-	String PAYPAL_ENVIRONMENT_LIVE = "live";
-	String PAYPAL_ENVIRONMENT_SANDBOX = "sandbox";
+	String CFG_PAYPAL_ENVIRONMENT = "paypal-environment";
+	String CFG_PAYPAL_ENVIRONMENT_LIVE = "live";
+	String CFG_PAYPAL_ENVIRONMENT_SANDBOX = "sandbox";
 	
-	String PAYPAL_MERCHANT_USERNAME = "paypal.acct1.UserName";
-	String PAYPAL_MERCHANT_PASSWORD = "paypal.acct1.Password";
-	String PAYPAL_MERCHANT_SIGNATURE = "paypal.acct1.Signature";
+	String CFG_PAYPAL_MERCHANT_USERNAME = "paypal-acct1-UserName";
+	String CFG_PAYPAL_MERCHANT_PASSWORD = "paypal-acct1-Password";
+	String CFG_PAYPAL_MERCHANT_SIGNATURE = "paypal-acct1-Signature";
 	
 	// clickatell (for SMS)
-	String CLICKATELL_USERNAME = "clickatell.username";
-	String CLICKATELL_PASSWORD = "clickatell.password";
-	String CLICKATELL_API_ID = "clickatell.api.id";
+	String CFG_CLICKATELL_USERNAME = "clickatell-username";
+	String CFG_CLICKATELL_PASSWORD = "clickatell-password";
+	String CFG_CLICKATELL_API_ID = "clickatell-api-id";
 	
 	// openxchangerates.org
-	boolean OPENXCHAGE_UPDATE = GetterUtil.getBoolean(AppConfig.get("openxchange.update"));
-	boolean NOTIFY_OLD_USERS = GetterUtil.getBoolean(AppConfig.get("notify.old.users"));
-	String OPENXCHAGE_API_ID = "openxchange.api.id";
+	boolean CFG_OPENXCHAGE_UPDATE = GetterUtil.getBoolean(AppConfig.get("openxchange-update"));
+	boolean CFG_NOTIFY_OLD_USERS = GetterUtil.getBoolean(AppConfig.get("notify-old-users"));
+	String CFG_OPENXCHAGE_API_ID = "openxchange-api-id";
 	
 	// Cloudinary (for thumbnail conversion)
-	String CLDY_CLOUD_NAME = "cloudinary.cloud.name";
-	String CLDY_API_KEY = "cloudinary.api.key";
-	String CLDY_API_SECRET = "cloudinary.api.secret";
+	String CFG_CLDY_CLOUD_NAME = "cloudinary-cloud-name";
+	String CFG_CLDY_API_KEY = "cloudinary-api-key";
+	String CFG_CLDY_API_SECRET = "cloudinary-api-secret";
 	
-	String CFG_PAYPAL_CLIENT_ID = "paypal.client.id";
-	String CFG_PAYPAL_CLIENT_SECRET = "paypal.client.secret";
+	String CFG_PAYPAL_CLIENT_ID = "paypal-client-id";
+	String CFG_PAYPAL_CLIENT_SECRET = "paypal-client-secret";
 	
-	String CFG_AWS_S3_BUCKET_PHOTO_PROFILE = "aws.s3.bucket.photo.profile";
-	String CFG_AWS_ACCESS_KEY = "aws.access.key";
-	String CFG_AWS_SECRET_KEY = "aws.secret.key";
-	String CFG_AWS_CLOUDFRONT_DOMAIN = "aws.cloudfront.domain";
+	String CFG_AWS_S3_BUCKET_PHOTO_PROFILE = "aws-s3-bucket-photo-profile";
+	String CFG_AWS_ACCESS_KEY = "aws-access-key";
+	String CFG_AWS_SECRET_KEY = "aws-secret-key";
+	String CFG_AWS_CLOUDFRONT_DOMAIN = "aws-cloudfront-domain";
 	
 	String DIV_HIDDEN = "hidden";
 	String FLD_CHECKED = "checked";

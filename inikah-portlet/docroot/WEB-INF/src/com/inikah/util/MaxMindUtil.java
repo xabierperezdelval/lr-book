@@ -20,8 +20,8 @@ public class MaxMindUtil {
 	static WebServiceClient client;
 	
 	static {
-		int maxMindUserId = GetterUtil.getInteger(AppConfig.get(IConstants.MAX_MIND_USER_ID));
-		String maxMindLicenseKey = AppConfig.get(IConstants.MAX_MIND_LICENSE_KEY);
+		int maxMindUserId = GetterUtil.getInteger(AppConfig.get(IConstants.CFG_MAX_MIND_USER_ID));
+		String maxMindLicenseKey = AppConfig.get(IConstants.CFG_MAX_MIND_LICENSE_KEY);
 		client = new WebServiceClient.Builder(maxMindUserId, maxMindLicenseKey).build();
 	}
 
