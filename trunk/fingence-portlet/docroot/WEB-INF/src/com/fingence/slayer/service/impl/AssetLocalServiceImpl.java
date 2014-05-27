@@ -377,6 +377,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		return assetId;	
+		return assetId;
 	}
 }

@@ -57,7 +57,7 @@
 	    					},
 	    					{
 	    						key: 'currentPrice',
-	    						label: 'Current Value (USD)',
+	    						label: 'Market Value (USD)',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
 	    							obj.value = formatCustom(obj.value, 'amount');
@@ -68,7 +68,7 @@
 	    						label: 'Gain/Loss (USD)',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							obj.value = formatCustom(obj.value, 'amount');
+	    							obj.value = formatCustom1(obj.value, 'amount');
 	    						}
 	    					},	 
 	    					{
@@ -76,7 +76,7 @@
 	    						label: 'Gain/Loss (%)',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							obj.value = formatCustom(obj.value, 'percent');
+	    							obj.value = formatCustom1(obj.value, 'percent');
 	    						}
 	    					},		    					  					
 			 				{

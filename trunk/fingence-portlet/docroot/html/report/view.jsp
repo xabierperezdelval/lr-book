@@ -119,6 +119,19 @@
 		return _value;
 	}
 	
+	function formatCustom1(value, _type) {
+		var _value = (_type == 'amount')? 
+			accounting.formatMoney(Math.abs(value)) : accounting.toFixed(Math.abs(value), 2) + '%';
+		
+		if (value < 0) {
+			_value = '-'.fontcolor('red') + _value.fontcolor('red');
+		} else {
+			_value = _value.fontcolor('green');
+		}
+		
+		return _value;
+	}	
+	
 	<c:if test="<%= (portfolioCount > 1) %>">
 		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
@@ -241,7 +254,7 @@
 				},
 	            {
 	            	key: 'currentMarketValue', 
-	               	label: 'Current Value',
+	               	label: 'Market Value',
 	                formatter: function(obj) {
 						obj.value = formatCustom(obj.value, 'amount');
 					},
@@ -260,7 +273,7 @@
 	            	key: 'gain_loss',
 	                label: 'Gain/Loss',
 	                formatter: function(obj) {
-						obj.value = formatCustom(obj.value, 'amount');
+						obj.value = formatCustom1(obj.value, 'amount');
 					},
 					allowHTML: true,
 					sortable: true
@@ -269,7 +282,7 @@
 	               	key: 'gain_loss_percent',
 	               	label: 'Gain/Loss%',
 	               	formatter: function(obj) {
-	             		obj.value = formatCustom(obj.value, 'percent');
+	             		obj.value = formatCustom1(obj.value, 'percent');
 					},
 					allowHTML: true,
 					sortable: true

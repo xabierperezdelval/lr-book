@@ -41,6 +41,8 @@
 <%@page import="com.liferay.portal.model.Country"%>
 <%@page import="com.liferay.portal.service.CountryServiceUtil"%>
 
+<%@page import="com.fingence.util.ConversionUtil"%>
+
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
 

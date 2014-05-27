@@ -70,7 +70,7 @@
 				 			key: 'gain_loss',
 				 			label: title,
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom(obj.value, 'amount');
+				 				obj.value = formatCustom1(obj.value, 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -79,7 +79,7 @@
 							key: 'gain_loss_percent',
 							label: title + '%' ,
 							formatter: function(obj) {
-								obj.value = formatCustom(obj.value, 'percent');
+								obj.value = formatCustom1(obj.value, 'percent');
 							},
 				 			allowHTML: true,
 				 			sortable: true
