@@ -92,14 +92,14 @@
 			 			key: 'gainLossPercent', 
 			 			label: 'Gain/Loss',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'percent');
+			 				obj.value = formatCustom1(obj.value, 'percent');
 			 			},
 			 			allowHTML:true,
 			 			sortable: true 			
 			 		},
 			 		{
 			 			key: 'currentMarketValue', 
-			 			label: 'Current Value',
+			 			label: 'Market Value',
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},

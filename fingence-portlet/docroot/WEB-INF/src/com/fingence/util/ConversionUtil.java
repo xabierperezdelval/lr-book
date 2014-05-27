@@ -11,6 +11,9 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
+import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.service.PortfolioLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 
 public class ConversionUtil {
@@ -56,5 +59,19 @@ public class ConversionUtil {
 		}
 
 		return conversion;
+	}
+	
+	public static String getCurrency(long portfolioId) {
+		
+		String currency = StringPool.BLANK;
+		
+		try {
+			Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(portfolioId);
+			currency = portfolio.getBaseCurrency();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return currency;
 	}
 }
