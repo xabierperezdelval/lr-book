@@ -23,7 +23,7 @@
 		ajaxURL.setPortletId('menu_WAR_fingenceportlet');
 		ajaxURL.setParameter('MENU_ITEM', item);
 		ajaxURL.setName('setNavigation');
-		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		ajaxURL.setWindowState('exclusive');
 		
 		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
 			sync: true,

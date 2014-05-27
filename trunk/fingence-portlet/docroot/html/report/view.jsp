@@ -1,3 +1,4 @@
+<%@page import="com.fingence.util.PrefsUtil"%>
 <%@ include file="/html/report/init.jsp"%>
 
 <%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
@@ -19,6 +20,12 @@
 			IConstants.BREAKUP_BY_RISK_COUNTRY);
 	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
+	boolean performanceReport = layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE);
+	
+	int assetsToShow = 0;
+	if (performanceReport) {
+		assetsToShow = GetterUtil.getInteger(PrefsUtil.getUserPreference(userId, plid, portletDisplay.getRootPortletId(), "assetsToShow"), 5);
+	}
 %>
 
 <c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
@@ -66,6 +73,17 @@
 					<aui:option value="<%=IConstants.BREAKUP_BY_SECTOR%>"
 						label="<%=IConstants.LBL_BREAKUP_BY_SECTOR%>"
 						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECTOR)%>" />
+				</aui:select>
+			</aui:column>
+		</c:if>
+		
+		<c:if test="<%= performanceReport %>">
+			<aui:column>
+				<aui:select name="assetsToShow" onChange="javascript:setAssetsToShow(this.value);">
+					<aui:option value="3" label="Three" selected="<%= (assetsToShow == 3) %>"/>
+					<aui:option value="5" label="Five" selected="<%= (assetsToShow == 5) %>"/>
+					<aui:option value="7" label="Seven" selected="<%= (assetsToShow == 7) %>"/>
+					<aui:option value="10" label="Ten" selected="<%= (assetsToShow == 10) %>"/>
 				</aui:select>
 			</aui:column>
 		</c:if>
@@ -138,7 +156,7 @@
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
 			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
 			ajaxURL.setParameter('portfolioId', value);
-			ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+			ajaxURL.setWindowState('exclusive');
 			
 			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
 				sync: true,
@@ -178,7 +196,7 @@
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
 			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_ALLOCATION_BY %>');
 			ajaxURL.setParameter('allocationBy', value);
-			ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+			ajaxURL.setWindowState('exclusive');
 			
 			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
 				sync: true,
@@ -188,6 +206,26 @@
 					}
 				}
 			});
+		}
+	</c:if>
+	
+	<c:if test="<%= performanceReport %>">
+		function setAssetsToShow(value) {
+		
+			var ajaxURL = Liferay.PortletURL.createResourceURL();
+			ajaxURL.setPortletId('report_WAR_fingenceportlet');
+			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_ASSETS_TO_SHOW %>');
+			ajaxURL.setParameter('assetsToShow', value);
+			ajaxURL.setWindowState('exclusive');
+			
+			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+				sync: true,
+				on: {
+					success: function() {
+						Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+					}
+				}
+			});		
 		}
 	</c:if>
 	
@@ -235,7 +273,32 @@
                 }
             );
         }
-    }    
+    } 
+    
+	function discussions(portfolioItemId) {
+		
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('jspPage', '/html/report/discussion-portfolio-item.jsp');
+		ajaxURL.setParameter('portfolioItemId', portfolioItemId);
+		ajaxURL.setWindowState('pop_up');
+	
+	    AUI().use('aui-dialog', function(A) {
+			Liferay.Util.openWindow({
+	        	dialog: {
+	            	centered: true,
+	                modal: true,
+	                width: 800,
+	                height: 600,
+	                destroyOnHide: true,
+	                resizable: false           
+	           	},
+	            id: '<portlet:namespace/>itemDiscussionPopup',
+	            title: 'Discussions',
+	           	uri: ajaxURL
+	       	});
+	    });
+	}      
 	
 	function displayItemsGrid(results, divId) {
 		YUI().use('aui-datatable', function(Y) {
@@ -293,6 +356,7 @@
 	                 formatter: function(obj) {
 	                  	obj.value = 
 	                  		'<a href="javascript:void(0);" title="Update Asset" onclick="javascript:updateItem(' + obj.data.itemId + ',' + obj.data.portfolioId + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT %>"/></a>&nbsp;' +
+	                  		'<a href="javascript:void(0);" title="Discussion" onclick="javascript:discussions(' + obj.data.itemId + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DISCUSSION %>"/></a>' +
 	                 		'<a href="javascript:void(0);" title="Delete Asset" onclick="javascript:deleteItem(' + obj.data.itemId + ');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	     			},
 	                allowHTML: true

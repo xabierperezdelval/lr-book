@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
@@ -15,11 +16,20 @@ import javax.portlet.ResourceResponse;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
+import com.fingence.util.PrefsUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalClassInvoker;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -65,6 +75,21 @@ public class ReportPortlet extends MVCPortlet {
 			
 			PrintWriter writer = resourceResponse.getWriter();
 			writer.println(flag);
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ASSETS_TO_SHOW)) {
+			int assetsToShow = ParamUtil.getInteger(resourceRequest, "assetsToShow", 5);
+			
+			long ownerId = PortalUtil.getUserId(resourceRequest);
+			ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			
+			String[] values = {String.valueOf(assetsToShow)};
+									
+			try {				
+				PortletPreferencesLocalServiceUtil.updatePreferences(ownerId,
+						PortletKeys.PREFS_OWNER_TYPE_USER, themeDisplay.getPlid(), themeDisplay.getPortletDisplay().getRootPortletId(),
+						PrefsUtil.getPortletPreferencesXML("assetsToShow", values));
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -115,5 +140,51 @@ public class ReportPortlet extends MVCPortlet {
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
 				isinId, ticker, purchasePrice, purchaseQty, purchasedFx,
 				purchaseDate);		
+	}
+	
+	public void discussOnPortfolio(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+
+		String declaringClassName = "com.liferay.portlet.messageboards.action.EditDiscussionAction";
+		Class<?> declaringClass = null;
+		try {
+			declaringClass = Class.forName(declaringClassName, true, PortalClassLoaderUtil.getClassLoader());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String methodName = "processAction";
+		
+		Class<?> actionMappingClass = null;
+		try {
+			actionMappingClass = Class.forName("org.apache.struts.action.ActionMapping", true, PortalClassLoaderUtil.getClassLoader());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		Class<?> actionFormClass = null;
+		try {
+			actionFormClass = Class.forName("org.apache.struts.action.ActionForm", true, PortalClassLoaderUtil.getClassLoader());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}		
+		
+		Class<?>[] parameterTypes = {
+			actionMappingClass,
+			actionFormClass,
+			PortletConfig.class, 
+			ActionRequest.class,
+			ActionResponse.class 
+		};
+		Object[] arguments = { null, null, getPortletConfig(), actionRequest,
+				actionResponse };
+		
+		MethodKey methodKey = new MethodKey(declaringClass, methodName, parameterTypes);
+		
+		try {
+			PortalClassInvoker.invoke(true, methodKey, arguments);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

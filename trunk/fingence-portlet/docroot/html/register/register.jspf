@@ -111,7 +111,7 @@
 		ajaxURL.setPlid('<%= targetPlId %>');
 		ajaxURL.setParameter('fieldName', fld);
 		ajaxURL.setParameter('fieldValue', ele.value);
-		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		ajaxURL.setWindowState('exclusive');
 		
 		var notExists = true;
 		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
