@@ -35,6 +35,7 @@ public interface IConstants {
 	String CMD_SET_PORTFOLIO_ID = "setPortfolioId";
 	String CMD_SET_ALLOCATION_BY = "setAllocationBy";
 	String CMD_CHECK_DUPLICATE_PORTFOLIO = "checkDuplicatePortfolio";
+	String CMD_SET_ASSETS_TO_SHOW = "setAssetsToShow";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;
@@ -51,6 +52,7 @@ public interface IConstants {
 	String THEME_ICON_VIEW = "/common/portlet.png";
 	String THEME_ICON_MORE_DETAILS = "/common/open_window.png";
 	String THEME_ICON_PRIMARY_OPTIONS = "/portlet/pop_up.png";
+	String THEME_ICON_DISCUSSION = "/common/conversation.png";
 	
 	String CURRENCY_USD = "USD";
 	String CURRENCY_UNIT = "1";

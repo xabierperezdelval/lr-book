@@ -59,7 +59,7 @@
 			}
 		}
 		
-		sorted = sorted.slice(0,7);
+		sorted = sorted.slice(0,<%= assetsToShow %>);
 		if (sorted.length > 0) {
 			YUI().use(
 				'aui-datatable',

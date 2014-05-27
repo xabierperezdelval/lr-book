@@ -154,7 +154,7 @@
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHECK_DUPLICATE_PORTFOLIO %>');
 		ajaxURL.setParameter('portfolioId', portfolioId);
 		ajaxURL.setParameter('portfolioName', portfolioName.value);
-		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		ajaxURL.setWindowState('exclusive');
 		
 		var notExists = true;
 		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {

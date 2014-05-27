@@ -87,6 +87,7 @@
 	    								var _portfolioId = obj.data.portfolioId;
     									obj.value = '<a href="javascript:void(0);" title="View Allocation Strategy" onclick="javascript:viewAllocationStrategy(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_VIEW   %>"/></a>'
     										+ '&nbsp;<a href="javascript:void(0);" title="Update Portfolio" onclick="javascript:updatePortfolio(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_EDIT   %>"/></a>'
+    										+ '&nbsp;<a href="javascript:void(0);" title="Discussion" onclick="javascript:viewComments(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DISCUSSION   %>"/></a>'
     										+ '&nbsp;<a href="javascript:void(0);" title="Delete Portfolio" onclick="javascript:deletePortfolio(' + _portfolioId +');"><img src="<%= themeDisplay.getPathThemeImages() + IConstants.THEME_ICON_DELETE %>"/></a>';
 	    							
 	    								if (!obj.data.isPrimary && (<%= (userType == IConstants.USER_TYPE_INVESTOR) || (userType == IConstants.USER_TYPE_WEALTH_ADVISOR) %>)){
@@ -120,7 +121,7 @@
 		ajaxURL.setParameter('jspPage', '/html/report/details.jsp');
 		ajaxURL.setParameter('portfolioId', portfolioId);
 		ajaxURL.setParameter("backURL", '<%= themeDisplay.getURLCurrent() %>');
-		ajaxURL.setWindowState('<%= LiferayWindowState.EXCLUSIVE.toString() %>');
+		ajaxURL.setWindowState('exclusive');
 				
 		AUI().one('#p_p_id<portlet:namespace/>').load('<%= themeDisplay.getURLPortal() %>' + ajaxURL);
 	}
@@ -139,13 +140,37 @@
         }
     }
     
+    function viewComments(portfolioId) {
+    
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('jspPage', '/html/report/discussion-portfolio.jsp');
+		ajaxURL.setParameter('portfolioId', portfolioId);
+		ajaxURL.setWindowState('pop_up');
+    
+        AUI().use('aui-dialog', function(A) {
+			Liferay.Util.openWindow({
+            	dialog: {
+                	centered: true,
+                    modal: true,
+                    width: 800,
+                    height: 600,
+                    destroyOnHide: true           
+               	},
+                id: '<portlet:namespace/>viewCommentsPopup',
+                title: 'Discussions',
+               	uri: ajaxURL
+           	});      
+        });
+    }    
+    
     function updatePortfolio(portfolioId) {
     
 		var ajaxURL = Liferay.PortletURL.createRenderURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('jspPage', '/html/report/update-container.jsp');
 		ajaxURL.setParameter('portfolioId', portfolioId);
-		ajaxURL.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');    
+		ajaxURL.setWindowState('pop_up');    
     
         AUI().use('aui-dialog', function(A) {
 			Liferay.Util.openWindow({
