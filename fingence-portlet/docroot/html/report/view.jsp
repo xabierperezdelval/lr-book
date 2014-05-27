@@ -24,7 +24,7 @@
 	
 	int assetsToShow = 0;
 	if (performanceReport) {
-		assetsToShow = GetterUtil.getInteger(PrefsUtil.getUserPreference(userId, plid, portletDisplay.getRootPortletId(), "assetsToShow"), 5);
+		assetsToShow = GetterUtil.getInteger(PrefsUtil.getUserPreference(userId, plid, portletDisplay.getRootPortletId(), "assetsToShow"), 7);
 	}
 %>
 
@@ -84,6 +84,7 @@
 					<aui:option value="5" label="Five" selected="<%= (assetsToShow == 5) %>"/>
 					<aui:option value="7" label="Seven" selected="<%= (assetsToShow == 7) %>"/>
 					<aui:option value="10" label="Ten" selected="<%= (assetsToShow == 10) %>"/>
+					<aui:option value="15" label="Fifteen" selected="<%= (assetsToShow == 15) %>"/>
 				</aui:select>
 			</aui:column>
 		</c:if>
