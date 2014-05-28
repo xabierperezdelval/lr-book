@@ -334,6 +334,15 @@
 					}
 	           	},
 	            {
+	            	key: 'fx_gain_loss',
+	                label: 'FX Gain/Loss',
+	                formatter: function(obj) {
+						obj.value = formatCustom1(obj.value, 'amount');
+					},
+					allowHTML: true,
+					sortable: true
+	           	},	           	
+	            {
 	            	key: 'gain_loss',
 	                label: 'Gain/Loss',
 	                formatter: function(obj) {
