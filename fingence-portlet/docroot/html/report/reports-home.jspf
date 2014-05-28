@@ -59,6 +59,7 @@
 	    						key: 'currentPrice',
 	    						label: 'Market Value (USD)',
 	    						allowHTML : 'true',
+	    						className: 'align-right',
 	    						formatter: function(obj) {
 	    							obj.value = formatCustom(obj.value, 'amount');
 	    						}
@@ -130,7 +131,7 @@
 	}
 	
 	function deletePortfolio(portfolioId) {
-        if (confirm('Are you sure to delete this item from portfolio?')) {
+        if (confirm('Are you sure to delete this portfolio?')) {
             Liferay.Service(
                 '/fingence-portlet.portfolio/delete-portfolio',
                 {
