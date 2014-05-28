@@ -102,15 +102,22 @@
 					</aui:select>
 				</aui:column>
 				<aui:column>
-					<c:choose>
-						<c:when test="<%= (_portfolioId == 0l) %>">
-							<aui:input type="file" name="excelFile" label="portfolio-assets" />
-							<aui:button type="submit" />
-						</c:when>
-						<c:otherwise>
-							<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
-						</c:otherwise>
-					</c:choose>
+					<aui:row>
+						<aui:column>
+							<c:choose>
+								<c:when test="<%= (_portfolioId == 0l) %>">
+									<aui:input type="file" name="excelFile" label="portfolio-assets" />
+									<aui:button type="submit" />
+								</c:when>
+								<c:otherwise>
+									<aui:button type="button" onClick="javascript:updateInfo();" value="save" cssClass="btn-primary"/>
+								</c:otherwise>
+							</c:choose>						
+						</aui:column>
+						<aui:column>
+							<aui:button type="button" onClick="javascript:closePopup();" value="cancel" cssClass="btn-primary"/>
+						</aui:column>
+					</aui:row>
 				</aui:column>
 			</aui:row>
 		</aui:form>	
@@ -168,4 +175,8 @@
 		
 		return notExists;
 	}	
+	
+	function closePopup() {
+		Liferay.Util.getWindow('<portlet:namespace/>editPortfolioPopup').destroy();
+	}
 </aui:script>

@@ -61,8 +61,10 @@
 			</c:choose>
 		</aui:column>
 	</aui:row>
+	
 	<aui:row>
 		<aui:column><aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/></aui:column>
+		<aui:column><aui:button onclick='javascript:closePopup();' value="cancel" cssClass="btn-primary"/></aui:column>
 	</aui:row>
 		
 </aui:form>
@@ -104,5 +106,9 @@
 	  			}
 	 		}); 
  		}         
+    }
+    
+    function closePopup() {
+    	Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
     }
 </aui:script>

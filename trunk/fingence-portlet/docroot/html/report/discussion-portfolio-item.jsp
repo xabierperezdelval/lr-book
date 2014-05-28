@@ -14,7 +14,15 @@
 
 <liferay-ui:discussion classPK="<%= portfolioItem.getItemId() %>"
 	userId="<%= userId %>"
-	className="<%= Portfolio.class.getName() %>"
+	className="<%= PortfolioItem.class.getName() %>"
 	formAction="<%= discussionURL %>" 
 	ratingsEnabled="<%= true %>"
 />
+
+<aui:button type="button" onClick="javascript:closePopup();" value="close" cssClass="btn-primary"/>
+
+<aui:script>
+	function closePopup() {
+		Liferay.Util.getWindow('<portlet:namespace/>itemDiscussionPopup').destroy();
+	}
+</aui:script>

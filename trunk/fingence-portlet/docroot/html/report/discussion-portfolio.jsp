@@ -17,3 +17,11 @@
 	ratingsEnabled="<%= true %>" 
 	subject="<%= portfolio.getPortfolioName() %>"
 />
+
+<aui:button type="button" onClick="javascript:closePopup();" value="close" cssClass="btn-primary"/>
+
+<aui:script>
+	function closePopup() {
+		Liferay.Util.getWindow('<portlet:namespace/>viewCommentsPopup').destroy();
+	}
+</aui:script>
