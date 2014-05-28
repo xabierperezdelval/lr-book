@@ -42,7 +42,7 @@
 			WHERE 
 				b.portfolioId = ?
 				and a.assetId = c.assetId
-				and b.portfolioId = c.portfolioId 
+				and b.portfolioId = c.portfolioId
 				and a.country = d.countryId
 				and a.currency_ = e.currencyCode
 		]]>

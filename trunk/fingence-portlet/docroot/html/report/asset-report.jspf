@@ -243,6 +243,7 @@
 					jsonObj.security_ticker = item.security_ticker;
 					jsonObj.purchasedMarketValue = item.purchasedMarketValue;
 					jsonObj.currentMarketValue = item.currentMarketValue;
+					jsonObj.fx_gain_loss = item.fx_gain_loss;
 					jsonObj.gain_loss = item.gain_loss;
 					jsonObj.gain_loss_percent = item.gain_loss_percent;
 					jsonObj.purchaseQty = item.purchaseQty;
