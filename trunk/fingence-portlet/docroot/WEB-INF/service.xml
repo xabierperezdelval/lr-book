@@ -215,6 +215,7 @@
 		<column name="currentMarketValue" type="double"/>
 		<column name="gain_loss" type="double"/>
 		<column name="gain_loss_percent" type="double"/>
+		<column name="fx_gain_loss" type="double"/>
 		
 		<finder return-type="Collection" name="PortfolioId">
 			<finder-column name="portfolioId"/>

@@ -10,7 +10,7 @@
 	<aui:column>
 		<div id="chartContainer"></div>
 	</aui:column>
-	<aui:column columnWidth="40">
+	<aui:column>
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
@@ -53,16 +53,18 @@
 		var resultantDataArray = [];
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
 			var resultantObj = {};
-			var gainLossPercent = 0;
+			var totalFxGainLoss = 0.0;
 			var totalPurchaseValue = 0.0;
 			var totalCurrentValue = 0.0;
 			
 			_.each(item, function(item){
 				totalCurrentValue += item.currentMarketValue;
 				totalPurchaseValue += item.purchasedMarketValue;
+				totalFxGainLoss += item.fx_gain_loss;
 			});
 			
 			resultantObj._key = key;
+			resultantObj.fxGainLoss = totalFxGainLoss;
 			resultantObj.gainLossPercent = (totalCurrentValue-totalPurchaseValue)/totalPurchaseValue * 100.0;
 			resultantObj.currentMarketValue = totalCurrentValue;
 			resultantObj.weightage = totalCurrentValue/netWorth * 100.0;
@@ -88,6 +90,17 @@
     					allowHTML:true,
     					sortable: true
 	    			},
+	    			<c:if test="<%= index == 1 %>">
+				 		{
+				 			key: 'fxGainLoss', 
+				 			label: 'FX Gain/Loss',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1(obj.value, 'amount');
+				 			},
+				 			allowHTML:true,
+				 			sortable: true 			
+				 		},		    			
+	    			</c:if>    			
 			 		{
 			 			key: 'gainLossPercent', 
 			 			label: 'Gain/Loss',
