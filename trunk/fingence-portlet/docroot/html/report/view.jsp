@@ -67,12 +67,12 @@
 					<aui:option value="<%=IConstants.BREAKUP_BY_CURRENCY%>"
 						label="<%=IConstants.LBL_BREAKUP_BY_CURRENCY%>"
 						selected="<%=(allocationBy == IConstants.BREAKUP_BY_CURRENCY)%>" />
-					<aui:option value="<%=IConstants.BREAKUP_BY_SECURITY_TYPE%>"
-						label="<%=IConstants.LBL_BREAKUP_BY_SECURITY_TYPE%>"
-						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECURITY_TYPE)%>" />
-					<aui:option value="<%=IConstants.BREAKUP_BY_SECTOR%>"
-						label="<%=IConstants.LBL_BREAKUP_BY_SECTOR%>"
-						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECTOR)%>" />
+					<aui:option value="<%=IConstants.BREAKUP_BY_SECURITY_CLASS%>"
+						label="<%=IConstants.LBL_BREAKUP_BY_SECURITY_CLASS%>"
+						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS)%>" />
+					<aui:option value="<%=IConstants.BREAKUP_BY_INDUSTRY_SECTOR%>"
+						label="<%=IConstants.LBL_BREAKUP_BY_INDUSTRY_SECTOR %>"
+						selected="<%=(allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR)%>" />
 				</aui:select>
 			</aui:column>
 		</c:if>

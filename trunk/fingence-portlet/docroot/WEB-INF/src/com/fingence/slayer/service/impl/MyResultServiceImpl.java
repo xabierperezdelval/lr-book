@@ -17,14 +17,22 @@ package com.fingence.slayer.service.impl;
 import java.util.List;
 
 import com.fingence.IConstants;
+import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.model.AssetVocabulary;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 
 /**
  * The implementation of the my result remote service.
@@ -90,8 +98,68 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			if (Validator.isNull(myResult.getIndustry_sector())) {
 				myResult.setIndustry_sector(IConstants.UN_SPECIFIED);
 			}
+			
+			setCategoryFields(myResult);
 		}
 		
 		return myResults;
+	}
+
+	private void setCategoryFields(MyResult myResult) {
+		
+		long assetId = myResult.getAssetId();
+		
+		long entryId = 0l;
+		
+		try {
+			AssetEntry assetEntry = AssetEntryLocalServiceUtil.fetchEntry(Asset.class.getName(), assetId);
+			entryId = assetEntry.getEntryId();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (entryId == 0l) return;
+		
+		List<AssetCategory> assetCategories = null;
+		try {
+			assetCategories = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(entryId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(assetCategories)) return;
+		
+		for (AssetCategory assetCategory: assetCategories) {
+			String vocabularyName = StringPool.BLANK;
+			try {
+				AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.fetchAssetVocabulary(assetCategory.getVocabularyId());
+				vocabularyName = assetVocabulary.getName();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (vocabularyName.equalsIgnoreCase("BB_Security")) {
+				myResult.setSecurity_typ(assetCategory.getName());
+				
+				try {
+					AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
+					myResult.setSecurity_class(parentCategory.getName());
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			} else if (vocabularyName.equalsIgnoreCase("BB_Industry")) {
+				myResult.setIndustry_subgroup(assetCategory.getName());
+				
+				try {
+					AssetCategory industryGroup = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
+					myResult.setIndustry_group(industryGroup.getName());
+					
+					AssetCategory industrySector = AssetCategoryLocalServiceUtil.fetchAssetCategory(industryGroup.getParentCategoryId());
+					myResult.setIndustry_sector(industrySector.getName());
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}				
+			}
+		}
 	}
 }
