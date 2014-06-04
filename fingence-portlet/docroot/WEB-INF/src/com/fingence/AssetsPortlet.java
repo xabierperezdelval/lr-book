@@ -8,7 +8,11 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
 import com.fingence.slayer.service.AssetLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -25,6 +29,15 @@ public class AssetsPortlet extends MVCPortlet {
 		
 		File excelFile = uploadPortletRequest.getFile("assetsMaster");
 		long userId = PortalUtil.getUserId(uploadPortletRequest);
-		AssetLocalServiceUtil.importFromExcel(userId, excelFile);		
+		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);		
 	}
 }

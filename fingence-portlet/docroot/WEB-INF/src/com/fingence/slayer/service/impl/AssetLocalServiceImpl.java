@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.NoSuchBondException;
 import com.fingence.slayer.NoSuchEquityException;
@@ -42,6 +43,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the asset local service.
@@ -70,7 +72,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 	 * local service.
 	 */
 
-	public void importFromExcel(long userId, File excelFile) {
+	public void importFromExcel(long userId, File excelFile, ServiceContext serviceContext) {
 
 		if (Validator.isNull(excelFile)) return;
 		
@@ -100,6 +102,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		Iterator<Row> rowIterator = sheet.iterator();
 		Map<String, Integer> columnNames = new HashMap<String, Integer>();
 		int columnCount = 0;
+		
+		long bbSecurityVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Security", serviceContext);
+		long bbIndustryVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Industry", serviceContext);
 
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
@@ -134,20 +139,21 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setChg_pct_high_52week(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_HIGH_52WEEK"))));
 			asset.setChg_pct_low_52week(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_LOW_52WEEK"))));
 			
-			asset.setIndustry_sector(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SECTOR"))));
-			asset.setIndustry_group(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP"))));
-			asset.setIndustry_subgroup(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SUBGROUP"))));
+			//asset.setIndustry_sector(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SECTOR"))));
+			//asset.setIndustry_group(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP"))));
+			//asset.setIndustry_subgroup(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SUBGROUP"))));
 			
 			asset.setSecurity_des(CellUtil.getString(row.getCell(columnNames.get("SECURITY_DES"))));
-			asset.setSecurity_typ(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP"))));
-			asset.setSecurity_typ2(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2"))));
+			//asset.setSecurity_typ(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP"))));
+			//asset.setSecurity_typ2(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2"))));
 			asset.setParent_comp_name(CellUtil.getString(row.getCell(columnNames.get("PARENT_COMP_NAME"))));
 			
 			String securityClass = CellUtil.getString(row.getCell(columnNames.get("BPIPE_REFERENCE_SECURITY_CLASS")));
+			
 			if (securityClass.equalsIgnoreCase("FixedIncome")) {
 				securityClass = "Fixed Income";
 			}
-			asset.setSecurity_class(securityClass);
+			//asset.setSecurity_class(securityClass);
 			
 			asset.setVolatility_30d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_30D"))));
 			asset.setVolatility_90d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_90D"))));
@@ -194,11 +200,14 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				asset.setCountry_of_risk(asset.getCountry());
 			}
 			
-			if (asset.getSecurity_class().equalsIgnoreCase("Fixed Income")) {
+			if (securityClass.equalsIgnoreCase("Fixed Income")) {
+				asset.setSecurity_class(IConstants.SECURITY_CLASS_FIXED_INCOME);
 				asset.setCurrent_price(asset.getBid_price()/100);
-			} else if (asset.getSecurity_class().equalsIgnoreCase("Fund")) {
+			} else if (securityClass.equalsIgnoreCase("Fund")) {
+				asset.setSecurity_class(IConstants.SECURITY_CLASS_FUND);
 				asset.setCurrent_price(CellUtil.getDouble(row.getCell(columnNames.get("FUND_NET_ASSET_VAL"))));
 			} else {
+				asset.setSecurity_class(IConstants.SECURITY_CLASS_EQUITY);
 				asset.setCurrent_price(asset.getLast_price());
 			}
 			
@@ -209,6 +218,11 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			}
 			
 			long assetId = asset.getAssetId();
+			
+			// Saving to AssetEntry table
+			long entryId = AssetHelper.updateAssetEntry(assetId);
+			
+			AssetHelper.assignCategories(assetId, entryId, userId, row, columnNames, serviceContext, bbSecurityVocabularyId, bbIndustryVocabularyId);
 			
 			if (securityClass.equalsIgnoreCase("Fixed Income")) {
 				Bond bond = getBond(assetId);
@@ -272,7 +286,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			}
 		}		
 	}
-	
+
 	private Equity getEquity(long assetId) {
 		Equity equity = null;
 		try {

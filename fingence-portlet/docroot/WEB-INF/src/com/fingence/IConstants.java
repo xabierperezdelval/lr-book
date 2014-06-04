@@ -39,13 +39,17 @@ public interface IConstants {
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;
-	int BREAKUP_BY_SECURITY_TYPE = 3;
-	int BREAKUP_BY_SECTOR = 4;
+	int BREAKUP_BY_SECURITY_CLASS = 3;
+	int BREAKUP_BY_INDUSTRY_SECTOR = 4;
+	
+	int SECURITY_CLASS_FIXED_INCOME = 1;
+	int SECURITY_CLASS_FUND = 2;
+	int SECURITY_CLASS_EQUITY = 3;
 	
 	String LBL_BREAKUP_BY_RISK_COUNTRY = "Risk Country";
 	String LBL_BREAKUP_BY_CURRENCY = "Currency";
-	String LBL_BREAKUP_BY_SECURITY_TYPE = "Security Type";
-	String LBL_BREAKUP_BY_SECTOR = "Sector";
+	String LBL_BREAKUP_BY_SECURITY_CLASS = "Security Class";
+	String LBL_BREAKUP_BY_INDUSTRY_SECTOR = "Industry Sector";
 	
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
