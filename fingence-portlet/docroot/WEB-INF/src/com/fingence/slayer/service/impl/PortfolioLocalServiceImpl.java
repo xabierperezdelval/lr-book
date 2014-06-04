@@ -162,7 +162,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
 			
-			if (asset.getSecurity_class().equalsIgnoreCase("Fixed Income")) {
+			if (asset.getSecurity_class() == IConstants.SECURITY_CLASS_FIXED_INCOME) {
 				portfolioItem.setPurchasePrice(portfolioItem.getPurchasePrice()/100);
 			}
 			
