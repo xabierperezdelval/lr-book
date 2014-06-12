@@ -101,7 +101,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			
 			setCategoryFields(myResult);
 		}
-		
+				
 		return myResults;
 	}
 
