@@ -1,9 +1,19 @@
+<%@page import="com.fingence.IConstants"%>
 <h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
 
 <%
 	int index = (allocationBy - 1);
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
-	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};	
+	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
+	
+	String[][] groupByKeys = 
+		{
+			{},	// Blank
+			{"country_of_risk", "security_class"}, // Risk Country (index-1)
+			{}, // Blank
+			{"security_class", "security_typ"}, // Security Class
+			{"industry_sector", "industry_group", "industry_subgroup"}  // Industry Sector
+		};
 %>
 
 <aui:row>
@@ -14,6 +24,8 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
+
+<div id="treeble"></div>
 
 <hr/><div id="slicePortfolio"></div>
 
@@ -42,12 +54,195 @@
 				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
 				
 				//4. Group By currency with Weightage.
-				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
+				<c:choose>
+					<c:when test="<%= (allocationBy == IConstants.BREAKUP_BY_CURRENCY) %>">
+						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
+					</c:when>
+					<c:otherwise>
+						showTreeble(data, '<%= allocationBy %>');
+					</c:otherwise>
+				</c:choose>
 				
 				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
+	
+	function showTreeble(data, allocationBy) {
+	
+		var groupByKeys = [
+			[],
+			["countryOfRiskName", "security_class"],
+			[],
+			["security_class", "security_typ"],
+			["industry_sector", "industry_group", "industry_subgroup"]
+		];
+		
+		var itemList = _.nest(data, groupByKeys[allocationBy]);
+				
+		var resultantDataArray = [];
+		
+		_.each(itemList, function(item) {
+			_.each(item, function(item) {
+				var jsonObj1 = {};
+				jsonObj1.allocation = item.name;
+				var gain_loss0 = 0.0; 
+				var market_value0 = 0.0;			
+				jsonObj1.children = [];
+				_.each(item.children, function(item) {
+					var jsonObj2 = {};
+					jsonObj2.allocation = item.name;
+					var gain_loss1 = 0.0; 
+					var market_value1 = 0.0;
+					_.each(item.children, function(item) {
+						if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
+							var jsonObj3 = {};
+							jsonObj3.allocation = item.name;
+							var gain_loss2 = 0.0; 
+							var market_value2 = 0.0;
+							
+							jsonObj2.children = [];
+							_.each(item.children, function(item) {
+								gain_loss2 += item.gain_loss;
+								market_value2 += item.currentMarketValue;
+							});
+							
+							jsonObj3.gain_loss = gain_loss2;
+							jsonObj3.market_value = market_value2;
+							jsonObj3.weight = 10.0;
+							
+							gain_loss1 += jsonObj3.gain_loss;
+							market_value1 += market_value2;					
+		
+							jsonObj2.children.push(jsonObj3);				
+						} else {
+							gain_loss1 += item.gain_loss;
+							market_value1 += item.currentMarketValue;
+						}
+					});
+					jsonObj2.gain_loss = gain_loss1;
+					jsonObj2.market_value = market_value1;
+					jsonObj2.weight = 10.0;
+					
+					gain_loss0 += gain_loss1;
+					market_value0 += market_value1;					
+
+					jsonObj1.children.push(jsonObj2);
+				});
+				
+				jsonObj1.gain_loss = gain_loss0;
+				jsonObj1.market_value = market_value0;
+				jsonObj1.weight = 20.0;
+									
+				resultantDataArray.push(jsonObj1);
+			});
+		});
+		
+		YUI().use(
+			'datatable',
+			'gallery-treeble',
+			function(Y) {
+				function sendRequest() {
+					table.datasource.load({
+						request : {
+							startIndex : 0,
+							resultCount : resultantDataArray.length
+						}
+					});
+				}
+	
+				// column configuration
+				var cols = [
+					{
+						label : '&nbsp;',
+						nodeFormatter : Y.Treeble.buildTwistdownFormatter(sendRequest)
+					},				
+					{
+						key : 'allocation',
+						label : 'Allocation',
+						formatter : Y.Treeble.treeValueFormatter,
+						allowHTML : true
+					},				
+					{
+						key : 'gain_loss',
+						label : 'Gain/Loss',
+						formatter : Y.Treeble.treeValueFormatter,
+						allowHTML : true
+					},				
+					{
+						key : 'market_value',
+						label : 'Market Value',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom(obj.value, 'amount');
+			 			},
+						allowHTML : true
+					},				
+					{
+						key : 'weight',
+						label : 'Weight',
+						formatter : Y.Treeble.treeValueFormatter,
+						allowHTML : true
+					}
+				];
+	
+				// treeble config to be set on root datasource
+				var schema = {
+					resultFields : [ 'allocation', 'gain_loss', 'market_value', 'weight',
+						'_open', {
+							key : 'children',
+							parser : 'treebledatasource'
+						} 
+					]
+				};
+	
+				var schema_plugin_config = {
+					fn : Y.Plugin.DataSourceArraySchema,
+					cfg : {
+						schema : schema
+					}
+				};
+	
+				var treeble_config = {
+					generateRequest : function() {
+					},
+					schemaPluginConfig : schema_plugin_config,
+					childNodesKey : 'children',
+					nodeOpenKey : '_open',
+					totalRecordsReturnExpr : '.meta.totalRecords'
+				};
+		
+				// root data source
+		
+				var root = new Y.DataSource.Local({
+					source : resultantDataArray
+				});
+				root.treeble_config = Y.clone(treeble_config, true);
+				root.plug(schema_plugin_config);
+		
+				// TreebleDataSource
+		
+				var ds = new Y.DataSource.Treeble({
+					root : root,
+					paginateChildren : false,
+					uniqueIdKey : 'name' // normally, it would be a database row id, but title happens to be unique in this example
+				});
+		
+				// DataTable
+		
+				var table = new Y.Treeble({
+					columns : cols
+				});
+				
+				table.plug(Y.Plugin.DataTableDataSource, {
+					datasource : ds
+				});
+		
+				table.render("#gridContainer");
+		
+				sendRequest();
+			}
+		);		
+	}
 	
 	function getDataGroupedBy(data, groupBy, netWorth) {
 		var resultantDataArray = [];
@@ -74,7 +269,7 @@
 		
 		return resultantDataArray;
 	}
-	
+		
 	function showWeightage(data, groupBy, divId, title, netWorth) {
 		var jsonArr = getDataGroupedBy(data, groupBy, netWorth);
 		YUI().use(
@@ -136,8 +331,8 @@
 				}).render(divId);
 		  	}
 		);
-	}
-	
+	}		
+
 	function getModifiedArray(data, groupBy) {
 		var dataArray = new Array();
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
