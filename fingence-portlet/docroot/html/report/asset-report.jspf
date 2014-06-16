@@ -5,17 +5,29 @@
 	int index = (allocationBy - 1);
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
-	
-	String[][] groupByKeys = 
-		{
-			{},	// Blank
-			{"country_of_risk", "security_class"}, // Risk Country (index-1)
-			{}, // Blank
-			{"security_class", "security_typ"}, // Security Class
-			{"industry_sector", "industry_group", "industry_subgroup"}  // Industry Sector
-		};
 %>
 
+<div id="myTab">
+	<ul class="nav nav-tabs">
+    	<li><a href="#tab-1">Chart View</a></li>
+    	<li><a href="#tab-2">Grid View</a></li>
+    	<li><a href="#tab-3">Tree View</a></li>
+  	</ul>
+
+  	<div class="tab-content">
+    	<div id="tab-1">
+			<div id="chartContainer"></div>    	
+		</div>
+    	<div id="tab-2">
+      		<div id="gridContainer"></div>
+    	</div>
+    	<div id="tab-3">
+      		<div id="treeContainer"></div>
+    	</div>
+  	</div>
+</div>
+
+<%--
 <aui:row>
 	<aui:column>
 		<div id="chartContainer"></div>
@@ -24,12 +36,18 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
-
-<div id="treeble"></div>
+--%>
 
 <hr/><div id="slicePortfolio"></div>
 
 <aui:script>
+
+	YUI().use('aui-tabview', function(Y) {
+	    new Y.TabView({
+	    	srcNode: '#myTab'
+	    }).render();
+	});
+
 	AUI().ready(function(A) {
 	
 		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
@@ -54,26 +72,31 @@
 				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
 				
 				//4. Group By currency with Weightage.
+				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
+				showTreeble(data, '<%= allocationBy %>', netWorth);
+				<%--
 				<c:choose>
 					<c:when test="<%= (allocationBy == IConstants.BREAKUP_BY_CURRENCY) %>">
 						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
 					</c:when>
 					<c:otherwise>
-						showTreeble(data, '<%= allocationBy %>');
+						showTreeble(data, '<%= allocationBy %>', netWorth);
+						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
 					</c:otherwise>
 				</c:choose>
+				 --%>
 				
 				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
 	
-	function showTreeble(data, allocationBy) {
+	function showTreeble(data, allocationBy, netWorth) {
 	
 		var groupByKeys = [
 			[],
 			["countryOfRiskName", "security_class"],
-			[],
+			["currency_", "security_class"],
 			["security_class", "security_typ"],
 			["industry_sector", "industry_group", "industry_subgroup"]
 		];
@@ -84,57 +107,60 @@
 		
 		_.each(itemList, function(item) {
 			_.each(item, function(item) {
-				var jsonObj1 = {};
-				jsonObj1.allocation = item.name;
+				var jsonObj0 = {};
+				jsonObj0.allocation = item.name;
 				var gain_loss0 = 0.0; 
 				var market_value0 = 0.0;			
-				jsonObj1.children = [];
+				jsonObj0.children = [];
 				_.each(item.children, function(item) {
-					var jsonObj2 = {};
-					jsonObj2.allocation = item.name;
+					var jsonObj1 = {};
+					jsonObj1.allocation = item.name;
 					var gain_loss1 = 0.0; 
 					var market_value1 = 0.0;
+					var purchase_value1 = 0.0;
 					_.each(item.children, function(item) {
 						if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
-							var jsonObj3 = {};
-							jsonObj3.allocation = item.name;
+							var jsonObj2 = {};
+							jsonObj2.allocation = item.name;
 							var gain_loss2 = 0.0; 
 							var market_value2 = 0.0;
-							
-							jsonObj2.children = [];
+							var purchase_value2 = 0.0;
+							jsonObj1.children = [];
 							_.each(item.children, function(item) {
-								gain_loss2 += item.gain_loss;
+								gain_loss2 += item.gain_loss_percent;
 								market_value2 += item.currentMarketValue;
+								purchase_value2 += item.purchasedMarketValue;
 							});
 							
-							jsonObj3.gain_loss = gain_loss2;
-							jsonObj3.market_value = market_value2;
-							jsonObj3.weight = 10.0;
+							jsonObj2.gain_loss = gain_loss2/item.children.length;
+							jsonObj2.market_value = market_value2;
+							jsonObj2.weight = market_value2/netWorth * 100;
 							
-							gain_loss1 += jsonObj3.gain_loss;
-							market_value1 += market_value2;					
+							gain_loss1 += jsonObj2.gain_loss;
+							market_value1 += jsonObj2.market_value;					
 		
-							jsonObj2.children.push(jsonObj3);				
+							jsonObj1.children.push(jsonObj2);
 						} else {
-							gain_loss1 += item.gain_loss;
+							gain_loss1 += item.gain_loss_percent;
 							market_value1 += item.currentMarketValue;
+							purchase_value1 += item.purchasedMarketValue;
 						}
 					});
-					jsonObj2.gain_loss = gain_loss1;
-					jsonObj2.market_value = market_value1;
-					jsonObj2.weight = 10.0;
+					jsonObj1.gain_loss = gain_loss1/item.children.length;
+					jsonObj1.market_value = market_value1;
+					jsonObj1.weight = market_value1/netWorth * 100;
 					
-					gain_loss0 += gain_loss1;
-					market_value0 += market_value1;					
+					gain_loss0 += jsonObj1.gain_loss;
+					market_value0 += jsonObj1.market_value;			
 
-					jsonObj1.children.push(jsonObj2);
+					jsonObj0.children.push(jsonObj1);
 				});
 				
-				jsonObj1.gain_loss = gain_loss0;
-				jsonObj1.market_value = market_value0;
-				jsonObj1.weight = 20.0;
+				jsonObj0.gain_loss = gain_loss0/item.children.length;
+				jsonObj0.market_value = market_value0;
+				jsonObj0.weight = market_value0/netWorth * 100;
 									
-				resultantDataArray.push(jsonObj1);
+				resultantDataArray.push(jsonObj0);
 			});
 		});
 		
@@ -165,8 +191,10 @@
 					},				
 					{
 						key : 'gain_loss',
-						label : 'Gain/Loss',
-						formatter : Y.Treeble.treeValueFormatter,
+						label : '%age G/L',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom1(obj.value, 'percent');
+			 			},
 						allowHTML : true
 					},				
 					{
@@ -180,7 +208,9 @@
 					{
 						key : 'weight',
 						label : 'Weight',
-						formatter : Y.Treeble.treeValueFormatter,
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom(obj.value, 'percent');
+			 			},
 						allowHTML : true
 					}
 				];
@@ -237,7 +267,7 @@
 					datasource : ds
 				});
 		
-				table.render("#gridContainer");
+				table.render("#treeContainer");
 		
 				sendRequest();
 			}
