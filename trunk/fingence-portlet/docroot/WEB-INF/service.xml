@@ -198,10 +198,10 @@
 		<column name="current_fx" type="double"/>
 		<column name="baseCurrency" type="String" />
 		<column name="security_des" type="String"/>
+		<column name="security_class" type="String"/>
 		<column name="security_typ" type="String"/>
 		<column name="security_typ2" type="String"/>
 		<column name="parent_comp_name" type="String"/>
-		<column name="security_class" type="String"/>
 		<column name="countryId" type="long"/>
 		<column name="countryName" type="String"/>
 		<column name="countryOfRisk" type="long"/>
