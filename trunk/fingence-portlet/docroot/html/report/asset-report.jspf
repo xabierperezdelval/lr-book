@@ -7,27 +7,6 @@
 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
 %>
 
-<div id="myTab">
-	<ul class="nav nav-tabs">
-    	<li><a href="#tab-1">Chart View</a></li>
-    	<li><a href="#tab-2">Grid View</a></li>
-    	<li><a href="#tab-3">Tree View</a></li>
-  	</ul>
-
-  	<div class="tab-content">
-    	<div id="tab-1">
-			<div id="chartContainer"></div>    	
-		</div>
-    	<div id="tab-2">
-      		<div id="gridContainer"></div>
-    	</div>
-    	<div id="tab-3">
-      		<div id="treeContainer"></div>
-    	</div>
-  	</div>
-</div>
-
-<%--
 <aui:row>
 	<aui:column>
 		<div id="chartContainer"></div>
@@ -36,18 +15,10 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
---%>
 
 <hr/><div id="slicePortfolio"></div>
 
 <aui:script>
-
-	YUI().use('aui-tabview', function(Y) {
-	    new Y.TabView({
-	    	srcNode: '#myTab'
-	    }).render();
-	});
-
 	AUI().ready(function(A) {
 	
 		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
@@ -72,19 +43,14 @@
 				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
 				
 				//4. Group By currency with Weightage.
-				showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
-				showTreeble(data, '<%= allocationBy %>', netWorth);
-				<%--
 				<c:choose>
 					<c:when test="<%= (allocationBy == IConstants.BREAKUP_BY_CURRENCY) %>">
 						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
 					</c:when>
 					<c:otherwise>
 						showTreeble(data, '<%= allocationBy %>', netWorth);
-						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
 					</c:otherwise>
 				</c:choose>
-				 --%>
 				
 				divForMasking.loadingmask.toggle();
   			}
@@ -108,20 +74,26 @@
 		_.each(itemList, function(item) {
 			_.each(item, function(item) {
 				var jsonObj0 = {};
+				jsonObj0.level = 0;
 				jsonObj0.allocation = item.name;
+				jsonObj0.hierarchy = item.name;
 				var gain_loss0 = 0.0; 
 				var market_value0 = 0.0;			
 				jsonObj0.children = [];
 				_.each(item.children, function(item) {
 					var jsonObj1 = {};
+					jsonObj1.level = 1;
 					jsonObj1.allocation = item.name;
+					jsonObj1.hierarchy = jsonObj0.allocation + '>>>' + item.name;
 					var gain_loss1 = 0.0; 
 					var market_value1 = 0.0;
 					var purchase_value1 = 0.0;
 					_.each(item.children, function(item) {
 						if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
 							var jsonObj2 = {};
+							jsonObj2.level = 2;
 							jsonObj2.allocation = item.name;
+							jsonObj2.hierarchy = jsonObj0.allocation + '>>>' + jsonObj1.allocation + '>>>' + item.name;
 							var gain_loss2 = 0.0; 
 							var market_value2 = 0.0;
 							var purchase_value2 = 0.0;
@@ -159,6 +131,8 @@
 				jsonObj0.gain_loss = gain_loss0/item.children.length;
 				jsonObj0.market_value = market_value0;
 				jsonObj0.weight = market_value0/netWorth * 100;
+				
+				console.log(JSON.stringify(jsonObj0));
 									
 				resultantDataArray.push(jsonObj0);
 			});
@@ -186,7 +160,14 @@
 					{
 						key : 'allocation',
 						label : 'Allocation',
-						formatter : Y.Treeble.treeValueFormatter,
+		    			formatter: function(obj) {
+		    				var prefix = '';
+		    				for (var i=0; i<(obj.data.level*5); i++) {
+		    					prefix += '&nbsp;';
+		    				}		    				
+		    				obj.value = prefix + '<a href="#slicePortfolio" onclick="javascript:sliceChart1(\'' + obj.data.hierarchy + '\',\'' + groupByKeys[allocationBy] + '\');">' + obj.value + '</a>';
+		    				console.log(obj.value);
+    					},						
 						allowHTML : true
 					},				
 					{
@@ -217,7 +198,7 @@
 	
 				// treeble config to be set on root datasource
 				var schema = {
-					resultFields : [ 'allocation', 'gain_loss', 'market_value', 'weight',
+					resultFields : ['hierarchy', 'level', 'allocation', 'gain_loss', 'market_value', 'weight',
 						'_open', {
 							key : 'children',
 							parser : 'treebledatasource'
@@ -267,7 +248,7 @@
 					datasource : ds
 				});
 		
-				table.render("#treeContainer");
+				table.render("#gridContainer");
 		
 				sendRequest();
 			}
@@ -437,22 +418,63 @@
 			allocationParam = '<%= groupByField[3] %>';
 		}
 		
-	 	renderPieChartSectionInfo(portfolioId, allocationBy, allocationParam, sliceBy);
+ 		Liferay.Service(
+  			'/fingence-portlet.myresult/get-my-results',
+  			{
+    			portfolioId: '<%= portfolioId %>'
+  			},
+  			function(data) {
+  				showPortfolioItems(data, allocationParam, sliceBy, '#slicePortfolio');
+  			}
+		);
 	}
 	
-	function renderPieChartSectionInfo(portfolioId, allocationBy, allocationParam, sliceBy){
-		AUI().ready(function(A) {
-			
-			Liferay.Service(
-	  			'/fingence-portlet.myresult/get-my-results',
-	  			{
-	    			portfolioId: '<%= portfolioId %>'
-	  			},
-	  			function(data) {
-	  				showPortfolioItems(data, allocationParam, sliceBy, '#slicePortfolio');
-	  			}
-			);
-		});
+	function sliceChart1(hierarchy, groupByKeys) {
+	
+		var keywords = hierarchy.split('>>>');
+		var level = keywords.length;
+	
+ 		Liferay.Service(
+  			'/fingence-portlet.myresult/get-my-results',
+  			{
+    			portfolioId: '<%= portfolioId %>'
+  			},
+  			function(data) {  			
+  				var itemList = _.nest(data, groupByKeys.split(',').slice(0,level));
+  				
+  				var jsonArray = [];				
+				_.each(itemList, function(item) {
+					_.each(item, function(item) {
+						if (item.name == keywords[0]) {
+							if (level == 1) {
+								jsonArray = item.children;
+							} else {
+								_.each(item.children, function(item) {
+									if (item.name == keywords[1]) {
+										if (level == 2) {
+											jsonArray = item.children;
+										} else {
+											_.each(item.children, function(item) {
+												if (item.name == keywords[2]) {
+													jsonArray = item.children;
+												}
+											});
+										}
+									}
+								});
+							} 
+						}
+					});
+				});  				
+  				
+  				// display grid
+		 		var divContent = document.getElementById('slicePortfolio');
+				if (divContent) {
+					divContent.innerHTML = "";
+				}
+				displayItemsGrid(jsonArray, '#slicePortfolio'); 				
+  			}
+		);
 	}
 	
 	function showPortfolioItems(data, allocationParam, sliceBy, divId){
