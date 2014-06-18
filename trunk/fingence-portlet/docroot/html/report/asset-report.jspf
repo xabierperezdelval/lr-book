@@ -16,6 +16,8 @@
 	</aui:column>	
 </aui:row>
 
+<hr/><div id="gridContainer1"></div>
+
 <hr/><div id="slicePortfolio"></div>
 
 <aui:script>
@@ -49,6 +51,7 @@
 					</c:when>
 					<c:otherwise>
 						showTreeble(data, '<%= allocationBy %>', netWorth);
+						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer1', '<%= groupByTitle[index] %>', netWorth);
 					</c:otherwise>
 				</c:choose>
 				
@@ -87,7 +90,10 @@
 					jsonObj1.hierarchy = jsonObj0.allocation + '>>>' + item.name;
 					var gain_loss1 = 0.0; 
 					var market_value1 = 0.0;
-					var purchase_value1 = 0.0;
+					if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
+						jsonObj1.children = [];
+					}
+					
 					_.each(item.children, function(item) {
 						if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
 							var jsonObj2 = {};
@@ -96,12 +102,10 @@
 							jsonObj2.hierarchy = jsonObj0.allocation + '>>>' + jsonObj1.allocation + '>>>' + item.name;
 							var gain_loss2 = 0.0; 
 							var market_value2 = 0.0;
-							var purchase_value2 = 0.0;
-							jsonObj1.children = [];
+							jsonObj2.children = [];
 							_.each(item.children, function(item) {
 								gain_loss2 += item.gain_loss_percent;
 								market_value2 += item.currentMarketValue;
-								purchase_value2 += item.purchasedMarketValue;
 							});
 							
 							jsonObj2.gain_loss = gain_loss2/item.children.length;
@@ -115,7 +119,6 @@
 						} else {
 							gain_loss1 += item.gain_loss_percent;
 							market_value1 += item.currentMarketValue;
-							purchase_value1 += item.purchasedMarketValue;
 						}
 					});
 					jsonObj1.gain_loss = gain_loss1/item.children.length;
@@ -131,9 +134,7 @@
 				jsonObj0.gain_loss = gain_loss0/item.children.length;
 				jsonObj0.market_value = market_value0;
 				jsonObj0.weight = market_value0/netWorth * 100;
-				
-				console.log(JSON.stringify(jsonObj0));
-									
+													
 				resultantDataArray.push(jsonObj0);
 			});
 		});
@@ -166,7 +167,6 @@
 		    					prefix += '&nbsp;';
 		    				}		    				
 		    				obj.value = prefix + '<a href="#slicePortfolio" onclick="javascript:sliceChart1(\'' + obj.data.hierarchy + '\',\'' + groupByKeys[allocationBy] + '\');">' + obj.value + '</a>';
-		    				console.log(obj.value);
     					},						
 						allowHTML : true
 					},				
@@ -441,7 +441,7 @@
   			},
   			function(data) {  			
   				var itemList = _.nest(data, groupByKeys.split(',').slice(0,level));
-  				
+  				  				
   				var jsonArray = [];				
 				_.each(itemList, function(item) {
 					_.each(item, function(item) {
