@@ -49,7 +49,6 @@
 					</c:when>
 					<c:otherwise>
 						showTreeble(data, '<%= allocationBy %>', netWorth);
-						//showWeightage(data, '<%= groupByField[index] %>', '#gridContainer1', '<%= groupByTitle[index] %>', netWorth);
 					</c:otherwise>
 				</c:choose>
 				
@@ -477,31 +476,16 @@
 	
 	function showPortfolioItems(data, allocationParam, sliceBy, divId){
 	
-		var jsonArray = [];
-		_(_.groupBy(data, allocationParam)).map(function(itemList, key) {	
-			if (key == sliceBy) {
-				_.each(itemList, function(item){
-					var jsonObj = {};
-					jsonObj.name = item.name;
-					jsonObj.itemId = item.itemId;
-					jsonObj.portfolioId = item.portfolioId;
-					jsonObj.security_ticker = item.security_ticker;
-					jsonObj.purchasedMarketValue = item.purchasedMarketValue;
-					jsonObj.currentMarketValue = item.currentMarketValue;
-					jsonObj.fx_gain_loss = item.fx_gain_loss;
-					jsonObj.gain_loss = item.gain_loss;
-					jsonObj.gain_loss_percent = item.gain_loss_percent;
-					jsonObj.purchaseQty = item.purchaseQty;
-					jsonArray.push(jsonObj);
-				});
-			}
-		});
-		
 		var divContent = document.getElementById('slicePortfolio');
 		if (divContent) {
 			divContent.innerHTML = "";
-		}
-		displayItemsGrid(jsonArray, divId);
+		}	
+	
+		_(_.groupBy(data, allocationParam)).map(function(itemList, key) {	
+			if (key == sliceBy) {
+				displayItemsGrid(itemList, divId);
+			}
+		});		
 	}
 	
 	function getTotalNetWorth(data){
