@@ -16,8 +16,6 @@
 	</aui:column>	
 </aui:row>
 
-<hr/><div id="gridContainer1"></div>
-
 <hr/><div id="slicePortfolio"></div>
 
 <aui:script>
@@ -51,7 +49,7 @@
 					</c:when>
 					<c:otherwise>
 						showTreeble(data, '<%= allocationBy %>', netWorth);
-						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer1', '<%= groupByTitle[index] %>', netWorth);
+						//showWeightage(data, '<%= groupByField[index] %>', '#gridContainer1', '<%= groupByTitle[index] %>', netWorth);
 					</c:otherwise>
 				</c:choose>
 				
