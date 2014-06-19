@@ -149,7 +149,8 @@
 				jsonObj0.gain_loss = gain_loss0/item.children.length;
 				jsonObj0.market_value = market_value0;
 				jsonObj0.weight = market_value0/_netWorth * 100;
-				jsonObj0._open = (allocationBy == '<%= IConstants.BREAKUP_BY_SECURITY_CLASS %>');
+				
+				console.log(jsonObj0.allocation + ' is ' + jsonObj0._open);
 												
 				resultantDataArray.push(jsonObj0);
 			});
@@ -236,7 +237,6 @@
 					},
 					schemaPluginConfig : schema_plugin_config,
 					childNodesKey : 'children',
-					nodeOpenKey : '_open',
 					totalRecordsReturnExpr : '.meta.totalRecords'
 				};
 		
