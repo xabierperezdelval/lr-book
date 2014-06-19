@@ -138,14 +138,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			asset.setLast_price(CellUtil.getDouble(row.getCell(columnNames.get("PX_LAST"))));
 			asset.setChg_pct_high_52week(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_HIGH_52WEEK"))));
 			asset.setChg_pct_low_52week(CellUtil.getDouble(row.getCell(columnNames.get("CHG_PCT_LOW_52WEEK"))));
-			
-			//asset.setIndustry_sector(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SECTOR"))));
-			//asset.setIndustry_group(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP"))));
-			//asset.setIndustry_subgroup(CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SUBGROUP"))));
-			
 			asset.setSecurity_des(CellUtil.getString(row.getCell(columnNames.get("SECURITY_DES"))));
-			//asset.setSecurity_typ(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP"))));
-			//asset.setSecurity_typ2(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2"))));
 			asset.setParent_comp_name(CellUtil.getString(row.getCell(columnNames.get("PARENT_COMP_NAME"))));
 			
 			String securityClass = CellUtil.getString(row.getCell(columnNames.get("BPIPE_REFERENCE_SECURITY_CLASS")));
@@ -153,7 +146,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			if (securityClass.equalsIgnoreCase("FixedIncome")) {
 				securityClass = "Fixed Income";
 			}
-			//asset.setSecurity_class(securityClass);
 			
 			asset.setVolatility_30d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_30D"))));
 			asset.setVolatility_90d(CellUtil.getDouble(row.getCell(columnNames.get("VOLATILITY_90D"))));
@@ -241,6 +233,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
             	bond.setFive_y_bid_cds_spread(CellUtil.getDouble(row.getCell(columnNames.get("5Y_BID_CDS_SPREAD"))));
             	bond.setDur_mid(CellUtil.getDouble(row.getCell(columnNames.get("DUR_MID"))));
              	bond.setPrice_to_cash_flow(CellUtil.getDouble(row.getCell(columnNames.get("PX_TO_CASH_FLOW"))));
+             	bond.setMaturity_dt(CellUtil.getDate(row.getCell(columnNames.get("MATURITY"))));
              	
              	try {
 					bondLocalService.updateBond(bond);

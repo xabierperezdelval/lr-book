@@ -50,10 +50,10 @@
 			http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js
 		</footer-portlet-javascript>
 		<footer-portlet-javascript>
-			https://github.com/iros/underscore.nest/raw/master/underscore.nest.min.js
+			/js/underscore.nest.min.js
 		</footer-portlet-javascript>
 		<footer-portlet-javascript>
-			https://github.com/iros/underscore.nest/raw/master/lib/underscore.deepextend.js
+			/js/underscore.deepextend.js
 		</footer-portlet-javascript>
 		<css-class-wrapper>report-portlet</css-class-wrapper>
 	</portlet>
