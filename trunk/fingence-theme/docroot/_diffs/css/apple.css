@@ -173,3 +173,14 @@
     background: none;
     height: inherit;
 }
+
+.fingencelayout .span2 {
+	width: 11% !important;
+}
+
+.fingencelayout .span10 {
+	width: 87.8% !important;
+	margin-left: 10px !important;
+}
+
+.table-table {width: 100%;}
