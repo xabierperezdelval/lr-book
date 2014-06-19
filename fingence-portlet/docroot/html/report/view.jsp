@@ -299,9 +299,17 @@
 	           	uri: ajaxURL
 	       	});
 	    });
-	}      
+	}
 	
-	function displayItemsGrid(results, divId) {
+	function getTotalNetWorth(data){
+		var value = 0;
+		_.each(data, function(itemValue){
+			value += itemValue.currentMarketValue;
+		});
+	  	return value;
+	}	
+	
+	function displayItemsGrid(results, divId, networth) {
 		YUI().use('aui-datatable', function(Y) {
 			var columns = [
 				{key: 'name', label: 'Security Name', sortable: true},
@@ -359,7 +367,16 @@
 					},
 					allowHTML: true,
 					sortable: true
-	            },	                       	
+	            },
+	            {
+	               	key: 'weight',
+	               	label: 'Weight',
+	               	formatter: function(obj) {
+	             		obj.value = formatCustom(obj.data.currentMarketValue/networth*100, 'percent');
+					},
+					allowHTML: true,
+					sortable: true
+	            },		                                             	
 	            {
 	                 key: 'itemId',
 	                 label: 'Actions',

@@ -41,7 +41,7 @@
 					portfolioId : '<%= portfolioId %>'
 				},
 				function(data) {
-					displayItemsGrid(data, '#myDataTable');
+					displayItemsGrid(data, '#myDataTable', getTotalNetWorth(data));
 				}
 			);
 		});
