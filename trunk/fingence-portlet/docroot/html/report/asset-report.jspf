@@ -378,7 +378,7 @@
 					} 
 				}
 			});
-		});  				
+		});		
 				
 		// display grid
  		var divContent = document.getElementById('slicePortfolio');
