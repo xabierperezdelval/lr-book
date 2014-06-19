@@ -19,6 +19,20 @@
 <hr/><div id="slicePortfolio"></div>
 
 <aui:script>
+
+	// Global Variables BEGIN
+	var _data = null;
+	var _netWorth = 0.0;
+	
+	var groupByKeys = [
+		[],
+		["countryOfRiskName", "security_class"],
+		["currency_"],
+		["security_class", "security_typ"],
+		["industry_sector", "industry_group", "industry_subgroup"]
+	];
+	// Global Variables END
+	
 	AUI().ready(function(A) {
 	
 		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
@@ -34,108 +48,113 @@
   			},
   			function(data) {
   			
+  				_data = data;
+  			
   				var netWorth = getTotalNetWorth(data);
+  				_netWorth = getTotalNetWorth(data);
   			
   				// 1. networth
-				A.one('#<portlet:namespace/>networthLabel').text(formatCustom(netWorth, 'amount'));
+				A.one('#<portlet:namespace/>networthLabel').text(formatCustom(_netWorth, 'amount'));
 				
 				//2. Pie Chart - By Currency
-				renderChart(data, '<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
+				renderChart('<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
 				
 				//4. Group By currency with Weightage.
-				<c:choose>
-					<c:when test="<%= (allocationBy == IConstants.BREAKUP_BY_CURRENCY) %>">
-						showWeightage(data, '<%= groupByField[index] %>', '#gridContainer', '<%= groupByTitle[index] %>', netWorth);
-					</c:when>
-					<c:otherwise>
-						showTreeble(data, '<%= allocationBy %>', netWorth);
-					</c:otherwise>
-				</c:choose>
+				showTreeble('<%= allocationBy %>');
 				
 				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
 	
-	function showTreeble(data, allocationBy, netWorth) {
+	function showTreeble(allocationBy) {
 	
-		var groupByKeys = [
-			[],
-			["countryOfRiskName", "security_class"],
-			["currency_", "security_class"],
-			["security_class", "security_typ"],
-			["industry_sector", "industry_group", "industry_subgroup"]
-		];
-		
-		var itemList = _.nest(data, groupByKeys[allocationBy]);
+		var itemList = _.nest(_data, groupByKeys[allocationBy]);
 				
 		var resultantDataArray = [];
-		
+						
 		_.each(itemList, function(item) {
 			_.each(item, function(item) {
+			
 				var jsonObj0 = {};
 				jsonObj0.level = 0;
 				jsonObj0.allocation = item.name;
 				jsonObj0.hierarchy = item.name;
 				var gain_loss0 = 0.0; 
-				var market_value0 = 0.0;			
-				jsonObj0.children = [];
-				_.each(item.children, function(item) {
-					var jsonObj1 = {};
-					jsonObj1.level = 1;
-					jsonObj1.allocation = item.name;
-					jsonObj1.hierarchy = jsonObj0.allocation + '>>>' + item.name;
-					var gain_loss1 = 0.0; 
-					var market_value1 = 0.0;
-					if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
-						jsonObj1.children = [];
-					}
+				var market_value0 = 0.0;
+							
+				if (item.children[0].assetId) {
+					_.each(item.children, function(item) {
+						gain_loss0 += item.gain_loss_percent;
+						market_value0 += item.currentMarketValue;
+					});
+				} else {
+				
+					if (jsonObj0.allocation != 'Un-Specified') {
+						jsonObj0.children = [];	
+					} 
 					
 					_.each(item.children, function(item) {
+						var jsonObj1 = {};
+						jsonObj1.level = 1;
+						jsonObj1.allocation = item.name;
+						jsonObj1.hierarchy = jsonObj0.allocation + '>>>' + item.name;
+						var gain_loss1 = 0.0; 
+						var market_value1 = 0.0;
+						
 						if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
-							var jsonObj2 = {};
-							jsonObj2.level = 2;
-							jsonObj2.allocation = item.name;
-							jsonObj2.hierarchy = jsonObj0.allocation + '>>>' + jsonObj1.allocation + '>>>' + item.name;
-							var gain_loss2 = 0.0; 
-							var market_value2 = 0.0;
-							jsonObj2.children = [];
-							_.each(item.children, function(item) {
-								gain_loss2 += item.gain_loss_percent;
-								market_value2 += item.currentMarketValue;
-							});
-							
-							jsonObj2.gain_loss = gain_loss2/item.children.length;
-							jsonObj2.market_value = market_value2;
-							jsonObj2.weight = market_value2/netWorth * 100;
-							
-							gain_loss1 += jsonObj2.gain_loss;
-							market_value1 += jsonObj2.market_value;					
-		
-							jsonObj1.children.push(jsonObj2);
-						} else {
-							gain_loss1 += item.gain_loss_percent;
-							market_value1 += item.currentMarketValue;
+							jsonObj1.children = [];
 						}
-					});
-					jsonObj1.gain_loss = gain_loss1/item.children.length;
-					jsonObj1.market_value = market_value1;
-					jsonObj1.weight = market_value1/netWorth * 100;
-					
-					gain_loss0 += jsonObj1.gain_loss;
-					market_value0 += jsonObj1.market_value;			
-
-					jsonObj0.children.push(jsonObj1);
-				});
+						
+						_.each(item.children, function(item) {
+							if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
+								var jsonObj2 = {};
+								jsonObj2.level = 2;
+								jsonObj2.allocation = item.name;
+								jsonObj2.hierarchy = jsonObj0.allocation + '>>>' + jsonObj1.allocation + '>>>' + item.name;
+								var gain_loss2 = 0.0; 
+								var market_value2 = 0.0;
+								_.each(item.children, function(item) {
+									gain_loss2 += item.gain_loss_percent;
+									market_value2 += item.currentMarketValue;
+								});
+								
+								jsonObj2.gain_loss = gain_loss2/item.children.length;
+								jsonObj2.market_value = market_value2;
+								jsonObj2.weight = market_value2/_netWorth * 100;
+								
+								gain_loss1 += jsonObj2.gain_loss;
+								market_value1 += jsonObj2.market_value;					
+			
+								jsonObj1.children.push(jsonObj2);
+							} else {
+								gain_loss1 += item.gain_loss_percent;
+								market_value1 += item.currentMarketValue;
+							}
+						});
+						
+						jsonObj1.gain_loss = gain_loss1/item.children.length;
+						jsonObj1.market_value = market_value1;
+						jsonObj1.weight = market_value1/_netWorth * 100;
+						
+						gain_loss0 += jsonObj1.gain_loss;
+						market_value0 += jsonObj1.market_value;			
+	
+						if (jsonObj0.allocation != 'Un-Specified') {
+							jsonObj0.children.push(jsonObj1);
+						}
+					});					
+				}
 				
 				jsonObj0.gain_loss = gain_loss0/item.children.length;
 				jsonObj0.market_value = market_value0;
-				jsonObj0.weight = market_value0/netWorth * 100;
-													
+				jsonObj0.weight = market_value0/_netWorth * 100;
+				jsonObj0._open = (allocationBy == '<%= IConstants.BREAKUP_BY_SECURITY_CLASS %>');
+												
 				resultantDataArray.push(jsonObj0);
 			});
-		});
-		
+		});	
+						
 		YUI().use(
 			'datatable',
 			'gallery-treeble',
@@ -151,19 +170,21 @@
 	
 				// column configuration
 				var cols = [
-					{
-						label : '&nbsp;',
-						nodeFormatter : Y.Treeble.buildTwistdownFormatter(sendRequest)
-					},				
+					<c:if test="<%= allocationBy != IConstants.BREAKUP_BY_CURRENCY %>">
+						{
+							label : '&nbsp;',
+							nodeFormatter : Y.Treeble.buildTwistdownFormatter(sendRequest)
+						},					
+					</c:if>					
 					{
 						key : 'allocation',
 						label : 'Allocation',
 		    			formatter: function(obj) {
 		    				var prefix = '';
-		    				for (var i=0; i<(obj.data.level*5); i++) {
+		    				for (var i=0; i<(obj.data.level*4); i++) {
 		    					prefix += '&nbsp;';
 		    				}		    				
-		    				obj.value = prefix + '<a href="#slicePortfolio" onclick="javascript:sliceChart1(\'' + obj.data.hierarchy + '\',\'' + groupByKeys[allocationBy] + '\');">' + obj.value + '</a>';
+		    				obj.value = prefix + '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.data.hierarchy + '\',\'' + groupByKeys[allocationBy] + '\');">' + obj.value + '</a>';
     					},						
 						allowHTML : true
 					},				
@@ -252,95 +273,6 @@
 		);		
 	}
 	
-	function getDataGroupedBy(data, groupBy, netWorth) {
-		var resultantDataArray = [];
-		_(_.groupBy(data, groupBy)).map(function(item, key) {
-			var resultantObj = {};
-			var totalFxGainLoss = 0.0;
-			var totalPurchaseValue = 0.0;
-			var totalCurrentValue = 0.0;
-			
-			_.each(item, function(item){
-				totalCurrentValue += item.currentMarketValue;
-				totalPurchaseValue += item.purchasedMarketValue;
-				totalFxGainLoss += item.fx_gain_loss;
-			});
-			
-			resultantObj._key = key;
-			resultantObj.fxGainLoss = totalFxGainLoss;
-			resultantObj.gainLossPercent = (totalCurrentValue-totalPurchaseValue)/totalPurchaseValue * 100.0;
-			resultantObj.currentMarketValue = totalCurrentValue;
-			resultantObj.weightage = totalCurrentValue/netWorth * 100.0;
-			
-			resultantDataArray.push(resultantObj);
-		});
-		
-		return resultantDataArray;
-	}
-		
-	function showWeightage(data, groupBy, divId, title, netWorth) {
-		var jsonArr = getDataGroupedBy(data, groupBy, netWorth);
-		YUI().use(
-			'aui-datatable',
-		  	function(Y) {
-		    	var columns = [
-		    		{
-		    			key: '_key',
-		    			label: title,
-		    			formatter: function(obj){
-		    				obj.value = '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.value + '\');">' + obj.value + '</a>';
-    					},
-    					allowHTML:true,
-    					sortable: true
-	    			},
-	    			<c:if test="<%= index == 1 %>">
-				 		{
-				 			key: 'fxGainLoss', 
-				 			label: 'FX Gain/Loss',
-				 			formatter: function(obj) {
-				 				obj.value = formatCustom1(obj.value, 'amount');
-				 			},
-				 			allowHTML:true,
-				 			sortable: true 			
-				 		},		    			
-	    			</c:if>    			
-			 		{
-			 			key: 'gainLossPercent', 
-			 			label: 'Gain/Loss',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom1(obj.value, 'percent');
-			 			},
-			 			allowHTML:true,
-			 			sortable: true 			
-			 		},
-			 		{
-			 			key: 'currentMarketValue', 
-			 			label: 'Market Value',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'amount');
-			 			},
-			 			allowHTML:true,
-			 			sortable: true
-			 		},
-			 		{
-			 			key: 'weightage', 
-			 			label: 'Weight',
-			 			formatter:function(obj) {
-				 			obj.value = formatCustom(obj.value, 'percent');
-				 		},
-				 		allowHTML:true,
-				 		sortable: true
-			 		}
-		   	 	];
-		   
-		   		new Y.DataTable({
-					columnset: columns,
-			    	recordset: jsonArr
-				}).render(divId);
-		  	}
-		);
-	}		
-
 	function getModifiedArray(data, groupBy) {
 		var dataArray = new Array();
 		_(_.groupBy(data, groupBy)).map(function(item, key) {
@@ -357,9 +289,9 @@
 		return dataArray;	
 	}	
 	
-	function renderChart(data, groupBy, divId, title){
+	function renderChart(groupBy, divId, title){
 		
-		var dataArray = getModifiedArray(data, groupBy);
+		var dataArray = getModifiedArray(_data, groupBy);
 				
 		$(divId).highcharts({
 	        chart: {
@@ -392,100 +324,51 @@
 	            data: dataArray,
 	            events:{
 	                click: function (event) {
-	                    sliceChart(event.point.name);
+	                    sliceChart(event.point.name, groupBy);
 	                }
               	}
 	        }]
 	    });
 	}
 	
-	function sliceChart(sliceBy){
-	
-		var portfolioId = '<%= portfolioId %>';
-		var allocationBy = '<%= allocationBy %>'
-		var allocationParam = new String();
-		
-		if (allocationBy == <%= IConstants.BREAKUP_BY_RISK_COUNTRY %>){
-			allocationParam = '<%= groupByField[0] %>';
-		} else if(allocationBy == <%= IConstants.BREAKUP_BY_CURRENCY %>){
-			allocationParam = '<%= groupByField[1] %>';
-		} else if(allocationBy == <%= IConstants.BREAKUP_BY_SECURITY_CLASS %>){
-			allocationParam = '<%= groupByField[2] %>';
-		} else if(allocationBy == <%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>){
-			allocationParam = '<%= groupByField[3] %>';
-		}
-		
- 		Liferay.Service(
-  			'/fingence-portlet.myresult/get-my-results',
-  			{
-    			portfolioId: '<%= portfolioId %>'
-  			},
-  			function(data) {
-  				showPortfolioItems(data, allocationParam, sliceBy, '#slicePortfolio');
-  			}
-		);
-	}
-	
-	function sliceChart1(hierarchy, groupByKeys) {
+	function sliceChart(hierarchy, groupByKeys) {
 	
 		var keywords = hierarchy.split('>>>');
 		var level = keywords.length;
 	
- 		Liferay.Service(
-  			'/fingence-portlet.myresult/get-my-results',
-  			{
-    			portfolioId: '<%= portfolioId %>'
-  			},
-  			function(data) {  			
-  				var itemList = _.nest(data, groupByKeys.split(',').slice(0,level));
-  				  				
-  				var jsonArray = [];				
-				_.each(itemList, function(item) {
-					_.each(item, function(item) {
-						if (item.name == keywords[0]) {
-							if (level == 1) {
-								jsonArray = item.children;
-							} else {
-								_.each(item.children, function(item) {
-									if (item.name == keywords[1]) {
-										if (level == 2) {
+		var itemList = _.nest(_data, groupByKeys.split(',').slice(0,level));
+				  				
+		var jsonArray = [];				
+		_.each(itemList, function(item) {
+			_.each(item, function(item) {
+				if (item.name == keywords[0]) {
+					if (level == 1) {
+						jsonArray = item.children;
+					} else {
+						_.each(item.children, function(item) {
+							if (item.name == keywords[1]) {
+								if (level == 2) {
+									jsonArray = item.children;
+								} else {
+									_.each(item.children, function(item) {
+										if (item.name == keywords[2]) {
 											jsonArray = item.children;
-										} else {
-											_.each(item.children, function(item) {
-												if (item.name == keywords[2]) {
-													jsonArray = item.children;
-												}
-											});
 										}
-									}
-								});
-							} 
-						}
-					});
-				});  				
-  				
-  				// display grid
-		 		var divContent = document.getElementById('slicePortfolio');
-				if (divContent) {
-					divContent.innerHTML = "";
+									});
+								}
+							}
+						});
+					} 
 				}
-				displayItemsGrid(jsonArray, '#slicePortfolio'); 				
-  			}
-		);
-	}
-	
-	function showPortfolioItems(data, allocationParam, sliceBy, divId){
-	
-		var divContent = document.getElementById('slicePortfolio');
+			});
+		});  				
+				
+		// display grid
+ 		var divContent = document.getElementById('slicePortfolio');
 		if (divContent) {
 			divContent.innerHTML = "";
-		}	
-	
-		_(_.groupBy(data, allocationParam)).map(function(itemList, key) {	
-			if (key == sliceBy) {
-				displayItemsGrid(itemList, divId);
-			}
-		});		
+		}
+		displayItemsGrid(jsonArray, '#slicePortfolio');
 	}
 	
 	function getTotalNetWorth(data){
