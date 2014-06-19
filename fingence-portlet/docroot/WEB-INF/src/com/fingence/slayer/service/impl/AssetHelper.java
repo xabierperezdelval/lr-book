@@ -167,6 +167,25 @@ public class AssetHelper {
 				e.printStackTrace();
 			}			
 		}
+	}
+	
+	public static void assignBondCategory(long assetId, long entryId, long userId, Row row,
+			Map<String, Integer> columnNames, ServiceContext serviceContext,
+			long bondCPNVocabularyId) {
+		
+		String cpnType = CellUtil.getString(row.getCell(columnNames.get("CPN_TYP")));
+		String mtyType = CellUtil.getString(row.getCell(columnNames.get("MTY_TYP")));
+		
+		long cpnTypeId = getCategoryId(userId, cpnType, serviceContext, bondCPNVocabularyId, 0l);
+		long mtyTypeId = getCategoryId(userId, mtyType, serviceContext, bondCPNVocabularyId, cpnTypeId);
+		
+		if (mtyTypeId > 0l) {
+			try {
+				AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, mtyTypeId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}			
+		}
 	}	
 	
 	public static long updateAssetEntry(long assetId) {
