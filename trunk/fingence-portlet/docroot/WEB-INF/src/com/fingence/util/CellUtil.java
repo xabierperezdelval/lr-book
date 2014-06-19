@@ -1,5 +1,7 @@
 package com.fingence.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -77,9 +79,13 @@ public class CellUtil {
 		Date value = null;
 		
 		String cellValue = cell.toString();
-		
+				
 		if (Validator.isNotNull(cellValue)) {
-			value = cell.getDateCellValue();
+			try {
+				value = (new SimpleDateFormat("dd/MM/yyyy")).parse(cellValue);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}		
 		
 		return value;

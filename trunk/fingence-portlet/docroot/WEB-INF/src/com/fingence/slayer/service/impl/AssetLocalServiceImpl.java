@@ -105,6 +105,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		
 		long bbSecurityVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Security", serviceContext);
 		long bbIndustryVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Industry", serviceContext);
+		long bondCPNVocabularyId = AssetHelper.getVocabularyId(userId, "CPN_Type", serviceContext);
 
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
@@ -220,8 +221,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				Bond bond = getBond(assetId);
              	bond.setIssuer_bulk(CellUtil.getString(row.getCell(columnNames.get("ISSUER_BULK"))));
              	bond.setCpn(CellUtil.getDouble(row.getCell(columnNames.get("CPN"))));
-             	bond.setCpn_typ(CellUtil.getString(row.getCell(columnNames.get("CPN_TYP"))));
-             	bond.setMty_typ(CellUtil.getString(row.getCell(columnNames.get("MTY_TYP"))));
+             	//bond.setCpn_typ(CellUtil.getString(row.getCell(columnNames.get("CPN_TYP"))));
+             	//bond.setMty_typ(CellUtil.getString(row.getCell(columnNames.get("MTY_TYP"))));
              	bond.setMty_years_tdy(CellUtil.getDouble(row.getCell(columnNames.get("MTY_YEARS_TDY"))));
              	bond.setYld_ytm_ask(CellUtil.getDouble(row.getCell(columnNames.get("YLD_YTM_ASK"))));
              	bond.setYld_ytm_bid(CellUtil.getDouble(row.getCell(columnNames.get("YLD_YTM_BID"))));
@@ -235,6 +236,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
              	bond.setPrice_to_cash_flow(CellUtil.getDouble(row.getCell(columnNames.get("PX_TO_CASH_FLOW"))));
              	bond.setMaturity_dt(CellUtil.getDate(row.getCell(columnNames.get("MATURITY"))));
              	
+             	AssetHelper.assignBondCategory(assetId, entryId, userId, row, columnNames, serviceContext, bondCPNVocabularyId);
+             		
              	try {
 					bondLocalService.updateBond(bond);
 				} catch (SystemException e) {

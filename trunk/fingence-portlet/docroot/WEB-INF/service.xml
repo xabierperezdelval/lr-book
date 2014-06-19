@@ -53,9 +53,7 @@
 		<column name="assetId" type="long" primary="true"/>
 		
 		<column name="issuer_bulk" type="String"/>
-		<column name="cpn" type="double"/>
-		<column name="cpn_typ" type="String"/>
-		<column name="mty_typ" type="String"/>		
+		<column name="cpn" type="double"/>	
 		<column name="mty_years_tdy" type="double"/>
 		<column name="yld_ytm_ask" type="double"/>
 		<column name="yld_ytm_bid" type="double"/>
