@@ -21,7 +21,7 @@
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
-    			portfolioId: '<%= portfolioId %>'
+    			portfolioIds: '<%= portfolioIds %>'
   			},
   			function(data) {
 				

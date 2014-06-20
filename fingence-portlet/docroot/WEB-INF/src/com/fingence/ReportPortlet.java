@@ -3,6 +3,7 @@ package com.fingence;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -50,6 +51,15 @@ public class ReportPortlet extends MVCPortlet {
 			portletSession.setAttribute("PORTFOLIO_ID",
 					String.valueOf(portfolioId),
 					PortletSession.APPLICATION_SCOPE);
+			
+			// remove all those added previously
+			Enumeration<String> enm = portletSession.getAttributeNames();
+			while (enm.hasMoreElements()) {
+				String attrName = enm.nextElement();
+				if (attrName.startsWith("PORTFOLIO_ADDED_")) {
+					portletSession.removeAttribute(attrName);
+				}
+			}
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ALLOCATION_BY)) {
 			int allocationBy = ParamUtil.getInteger(resourceRequest,
 					"allocationBy");
@@ -89,6 +99,16 @@ public class ReportPortlet extends MVCPortlet {
 						PrefsUtil.getPortletPreferencesXML("assetsToShow", values));
 			} catch (SystemException e) {
 				e.printStackTrace();
+			}
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_ADD_PORTFOLIO_ID)) {
+			
+			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0l);
+			String portfolioIdSet = ParamUtil.getString(resourceRequest, "portfolioIdSet");
+			
+			if (String.valueOf(portfolioId).equalsIgnoreCase(portfolioIdSet)) {
+				portletSession.setAttribute("PORTFOLIO_ADDED_"+portfolioId, String.valueOf(portfolioId));
+			} else {
+				portletSession.removeAttribute("PORTFOLIO_ADDED_"+portfolioId);
 			}
 		}
 	}

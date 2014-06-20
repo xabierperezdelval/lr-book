@@ -36,6 +36,7 @@ public interface IConstants {
 	String CMD_SET_ALLOCATION_BY = "setAllocationBy";
 	String CMD_CHECK_DUPLICATE_PORTFOLIO = "checkDuplicatePortfolio";
 	String CMD_SET_ASSETS_TO_SHOW = "setAssetsToShow";
+	String CMD_ADD_PORTFOLIO_ID = "addPortfolioId";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;

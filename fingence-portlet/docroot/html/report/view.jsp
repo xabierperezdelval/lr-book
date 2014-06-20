@@ -1,4 +1,3 @@
-<%@page import="com.fingence.util.PrefsUtil"%>
 <%@ include file="/html/report/init.jsp"%>
 
 <%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
@@ -14,6 +13,16 @@
 	long portfolioId = GetterUtil.getLong(portletSession.getAttribute(
 			"PORTFOLIO_ID", PortletSession.APPLICATION_SCOPE),
 			PortfolioServiceUtil.getDefault(userId));
+	
+	// make CSV if more portfolio's are added for the purpose of report. 
+	String portfolioIds = String.valueOf(portfolioId);
+	Enumeration<String> enm = portletSession.getAttributeNames();
+	while (enm.hasMoreElements()) {
+		String attrName = enm.nextElement();
+		if (attrName.startsWith("PORTFOLIO_ADDED_")) {
+			portfolioIds += StringPool.COMMA + attrName.replaceAll("PORTFOLIO_ADDED_", StringPool.BLANK);
+		}
+	}	
 	
 	int allocationBy = GetterUtil.getInteger(portletSession.getAttribute(
 			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE),
@@ -37,23 +46,9 @@
 			<c:choose>
 				<c:when test="<%= portfolioCount == 1 %>">
 					<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
-				</c:when>
-				<c:when test="<%= portfolioCount == 2 %>">
-					<%
-						String otherPortolio = null;
-						long otherPortfolioId = 0l;
-						List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-						for (Portfolio _portfolio: _portfolios) {
-							if (portfolioId != _portfolio.getPortfolioId()) {
-								otherPortfolioId = _portfolio.getPortfolioId();
-								otherPortolio = _portfolio.getPortfolioName();
-							}
-						}
-					%>
-					<a href="javascript:void(0);" onClick="javascript:changePortfolio('<%= otherPortfolioId %>');">Show Reports for <%= otherPortolio %> &raquo;</a>
-				</c:when>			
+				</c:when>		
 				<c:otherwise>
-					<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value);"/>
+					<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value, 1);" />
 				</c:otherwise>
 			</c:choose>
 		</aui:column>
@@ -86,6 +81,23 @@
 					<aui:option value="10" label="Ten" selected="<%= (assetsToShow == 10) %>"/>
 					<aui:option value="15" label="Fifteen" selected="<%= (assetsToShow == 15) %>"/>
 				</aui:select>
+			</aui:column>
+		</c:if>
+		
+		<c:if test="<%= portfolioCount > 1 %>">
+			<aui:column>
+				Add More Portfolio...
+				<%
+					List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+					for (Portfolio _portfolio: _portfolios) {
+						if (portfolioId != _portfolio.getPortfolioId()) {
+							long otherPortfolioId = _portfolio.getPortfolioId();
+							String checkboxName = "addToReport_" + otherPortfolioId;
+							boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
+							%><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:changePortfolio(this.value, 2);"/><%
+						}	
+					}
+				%>
 			</aui:column>
 		</c:if>
 	</aui:row>
@@ -152,10 +164,19 @@
 	}	
 	
 	<c:if test="<%= (portfolioCount > 1) %>">
-		function changePortfolio(value) {
+		function changePortfolio(value, cmd) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
-			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
+			
+			var _CMD = (cmd == 1)?
+				'<%= IConstants.CMD_SET_PORTFOLIO_ID %>' : '<%= IConstants.CMD_ADD_PORTFOLIO_ID %>';
+				
+			if (cmd == 2) {
+				var hiddenFld = document.getElementById('<portlet:namespace/>addToReport_' + value);
+				ajaxURL.setParameter('portfolioIdSet', hiddenFld.value);
+			}	
+				
+			ajaxURL.setParameter('<%= Constants.CMD %>', _CMD);
 			ajaxURL.setParameter('portfolioId', value);
 			ajaxURL.setWindowState('exclusive');
 			
@@ -168,9 +189,7 @@
 				}
 			});	
 		}
-	</c:if>		
-	
-	<c:if test="<%= (portfolioCount > 2) %>">	
+
 		AUI().ready(function(A) {
 			var list = document.getElementById('<portlet:namespace/>portfolioList');
 			if (list != null){

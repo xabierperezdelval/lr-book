@@ -54,10 +54,10 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.MyResultServiceUtil} to access the my result remote service.
 	 */
-	
-	public List<MyResult> getMyResults(long portfolioId) {
+
+	public List<MyResult> getMyResults(String portfolioIds) {
 				
-		List<MyResult> myResults = myResultFinder.findResults(portfolioId);
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
 				
 		for (MyResult myResult: myResults) {
 			
@@ -104,7 +104,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 		return myResults;
 	}
-
+	
 	private void setCategoryFields(MyResult myResult) {
 		
 		long assetId = myResult.getAssetId();

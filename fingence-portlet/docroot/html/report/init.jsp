@@ -1,5 +1,8 @@
 <%@ include file="/html/init.jsp"%>
 
+<%@page import="java.util.Enumeration"%>
+<%@page import="com.fingence.util.PrefsUtil"%>
+
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 

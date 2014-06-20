@@ -38,7 +38,7 @@
 			Liferay.Service(
 				'/fingence-portlet.myresult/get-my-results',
 				{
-					portfolioId : '<%= portfolioId %>'
+					portfolioIds : '<%= portfolioId %>'
 				},
 				function(data) {
 					displayItemsGrid(data, '#myDataTable', getTotalNetWorth(data));
