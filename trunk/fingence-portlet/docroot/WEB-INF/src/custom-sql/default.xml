@@ -40,7 +40,7 @@
 				Country d,
 				fing_Currency e
 			WHERE 
-				b.portfolioId = ?
+				b.portfolioId in ([$PORTFOLIO_IDS$])
 				and a.assetId = c.assetId
 				and b.portfolioId = c.portfolioId
 				and a.country = d.countryId
