@@ -14,6 +14,7 @@ public class MyResultFinderImpl extends BasePersistenceImpl<MyResult> implements
 
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";	
 	
+	@Override
 	public List<MyResult> findResults(String portfolioIds) {
 		Session session = openSession();
 				
