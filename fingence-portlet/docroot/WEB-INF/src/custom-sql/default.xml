@@ -33,18 +33,21 @@
 				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx)) as gain_loss,
 				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx))/(c.purchasePrice * c.purchaseQty * c.purchasedFx) * 100.0 as gain_loss_percent,
 				((e.conversion - c.purchasedFx) * c.purchaseQty) as fx_gain_loss
+				[$FING_BOND_COLUMNS$]
 			FROM 
 				fing_Asset a,
 				fing_Portfolio b,
 				fing_PortfolioItem c,
 				Country d,
 				fing_Currency e
+				[$FING_BOND_TABLE$]
 			WHERE 
 				b.portfolioId in ([$PORTFOLIO_IDS$])
 				and a.assetId = c.assetId
 				and b.portfolioId = c.portfolioId
 				and a.country = d.countryId
 				and a.currency_ = e.currencyCode
+				[$FING_BOND_WHERE_CLAUSE$]
 		]]>
-	</sql>
+	</sql>	
 </custom-sql>

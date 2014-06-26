@@ -30,6 +30,7 @@
 	
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
 	boolean performanceReport = layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE);
+	boolean fixedIncomeReport = layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME);
 	
 	int assetsToShow = 0;
 	if (performanceReport) {
@@ -48,11 +49,28 @@
 					<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
 				</c:when>		
 				<c:otherwise>
-					<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value, 1);" />
+					<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value);" />
 				</c:otherwise>
 			</c:choose>
 		</aui:column>
 		
+		<c:if test="<%= portfolioCount > 1 %>">
+			<aui:column>
+				Add More Portfolio...
+				<%
+					List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+					for (Portfolio _portfolio: _portfolios) {
+						if (portfolioId != _portfolio.getPortfolioId()) {
+							long otherPortfolioId = _portfolio.getPortfolioId();
+							String checkboxName = "addToReport_" + otherPortfolioId;
+							boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
+							%><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:appendPortfolio(this);"/><%
+						}	
+					}
+				%>
+			</aui:column>
+		</c:if>
+				
 		<c:if test="<%= showAllocationSwitch %>">
 			<aui:column>
 				<aui:select name="allocationBy" onChange="javascript:switchAllocationBy(this.value);">
@@ -84,22 +102,18 @@
 			</aui:column>
 		</c:if>
 		
-		<c:if test="<%= portfolioCount > 1 %>">
+		<c:if test="<%= fixedIncomeReport %>">
+			<%
+				int fixedIncomeReportType = GetterUtil.getInteger(portletSession.getAttribute("FIXED_INCOME_REPORT_TYPE"), IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY);
+			%>
 			<aui:column>
-				Add More Portfolio...
-				<%
-					List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-					for (Portfolio _portfolio: _portfolios) {
-						if (portfolioId != _portfolio.getPortfolioId()) {
-							long otherPortfolioId = _portfolio.getPortfolioId();
-							String checkboxName = "addToReport_" + otherPortfolioId;
-							boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
-							%><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:changePortfolio(this.value, 2);"/><%
-						}	
-					}
-				%>
+				<aui:select name="fixedIncomeReportType" onChange="javascript:changeFixedIncomeReport(this.value);">
+					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY %>" label="fixed-income-bonds-maturity" selected="<%= (IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY == fixedIncomeReportType) %>"/>
+					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY %>" label="fixed-income-bonds-quality" selected="<%= (IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY == fixedIncomeReportType) %>"/>
+					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_CASH_FLOW %>" label="fixed-income-cash-flow" selected="<%= (IConstants.FIXED_INCOME_TYPE_CASH_FLOW == fixedIncomeReportType) %>"/>
+				</aui:select>
 			</aui:column>
-		</c:if>
+		</c:if>		
 	</aui:row>
 </c:if>
 
@@ -164,19 +178,10 @@
 	}	
 	
 	<c:if test="<%= (portfolioCount > 1) %>">
-		function changePortfolio(value, cmd) {
+		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
-			
-			var _CMD = (cmd == 1)?
-				'<%= IConstants.CMD_SET_PORTFOLIO_ID %>' : '<%= IConstants.CMD_ADD_PORTFOLIO_ID %>';
-				
-			if (cmd == 2) {
-				var hiddenFld = document.getElementById('<portlet:namespace/>addToReport_' + value);
-				ajaxURL.setParameter('portfolioIdSet', hiddenFld.value);
-			}	
-				
-			ajaxURL.setParameter('<%= Constants.CMD %>', _CMD);
+			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_PORTFOLIO_ID %>');
 			ajaxURL.setParameter('portfolioId', value);
 			ajaxURL.setWindowState('exclusive');
 			
@@ -189,6 +194,24 @@
 				}
 			});	
 		}
+		
+		function appendPortfolio(checkbox) {
+			var ajaxURL = Liferay.PortletURL.createResourceURL();
+			ajaxURL.setPortletId('report_WAR_fingenceportlet');
+			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_ADD_PORTFOLIO_ID %>');
+			ajaxURL.setParameter('portfolioId', checkbox.value);
+			ajaxURL.setParameter('checked', checkbox.checked);
+			ajaxURL.setWindowState('exclusive');
+			
+			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+				sync: true,
+				on: {
+					success: function() {
+						Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+					}
+				}
+			});	
+		}		
 
 		AUI().ready(function(A) {
 			var list = document.getElementById('<portlet:namespace/>portfolioList');
@@ -246,6 +269,25 @@
 					}
 				}
 			});		
+		}
+	</c:if>
+	
+	<c:if test="<%= fixedIncomeReport %>">
+		function changeFixedIncomeReport(value) {
+			var ajaxURL = Liferay.PortletURL.createResourceURL();
+			ajaxURL.setPortletId('report_WAR_fingenceportlet');
+			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CHANGE_FIXED_INCOME_RPT %>');
+			ajaxURL.setParameter('reportType', value);
+			ajaxURL.setWindowState('exclusive');
+			
+			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+				sync: true,
+				on: {
+					success: function() {
+						Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+					}
+				}
+			});			
 		}
 	</c:if>
 	

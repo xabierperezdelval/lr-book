@@ -309,8 +309,18 @@
 	function renderChart(groupBy, divId, title){
 		
 		var dataArray = getModifiedArray(_data, groupBy);
-				
+		
 		$(divId).highcharts({
+			legend: {
+		    	enabled: true,
+		    	align: 'right',
+	        	borderColor: 'grey',
+	        	borderWidth: 1,
+		    	layout: 'vertical',
+		    	verticalAlign: 'top',
+		    	y: 100
+		    },
+	    		
 	        chart: {
 	            plotBackgroundColor: null,
 	            plotBorderWidth: null,
@@ -325,27 +335,26 @@
 	        plotOptions: {
 	            pie: {
 	            	size: "50%",
-	                allowPointSelect: true,
 	                cursor: 'pointer',
 	                dataLabels: {
 	                    enabled: true,
 	                    color: '#000000',
 	                    connectorColor: '#000000',
 	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-	                }
+	                },
+	                showInLegend: true
 	            }
 	        },
 	        series: [{
 	            type: 'pie',
-	            name: title,
 	            data: dataArray,
 	            events:{
 	                click: function (event) {
 	                    sliceChart(event.point.name, groupBy);
 	                }
               	}
-	        }]
-	    });
+	        }]		
+		});
 	}
 	
 	function sliceChart(hierarchy, groupByKeys) {
