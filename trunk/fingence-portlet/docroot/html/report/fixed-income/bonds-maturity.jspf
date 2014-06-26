@@ -31,17 +31,45 @@
 		);
 	});
 	
+	function appendTotalRow(data) {
+	
+		var dataWithSummary = data;
+		
+		var summaryRow = {};
+		summaryRow.summary = true;
+		summaryRow.bucket = '<b>Total</b>';
+		summaryRow.market_value = 0.0;
+		summaryRow.bond_holdings_percent = 0.0;
+		summaryRow.total_holdings_percent = 0.0;
+		
+		_.each(data, function(item){
+			summaryRow.market_value += item.market_value;
+			summaryRow.bond_holdings_percent += item.bond_holdings_percent;
+			summaryRow.total_holdings_percent += item.total_holdings_percent
+		});
+		
+		dataWithSummary.push(summaryRow);
+		
+		return dataWithSummary;
+	}
+	
 	function showDataTable(data) {
+	
+		var dataWithSummary = appendTotalRow(data);
+	
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
 		    	var columns = [
-		    		{key: 'bucket', label: 'Bond Maturity<br/>Schedule'},
+		    		{key: 'bucket', label: 'Bond Maturity<br/>Schedule', allowHTML: true},
 			 		{
 			 			key: 'market_value',
 			 			label: 'Market Value<br/>in USD',
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'amount');
+			 				if (obj.data.summary) {	
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				} 
 			 			},
 			 			allowHTML: true
 			 		},
@@ -50,6 +78,9 @@
 						label: '% of Bond<br/>Holdings',
 						formatter: function(obj) {
 							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {	
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				}
 						},
 			 			allowHTML: true
 					},
@@ -58,6 +89,9 @@
 						label: '% of Total<br/>Holdings' ,
 						formatter: function(obj) {
 							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {	
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				}
 						},
 			 			allowHTML: true
 					}				 		
@@ -65,7 +99,7 @@
 		   
 		   		new Y.DataTable({
 					columnset: columns,
-				    recordset: data
+				    recordset: dataWithSummary
 				}).render("#gridContainer");
 		  	}
 		);
