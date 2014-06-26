@@ -103,13 +103,16 @@ public class ReportPortlet extends MVCPortlet {
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_ADD_PORTFOLIO_ID)) {
 			
 			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0l);
-			String portfolioIdSet = ParamUtil.getString(resourceRequest, "portfolioIdSet");
+			boolean checked = ParamUtil.getBoolean(resourceRequest, "checked");
 			
-			if (String.valueOf(portfolioId).equalsIgnoreCase(portfolioIdSet)) {
+			if (checked) {
 				portletSession.setAttribute("PORTFOLIO_ADDED_"+portfolioId, String.valueOf(portfolioId));
 			} else {
 				portletSession.removeAttribute("PORTFOLIO_ADDED_"+portfolioId);
 			}
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHANGE_FIXED_INCOME_RPT)) {
+			int reportType = ParamUtil.getInteger(resourceRequest, "reportType", 1);
+			portletSession.setAttribute("FIXED_INCOME_REPORT_TYPE", String.valueOf(reportType));
 		}
 	}
 

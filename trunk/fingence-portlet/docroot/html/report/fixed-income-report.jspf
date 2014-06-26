@@ -1,1 +1,15 @@
-<h2>Coming Soon</h2>
+<%
+	int fixedIncomeReportType = GetterUtil.getInteger(portletSession.getAttribute("FIXED_INCOME_REPORT_TYPE"), IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY);
+%>
+
+<c:choose>
+	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>">
+		<%@ include file="/html/report/fixed-income/bonds-quality.jspf"%>
+	</c:when>
+	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_CASH_FLOW) %>">
+		<%@ include file="/html/report/fixed-income/cash-flow.jspf"%>
+	</c:when>
+	<c:otherwise>
+		<%@ include file="/html/report/fixed-income/bonds-maturity.jspf"%>
+	</c:otherwise>
+</c:choose>

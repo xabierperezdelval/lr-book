@@ -14,6 +14,10 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import com.fingence.IConstants;
@@ -21,8 +25,14 @@ import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
+import com.fingence.slayer.service.persistence.MyResultFinderImpl;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
@@ -33,6 +43,7 @@ import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.util.dao.orm.CustomSQLUtil;
 
 /**
  * The implementation of the my result remote service.
@@ -55,6 +66,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.MyResultServiceUtil} to access the my result remote service.
 	 */
 
+	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";
+	
 	public List<MyResult> getMyResults(String portfolioIds) {
 				
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
@@ -161,5 +174,89 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				}				
 			}
 		}
+	}
+	
+	public JSONArray getBondsMaturing(String portfolioIds) {
+		
+		String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		// initialization of JSONArray with default values
+		for (int i=0; i<5; i++) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("bucket", bucketNames[i]);
+			jsonObject.put("market_value", 0.0);
+			jsonObject.put("bond_holdings_percent", 0.0);
+			jsonObject.put("total_holdings_percent", 0.0);
+			jsonArray.put(jsonObject);
+		}
+		
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+			String[] replacements = {portfolioIds, ",f.*, DATEDIFF(f.maturity_dt,now()) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
+					
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			double totalMarketValue = getTotalMarketValue(portfolioIds);
+			double totalValueOfBonds = 0.0;
+						
+			while (rs.next()) {
+				int maturingAfter = rs.getInt("maturing_after");
+				double currentMarketValue = rs.getDouble("currentMarketValue");
+				totalValueOfBonds += currentMarketValue;
+				
+				if (maturingAfter < 210) continue; // less than 7 months
+				
+				int index = 0;
+				if (maturingAfter > 366 && maturingAfter < 730) {
+					index = 1;
+				} else if (maturingAfter > 731 && maturingAfter < 1825) {
+					index = 2;
+				} else if (maturingAfter > 1826 && maturingAfter < 3650) {
+					index = 3;
+				} else if (maturingAfter > 3650) {
+					index = 4;
+				}
+				
+				JSONObject jsonObj = jsonArray.getJSONObject(index);
+				
+				jsonObj.put("market_value", jsonObj.getDouble("market_value") + currentMarketValue);
+				jsonObj.put("total_holdings_percent", jsonObj.getDouble("total_holdings_percent") + currentMarketValue*100/totalMarketValue);
+			}
+			
+			rs.close();
+			stmt.close();
+			
+			for (int i=0; i<jsonArray.length(); i++) {
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				jsonObj.put("bond_holdings_percent", jsonObj.getDouble("market_value")*100/totalValueOfBonds);
+			}
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return jsonArray;		
+	}
+	
+	private double getTotalMarketValue(String portfolioIds) {
+		double totalMarketValue = 0.0;
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
+		
+		for (MyResult myResult: myResults) {
+			totalMarketValue += myResult.getCurrentMarketValue();
+		}
+		
+		return totalMarketValue;
 	}
 }

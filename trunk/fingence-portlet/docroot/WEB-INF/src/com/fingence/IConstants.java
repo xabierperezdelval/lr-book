@@ -37,6 +37,7 @@ public interface IConstants {
 	String CMD_CHECK_DUPLICATE_PORTFOLIO = "checkDuplicatePortfolio";
 	String CMD_SET_ASSETS_TO_SHOW = "setAssetsToShow";
 	String CMD_ADD_PORTFOLIO_ID = "addPortfolioId";
+	String CMD_CHANGE_FIXED_INCOME_RPT = "changeFixedIncomeReport";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;
@@ -64,4 +65,8 @@ public interface IConstants {
 	
 	String SELECTED = "selected";
 	String UN_SPECIFIED = "Un-Specified";
+	
+	int FIXED_INCOME_TYPE_BONDS_MATURITY = 1;
+	int FIXED_INCOME_TYPE_BONDS_QUALITY = 2;
+	int FIXED_INCOME_TYPE_CASH_FLOW = 3;	
 }
