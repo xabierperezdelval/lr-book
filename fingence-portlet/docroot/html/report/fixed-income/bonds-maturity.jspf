@@ -2,10 +2,10 @@
 
 <aui:row>
 	<aui:column>
-		<div id="chartContainer"></div>
+		<div id="gridContainer"></div>
 	</aui:column>
 	<aui:column>
-		<div id="gridContainer"></div>
+		<div id="chartContainer"></div>
 	</aui:column>	
 </aui:row>
 
@@ -24,137 +24,11 @@
     			portfolioIds: '<%= portfolioIds %>'
   			},
   			function(data) {
-  				renderChart(data);
-  				showDataTable(data);				
+  				console.log(JSON.stringify(data));
+  				showDataTable(data, '#gridContainer', 'Bond Maturity<br/>Schedule');
+  				renderChart(data, 'Bonds Maturity Breakup');				
 				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
-	
-	function appendTotalRow(data) {
-	
-		var dataWithSummary = data;
-		
-		var summaryRow = {};
-		summaryRow.summary = true;
-		summaryRow.bucket = '<b>Total</b>';
-		summaryRow.market_value = 0.0;
-		summaryRow.bond_holdings_percent = 0.0;
-		summaryRow.total_holdings_percent = 0.0;
-		
-		_.each(data, function(item){
-			summaryRow.market_value += item.market_value;
-			summaryRow.bond_holdings_percent += item.bond_holdings_percent;
-			summaryRow.total_holdings_percent += item.total_holdings_percent
-		});
-		
-		dataWithSummary.push(summaryRow);
-		
-		return dataWithSummary;
-	}
-	
-	function showDataTable(data) {
-	
-		var dataWithSummary = appendTotalRow(data);
-	
-		YUI().use(
-			'aui-datatable',
-		  	function(Y) {
-		    	var columns = [
-		    		{key: 'bucket', label: 'Bond Maturity<br/>Schedule', allowHTML: true},
-			 		{
-			 			key: 'market_value',
-			 			label: 'Market Value<br/>in USD',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom(obj.value, 'amount');
-			 				if (obj.data.summary) {	
-			 					obj.value = '<b>' + obj.value + '</b>';
-			 				} 
-			 			},
-			 			allowHTML: true
-			 		},
-					{
-						key: 'bond_holdings_percent',
-						label: '% of Bond<br/>Holdings',
-						formatter: function(obj) {
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {	
-			 					obj.value = '<b>' + obj.value + '</b>';
-			 				}
-						},
-			 			allowHTML: true
-					},
-					{
-						key: 'total_holdings_percent',
-						label: '% of Total<br/>Holdings' ,
-						formatter: function(obj) {
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {	
-			 					obj.value = '<b>' + obj.value + '</b>';
-			 				}
-						},
-			 			allowHTML: true
-					}				 		
-		   	 	];
-		   
-		   		new Y.DataTable({
-					columnset: columns,
-				    recordset: dataWithSummary
-				}).render("#gridContainer");
-		  	}
-		);
-	}
-	
-	function renderChart(data){
-	
-		var dataArray = getModifiedArray(data);
-						
-		$('#chartContainer').highcharts({
-		
-			legend: {
-		    	enabled: true,
-		    	align: 'right',
-	        	borderColor: 'grey',
-	        	borderWidth: 1,
-		    	layout: 'vertical',
-		    	verticalAlign: 'top',
-		    	y: 100
-		    },
-	    		
-	        chart: {
-	            plotBackgroundColor: null,
-	            plotBorderWidth: null,
-	            plotShadow: false,
-	        },
-	        title: {
-	            text: 'Bonds Maturity Breakup'
-	        },
-	        tooltip: {
-	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-	        },
-	        plotOptions: {
-	            pie: {
-	            	size: "50%",
-	                cursor: 'pointer',
-	                dataLabels: {
-	                    enabled: false
-	                },
-	                showInLegend: true
-	            }
-	        },
-	        series: [{
-	            type: 'pie',
-	            data: dataArray
-	        }]
-	    });
-	}
-	
-	function getModifiedArray(data) {
-		var dataArray = new Array();	
-		_.each(data, function(item){
-			console.log(item.bucket);
-			dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
-		});
-		return dataArray;	
-	}		
 </aui:script>

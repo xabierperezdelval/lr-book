@@ -216,4 +216,20 @@
 		</finder>
 	</entity>
 	
+	<entity name="Rating" remote-service="true" local-service="true">
+		<column name="ratingId" type="long" primary="true"/>
+		<column name="moodys" type="String"/>
+		<column name="sandp" type="String"/>
+		<column name="fitch" type="String"/>
+		<column name="general" type="String"/>
+		<column name="description" type="String"/>
+		<column name="creditWorthiness" type="String"/>
+		<column name="category" type="String"/>
+		
+		<finder return-type="Rating" name="SP_Moody">
+			<finder-column name="sandp"/>
+			<finder-column name="moodys"/>
+		</finder>
+	</entity>	
+	
 </service-builder>
