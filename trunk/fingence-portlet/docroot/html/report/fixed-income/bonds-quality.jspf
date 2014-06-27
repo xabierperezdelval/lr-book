@@ -1,3 +1,39 @@
-Coming Soon
+<h4>Bond Quality Analysis in USD <i>(as of today)</i></h4><hr/>
 
-<%= fixedIncomeReportType %>
+<aui:row>
+	<aui:column>
+		<div id="gridContainer1"></div>
+		<hr/>
+		<div id="gridContainer2"></div>
+		<hr/>
+		<div id="gridContainer3"></div>
+	</aui:column>
+	<aui:column>
+		<div id="chartContainer"></div>
+	</aui:column>	
+</aui:row>
+
+<aui:script>
+	AUI().ready(function(A) {
+	
+		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
+		if (divForMasking.loadingmask == null) {
+			divForMasking.plug(A.LoadingMask, { background: '#F0F0F0' });
+            divForMasking.loadingmask.toggle();
+		}
+			
+		Liferay.Service(
+  			'/fingence-portlet.myresult/get-bonds-quality',
+  			{
+    			portfolioIds: '<%= portfolioIds %>'
+  			},
+  			function(data) {
+  				showDataTable(data[0].children, '#gridContainer1', 'Investment Grade');	
+  				showDataTable(data[1].children, '#gridContainer2', 'Non Investment Grade');
+  				showDataTable(data[2].children, '#gridContainer3', 'Others Bond /<br/>Note Grade');		
+  				renderChart(data);
+				divForMasking.loadingmask.toggle();
+  			}
+		);
+	});
+</aui:script>

@@ -23,6 +23,7 @@ import java.util.List;
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.MyResult;
+import com.fingence.slayer.model.Rating;
 import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
 import com.fingence.slayer.service.persistence.MyResultFinderImpl;
@@ -183,7 +184,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		
 		// initialization of JSONArray with default values
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<bucketNames.length; i++) {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put("bucket", bucketNames[i]);
 			jsonObject.put("market_value", 0.0);
@@ -247,6 +248,107 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		
 		return jsonArray;		
 	}
+	
+	public JSONArray getBondsQuality(String portfolioIds) {
+		
+		String[] categories = {"Investment", "Non Investment", "Others"};
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		// initialization of JSONArray with default values
+		for (int i=0; i<categories.length; i++) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("category", categories[i]);
+			jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+			jsonArray.put(jsonObject);
+		}
+		
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+			String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", "and a.assetId = f.assetId"};
+					
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			double totalMarketValue = getTotalMarketValue(portfolioIds);
+			double totalValueOfBonds = 0.0;
+						
+			while (rs.next()) {
+				double currentMarketValue = rs.getDouble("currentMarketValue");
+				totalValueOfBonds += currentMarketValue;
+				
+				String spRating = rs.getString("rtg_sp");
+				String moodyRating = rs.getString("rtg_moody");
+								
+				Rating rating = null;
+				try {
+					rating = ratingPersistence.fetchBySP_Moody(spRating, moodyRating);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				// identify the object 
+				int index = 2;
+				String description = "No Rating Available";
+				if (Validator.isNotNull(rating)) {
+					String category = rating.getCategory();
+					description = rating.getDescription();
+					
+					for (int i=0; i<categories.length; i++) {
+						if (categories[i].equalsIgnoreCase(category)) {
+							index = i;
+						}
+					}
+				}
+				
+				JSONArray children = jsonArray.getJSONObject(index).getJSONArray("children");
+				
+				// identify the child within the parent
+				JSONObject child = null;
+								
+				if (children.length() == 0) {
+					child = JSONFactoryUtil.createJSONObject();
+					child.put("bucket", description);
+					child.put("market_value", 0.0);
+					child.put("bond_holdings_percent", 0.0);
+					child.put("total_holdings_percent", 0.0);					
+					children.put(child);
+				} 
+								
+				for (int i=0; i<children.length(); i++) {
+					child = children.getJSONObject(i);
+					if (child.getString("bucket").equalsIgnoreCase(description)) {
+						child.put("market_value", child.getDouble("market_value") + currentMarketValue);
+						child.put("total_holdings_percent", child.getDouble("total_holdings_percent") + currentMarketValue*100/totalMarketValue);
+					}
+				}
+			}
+			
+			rs.close();
+			stmt.close();
+			
+			for (int i=0; i<jsonArray.length(); i++) {
+				JSONObject parent = jsonArray.getJSONObject(i);
+				JSONArray children = parent.getJSONArray("children");
+								
+				for (int j=0; j<children.length(); j++) {
+					JSONObject child = children.getJSONObject(j);
+					child.put("bond_holdings_percent", child.getDouble("market_value")*100/totalValueOfBonds);
+				}					
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return jsonArray;		
+	}	
 	
 	private double getTotalMarketValue(String portfolioIds) {
 		double totalMarketValue = 0.0;

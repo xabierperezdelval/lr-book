@@ -13,3 +13,137 @@
 		<%@ include file="/html/report/fixed-income/bonds-maturity.jspf"%>
 	</c:otherwise>
 </c:choose>
+
+<aui:script>
+	function appendSummaryRow(data) {
+	
+		var dataWithSummary = data.slice();
+		
+		var summaryRow = {};
+		summaryRow.summary = true;
+		summaryRow.bucket = '<b>Total</b>';
+		summaryRow.market_value = 0.0;
+		summaryRow.bond_holdings_percent = 0.0;
+		summaryRow.total_holdings_percent = 0.0;
+		
+		_.each(data, function(item){
+			summaryRow.market_value += item.market_value;
+			summaryRow.bond_holdings_percent += item.bond_holdings_percent;
+			summaryRow.total_holdings_percent += item.total_holdings_percent
+		});
+		
+		dataWithSummary.push(summaryRow);
+		
+		return dataWithSummary;
+	}
+	
+	function showDataTable(data, divId, title) {
+	
+		var dataWithSummary = appendSummaryRow(data);
+	
+		YUI().use(
+			'aui-datatable',
+		  	function(Y) {
+		    	var columns = [
+		    		{key: 'bucket', label: title, allowHTML: true},
+			 		{
+			 			key: 'market_value',
+			 			label: 'Market Value<br/>in USD',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom(obj.value, 'amount');
+			 				if (obj.data.summary) {	
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				} 
+			 			},
+			 			allowHTML: true
+			 		},
+					{
+						key: 'bond_holdings_percent',
+						label: '% of Bond<br/>Holdings',
+						formatter: function(obj) {
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {	
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				}
+						},
+			 			allowHTML: true
+					},
+					{
+						key: 'total_holdings_percent',
+						label: '% of Total<br/>Holdings' ,
+						formatter: function(obj) {
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {	
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				}
+						},
+			 			allowHTML: true
+					}				 		
+		   	 	];
+		   
+		   		new Y.DataTable({
+					columnset: columns,
+				    recordset: dataWithSummary
+				}).render(divId);
+		  	}
+		);
+	}
+	
+	function renderChart(data, title){
+	
+		var dataArray = getModifiedArray(data);
+						
+		$('#chartContainer').highcharts({
+		
+			legend: {
+		    	enabled: true,
+		    	align: 'right',
+	        	borderColor: 'grey',
+	        	borderWidth: 1,
+		    	layout: 'vertical',
+		    	verticalAlign: 'top',
+		    	y: 100
+		    },
+	    		
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	        },
+	        title: {
+	            text: title
+	        },
+	        tooltip: {
+	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	            	size: "50%",
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                showInLegend: true
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            data: dataArray
+	        }]
+	    });
+	}
+	
+	function getModifiedArray(data) {
+		var dataArray = new Array();	
+		_.each(data, function(item){
+			if (<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>) {
+				_.each(item.children, function(item){
+					dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
+				});
+			} else { 
+				dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
+			}
+		});
+		return dataArray;	
+	}
+</aui:script>
