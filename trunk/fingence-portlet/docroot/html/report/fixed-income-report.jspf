@@ -40,12 +40,23 @@
 	function showDataTable(data, divId, title) {
 	
 		var dataWithSummary = appendSummaryRow(data);
-	
+			
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
 		    	var columns = [
-		    		{key: 'bucket', label: title, allowHTML: true},
+		    		{
+		    			key: 'bucket', 
+		    			label: title, 
+			 			formatter: function(obj) {
+			 				if (obj.data.summary) {
+			 					obj.value = '<b>' + obj.value + '</b>';
+			 				} else {
+			 					obj.value = '<a onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}
+			 			},		    			
+		    			allowHTML: true
+		    		},
 			 		{
 			 			key: 'market_value',
 			 			label: 'Market Value<br/>in USD',
@@ -89,21 +100,13 @@
 		);
 	}
 	
-	function renderChart(data, title){
+	function renderChart(data, title, legend, type){
 	
 		var dataArray = getModifiedArray(data);
 						
 		$('#chartContainer').highcharts({
 		
-			legend: {
-		    	enabled: true,
-		    	align: 'right',
-	        	borderColor: 'grey',
-	        	borderWidth: 1,
-		    	layout: 'vertical',
-		    	verticalAlign: 'top',
-		    	y: 100
-		    },
+			legend: legend,
 	    		
 	        chart: {
 	            plotBackgroundColor: null,
@@ -127,23 +130,41 @@
 	            }
 	        },
 	        series: [{
-	            type: 'pie',
+	            type: type,
 	            data: dataArray
 	        }]
 	    });
 	}
 	
 	function getModifiedArray(data) {
-		var dataArray = new Array();	
+		var dataArray = new Array();
+		
+		var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_RATING_DETAILS %>');
+		ajaxURL.setWindowState('exclusive');
+					
 		_.each(data, function(item){
 			if (<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>) {
 				_.each(item.children, function(item){
-					dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
+					ajaxURL.setParameter('description', item.bucket);
+					AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+						sync: true,
+						on: {
+							success: function() {
+								dataArray.push(new Array(item.bucket + ' (' + this.get('responseData') + ') ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
+							}
+						}
+					});
 				});
 			} else { 
 				dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
 			}
 		});
 		return dataArray;	
+	}
+	
+	function showDetails(key) {
+		
 	}
 </aui:script>

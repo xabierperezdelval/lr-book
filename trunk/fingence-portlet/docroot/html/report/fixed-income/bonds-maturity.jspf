@@ -9,6 +9,8 @@
 	</aui:column>	
 </aui:row>
 
+<hr/><div id="portfolioDetails"></div>
+
 <aui:script>
 	AUI().ready(function(A) {
 	
@@ -26,7 +28,18 @@
   			function(data) {
   				console.log(JSON.stringify(data));
   				showDataTable(data, '#gridContainer', 'Bond Maturity<br/>Schedule');
-  				renderChart(data, 'Bonds Maturity Breakup');				
+  				
+  				var legend = {
+			    	enabled: true,
+			    	align: 'right',
+		        	borderColor: 'grey',
+		        	borderWidth: 1,
+			    	layout: 'vertical',
+			    	verticalAlign: 'top',
+			    	y: 100
+  				};
+  				
+  				renderChart(data, 'Bonds Maturity Breakup', legend, 'pie');				
 				divForMasking.loadingmask.toggle();
   			}
 		);

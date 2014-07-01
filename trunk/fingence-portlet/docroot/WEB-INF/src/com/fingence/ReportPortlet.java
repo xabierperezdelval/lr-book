@@ -17,6 +17,7 @@ import javax.portlet.ResourceResponse;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
+import com.fingence.slayer.service.RatingServiceUtil;
 import com.fingence.util.PrefsUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -44,6 +45,7 @@ public class ReportPortlet extends MVCPortlet {
 
 		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
 		PortletSession portletSession = resourceRequest.getPortletSession();
+		PrintWriter writer = resourceResponse.getWriter();
 
 		if (cmd.equalsIgnoreCase(IConstants.CMD_SET_PORTFOLIO_ID)) {
 			long portfolioId = ParamUtil
@@ -83,7 +85,6 @@ public class ReportPortlet extends MVCPortlet {
 				}
 			}
 			
-			PrintWriter writer = resourceResponse.getWriter();
 			writer.println(flag);
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ASSETS_TO_SHOW)) {
 			int assetsToShow = ParamUtil.getInteger(resourceRequest, "assetsToShow", 5);
@@ -113,7 +114,12 @@ public class ReportPortlet extends MVCPortlet {
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHANGE_FIXED_INCOME_RPT)) {
 			int reportType = ParamUtil.getInteger(resourceRequest, "reportType", 1);
 			portletSession.setAttribute("FIXED_INCOME_REPORT_TYPE", String.valueOf(reportType));
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_GET_RATING_DETAILS)) {
+			String description = ParamUtil.getString(resourceRequest, "description");
+			writer.println(RatingServiceUtil.getRatings(description));
 		}
+		
+		writer.close();
 	}
 
 	public void savePortfolio(ActionRequest actionRequest,
