@@ -30,8 +30,17 @@
   			function(data) {
   				showDataTable(data[0].children, '#gridContainer1', 'Investment Grade');	
   				showDataTable(data[1].children, '#gridContainer2', 'Non Investment Grade');
-  				showDataTable(data[2].children, '#gridContainer3', 'Others Bond /<br/>Note Grade');		
-  				renderChart(data);
+  				showDataTable(data[2].children, '#gridContainer3', 'Others Bond /<br/>Note Grade');	
+  				
+  				var legend = {
+            		enabled: true,
+            		verticalAlign: 'bottom',
+            		borderColor: 'grey',
+		        	borderWidth: 1,
+		        	layout:'vertical'
+        		};
+        		
+  				renderChart(data, 'Bonds Quality Breakup', legend, 'pie');
 				divForMasking.loadingmask.toggle();
   			}
 		);
