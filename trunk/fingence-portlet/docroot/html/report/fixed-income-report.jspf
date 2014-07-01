@@ -52,7 +52,7 @@
 			 				if (obj.data.summary) {
 			 					obj.value = '<b>' + obj.value + '</b>';
 			 				} else {
-			 					obj.value = '<a onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 					obj.value = '<a href="javascript:void();" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
 			 				}
 			 			},		    			
 		    			allowHTML: true
@@ -137,13 +137,13 @@
 	}
 	
 	function getModifiedArray(data) {
-		var dataArray = new Array();
 		
 		var ajaxURL = Liferay.PortletURL.createResourceURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_RATING_DETAILS %>');
 		ajaxURL.setWindowState('exclusive');
-					
+		
+		var dataArray = new Array();
 		_.each(data, function(item){
 			if (<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>) {
 				_.each(item.children, function(item){
