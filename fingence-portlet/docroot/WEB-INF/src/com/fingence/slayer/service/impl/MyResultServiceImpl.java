@@ -68,6 +68,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 */
 
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";
+	static String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
 	
 	public List<MyResult> getMyResults(String portfolioIds) {
 				
@@ -177,9 +178,37 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		}
 	}
 	
-	public JSONArray getBondsMaturing(String portfolioIds) {
+	public List<MyResult> getBondsByMaturity(String bucketName, String portfolioIds) {
 		
-		String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
+		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+		
+		int[][] ranges = {
+			{210, 365},
+			{366, 730},
+			{731, 1825},
+			{1826, 3650},
+			{3651, 10000},
+		};
+		
+		int index = -1; 
+		for (int i=0; i<bucketNames.length; i++) {
+			if (bucketName.equalsIgnoreCase(bucketNames[i])) {
+				index = i;
+				break;
+			}
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" and a.assetId = f.assetId");
+		sb.append(" and DATEDIFF(f.maturity_dt,now()) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
+		String[] replacements = {portfolioIds, ",f.*, DATEDIFF(f.maturity_dt,now()) AS maturing_after", ",fing_Bond f", sb.toString()};
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
+		
+		return myResults;
+	}
+	
+	public JSONArray getBondsMaturing(String portfolioIds) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		
@@ -222,7 +251,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					index = 2;
 				} else if (maturingAfter > 1826 && maturingAfter < 3650) {
 					index = 3;
-				} else if (maturingAfter > 3650) {
+				} else if (maturingAfter > 3651) {
 					index = 4;
 				}
 				
@@ -350,7 +379,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		return jsonArray;		
 	}	
 	
-	private double getTotalMarketValue(String portfolioIds) {
+	public double getTotalMarketValue(String portfolioIds) {
 		double totalMarketValue = 0.0;
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);

@@ -16,11 +16,16 @@ public class MyResultFinderImpl extends BasePersistenceImpl<MyResult> implements
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";	
 	
 	public List<MyResult> findResults(String portfolioIds) {
-		Session session = openSession();
 		
 		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
 		String[] replacements = {portfolioIds, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK};
-				
+		
+		return findResults(portfolioIds, tokens, replacements);
+	}	
+	
+	public List<MyResult> findResults(String portfolioIds, String[] tokens, String[] replacements) {
+		Session session = openSession();
+						
 		String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
 		
 		SQLQuery query = session.createSQLQuery(sql);

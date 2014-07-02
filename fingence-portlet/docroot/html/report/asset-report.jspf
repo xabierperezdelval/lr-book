@@ -390,10 +390,6 @@
 		});		
 				
 		// display grid
- 		var divContent = document.getElementById('slicePortfolio');
-		if (divContent) {
-			divContent.innerHTML = "";
-		}
 		displayItemsGrid(jsonArray, '#slicePortfolio', _netWorth);
 	}
 </aui:script>
