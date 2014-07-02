@@ -13,6 +13,8 @@
 	</aui:column>	
 </aui:row>
 
+<hr/><div id="portfolioDetails"></div>
+
 <aui:script>
 	AUI().ready(function(A) {
 	

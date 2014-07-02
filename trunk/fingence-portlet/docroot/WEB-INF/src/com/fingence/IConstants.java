@@ -39,6 +39,7 @@ public interface IConstants {
 	String CMD_ADD_PORTFOLIO_ID = "addPortfolioId";
 	String CMD_CHANGE_FIXED_INCOME_RPT = "changeFixedIncomeReport";
 	String CMD_GET_RATING_DETAILS = "getRatingDetails";
+	String CMD_GET_NET_WORTH = "getNetWorth";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;

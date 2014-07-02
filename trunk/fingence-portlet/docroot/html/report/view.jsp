@@ -371,6 +371,12 @@
 	}	
 	
 	function displayItemsGrid(results, divId, networth) {
+	
+		var divContent = AUI().one(divId);
+		if (divContent) {
+			divContent.setContent('');
+		}
+			
 		YUI().use('aui-datatable', function(Y) {
 			var columns = [
 				{key: 'name', label: 'Security Name', sortable: true},

@@ -52,7 +52,7 @@
 			 				if (obj.data.summary) {
 			 					obj.value = '<b>' + obj.value + '</b>';
 			 				} else {
-			 					obj.value = '<a href="javascript:void();" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
 			 				}
 			 			},		    			
 		    			allowHTML: true
@@ -164,7 +164,30 @@
 		return dataArray;	
 	}
 	
-	function showDetails(key) {
-		
+	function showDetails(bucketName) {
+		Liferay.Service(
+			'/fingence-portlet.myresult/get-bonds-by-maturity',
+			{
+				bucketName: bucketName,
+				portfolioIds : '<%= portfolioIds %>'
+			},
+			function(data) {
+
+				var ajaxURL = Liferay.PortletURL.createResourceURL();
+				ajaxURL.setPortletId('report_WAR_fingenceportlet');
+				ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_NET_WORTH %>');
+				ajaxURL.setWindowState('exclusive');
+				ajaxURL.setParameter('portfolioIds', '<%= portfolioIds %>');
+				
+				AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+					sync: true,
+					on: {
+						success: function() {
+							displayItemsGrid(data, '#portfolioDetails', this.get('responseData'));
+						}
+					}
+				});
+			}
+		);
 	}
 </aui:script>

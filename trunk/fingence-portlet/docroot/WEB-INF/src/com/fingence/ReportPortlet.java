@@ -15,6 +15,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.service.MyResultServiceUtil;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.fingence.slayer.service.RatingServiceUtil;
@@ -117,6 +118,9 @@ public class ReportPortlet extends MVCPortlet {
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_GET_RATING_DETAILS)) {
 			String description = ParamUtil.getString(resourceRequest, "description");
 			writer.println(RatingServiceUtil.getRatings(description));
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_GET_NET_WORTH)) {
+			String portfolioIds = ParamUtil.getString(resourceRequest, "portfolioIds");
+			writer.println(MyResultServiceUtil.getTotalMarketValue(portfolioIds));
 		}
 		
 		writer.close();
