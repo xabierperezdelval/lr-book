@@ -58,3 +58,15 @@
 .aui .menu-portlet a:focus {
   	outline: none;
 }
+
+.dropdown-menu.merge {
+    left: auto;
+    max-height: 200px;
+    min-height: 50px;
+    overflow-y: auto;
+    top: 5%;
+}
+
+.dropdown-menu.merge li {
+    padding-left: 4%;
+}
