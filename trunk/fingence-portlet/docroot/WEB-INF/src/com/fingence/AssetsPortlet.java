@@ -24,6 +24,8 @@ public class AssetsPortlet extends MVCPortlet {
 	public void uploadAssets(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
+		System.out.println("inside uploadAssets....");
+		
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 				.getUploadPortletRequest(actionRequest);
 		
