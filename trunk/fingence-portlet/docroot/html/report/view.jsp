@@ -28,9 +28,10 @@
 			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE),
 			IConstants.BREAKUP_BY_RISK_COUNTRY);
 	
-	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT);
-	boolean performanceReport = layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE);
-	boolean fixedIncomeReport = layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME);
+	boolean reportsPage = !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER);
+	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT) && reportsPage;
+	boolean performanceReport = layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE) && reportsPage;
+	boolean fixedIncomeReport = layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME) && reportsPage;
 	
 	int assetsToShow = 0;
 	if (performanceReport) {
@@ -38,7 +39,7 @@
 	}
 %>
 
-<c:if test="<%= !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER)%>">
+<c:if test="<%= reportsPage %>">
 	<aui:row>
 		<aui:column columnWidth="30">
 			<h4>Base Currency: <%= PortfolioServiceUtil.getBaseCurrency(portfolioId) %></h4>
@@ -56,18 +57,20 @@
 		
 		<c:if test="<%= portfolioCount > 1 %>">
 			<aui:column>
-				Add More Portfolio...
-				<%
-					List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-					for (Portfolio _portfolio: _portfolios) {
-						if (portfolioId != _portfolio.getPortfolioId()) {
-							long otherPortfolioId = _portfolio.getPortfolioId();
-							String checkboxName = "addToReport_" + otherPortfolioId;
-							boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
-							%><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:appendPortfolio(this);"/><%
-						}	
-					}
-				%>
+				<a id="mergeLink" href="javascript:void();">Merge Portfolio &raquo;</a>
+				<ul class="dropdown-menu merge" id="version-dropdown">
+					<%
+						List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+						for (Portfolio _portfolio: _portfolios) {
+							if (portfolioId != _portfolio.getPortfolioId()) {
+								long otherPortfolioId = _portfolio.getPortfolioId();
+								String checkboxName = "addToReport_" + otherPortfolioId;
+								boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
+								%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:appendPortfolio(this);"/><%
+							}	
+						}
+					%>
+				</ul>
 			</aui:column>
 		</c:if>
 				
@@ -177,7 +180,7 @@
 		return _value;
 	}	
 	
-	<c:if test="<%= (portfolioCount > 1) %>">
+	<c:if test="<%= (portfolioCount > 1) && reportsPage %>">
 		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
@@ -230,6 +233,13 @@
 		  			}
 				);
 			}
+			
+			var mergeLink = A.one('#mergeLink');
+			var portfolios = A.one('#version-dropdown');
+			mergeLink.on('click', function(e) {
+				portfolios.toggleClass('show');
+				e.preventDefault();
+			});			
 		});
 	</c:if>
 	
