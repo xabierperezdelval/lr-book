@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -114,7 +115,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			if (row.getRowNum() == 0) {
 				for (int i=0; i < columnCount; i++){
-					columnNames.put(CellUtil.getStringCaps(row.getCell(i)), i);
+					Cell cell = row.getCell(i);
+					if (Validator.isNull(cell)) continue;
+					columnNames.put(CellUtil.getStringCaps(cell), i);
 				}
 				continue;
 			}
@@ -219,10 +222,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			if (securityClass.equalsIgnoreCase("Fixed Income")) {
 				Bond bond = getBond(assetId);
-             	bond.setIssuer_bulk(CellUtil.getString(row.getCell(columnNames.get("ISSUER_BULK"))));
+             	//bond.setIssuer_bulk(CellUtil.getString(row.getCell(columnNames.get("ISSUER_BULK"))));
              	bond.setCpn(CellUtil.getDouble(row.getCell(columnNames.get("CPN"))));
-             	//bond.setCpn_typ(CellUtil.getString(row.getCell(columnNames.get("CPN_TYP"))));
-             	//bond.setMty_typ(CellUtil.getString(row.getCell(columnNames.get("MTY_TYP"))));
              	bond.setMty_years_tdy(CellUtil.getDouble(row.getCell(columnNames.get("MTY_YEARS_TDY"))));
              	bond.setYld_ytm_ask(CellUtil.getDouble(row.getCell(columnNames.get("YLD_YTM_ASK"))));
              	bond.setYld_ytm_bid(CellUtil.getDouble(row.getCell(columnNames.get("YLD_YTM_BID"))));
