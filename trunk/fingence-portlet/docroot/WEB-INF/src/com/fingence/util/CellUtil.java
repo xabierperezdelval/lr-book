@@ -3,13 +3,9 @@ package com.fingence.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-import com.fingence.slayer.model.Portfolio;
-import com.fingence.slayer.service.PortfolioLocalServiceUtil;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
@@ -19,6 +15,8 @@ public class CellUtil {
 	public static long getLong(Cell cell) {
 		
 		long value = 0l;
+		
+		if (Validator.isNull(cell)) return value; 
 		
 		String cellValue = cell.toString();
 		
@@ -60,6 +58,8 @@ public class CellUtil {
 		
 		String value = StringPool.BLANK;
 		
+		if (Validator.isNull(cell)) return value;
+		
 		String cellValue = cell.toString();
 		
 		if (Validator.isNotNull(cellValue) && !cellValue.trim().equalsIgnoreCase(StringPool.DASH)) {
@@ -78,13 +78,20 @@ public class CellUtil {
 	public static Date getDate(Cell cell) {
 		Date value = null;
 		
+		if (Validator.isNull(cell)) return value;
+		
 		String cellValue = cell.toString();
 				
 		if (Validator.isNotNull(cellValue)) {
 			try {
 				value = (new SimpleDateFormat("dd/MM/yyyy")).parse(cellValue);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				// try with a different format
+				try {
+					value = (new SimpleDateFormat("dd-MMM-yy")).parse(cellValue);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}		
 		
@@ -94,6 +101,8 @@ public class CellUtil {
 	public static int getInteger(Cell cell) {
 
 		int value = 0;
+		
+		if (Validator.isNull(cell)) return value;
 
 		String cellValue = cell.toString();
 
@@ -106,25 +115,5 @@ public class CellUtil {
 		}
 
 		return value;
-	}
-	
-	public static boolean disablePrimaryPortfolio(List<Portfolio> portfolios){
-		Boolean disabledPrimary = false;
-		
-		for(Portfolio portfolio: portfolios){
-			if(portfolio.isPrimary()){
-				portfolio.setPrimary(false);
-				try {
-					PortfolioLocalServiceUtil.updatePortfolio(portfolio);
-					disabledPrimary = true;
-				} catch (SystemException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			}
-		}
-		return disabledPrimary;
-		
 	}
 }
