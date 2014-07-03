@@ -107,6 +107,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		long bbSecurityVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Security", serviceContext);
 		long bbIndustryVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Industry", serviceContext);
 		long bondCPNVocabularyId = AssetHelper.getVocabularyId(userId, "CPN_Type", serviceContext);
+		
+		System.out.println("going to process the excel sheet....");
 
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
