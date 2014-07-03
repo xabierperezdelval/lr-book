@@ -165,14 +165,18 @@
 	}
 	
 	function showDetails(bucketName) {
+	
+		var serviceName = eval('<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>')?
+			'/fingence-portlet.myresult/get-bonds-by-quality':
+			'/fingence-portlet.myresult/get-bonds-by-maturity';
+					
 		Liferay.Service(
-			'/fingence-portlet.myresult/get-bonds-by-maturity',
+			serviceName,
 			{
 				bucketName: bucketName,
 				portfolioIds : '<%= portfolioIds %>'
 			},
 			function(data) {
-
 				var ajaxURL = Liferay.PortletURL.createResourceURL();
 				ajaxURL.setPortletId('report_WAR_fingenceportlet');
 				ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_NET_WORTH %>');

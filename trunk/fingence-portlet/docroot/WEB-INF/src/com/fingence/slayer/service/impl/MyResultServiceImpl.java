@@ -18,10 +18,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
+import com.fingence.slayer.model.Bond;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.model.Rating;
 import com.fingence.slayer.service.CurrencyServiceUtil;
@@ -206,6 +208,41 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
 		
 		return myResults;
+	}
+	
+	public List<MyResult> getBondsByQuality(String bucketName, String portfolioIds) {
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
+		
+		List<MyResult> results = new ArrayList<MyResult>();
+		
+		for (MyResult myresult: myResults) {
+			// get the bond
+			Bond bond = null;
+			try {
+				bond = bondPersistence.fetchByPrimaryKey(myresult.getAssetId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(bond)) continue;
+			
+			// get the rating
+			Rating rating = null;
+			try {
+				rating = ratingPersistence.fetchBySP_Moody(bond.getRtg_sp(), bond.getRtg_moody());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNull(rating)) continue;
+			
+			if (rating.getDescription().equalsIgnoreCase(bucketName)) {
+				results.add(myresult);
+			}
+		}
+		
+		return results;
 	}
 	
 	public JSONArray getBondsMaturing(String portfolioIds) {
