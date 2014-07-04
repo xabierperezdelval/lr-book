@@ -38,6 +38,8 @@ public class AssetsPortlet extends MVCPortlet {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);
+		
+		AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext);
+		//AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);
 	}
 }

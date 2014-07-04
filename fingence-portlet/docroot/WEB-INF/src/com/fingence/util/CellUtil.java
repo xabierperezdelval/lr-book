@@ -90,7 +90,12 @@ public class CellUtil {
 				try {
 					value = (new SimpleDateFormat("dd-MMM-yy")).parse(cellValue);
 				} catch (ParseException e1) {
-					e1.printStackTrace();
+					// try with a different format
+					try {
+						value = (new SimpleDateFormat("dd/MM/yy")).parse(cellValue);
+					} catch (ParseException e2) {
+						//e2.printStackTrace();
+					}
 				}
 			}
 		}		
