@@ -39,9 +39,53 @@
 			    	y: 100
   				};
   				
-  				renderChart(data, 'Bonds Maturity Breakup', legend, 'pie');				
+  				renderPieChart(data, 'Bonds Maturity Breakup', legend);				
 				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
+	
+	function renderPieChart(data, title, legend){
+	
+		var dataArray = getModifiedArray(data);
+						
+		$('#chartContainer').highcharts({
+		
+			legend: legend,
+	    		
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	        },
+	        title: {
+	            text: title
+	        },
+	        tooltip: {
+	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	            	size: "50%",
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                showInLegend: true
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            data: dataArray
+	        }]
+	    });
+	}
+	
+	function getModifiedArray(data) {
+		var dataArray = new Array();
+		_.each(data, function(item){
+			dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
+		});
+		return dataArray;	
+	}	
 </aui:script>

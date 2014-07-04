@@ -42,9 +42,68 @@
 		        	layout:'vertical'
         		};
         		
-  				renderChart(data, 'Bonds Quality Breakup', legend, 'pie');
+  				renderBarChart(data, 'Bonds Quality Breakup');
 				divForMasking.loadingmask.toggle();
   			}
 		);
 	});
+	
+	function renderBarChart(data, title){
+			
+		var dataArray = getModifiedArray(data);
+	
+    	$('#chartContainer').highcharts({
+        	chart: {
+            	type: 'column'
+           	},
+           	title: {
+               	text: title
+           	},
+           	xAxis: {                  
+               	categories: [
+                	'Grades'                  
+               	]
+           	},
+			yAxis: { 
+           		min: 15,
+             	labels: {
+                   format: '{value} %'
+               },
+        	},
+           	plotOptions: {
+               	column: {
+                   	pointPadding: 0.3,
+                   	borderWidth: 0.5                
+               	}
+          	},
+	        series: dataArray
+       	});
+	}	
+	
+	function getModifiedArray(data) {
+		
+		var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_RATING_DETAILS %>');
+		ajaxURL.setWindowState('exclusive');
+		
+		var dataArray = new Array();
+		_.each(data, function(item){
+			_.each(item.children, function(item){
+				ajaxURL.setParameter('description', item.bucket);
+				AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+					sync: true,
+					on: {
+						success: function() {
+							var jsonObj = {};
+							jsonObj.name = item.bucket + ' (' + this.get('responseData') + ') ' + formatCustom(item.bond_holdings_percent, 'percent');
+							jsonObj.data = [item.bond_holdings_percent];
+							dataArray.push(jsonObj);
+						}
+					}
+				});
+			});
+		});
+		return dataArray;	
+	}		
 </aui:script>
