@@ -169,6 +169,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 							
 							try {
 								history = historyLocalService.addHistory(history);
+								
+								System.out.println("history inserted..." + history);
 							} catch (SystemException e) {
 								e.printStackTrace();
 							}
