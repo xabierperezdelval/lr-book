@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,6 +37,7 @@ import com.fingence.slayer.NoSuchMutualFundException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Bond;
 import com.fingence.slayer.model.Equity;
+import com.fingence.slayer.model.History;
 import com.fingence.slayer.model.MutualFund;
 import com.fingence.slayer.service.base.AssetLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
@@ -73,6 +75,110 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 	 * local service.
 	 */
 
+	public void loadPricingData(long userId, File excelFile, ServiceContext serviceContext) {
+		if (Validator.isNull(excelFile)) return;
+		
+		InputStream is = null;
+		try {
+			is = new FileInputStream(excelFile);
+		} catch (FileNotFoundException e) {
+			//e.printStackTrace();
+		}
+				
+		if (Validator.isNull(is)) return;
+		
+		// Create Workbook instance holding reference to .xlsx file
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (Validator.isNull(workbook)) return;
+
+		// Get first/desired sheet from the workbook
+		XSSFSheet sheet = workbook.getSheetAt(1);
+		
+		Iterator<Row> rowIterator = sheet.iterator();
+		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
+		int columnCount = 0;
+		
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			
+			columnCount = row.getPhysicalNumberOfCells();
+			
+			if (row.getRowNum() == 0) continue;
+			
+			if (row.getRowNum() == 1) {
+				for (int i=0; i < columnCount; i++){
+					Cell cell = row.getCell(i);
+					if (Validator.isNull(cell)) continue;
+					
+					String id_isin = CellUtil.getString(cell);
+										
+					Asset asset = null;
+					try {
+						asset = assetPersistence.fetchByIdISIN(id_isin);
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
+					
+					if (Validator.isNull(asset)) continue;
+					
+					columnNames.put(i, asset.getAssetId());
+				}
+				continue;
+			}
+			
+			for (int i=0; i < columnCount; i++){
+				Date date = CellUtil.getDate(row.getCell(i));
+				
+				if (Validator.isNotNull(date)) {
+					
+					long assetId = 0l;
+					try {
+						assetId = columnNames.get(i);
+					} catch (Exception e) {
+						System.out.println(e.getMessage() + ": There is an exception...");
+					}
+					
+					if (assetId > 0l) {
+						double value = CellUtil.getDouble(row.getCell(++i));
+						
+						History history = null;
+						try {
+							history = historyPersistence.fetchByAssetId_Date_Type(assetId, date, IConstants.HISTORY_TYPE_PRICE);
+						} catch (SystemException e) {
+							e.printStackTrace();
+						}
+						
+						if (Validator.isNull(history)) {
+							long recId = 0l;
+							try {
+								recId = counterLocalService.increment(History.class.getName());
+							} catch (SystemException e) {
+								e.printStackTrace();
+							}
+							history = historyLocalService.createHistory(recId);
+							history.setAssetId(assetId);
+							history.setDate(date);
+							history.setType(IConstants.HISTORY_TYPE_PRICE);
+							history.setValue(value);
+							
+							try {
+								history = historyLocalService.addHistory(history);
+							} catch (SystemException e) {
+								e.printStackTrace();
+							}
+						}							
+					}				
+				}
+			}
+		}
+	}
+	
 	public void importFromExcel(long userId, File excelFile, ServiceContext serviceContext) {
 
 		if (Validator.isNull(excelFile)) return;
