@@ -48,9 +48,7 @@
   			},
   			function(data) {
   			
-  				_data = data;
-  			
-  				var netWorth = getTotalNetWorth(data);
+  				_data = data;  			
   				_netWorth = getTotalNetWorth(data);
   			
   				// 1. networth

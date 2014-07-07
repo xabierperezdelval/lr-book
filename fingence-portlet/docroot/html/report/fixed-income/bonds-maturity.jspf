@@ -26,7 +26,6 @@
     			portfolioIds: '<%= portfolioIds %>'
   			},
   			function(data) {
-  				console.log(JSON.stringify(data));
   				showDataTable(data, '#gridContainer', 'Bond Maturity<br/>Schedule');
   				
   				var legend = {
