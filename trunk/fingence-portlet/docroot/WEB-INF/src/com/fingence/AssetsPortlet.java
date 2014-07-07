@@ -11,6 +11,7 @@ import com.fingence.slayer.service.AssetLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
@@ -39,7 +40,12 @@ public class AssetsPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		
-		AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);
-		AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext);
+		if (ParamUtil.getBoolean(uploadPortletRequest, "loadAssetData", false)) {
+			AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);
+		}
+		
+		if (ParamUtil.getBoolean(uploadPortletRequest, "loadEquityPrice", false)) {
+			AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext);
+		}
 	}
 }

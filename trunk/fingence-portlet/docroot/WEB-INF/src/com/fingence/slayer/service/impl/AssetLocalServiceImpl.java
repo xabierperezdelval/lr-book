@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,6 +77,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 	 */
 
 	public void loadPricingData(long userId, File excelFile, ServiceContext serviceContext) {
+		
+		System.out.println("inside Load Pricing Data....");
 		if (Validator.isNull(excelFile)) return;
 		
 		InputStream is = null;
@@ -104,10 +107,14 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
 		int columnCount = 0;
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyD");
+		
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			
 			columnCount = row.getPhysicalNumberOfCells();
+			
+			System.out.println("processing row ==> " + row.getRowNum());
 			
 			if (row.getRowNum() == 0) continue;
 			
@@ -135,47 +142,45 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			for (int i=0; i < columnCount; i++){
 				Date date = CellUtil.getDate(row.getCell(i));
 				
-				if (Validator.isNotNull(date)) {
+				if (Validator.isNull(date)) continue;
 					
-					long assetId = 0l;
+				long assetId = 0l;
+				try {
+					assetId = columnNames.get(i);
+				} catch (Exception e) {
+					System.out.println(e.getMessage() + ": There is an exception...");
+					continue;
+				}
+				
+				double value = CellUtil.getDouble(row.getCell(++i));
+				int dateAsNumber = Integer.valueOf(sdf.format(date));
+				
+				History history = null;
+				try {
+					history = historyPersistence.fetchByAssetId_Date_Type(assetId, dateAsNumber, IConstants.HISTORY_TYPE_PRICE);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				if (Validator.isNull(history)) {
+					long recId = 0l;
 					try {
-						assetId = columnNames.get(i);
-					} catch (Exception e) {
-						System.out.println(e.getMessage() + ": There is an exception...");
+						recId = counterLocalService.increment(History.class.getName());
+					} catch (SystemException e) {
+						e.printStackTrace();
 					}
 					
-					if (assetId > 0l) {
-						double value = CellUtil.getDouble(row.getCell(++i));
-						
-						History history = null;
-						try {
-							history = historyPersistence.fetchByAssetId_Date_Type(assetId, date, IConstants.HISTORY_TYPE_PRICE);
-						} catch (SystemException e) {
-							e.printStackTrace();
-						}
-						
-						if (Validator.isNull(history)) {
-							long recId = 0l;
-							try {
-								recId = counterLocalService.increment(History.class.getName());
-							} catch (SystemException e) {
-								e.printStackTrace();
-							}
-							history = historyLocalService.createHistory(recId);
-							history.setAssetId(assetId);
-							history.setDate(date);
-							history.setType(IConstants.HISTORY_TYPE_PRICE);
-							history.setValue(value);
-							
-							try {
-								history = historyLocalService.addHistory(history);
-								
-								System.out.println("history inserted..." + history);
-							} catch (SystemException e) {
-								e.printStackTrace();
-							}
-						}							
-					}				
+					history = historyLocalService.createHistory(recId);
+					history.setAssetId(assetId);
+					history.setType(IConstants.HISTORY_TYPE_PRICE);
+					history.setValue(value);
+					history.setDateAsNumber(dateAsNumber);
+					
+					try {
+						history = historyLocalService.addHistory(history);						
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -218,14 +223,15 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
-			
+						
 			columnCount = row.getPhysicalNumberOfCells();
 			
 			if (row.getRowNum() == 0) {
 				for (int i=0; i < columnCount; i++){
 					Cell cell = row.getCell(i);
-					if (Validator.isNull(cell)) continue;
-					columnNames.put(CellUtil.getStringCaps(cell), i);
+					if (Validator.isNotNull(cell)) {
+						columnNames.put(CellUtil.getStringCaps(cell), i);
+					}
 				}
 				continue;
 			}
