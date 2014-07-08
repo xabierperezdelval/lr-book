@@ -59,6 +59,9 @@
 		<column name="yld_ytm_bid" type="double"/>
 		<column name="yld_cur_mid" type="double"/>
 		<column name="maturity_dt" type="Date"/>
+		<column name="calc_typ" type="double"/>
+		<column name="is_bond_no_calctyp" type="boolean"/>
+		<column name="collat_typ" type="String"/>
 		<column name="bb_composite" type="String"/>
 		<column name="rtg_sp" type="String"/>
 		<column name="rtg_moody" type="String"/>
