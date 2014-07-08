@@ -242,7 +242,6 @@
 	<entity name="History" remote-service="true" local-service="true">
 		<column name="recId" type="long" primary="true"/>
 		<column name="assetId" type="long"/>
-		<column name="date" type="Date"/>
 		<column name="dateAsNumber" type="int"/>
 		<column name="value" type="double"/>
 		<column name="type" type="int"/>
