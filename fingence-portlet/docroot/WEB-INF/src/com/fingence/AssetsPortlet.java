@@ -7,9 +7,10 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
-import com.fingence.slayer.service.AssetLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -40,12 +41,19 @@ public class AssetsPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		
+		Message message = new Message();
+        message.put("EXCEL_FILE", excelFile);
+        message.put("SERVICE_CONTEXT", serviceContext);
+        message.put("USER_ID", userId);
+		
 		if (ParamUtil.getBoolean(uploadPortletRequest, "loadAssetData", false)) {
-			AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);
+			message.put("MESSAGE_NAME", "loadAssetData");	
+            MessageBusUtil.sendMessage("fingence/destination", message);
 		}
 		
 		if (ParamUtil.getBoolean(uploadPortletRequest, "loadEquityPrice", false)) {
-			AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext);
+			message.put("MESSAGE_NAME", "loadEquityPrice");	
+            MessageBusUtil.sendMessage("fingence/destination", message);			
 		}
 	}
 }
