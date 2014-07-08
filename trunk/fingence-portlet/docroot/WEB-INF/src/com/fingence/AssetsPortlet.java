@@ -58,6 +58,11 @@ public class AssetsPortlet extends MVCPortlet {
             MessageBusUtil.sendMessage("fingence/destination", message);			
 		}
 		
+		if (ParamUtil.getBoolean(uploadPortletRequest, "loadBondPrice", false)) {
+			message.put("MESSAGE_NAME", "loadBondPrice");	
+            MessageBusUtil.sendMessage("fingence/destination", message);			
+		}		
+		
 		System.out.println("Exiting portlet class after delegating to MessageBus...");
 	}
 }
