@@ -36,7 +36,9 @@ public class FingenceListener extends BaseMessageListener{
 		} else if (messageName.equalsIgnoreCase("loadAssetData")) {
 			AssetLocalServiceUtil.importFromExcel(userId, excelFile, serviceContext);
 		} else if (messageName.equalsIgnoreCase("loadEquityPrice")) {
-			AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext);
+			AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext, IConstants.HISTORY_TYPE_EQUITY);
+		} else if (messageName.equalsIgnoreCase("loadBondPrice")) {
+			AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext, IConstants.HISTORY_TYPE_BOND);
 		}
 		
 		System.out.println("going to send email...");
