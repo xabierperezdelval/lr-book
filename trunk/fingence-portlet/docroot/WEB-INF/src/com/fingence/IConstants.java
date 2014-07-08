@@ -72,6 +72,6 @@ public interface IConstants {
 	int FIXED_INCOME_TYPE_BONDS_QUALITY = 2;
 	int FIXED_INCOME_TYPE_CASH_FLOW = 3;	
 	
-	int HISTORY_TYPE_PRICE = 1;
-	int HISTORY_TYPE_COUPON = 2;
+	int HISTORY_TYPE_EQUITY = 1;
+	int HISTORY_TYPE_BOND = 2;
 }

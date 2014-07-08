@@ -41,6 +41,8 @@ public class AssetsPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		
+		System.out.println("going to push to MessageBus...");
+		
 		Message message = new Message();
         message.put("EXCEL_FILE", excelFile);
         message.put("SERVICE_CONTEXT", serviceContext);
@@ -55,5 +57,7 @@ public class AssetsPortlet extends MVCPortlet {
 			message.put("MESSAGE_NAME", "loadEquityPrice");	
             MessageBusUtil.sendMessage("fingence/destination", message);			
 		}
+		
+		System.out.println("Exiting portlet class after delegating to MessageBus...");
 	}
 }

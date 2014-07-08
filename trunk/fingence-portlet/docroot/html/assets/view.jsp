@@ -11,5 +11,7 @@
 	
 	<aui:input name="loadEquityPrice" type="checkbox" label="load-equity-price"/>
 	
+	<aui:input name="loadBondPrice" type="checkbox" label="load-bond-price"/>
+	
 	<aui:button type="submit" value="upload" />
 </aui:form>

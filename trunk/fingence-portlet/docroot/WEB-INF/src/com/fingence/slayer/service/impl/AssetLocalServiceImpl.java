@@ -78,7 +78,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 	 * local service.
 	 */
 
-	public void loadPricingData(long userId, File excelFile, ServiceContext serviceContext) {
+	public void loadPricingData(long userId, File excelFile, ServiceContext serviceContext, int type) {
 		
 		System.out.println("inside Load Pricing Data....");
 		if (Validator.isNull(excelFile)) return;
@@ -103,7 +103,17 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		if (Validator.isNull(workbook)) return;
 
 		// Get first/desired sheet from the workbook
-		XSSFSheet sheet = workbook.getSheetAt(1);
+		
+		int sheetIndex = 0;
+		switch (type) {
+		case IConstants.HISTORY_TYPE_EQUITY:
+			sheetIndex = 1;
+			break;
+		case IConstants.HISTORY_TYPE_BOND:
+			sheetIndex = 6;
+			break;
+		}
+		XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
 		
 		Iterator<Row> rowIterator = sheet.iterator();
 		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
@@ -159,7 +169,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				
 				History history = null;
 				try {
-					history = historyPersistence.fetchByAssetId_Date_Type(assetId, dateAsNumber, IConstants.HISTORY_TYPE_PRICE);
+					history = historyPersistence.fetchByAssetId_Date_Type(assetId, dateAsNumber, type);
 					_log.debug("history record already present...");
 				} catch (SystemException e) {
 					e.printStackTrace();
@@ -175,13 +185,14 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					
 					history = historyLocalService.createHistory(recId);
 					history.setAssetId(assetId);
-					history.setType(IConstants.HISTORY_TYPE_PRICE);
+					history.setType(type);
 					history.setValue(value);
 					history.setDateAsNumber(dateAsNumber);
 					
 					try {
 						history = historyLocalService.addHistory(history);
 						_log.debug("inserted new history records..." + history);
+						System.out.println("inserted new history records..." + history);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
