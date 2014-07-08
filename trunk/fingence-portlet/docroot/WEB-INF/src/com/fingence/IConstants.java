@@ -74,4 +74,5 @@ public interface IConstants {
 	
 	int HISTORY_TYPE_EQUITY = 1;
 	int HISTORY_TYPE_BOND = 2;
+	int HISTORY_TYPE_BOND_CASHFLOW = 3;
 }

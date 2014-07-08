@@ -245,6 +245,7 @@
 		<column name="dateAsNumber" type="int"/>
 		<column name="value" type="double"/>
 		<column name="type" type="int"/>
+		<column name="principal" type="double"/>
 		
 		<finder return-type="Histor" name="AssetId_Date_Type">
 			<finder-column name="assetId"/>

@@ -112,6 +112,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		case IConstants.HISTORY_TYPE_BOND:
 			sheetIndex = 6;
 			break;
+		case IConstants.HISTORY_TYPE_BOND_CASHFLOW:
+			sheetIndex = 7;
+			break;	
 		}
 		XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
 		
@@ -127,6 +130,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			columnCount = row.getPhysicalNumberOfCells();
 			
 			_log.debug("processing row ==> " + row.getRowNum());
+			System.out.println("processing row ==> " + row.getRowNum());
 			
 			if (row.getRowNum() == 0) continue;
 			
@@ -188,6 +192,11 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					history.setType(type);
 					history.setValue(value);
 					history.setDateAsNumber(dateAsNumber);
+					
+					if (type == IConstants.HISTORY_TYPE_BOND_CASHFLOW) {
+						double principal = CellUtil.getDouble(row.getCell(++i));
+						history.setPrincipal(principal);
+					}
 					
 					try {
 						history = historyLocalService.addHistory(history);
