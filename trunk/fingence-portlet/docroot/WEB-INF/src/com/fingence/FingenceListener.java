@@ -29,6 +29,8 @@ public class FingenceListener extends BaseMessageListener{
 		long userId = message.getLong("USER_ID");
 		File excelFile = (File)message.get("EXCEL_FILE");
 		
+		System.out.println("inside message bus....");
+		
 		if (messageName.equalsIgnoreCase("setConvertionRate")) {
 			PortfolioLocalServiceUtil.applyConversion(message.getLong("portfolioId"));
 		} else if (messageName.equalsIgnoreCase("loadAssetData")) {
@@ -37,7 +39,7 @@ public class FingenceListener extends BaseMessageListener{
 			AssetLocalServiceUtil.loadPricingData(userId, excelFile, serviceContext);
 		}
 		
-		
+		System.out.println("going to send email...");
 		MailMessage mailMessage = new MailMessage();
 		
 		InternetAddress from = getFromAddress(CompanyThreadLocal.getCompanyId());
