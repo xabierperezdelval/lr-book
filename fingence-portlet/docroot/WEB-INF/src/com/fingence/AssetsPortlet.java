@@ -50,7 +50,7 @@ public class AssetsPortlet extends MVCPortlet {
 		
 		if (ParamUtil.getBoolean(uploadPortletRequest, "loadAssetData", false)) {
 			message.put("MESSAGE_NAME", "loadAssetData");	
-            MessageBusUtil.sendMessage("fingence/destination", message);
+			MessageBusUtil.sendMessage("fingence/destination", message);
 		}
 		
 		if (ParamUtil.getBoolean(uploadPortletRequest, "loadEquityPrice", false)) {
@@ -61,7 +61,12 @@ public class AssetsPortlet extends MVCPortlet {
 		if (ParamUtil.getBoolean(uploadPortletRequest, "loadBondPrice", false)) {
 			message.put("MESSAGE_NAME", "loadBondPrice");	
             MessageBusUtil.sendMessage("fingence/destination", message);			
-		}		
+		}	
+		
+		if (ParamUtil.getBoolean(uploadPortletRequest, "loadBondCashflow", false)) {
+			message.put("MESSAGE_NAME", "loadBondCashflow");	
+            MessageBusUtil.sendMessage("fingence/destination", message);			
+		}			
 		
 		System.out.println("Exiting portlet class after delegating to MessageBus...");
 	}
