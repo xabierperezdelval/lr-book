@@ -43,6 +43,8 @@ import com.fingence.slayer.model.MutualFund;
 import com.fingence.slayer.service.base.AssetLocalServiceBaseImpl;
 import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
@@ -114,7 +116,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			columnCount = row.getPhysicalNumberOfCells();
 			
-			System.out.println("processing row ==> " + row.getRowNum());
+			_log.debug("processing row ==> " + row.getRowNum());
 			
 			if (row.getRowNum() == 0) continue;
 			
@@ -138,7 +140,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}
 				continue;
 			}
-			
+						
 			for (int i=0; i < columnCount; i++){
 				Date date = CellUtil.getDate(row.getCell(i));
 				
@@ -148,7 +150,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				try {
 					assetId = columnNames.get(i);
 				} catch (Exception e) {
-					System.out.println(e.getMessage() + ": There is an exception...");
+					_log.debug(e.getMessage() + ": There is an exception...");
 					continue;
 				}
 				
@@ -158,6 +160,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				History history = null;
 				try {
 					history = historyPersistence.fetchByAssetId_Date_Type(assetId, dateAsNumber, IConstants.HISTORY_TYPE_PRICE);
+					_log.debug("history record already present...");
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
@@ -177,7 +180,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					history.setDateAsNumber(dateAsNumber);
 					
 					try {
-						history = historyLocalService.addHistory(history);						
+						history = historyLocalService.addHistory(history);
+						_log.debug("inserted new history records..." + history);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
@@ -504,4 +508,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		
 		return assetId;
 	}
+	
+	private static final Log _log = LogFactoryUtil.getLog(AssetLocalServiceImpl.class);
 }
