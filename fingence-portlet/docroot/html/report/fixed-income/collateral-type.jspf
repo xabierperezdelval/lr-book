@@ -27,7 +27,7 @@
   			},
   			function(data) {
   			
-  				showDataTable(data, '#gridContainer', 'Bond Maturity<br/>Schedule');
+  				showDataTable(data, '#gridContainer', 'Bond Collateral<br/>Type');
   				
   				var legend = {
 			    	enabled: true,
