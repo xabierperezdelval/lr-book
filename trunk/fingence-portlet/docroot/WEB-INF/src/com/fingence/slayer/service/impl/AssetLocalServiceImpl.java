@@ -37,6 +37,7 @@ import com.fingence.slayer.NoSuchEquityException;
 import com.fingence.slayer.NoSuchMutualFundException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Bond;
+import com.fingence.slayer.model.Dividend;
 import com.fingence.slayer.model.Equity;
 import com.fingence.slayer.model.History;
 import com.fingence.slayer.model.MutualFund;
@@ -209,6 +210,130 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			}
 		}
 	}
+	
+	public void loadDividends(long userId, File excelFile, ServiceContext serviceContext) {
+		
+		System.out.println("inside Load Dividends Data....");
+		if (Validator.isNull(excelFile)) return;
+		
+		InputStream is = null;
+		try {
+			is = new FileInputStream(excelFile);
+		} catch (FileNotFoundException e) {
+			//e.printStackTrace();
+		}
+				
+		if (Validator.isNull(is)) return;
+		
+		// Create Workbook instance holding reference to .xlsx file
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (Validator.isNull(workbook)) return;
+
+		// Get first/desired sheet from the workbook
+		XSSFSheet sheet = workbook.getSheetAt(2);
+		
+		Iterator<Row> rowIterator = sheet.iterator();
+		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
+		int columnCount = 0;
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyD");
+		
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			
+			columnCount = row.getPhysicalNumberOfCells();
+			
+			_log.debug("processing row ==> " + row.getRowNum());
+			System.out.println("processing row ==> " + row.getRowNum());
+			
+			if (row.getRowNum() == 0) continue;
+			
+			if (row.getRowNum() == 1) {
+				for (int i=0; i < columnCount; i++){
+					Cell cell = row.getCell(i);
+					if (Validator.isNull(cell)) continue;
+					
+					String id_isin = CellUtil.getString(cell);
+										
+					Asset asset = null;
+					try {
+						asset = assetPersistence.fetchByIdISIN(id_isin);
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
+					
+					if (Validator.isNull(asset)) continue;
+					
+					columnNames.put(i, asset.getAssetId());
+				}
+				continue;
+			}
+						
+			for (int i=0; i < columnCount; i++){
+				Date declaredDate = CellUtil.getDate(row.getCell(i));
+				
+				if (Validator.isNull(declaredDate)) continue;
+					
+				long assetId = 0l;
+				try {
+					assetId = columnNames.get(i);
+				} catch (Exception e) {
+					_log.debug(e.getMessage() + ": There is an exception...");
+					continue;
+				}
+				
+				int _declaredDate = Integer.valueOf(sdf.format(declaredDate));
+				int _exDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				int _recordDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				int _payableDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				double amount = CellUtil.getDouble(row.getCell(++i));
+				String frequency = CellUtil.getString(row.getCell(++i));
+				String type = CellUtil.getString(row.getCell(++i));
+				
+				Dividend dividend = null;
+				try {
+					dividend = dividendPersistence.fetchByAssetId_DeclaredDate(assetId, _declaredDate);
+					_log.debug("dividend record already present...");
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				if (Validator.isNull(dividend)) {
+					
+					long recId = 0l;
+					try {
+						recId = counterLocalService.increment(Dividend.class.getName());
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
+					
+					dividend = dividendPersistence.create(recId);
+				}	
+				
+				// update the record
+				dividend.setDeclaredDate(_declaredDate);
+				dividend.setExDate(_exDate);
+				dividend.setRecordDate(_recordDate);
+				dividend.setPayableDate(_payableDate);
+				dividend.setAmount(amount);
+				dividend.setFrequency(frequency);
+				dividend.setType(type);
+				
+				try {
+					dividend = dividendLocalService.updateDividend(dividend);
+					System.out.println("dividend new history records..." + dividend);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}	
 	
 	public void importFromExcel(long userId, File excelFile, ServiceContext serviceContext) {
 

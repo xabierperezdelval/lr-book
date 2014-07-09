@@ -210,6 +210,20 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		return myResults;
 	}
 	
+	public List<MyResult> getBondsByCollateral(String bucketName, String portfolioIds) {
+		
+		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" and a.assetId = f.assetId");
+		sb.append(" and f.collat_typ = '").append(bucketName).append("'");
+		String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", sb.toString()};
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
+		
+		return myResults;
+	}	
+	
 	public List<MyResult> getBondsByQuality(String bucketName, String portfolioIds) {
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
@@ -243,6 +257,84 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		}
 		
 		return results;
+	}
+
+	public JSONArray getCollateralBreakdown(String portfolioIds) {
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		/*
+		// initialization of JSONArray with default values
+		for (int i=0; i<bucketNames.length; i++) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("bucket", bucketNames[i]);
+			jsonObject.put("market_value", 0.0);
+			jsonObject.put("bond_holdings_percent", 0.0);
+			jsonObject.put("total_holdings_percent", 0.0);
+			jsonArray.put(jsonObject);
+		}
+		*/
+		
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+			String[] replacements = {portfolioIds, ",f.*, DATEDIFF(f.maturity_dt,now()) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
+					
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			double totalMarketValue = getTotalMarketValue(portfolioIds);
+			double totalValueOfBonds = 0.0;
+						
+			while (rs.next()) {
+				//int maturingAfter = rs.getInt("maturing_after");
+				String collatTyp = rs.getString("collat_typ");
+				double currentMarketValue = rs.getDouble("currentMarketValue");
+				totalValueOfBonds += currentMarketValue;
+				
+				JSONObject jsonObj = null;
+				if (jsonArray.length() > 0) {
+					for (int i=0; i<jsonArray.length(); i++) {
+						JSONObject _jsonObj = jsonArray.getJSONObject(i);
+						if (_jsonObj.getString("bucket").equalsIgnoreCase(collatTyp)) {
+							jsonObj = _jsonObj;
+							break;
+						}
+					}									
+				} 
+				
+				if (Validator.isNull(jsonObj)) {
+					jsonObj = JSONFactoryUtil.createJSONObject();
+					jsonObj.put("bucket", collatTyp);
+					jsonObj.put("market_value", 0.0);
+					jsonObj.put("bond_holdings_percent", 0.0);
+					jsonObj.put("total_holdings_percent", 0.0);
+					jsonArray.put(jsonObj);	
+				}
+				
+				jsonObj.put("market_value", jsonObj.getDouble("market_value") + currentMarketValue);
+				jsonObj.put("total_holdings_percent", jsonObj.getDouble("total_holdings_percent") + currentMarketValue*100/totalMarketValue);
+			}
+			
+			rs.close();
+			stmt.close();
+			
+			for (int i=0; i<jsonArray.length(); i++) {
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				jsonObj.put("bond_holdings_percent", jsonObj.getDouble("market_value")*100/totalValueOfBonds);
+			}
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return jsonArray;		
 	}
 	
 	public JSONArray getBondsMaturing(String portfolioIds) {

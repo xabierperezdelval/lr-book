@@ -247,11 +247,36 @@
 		<column name="type" type="int"/>
 		<column name="principal" type="double"/>
 		
-		<finder return-type="Histor" name="AssetId_Date_Type">
+		<finder return-type="History" name="AssetId_Date_Type">
 			<finder-column name="assetId"/>
 			<finder-column name="dateAsNumber"/>
 			<finder-column name="type"/>
 		</finder>
+		
+		<finder return-type="Collection" name="AssetId">
+			<finder-column name="assetId"/>
+		</finder>
+	</entity>
+	
+	<entity name="Dividend" remote-service="true" local-service="true">
+		<column name="recId" type="long" primary="true"/>
+		<column name="assetId" type="long"/>
+		<column name="declaredDate" type="int"/>
+		<column name="exDate" type="int"/>
+		<column name="recordDate" type="int"/>
+		<column name="payableDate" type="int"/>
+		<column name="amount" type="double"/>
+		<column name="frequency" type="String"/>
+		<column name="type" type="String"/>
+		
+		<finder return-type="History" name="AssetId_DeclaredDate">
+			<finder-column name="assetId"/>
+			<finder-column name="declaredDate"/>
+		</finder>
+				
+		<finder return-type="Collection" name="AssetId">
+			<finder-column name="assetId"/>
+		</finder>		
 	</entity>
 	
 </service-builder>
