@@ -289,9 +289,28 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}
 				
 				int _declaredDate = Integer.valueOf(sdf.format(declaredDate));
-				int _exDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
-				int _recordDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
-				int _payableDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				
+				int _exDate = 0;
+				try {
+					_exDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				} catch (Exception e) {
+					// ignore
+				}	
+				
+				int _recordDate = 0;
+				try {
+					_recordDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				} catch (Exception e) {
+					// ignore
+				}	
+				
+				int _payableDate = 0;
+				try {
+					_payableDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
+				} catch (Exception e) {
+					// ignore
+				}					
+				
 				double amount = CellUtil.getDouble(row.getCell(++i));
 				String frequency = CellUtil.getString(row.getCell(++i));
 				String type = CellUtil.getString(row.getCell(++i));
@@ -319,6 +338,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				// update the record
 				dividend.setDeclaredDate(_declaredDate);
 				dividend.setExDate(_exDate);
+				dividend.setAssetId(assetId);
 				dividend.setRecordDate(_recordDate);
 				dividend.setPayableDate(_payableDate);
 				dividend.setAmount(amount);
