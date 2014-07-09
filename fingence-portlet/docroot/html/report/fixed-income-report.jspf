@@ -9,6 +9,9 @@
 	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_CASH_FLOW) %>">
 		<%@ include file="/html/report/fixed-income/cash-flow.jspf"%>
 	</c:when>
+	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_COLLATERAL) %>">
+		<%@ include file="/html/report/fixed-income/collateral-type.jspf"%>
+	</c:when>	
 	<c:otherwise>
 		<%@ include file="/html/report/fixed-income/bonds-maturity.jspf"%>
 	</c:otherwise>
@@ -101,10 +104,14 @@
 	}
 	
 	function showDetails(bucketName) {
-	
-		var serviceName = eval('<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>')?
-			'/fingence-portlet.myresult/get-bonds-by-quality':
-			'/fingence-portlet.myresult/get-bonds-by-maturity';
+			
+		var serviceName = '/fingence-portlet.myresult/get-bonds-by-maturity';
+		
+		if (eval('<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>')) {
+			serviceName = '/fingence-portlet.myresult/get-bonds-by-quality';
+		} else if (eval('<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_COLLATERAL) %>')) {
+			serviceName = '/fingence-portlet.myresult/get-bonds-by-collateral';
+		}	
 					
 		Liferay.Service(
 			serviceName,

@@ -15,5 +15,7 @@
 	
 	<aui:input name="loadBondCashflow" type="checkbox" label="load-bond-cashflow"/>
 	
+	<aui:input name="loadDividends" type="checkbox" label="load-dividends"/>
+	
 	<aui:button type="submit" value="upload" />
 </aui:form>

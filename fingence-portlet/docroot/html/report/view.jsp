@@ -114,6 +114,7 @@
 					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY %>" label="fixed-income-bonds-maturity" selected="<%= (IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY == fixedIncomeReportType) %>"/>
 					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY %>" label="fixed-income-bonds-quality" selected="<%= (IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY == fixedIncomeReportType) %>"/>
 					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_CASH_FLOW %>" label="fixed-income-cash-flow" selected="<%= (IConstants.FIXED_INCOME_TYPE_CASH_FLOW == fixedIncomeReportType) %>"/>
+					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_COLLATERAL %>" label="fixed-income-collateral" selected="<%= (IConstants.FIXED_INCOME_TYPE_COLLATERAL == fixedIncomeReportType) %>"/>
 				</aui:select>
 			</aui:column>
 		</c:if>		
