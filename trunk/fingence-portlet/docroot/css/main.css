@@ -60,13 +60,18 @@
 }
 
 .dropdown-menu.merge {
-    left: auto;
-    max-height: 200px;
-    min-height: 50px;
+    left: 30%;
+    max-height: 100px;
+    min-height: 55px;
     overflow-y: auto;
     top: 5%;
+    width: 225px;
 }
 
 .dropdown-menu.merge li {
-    padding-left: 4%;
+    padding-left: 5%;
+}
+
+.protfoliodropdown {
+   	margin-top: 5px;
 }
