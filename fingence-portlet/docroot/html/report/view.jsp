@@ -48,16 +48,32 @@
 			<c:choose>
 				<c:when test="<%= portfolioCount == 1 %>">
 					<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
-				</c:when>		
+				</c:when>
 				<c:otherwise>
-					<aui:select name="portfolioList" onChange="javascript:changePortfolio(this.value);" />
-				</c:otherwise>
+					<liferay-ui:message key="portfolio-list"/>&nbsp;|&nbsp;<a id="mergeLink" href="javascript:void();">Merge Portfolio&raquo;</a>  
+					<div class="protfoliodropdown">
+						<aui:select name="portfolioList" type="select" label=""  onChange="javascript:changePortfolio(this.value);" />
+					</div>
+					<ul class="dropdown-menu merge" id="version-dropdown">
+						<%
+							List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+							for (Portfolio _portfolio: _portfolios) {
+								if (portfolioId != _portfolio.getPortfolioId()) {
+									long otherPortfolioId = _portfolio.getPortfolioId();
+									String checkboxName = "addToReport_" + otherPortfolioId;
+									boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
+									%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:appendPortfolio(this);"/><%
+								}	
+							}
+						%>
+					</ul>					
+				</c:otherwise>				
 			</c:choose>
 		</aui:column>
 		
+		<%-- --%>
 		<c:if test="<%= portfolioCount > 1 %>">
 			<aui:column>
-				<a id="mergeLink" href="javascript:void();">Merge Portfolio &raquo;</a>
 				<ul class="dropdown-menu merge" id="version-dropdown">
 					<%
 						List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
@@ -73,6 +89,7 @@
 				</ul>
 			</aui:column>
 		</c:if>
+		--%>
 				
 		<c:if test="<%= showAllocationSwitch %>">
 			<aui:column>
