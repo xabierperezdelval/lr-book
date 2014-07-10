@@ -70,26 +70,6 @@
 				</c:otherwise>				
 			</c:choose>
 		</aui:column>
-		
-		<%-- --%>
-		<c:if test="<%= portfolioCount > 1 %>">
-			<aui:column>
-				<ul class="dropdown-menu merge" id="version-dropdown">
-					<%
-						List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-						for (Portfolio _portfolio: _portfolios) {
-							if (portfolioId != _portfolio.getPortfolioId()) {
-								long otherPortfolioId = _portfolio.getPortfolioId();
-								String checkboxName = "addToReport_" + otherPortfolioId;
-								boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
-								%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:appendPortfolio(this);"/><%
-							}	
-						}
-					%>
-				</ul>
-			</aui:column>
-		</c:if>
-		--%>
 				
 		<c:if test="<%= showAllocationSwitch %>">
 			<aui:column>
