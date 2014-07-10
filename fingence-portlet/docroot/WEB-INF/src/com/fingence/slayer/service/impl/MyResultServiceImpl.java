@@ -73,6 +73,10 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	static String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
 	
 	public List<MyResult> getMyResults(String portfolioIds) {
+		return getMyResults(portfolioIds, 0);
+	}
+	
+	public List<MyResult> getMyResults(String portfolioIds, int allocationBy) {
 				
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
 				
@@ -116,14 +120,16 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				myResult.setIndustry_sector(IConstants.UN_SPECIFIED);
 			}
 			
-			setCategoryFields(myResult);
+			if (allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS || allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR) {
+				setCategoryFields(myResult, allocationBy);
+			}
 		}
 				
 		return myResults;
 	}
 	
-	private void setCategoryFields(MyResult myResult) {
-		
+	private void setCategoryFields(MyResult myResult, int allocationBy) {
+				
 		long assetId = myResult.getAssetId();
 		
 		long entryId = 0l;
@@ -155,7 +161,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				e.printStackTrace();
 			}
 			
-			if (vocabularyName.equalsIgnoreCase("BB_Security")) {
+			if (vocabularyName.equalsIgnoreCase("BB_Security") && (allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS)) {
 				myResult.setSecurity_typ(assetCategory.getName());
 				
 				try {
@@ -164,7 +170,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
-			} else if (vocabularyName.equalsIgnoreCase("BB_Industry")) {
+			} else if (vocabularyName.equalsIgnoreCase("BB_Industry") && (allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR)) {
 				myResult.setIndustry_subgroup(assetCategory.getName());
 				
 				try {
@@ -262,18 +268,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	public JSONArray getCollateralBreakdown(String portfolioIds) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-		
-		/*
-		// initialization of JSONArray with default values
-		for (int i=0; i<bucketNames.length; i++) {
-			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-			jsonObject.put("bucket", bucketNames[i]);
-			jsonObject.put("market_value", 0.0);
-			jsonObject.put("bond_holdings_percent", 0.0);
-			jsonObject.put("total_holdings_percent", 0.0);
-			jsonArray.put(jsonObject);
-		}
-		*/
 		
 		Connection conn = null;
 		try {
