@@ -254,10 +254,10 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			
-			if (Validator.isNull(rating)) continue;
-			
-			if (rating.getDescription().equalsIgnoreCase(bucketName)) {
+						
+			if (Validator.isNotNull(rating) && rating.getDescription().equalsIgnoreCase(bucketName)) {
+				results.add(myresult);
+			} else if (Validator.isNull(rating) && bucketName.equalsIgnoreCase("No Rating Available")) {
 				results.add(myresult);
 			}
 		}
