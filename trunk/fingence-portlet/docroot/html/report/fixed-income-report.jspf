@@ -54,7 +54,7 @@
 			 			formatter: function(obj) {
 			 				if (obj.data.summary) {
 			 					obj.value = '<b>' + obj.value + '</b>';
-			 				} else {
+			 				} else if (obj.data.market_value > 0.0) {
 			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
 			 				}
 			 			},		    			
