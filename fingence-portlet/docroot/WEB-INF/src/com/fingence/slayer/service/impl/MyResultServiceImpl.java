@@ -401,6 +401,102 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		return jsonArray;		
 	}
 	
+	public JSONArray getYldToMaturity(String portfolioIds) {
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		double yldToMaturityRange[][] =
+			{{0, 1},{1, 3},{3, 5},{5, 7},{7, 9},{9, 11},{11, 90}};
+		
+		double durationRange[][] =
+			{{0, 2},{2, 4},{4, 6},{6, 8},{8, 10},{10, 15},{15, 90}};
+	
+		
+		for (int i=0; i<yldToMaturityRange.length; i++) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			if (i<=5) {
+				jsonObject.put("yldToMaturityRange", yldToMaturityRange[i][0] + StringPool.DASH + yldToMaturityRange[i][1]);
+			} else {
+				jsonObject.put("yldToMaturityRange", yldToMaturityRange[i][0] + StringPool.PLUS);
+			}
+			for (int j=0; j<durationRange.length; j++) {
+				jsonObject.put((int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs", 0.0d);
+			}
+			jsonArray.put(jsonObject);
+		}
+		
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+			String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", "and a.assetId = f.assetId"};
+					
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			double totalValueOfBonds = 0.0;
+						
+			while (rs.next()) {
+				double dur_mid = rs.getDouble("dur_mid");
+				double yld_ytm_bid = rs.getDouble("yld_ytm_bid");
+				
+				double currentMarketValue = rs.getDouble("currentMarketValue");
+				totalValueOfBonds += currentMarketValue;
+				
+				for (int i=0; i<yldToMaturityRange.length; i++) {
+					if (yld_ytm_bid > yldToMaturityRange[i][0] && yld_ytm_bid <= yldToMaturityRange[i][1]) {
+						JSONObject jsonObj = jsonArray.getJSONObject(i);
+						for (int j=0; j<durationRange.length; j++) {
+							if (dur_mid > durationRange[j][0] && dur_mid <= durationRange[j][1]) {
+								String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs";
+								jsonObj.put(key, jsonObj.getDouble(key) + currentMarketValue);
+							}
+						}
+					}
+				}
+			}
+			
+			rs.close();
+			stmt.close();
+			
+			for (int i=0; i<yldToMaturityRange.length; i++) {
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				for (int j=0; j<durationRange.length; j++) {
+					String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs";
+					jsonObj.put(key, jsonObj.getDouble(key)*100/totalValueOfBonds);
+				}
+			}
+			
+			// append a summary row
+			JSONObject summary = JSONFactoryUtil.createJSONObject();
+			summary.put("summary", true);
+			summary.put("yldToMaturityRange", "Total");
+			for (int i=0; i<yldToMaturityRange.length; i++) {
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				for (int j=0; j<durationRange.length; j++) {
+					String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs";
+					if (Double.isNaN(summary.getDouble(key))) {
+						summary.put(key, jsonObj.getDouble(key));
+					} else {
+						summary.put(key, summary.getDouble(key) + jsonObj.getDouble(key));
+					}
+				}
+			}
+			
+			jsonArray.put(summary);
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return jsonArray;		
+	}	
+	
 	public JSONArray getBondsQuality(String portfolioIds) {
 		
 		String[] categories = {"Investment", "Non Investment", "Others"};

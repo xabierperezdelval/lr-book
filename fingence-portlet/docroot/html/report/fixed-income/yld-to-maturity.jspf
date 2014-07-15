@@ -1,0 +1,199 @@
+<h4>Maturity Schedule Analysis in USD <i>(as of today)</i></h4><hr/>
+
+<aui:row>
+	<aui:column>
+		<div id="gridContainer"></div>
+	</aui:column>
+	<aui:column>
+		<div id="chartContainer"></div>
+	</aui:column>	
+</aui:row>
+
+<hr/><div id="portfolioDetails"></div>
+
+<aui:script>
+	AUI().ready(function(A) {
+	
+		var divForMasking = A.one('#p_p_id_report_WAR_fingenceportlet_');
+		if (divForMasking.loadingmask == null) {
+			divForMasking.plug(A.LoadingMask, { background: '#F0F0F0' });
+            divForMasking.loadingmask.toggle();
+		}
+			
+		Liferay.Service(
+  			'/fingence-portlet.myresult/get-yld-to-maturity',
+  			{
+    			portfolioIds: '<%= portfolioIds %>'
+  			},
+  			function(data) {
+  			
+  				console.log(JSON.stringify(data));
+  				showDataTable1(data, '#gridContainer');
+  				
+  				var legend = {
+			    	enabled: true,
+			    	align: 'right',
+		        	borderColor: 'grey',
+		        	borderWidth: 1,
+			    	layout: 'vertical',
+			    	verticalAlign: 'top',
+			    	y: 100
+  				};
+  				
+  				//renderPieChart(data, 'Bonds Maturity Breakup', legend);				
+				divForMasking.loadingmask.toggle();
+  			}
+		);
+	});
+	
+	function renderPieChart(data, title, legend){
+	
+		var dataArray = getModifiedArray(data);
+						
+		$('#chartContainer').highcharts({
+		
+			legend: legend,
+	    		
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	        },
+	        title: {
+	            text: title
+	        },
+	        tooltip: {
+	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	            	size: "50%",
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                showInLegend: true
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            data: dataArray
+	        }]
+	    });
+	}
+	
+	function getModifiedArray(data) {
+		var dataArray = new Array();
+		_.each(data, function(item){
+			dataArray.push(new Array(item.bucket + ' ' + formatCustom(item.bond_holdings_percent, 'percent'), item.bond_holdings_percent));
+		});
+		return dataArray;	
+	}
+	
+	function showDataTable1(data, divId) {
+				
+		YUI().use(
+			'aui-datatable',
+		  	function(Y) {
+		    	var columns = [
+		    		{
+		    			key: 'yldToMaturityRange', 
+		    			label: '% Yield and</br>Maturity', 
+			 			formatter: function(obj) {
+			 				if (obj.data.summary) {
+			 					obj.value = '<b>' + obj.value + '</b>'; 
+			 				} else {
+			 					obj.value = '<b>' + obj.value + '</b>' + '%';
+			 				}
+			 			},		    			
+		    			allowHTML: true
+		    		},
+			 		{
+			 			key: '0-2 Yrs',
+						formatter: function(obj) {
+							var tmp = obj.value;
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} else if (tmp > 0.0) {
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}
+						},
+						allowHTML: true	 			
+			 		},
+			 		{
+			 			key: '2-4 Yrs',
+						formatter: function(obj) {
+							var tmp = obj.value;
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} else if (tmp > 0.0) {
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}							
+						},			 			
+			 			allowHTML: true
+			 		},	
+			 		{
+			 			key: '4-6 Yrs',
+						formatter: function(obj) {
+							var tmp = obj.value;
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} else if (tmp > 0.0) {
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}							
+						},			 			
+			 			allowHTML: true
+			 		},		
+			 		{
+			 			key: '6-8 Yrs',
+						formatter: function(obj) {
+							var tmp = obj.value;
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} else if (tmp > 0.0) {
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}							
+						},			 			
+			 			allowHTML: true
+			 		},	
+			 		{
+			 			key: '10-15 Yrs',
+						formatter: function(obj) {
+							var tmp = obj.value;
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} else if (tmp > 0.0) {
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}							
+						},			 			
+			 			allowHTML: true
+			 		},	
+			 		{
+			 			key: '15-90 Yrs',
+			 			label: '15+ Yrs',
+						formatter: function(obj) {
+							var tmp = obj.value;
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} else if (tmp > 0.0) {
+			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+			 				}							
+						},			 			
+			 			allowHTML: true
+			 		},				 				 				 			 					 		
+		   	 	];
+		   
+		   		new Y.DataTable({
+					columnset: columns,
+				    recordset: data
+				}).render(divId);
+		  	}
+		);
+	}	
+</aui:script>
