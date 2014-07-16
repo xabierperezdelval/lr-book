@@ -121,6 +121,8 @@ public class ReportPortlet extends MVCPortlet {
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_GET_NET_WORTH)) {
 			String portfolioIds = ParamUtil.getString(resourceRequest, "portfolioIds");
 			writer.println(MyResultServiceUtil.getTotalMarketValue(portfolioIds));
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_ENABLE_REPORT)) {
+			System.out.println("inside enable report");
 		}
 		
 		writer.close();

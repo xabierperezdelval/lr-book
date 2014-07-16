@@ -40,6 +40,7 @@ public interface IConstants {
 	String CMD_CHANGE_FIXED_INCOME_RPT = "changeFixedIncomeReport";
 	String CMD_GET_RATING_DETAILS = "getRatingDetails";
 	String CMD_GET_NET_WORTH = "getNetWorth";
+	String CMD_ENABLE_REPORT = "enableReport";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;
@@ -78,5 +79,7 @@ public interface IConstants {
 	int HISTORY_TYPE_BOND = 2;
 	int HISTORY_TYPE_BOND_CASHFLOW = 3;
 	int HISTORY_TYPE_DIVIDENDS = 4;
+	
+	String VOCABULARY_FINGENCE_REPORT = "Fingence Reports";
 	
 }
