@@ -1,21 +1,28 @@
 <%@ include file="/html/init.jsp"%>
 
-<portlet:actionURL var="uploadAssetsURL" name="uploadAssets"/>
+<div id="myTab">
+	<ul class="nav nav-tabs">
+    	<li><a href="#tab-1">Data Upload</a></li>
+    	<li><a href="#tab-2">Report</a></li>
+  	</ul>
 
-<aui:form action="<%= uploadAssetsURL %>" enctype="multipart/form-data">
-	<aui:input name="assetsMaster" type="file" required="true">
-		<aui:validator name="acceptFiles">'xls,xlsx'</aui:validator>
-	</aui:input>
-	
-	<aui:input name="loadAssetData" type="checkbox" label="load-asset-data"/>
-	
-	<aui:input name="loadEquityPrice" type="checkbox" label="load-equity-price"/>
-	
-	<aui:input name="loadBondPrice" type="checkbox" label="load-bond-price"/>
-	
-	<aui:input name="loadBondCashflow" type="checkbox" label="load-bond-cashflow"/>
-	
-	<aui:input name="loadDividends" type="checkbox" label="load-dividends"/>
-	
-	<aui:button type="submit" value="upload" />
-</aui:form>
+  	<div class="tab-content">
+    	<div id="tab-1" class="tab-pane">
+    		<%@ include file="/html/assets/data-upload.jspf"%>
+    	</div>
+    	<div id="tab-2">
+			<%@ include file="/html/assets/report-config.jspf"%>    	
+		</div>
+  	</div>
+</div>
+
+<aui:script>
+	YUI().use(
+		'aui-tabview',
+	  	function(Y) {
+	    	new Y.TabView({
+	        	srcNode: '#myTab'
+	      	}).render();
+	  	}
+	);
+</aui:script>

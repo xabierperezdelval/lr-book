@@ -279,4 +279,18 @@
 		</finder>		
 	</entity>
 	
+	<entity name="ReportConfig" local-service="true" remote-service="true">
+		<column name="recId" type="long" primary="true"/>
+		<column name="reportId" type="long"/>
+		<column name="enabled" type="boolean"/>
+		<column name="classPK" type="long"/>
+		<column name="classNameId" type="long"/>
+				
+		<finder return-type="ReportConfig" name="ReportId_ClassPK_ClassNameId_Enabled">
+			<finder-column name="reportId"/>
+			<finder-column name="classPK"/>
+			<finder-column name="classNameId"/>
+			<finder-column name="enabled"/>
+		</finder>
+	</entity>
 </service-builder>

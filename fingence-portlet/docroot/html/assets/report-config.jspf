@@ -1,0 +1,51 @@
+<%@page import="com.fingence.IConstants"%>
+<div id="myTreeView"></div>
+
+<aui:script use="liferay-portlet-url">
+
+	AUI().ready(function(A) {  
+		Liferay.Service(
+		  	'/fingence-portlet.reportconfig/get-tree-structure',
+		  	{
+    			title: '<%= IConstants.VOCABULARY_FINGENCE_REPORT %>'
+  			},
+		  	function(data) {
+				renderTree(data);	 
+			}
+		);
+	});
+
+	function renderTree(data) {
+		alert('hi');
+		YUI().use(
+			'aui-tree-view',
+			function(Y) {
+		  		new Y.TreeViewDD( {
+		        	boundingBox: '#myTreeView',
+		        	children: data,
+			        	on: {
+						lastSelectedChange: defCallback
+					}, 
+				}).render();	
+			}
+		);	
+	}
+			
+	function defCallback(event) { 
+		    	
+    	var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('cmd', '<%= IConstants.CMD_ENABLE_REPORT %>');
+		ajaxURL.setParameter('categoryId', event.newVal.get('id'));
+		ajaxURL.setParameter('categoryCheck', event.newVal.get('checked'));
+		
+		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+			sync: true,
+			on: {
+				success: function() {
+					//Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+				}
+			}
+		});
+    }	
+</aui:script>

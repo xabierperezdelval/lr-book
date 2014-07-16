@@ -29,6 +29,21 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 
 public class AssetHelper {
+	
+	public static long getVocabularyId(String title) {
+		
+		long vocabularyId = 0l;
+		try {
+			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(getGuestGroupId(), title);
+			vocabularyId = assetVocabulary.getVocabularyId();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return vocabularyId;
+	}
 
 	public static long getVocabularyId(long userId, String title, ServiceContext serviceContext) {
 		
@@ -60,7 +75,7 @@ public class AssetHelper {
 		return assetVocabulary.getVocabularyId();
 	}
 	
-	private static long getGuestGroupId() {
+	public static long getGuestGroupId() {
 		
 		long companyId = CompanyThreadLocal.getCompanyId();
 		
@@ -218,5 +233,5 @@ public class AssetHelper {
 		}
 		
 		return assetEntry.getEntryId();
-	}	
+	}
 }
