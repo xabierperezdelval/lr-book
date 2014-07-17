@@ -507,11 +507,12 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		
 		for (String cpnType: cpnTypes) {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-			jsonObject.put("cpnType", cpnType);
 			
+			jsonObject.put("cpnType", cpnType);
 			for (String mtyType: mtyTypes) {
 				jsonObject.put(mtyType, 0.0d);
 			}
+			jsonObject.put("grandTotal", 0.0d);
 			
 			jsonArray.put(jsonObject);
 		}
@@ -556,6 +557,11 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				JSONObject jsonObj = jsonArray.getJSONObject(i);
 				for (String mtyType: mtyTypes) {
 					jsonObj.put(mtyType, jsonObj.getDouble(mtyType)*100/totalValueOfBonds);
+					if (Double.isNaN(jsonObj.getDouble("grandTotal"))) {
+						jsonObj.put("grandTotal", jsonObj.getDouble(mtyType));
+					} else {
+						jsonObj.put("grandTotal", jsonObj.getDouble(mtyType) + jsonObj.getDouble("grandTotal"));
+					}
 				}
 			}
 			
@@ -570,7 +576,13 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 						summary.put(mtyType, jsonObj.getDouble(mtyType));
 					} else {
 						summary.put(mtyType, summary.getDouble(mtyType) + jsonObj.getDouble(mtyType));
-					}					
+					}
+					
+					if (Double.isNaN(summary.getDouble("grandTotal"))) {
+						summary.put("grandTotal", summary.getDouble(mtyType));
+					} else {
+						summary.put("grandTotal", summary.getDouble(mtyType) + summary.getDouble("grandTotal"));
+					}
 				}
 			}
 			

@@ -105,12 +105,12 @@
 			 				} 
 			 			},		    			
 		    			allowHTML: true
-		    		}
+		    		},
 		    		<%
 		    			List<String> mtyTypes = MyResultServiceUtil.getDistinctValues("mty_typ", portfolioIds);
 		    			for (String mtyType: mtyTypes) {
 		    				%>
-		    					,{
+		    					{
 						 			key: '<%= mtyType %>',
 									formatter: function(obj) {
 										var tmp = obj.value;
@@ -122,10 +122,21 @@
 						 				}							
 									},			 			
 						 			allowHTML: true		    							
-		    					}
+		    					},
 		    				<%
 		    			}
-		    		%>	 				 			 					 		
+		    		%>
+   					{
+			 			key: 'grandTotal',
+			 			label: '<b>Grand Total</b>',
+						formatter: function(obj) {
+							obj.value = formatCustom(obj.value, 'percent');
+							if (obj.data.summary) {
+								obj.value = '<b>' + obj.value + '</b>';
+							} 						
+						},			 			
+			 			allowHTML: true		    							
+   					}		    						 			 					 		
 		   	 	];
 		   
 		   		new Y.DataTable({
