@@ -1,5 +1,6 @@
 <%@ include file="/html/init.jsp"%>
 
+<%@page import="java.util.List"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.fingence.util.PrefsUtil"%>
 

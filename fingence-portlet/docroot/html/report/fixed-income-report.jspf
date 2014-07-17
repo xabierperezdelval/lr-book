@@ -15,6 +15,9 @@
 	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_YLD_TO_MATURITY) %>">
 		<%@ include file="/html/report/fixed-income/yld-to-maturity.jspf"%>
 	</c:when>	
+	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_CPN_TYP_VS_MTY_TYP) %>">
+		<%@ include file="/html/report/fixed-income/cpn-typ-vs-mty-typ.jspf"%>
+	</c:when>	
 	<c:otherwise>
 		<%@ include file="/html/report/fixed-income/bonds-maturity.jspf"%>
 	</c:otherwise>
