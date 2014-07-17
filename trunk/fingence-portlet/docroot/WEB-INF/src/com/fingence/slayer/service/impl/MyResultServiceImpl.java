@@ -70,6 +70,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	 */
 
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";
+	static String QUERY2 = MyResultFinderImpl.class.getName() + ".getDistinct";
 	static String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
 	
 	public List<MyResult> getMyResults(String portfolioIds) {
@@ -495,6 +496,93 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		}
 		
 		return jsonArray;		
+	}
+	
+	public JSONArray getCpnTypVsMtyTyp(String portfolioIds) {
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		List<String> cpnTypes = getDistinctValues("cpn_typ", portfolioIds);
+		List<String> mtyTypes = getDistinctValues("mty_typ", portfolioIds);
+		
+		for (String cpnType: cpnTypes) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("cpnType", cpnType);
+			
+			for (String mtyType: mtyTypes) {
+				jsonObject.put(mtyType, 0.0d);
+			}
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+			String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", "and a.assetId = f.assetId"};
+					
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+						
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			double totalValueOfBonds = 0.0;
+						
+			while (rs.next()) {
+				String cpn_typ = rs.getString("cpn_typ");
+				String mty_typ = rs.getString("mty_typ");
+				
+				double currentMarketValue = rs.getDouble("currentMarketValue");
+				totalValueOfBonds += currentMarketValue;
+				
+				for (int i=0; i<cpnTypes.size(); i++) {
+					if (cpn_typ.equalsIgnoreCase(cpnTypes.get(i))) {
+						JSONObject jsonObj = jsonArray.getJSONObject(i);
+						for (String mtyType: mtyTypes) {
+							if (mtyType.equalsIgnoreCase(mty_typ)) {
+								jsonObj.put(mtyType, jsonObj.getDouble(mtyType) + currentMarketValue);
+							}
+						}
+					}
+				}
+			}
+			
+			rs.close();
+			stmt.close();
+			
+			for (int i=0; i<cpnTypes.size(); i++) {
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				for (String mtyType: mtyTypes) {
+					jsonObj.put(mtyType, jsonObj.getDouble(mtyType)*100/totalValueOfBonds);
+				}
+			}
+			
+			// append a summary row
+			JSONObject summary = JSONFactoryUtil.createJSONObject();
+			summary.put("summary", true);
+			summary.put("cpnType", "Grand Total");
+			for (int i=0; i<cpnTypes.size(); i++) {
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				for (String mtyType: mtyTypes) {
+					if (Double.isNaN(summary.getDouble(mtyType))) {
+						summary.put(mtyType, jsonObj.getDouble(mtyType));
+					} else {
+						summary.put(mtyType, summary.getDouble(mtyType) + jsonObj.getDouble(mtyType));
+					}					
+				}
+			}
+			
+			jsonArray.put(summary);
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return jsonArray;		
 	}	
 	
 	public JSONArray getBondsQuality(String portfolioIds) {
@@ -608,5 +696,35 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		}
 		
 		return totalMarketValue;
+	}
+	
+	public List<String> getDistinctValues(String columnName, String portfolioIds) {
+		
+		List<String> distinctValues = new ArrayList<String>();
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$COLUMN_NAME$]", "[$PORTFOLIO_IDS$]"};
+			String[] replacements = {columnName, portfolioIds};
+					
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY2), tokens, replacements);
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+						
+			while (rs.next()) {
+				distinctValues.add(rs.getString(1));	
+			}
+			
+			rs.close();
+			stmt.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		return distinctValues;
 	}
 }

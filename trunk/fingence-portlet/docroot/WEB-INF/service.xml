@@ -54,6 +54,8 @@
 		
 		<column name="issuer_bulk" type="String"/>
 		<column name="cpn" type="double"/>	
+		<column name="cpn_typ" type="String"/>	
+		<column name="mty_typ" type="String"/>	
 		<column name="mty_years_tdy" type="double"/>
 		<column name="yld_ytm_ask" type="double"/>
 		<column name="yld_ytm_bid" type="double"/>
@@ -88,7 +90,7 @@
 		<column name="eqy_sharpe_ratio_1yr" type="double"/>
 		<column name="eqy_sharpe_ratio_3yr" type="double"/>
 		<column name="eqy_sharpe_ratio_5yr" type="double"/>
-	</entity>	
+	</entity>
 	
 	<entity name="MutualFund" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="assetId" type="long" primary="true"/>

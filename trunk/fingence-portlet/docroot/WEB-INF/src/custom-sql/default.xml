@@ -49,5 +49,23 @@
 				and a.currency_ = e.currencyCode
 				[$FING_BOND_WHERE_CLAUSE$]
 		]]>
-	</sql>	
+	</sql>
+	
+	<sql id="com.fingence.slayer.service.persistence.MyResultFinderImpl.getDistinct">
+		<![CDATA[
+			SELECT 
+				distinct [$COLUMN_NAME$] 
+			FROM 
+				fing_Asset a, 
+				fing_Portfolio b, 
+				fing_PortfolioItem c, 
+				fing_Bond d 
+			WHERE 
+				b.portfolioId in ([$PORTFOLIO_IDS$]) 
+				and a.assetId = c.assetId 
+				and b.portfolioId = c.portfolioId 
+				and a.assetId = d.assetId
+			ORDER BY [$COLUMN_NAME$]	
+		]]>
+	</sql>
 </custom-sql>
