@@ -81,6 +81,5 @@ public interface IConstants {
 	int HISTORY_TYPE_BOND_CASHFLOW = 3;
 	int HISTORY_TYPE_DIVIDENDS = 4;
 	
-	String VOCABULARY_FINGENCE_REPORT = "Fingence Reports";
-	
+	String VOCABULARY_FINGENCE_REPORT = "Fingence Reports";	
 }

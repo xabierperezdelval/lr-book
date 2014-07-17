@@ -19,6 +19,7 @@ import com.fingence.slayer.service.MyResultServiceUtil;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.fingence.slayer.service.RatingServiceUtil;
+import com.fingence.slayer.service.ReportConfigServiceUtil;
 import com.fingence.util.PrefsUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -33,6 +34,7 @@ import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -123,11 +125,30 @@ public class ReportPortlet extends MVCPortlet {
 			writer.println(MyResultServiceUtil.getTotalMarketValue(portfolioIds));
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_ENABLE_REPORT)) {
 			System.out.println("inside enable report");
+			
+			toggleReport(resourceRequest);		
 		}
 		
 		writer.close();
 	}
 
+	private void toggleReport(ResourceRequest resourceRequest) {
+		long categoryId = ParamUtil.getLong(resourceRequest, "categoryId");		
+		boolean categoryCheck = ParamUtil.getBoolean(resourceRequest, "categoryCheck");
+		
+		List<Long> assetCategoryIds = null;
+		try {
+			assetCategoryIds = AssetCategoryLocalServiceUtil.getSubcategoryIds(categoryId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+				
+		for (long assetCategoryId : assetCategoryIds) {
+			// Store the Status
+			ReportConfigServiceUtil.getReportConfig(assetCategoryId, categoryCheck);
+		}
+	}
+	
 	public void savePortfolio(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 

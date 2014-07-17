@@ -294,5 +294,11 @@
 			<finder-column name="classNameId"/>
 			<finder-column name="enabled"/>
 		</finder>
+		
+		<finder return-type="ReportConfig" name="ReportId_ClassPK_ClassNameId">
+			<finder-column name="reportId"/>
+			<finder-column name="classPK"/>
+			<finder-column name="classNameId"/>
+		</finder>		
 	</entity>
 </service-builder>
