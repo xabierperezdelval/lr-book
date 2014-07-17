@@ -16,7 +16,6 @@
 	});
 
 	function renderTree(data) {
-		alert('hi');
 		YUI().use(
 			'aui-tree-view',
 			function(Y) {
@@ -40,12 +39,7 @@
 		ajaxURL.setParameter('categoryCheck', event.newVal.get('checked'));
 		
 		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
-			sync: true,
-			on: {
-				success: function() {
-					//Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
-				}
-			}
+			sync: true
 		});
     }	
 </aui:script>

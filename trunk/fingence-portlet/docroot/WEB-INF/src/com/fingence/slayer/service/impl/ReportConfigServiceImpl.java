@@ -17,6 +17,7 @@ package com.fingence.slayer.service.impl;
 import java.util.List;
 
 import com.fingence.slayer.model.ReportConfig;
+import com.fingence.slayer.service.ReportConfigLocalServiceUtil;
 import com.fingence.slayer.service.base.ReportConfigServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -102,5 +103,48 @@ public class ReportConfigServiceImpl extends ReportConfigServiceBaseImpl {
 		}
 
 		return jsonArray;
+	}
+	
+	public ReportConfig getReportConfig(long reportId, boolean enabled) {
+				
+		ReportConfig reportConfig = null;
+		try {
+			reportConfig = reportConfigPersistence
+					.fetchByReportId_ClassPK_ClassNameId(
+							reportId, 
+							AssetHelper.getGuestGroupId(),
+							ClassNameLocalServiceUtil.getClassNameId(Group.class));
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(reportConfig)) {
+			long recId = 0l;
+			try {
+				recId = counterLocalService.increment(ReportConfig.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			reportConfig = ReportConfigLocalServiceUtil.createReportConfig(recId);
+			reportConfig.setReportId(reportId);
+			reportConfig.setClassPK(AssetHelper.getGuestGroupId());
+			reportConfig.setClassNameId(ClassNameLocalServiceUtil.getClassNameId(Group.class));
+			try {
+				reportConfig = reportConfigLocalService.addReportConfig(reportConfig);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (reportConfig.isEnabled() != enabled) {
+			reportConfig.setEnabled(enabled);
+			try {
+				reportConfig = reportConfigLocalService.updateReportConfig(reportConfig);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return reportConfig;
 	}
 }
