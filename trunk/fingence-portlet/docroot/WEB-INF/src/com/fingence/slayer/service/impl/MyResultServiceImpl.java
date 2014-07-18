@@ -196,7 +196,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			{366, 730},
 			{731, 1825},
 			{1826, 3650},
-			{3651, 10000},
+			{3651, 10000}
 		};
 		
 		int index = -1; 
