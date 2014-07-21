@@ -1,10 +1,19 @@
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portlet.asset.model.AssetCategory"%>
+<%@page import="com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil"%>
+<%@page import="java.util.Map.Entry"%>
 <%@page import="com.fingence.IConstants"%>
 <h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
 
 <%
-	int index = (allocationBy - 1);
+	int allocationByIndex = 0;
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
-	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
+ 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
+ 	for(int i = 0; i < groupByTitle.length; i++) {
+ 		if(allocationByName.equalsIgnoreCase(groupByTitle[i])) {
+ 			allocationByIndex = i;
+ 		}
+ 	}
 %>
 
 <aui:row>
@@ -45,7 +54,7 @@
   			'/fingence-portlet.myresult/get-my-results',
   			{
     			portfolioIds: '<%= portfolioIds %>',
-    			allocationBy: '<%= allocationBy %>'
+    			allocationBy: '<%= allocationByIndex %>'
   			},
   			function(data) {
   			
@@ -56,10 +65,10 @@
 				A.one('#<portlet:namespace/>networthLabel').text(formatCustom(_netWorth, 'amount'));
 				
 				//2. Pie Chart - By Currency
-				renderChart('<%= groupByField[index] %>', '#chartContainer', '<%= groupByTitle[index] %>');
+				renderChart('<%= groupByField[allocationByIndex] %>', '#chartContainer', '<%= groupByTitle[allocationByIndex] %>');
 				
 				//4. Group By currency with Weightage.
-				showTreeble('<%= allocationBy %>');
+				showTreeble('<%= allocationByIndex %>');
 				
 				divForMasking.loadingmask.toggle();
   			}
@@ -179,7 +188,7 @@
 	
 				// column configuration
 				var cols = [
-					<c:if test="<%= allocationBy != IConstants.BREAKUP_BY_CURRENCY %>">
+					<c:if test="<%= allocationByIndex != IConstants.BREAKUP_BY_CURRENCY %>">
 						{
 							label : '&nbsp;',
 							nodeFormatter : Y.Treeble.buildTwistdownFormatter(sendRequest)

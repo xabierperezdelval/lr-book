@@ -14,10 +14,14 @@
 
 package com.fingence.slayer.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fingence.slayer.model.ReportConfig;
 import com.fingence.slayer.service.ReportConfigLocalServiceUtil;
+import com.fingence.slayer.service.ReportConfigServiceUtil;
 import com.fingence.slayer.service.base.ReportConfigServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -50,10 +54,7 @@ public class ReportConfigServiceImpl extends ReportConfigServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.fingence.slayer.service.ReportConfigServiceUtil} to access the report config remote service.
 	 */
-
-	///
-	/// Exposed web service method to fetch the AUI Tree Structure
-	///
+	
 	public JSONArray getTreeStructure(String title) {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		long vocabularyId = AssetHelper.getVocabularyId(title);
@@ -63,9 +64,6 @@ public class ReportConfigServiceImpl extends ReportConfigServiceBaseImpl {
 		return generateJSON(vocabularyId, 0);	
 	}
 	
-	///
-	/// Recursive Method to Generate the JSON Output
-	///
 	private JSONArray generateJSON(long vocabularyId, long parentCategoryId) {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		List<AssetCategory> assetCategories = null;
@@ -82,7 +80,7 @@ public class ReportConfigServiceImpl extends ReportConfigServiceBaseImpl {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put("label", assetCategory.getName());
 			jsonObject.put("id",String.valueOf(assetCategory.getCategoryId()));
-			jsonObject.put("expanded", false);
+			jsonObject.put("expanded", true);
 			jsonObject.put("leaf", true);
 			jsonObject.put("type", "task");
 			
@@ -105,8 +103,21 @@ public class ReportConfigServiceImpl extends ReportConfigServiceBaseImpl {
 		return jsonArray;
 	}
 	
-	public ReportConfig getReportConfig(long reportId, boolean enabled) {
-				
+	public ReportConfig getReportConfig(long reportId) {
+		ReportConfig reportConfig = null;
+		try {
+			reportConfig = reportConfigPersistence
+					.fetchByReportId_ClassPK_ClassNameId(
+							reportId, 
+							AssetHelper.getGuestGroupId(),
+							ClassNameLocalServiceUtil.getClassNameId(Group.class));
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return reportConfig;
+	}
+	
+	public ReportConfig setReportConfig(long reportId, boolean enabled) {		
 		ReportConfig reportConfig = null;
 		try {
 			reportConfig = reportConfigPersistence
@@ -146,5 +157,24 @@ public class ReportConfigServiceImpl extends ReportConfigServiceBaseImpl {
 		}
 		
 		return reportConfig;
+	}
+	
+	public Map<Long, String> getMenuItems(long parentCategoryId) {
+		Map<Long, String> menuItems = new HashMap<Long, String>();
+		List<AssetCategory> assetCategories = null;
+		try {
+			assetCategories = AssetCategoryLocalServiceUtil.getChildCategories(parentCategoryId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		for (AssetCategory assetCategory : assetCategories) {
+			ReportConfig reportConfig = getReportConfig(assetCategory.getCategoryId());
+			if(Validator.isNotNull(reportConfig)) {
+				if(reportConfig.getEnabled()) {
+					menuItems.put(assetCategory.getCategoryId(), assetCategory.getName());
+				}
+			}
+		}
+		return menuItems;
 	}
 }

@@ -1,21 +1,17 @@
-<%
-	int fixedIncomeReportType = GetterUtil.getInteger(portletSession.getAttribute("FIXED_INCOME_REPORT_TYPE"), IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY);
-%>
-
 <c:choose>
-	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>">
+	<c:when test="<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY)) %>">
 		<%@ include file="/html/report/fixed-income/bonds-quality.jspf"%>
 	</c:when>
-	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_CASH_FLOW) %>">
+	<c:when test="<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_TYPE_CASH_FLOW)) %>">
 		<%@ include file="/html/report/fixed-income/cash-flow.jspf"%>
 	</c:when>
-	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_COLLATERAL) %>">
+	<c:when test="<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_TYPE_COLLATERAL)) %>">
 		<%@ include file="/html/report/fixed-income/collateral-type.jspf"%>
 	</c:when>
-	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_YLD_TO_MATURITY) %>">
+	<c:when test="<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_YLD_TO_MATURITY)) %>">
 		<%@ include file="/html/report/fixed-income/yld-to-maturity.jspf"%>
 	</c:when>	
-	<c:when test="<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_CPN_TYP_VS_MTY_TYP) %>">
+	<c:when test="<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_CPN_TYP_VS_MTY_TYP)) %>">
 		<%@ include file="/html/report/fixed-income/cpn-typ-vs-mty-typ.jspf"%>
 	</c:when>	
 	<c:otherwise>
@@ -113,9 +109,9 @@
 			
 		var serviceName = '/fingence-portlet.myresult/get-bonds-by-maturity';
 		
-		if (eval('<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY) %>')) {
+		if (eval('<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY)) %>')) {
 			serviceName = '/fingence-portlet.myresult/get-bonds-by-quality';
-		} else if (eval('<%= (fixedIncomeReportType == IConstants.FIXED_INCOME_TYPE_COLLATERAL) %>')) {
+		} else if (eval('<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_TYPE_COLLATERAL)) %>')) {
 			serviceName = '/fingence-portlet.myresult/get-bonds-by-collateral';
 		}	
 					

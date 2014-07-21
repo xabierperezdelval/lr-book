@@ -15,12 +15,14 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.model.ReportConfig;
 import com.fingence.slayer.service.MyResultServiceUtil;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.fingence.slayer.service.RatingServiceUtil;
 import com.fingence.slayer.service.ReportConfigServiceUtil;
 import com.fingence.util.PrefsUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
@@ -29,11 +31,13 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -66,11 +70,23 @@ public class ReportPortlet extends MVCPortlet {
 				}
 			}
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ALLOCATION_BY)) {
-			int allocationBy = ParamUtil.getInteger(resourceRequest,
-					"allocationBy");
-			portletSession.setAttribute("ALLOCATION_BY",
-					String.valueOf(allocationBy),
+			long allocationBy = ParamUtil.getLong(resourceRequest, "allocationBy");
+			String allocationByName = "";
+			
+	 		AssetCategory assetCategory;
+			try {
+				assetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(allocationBy);
+				allocationByName = assetCategory.getName();
+			} catch (PortalException | SystemException e) {
+				e.printStackTrace();
+			}
+			
+			portletSession.setAttribute("ALLOCATION_BY_NAME", String.valueOf(allocationByName),
 					PortletSession.APPLICATION_SCOPE);
+			
+			portletSession.setAttribute("ALLOCATION_BY", String.valueOf(allocationBy),
+					PortletSession.APPLICATION_SCOPE);
+			
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHECK_DUPLICATE_PORTFOLIO)) {
 			
 			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0l);
@@ -115,7 +131,20 @@ public class ReportPortlet extends MVCPortlet {
 				portletSession.removeAttribute("PORTFOLIO_ADDED_"+portfolioId);
 			}
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CHANGE_FIXED_INCOME_RPT)) {
-			int reportType = ParamUtil.getInteger(resourceRequest, "reportType", 1);
+			
+			int reportType = ParamUtil.getInteger(resourceRequest, "reportType");
+			String reportTypeName = "";
+			
+	 		AssetCategory assetCategory;
+			try {
+				assetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(reportType);
+				reportTypeName = assetCategory.getName();
+			} catch (PortalException | SystemException e) {
+				e.printStackTrace();
+			}
+			
+			portletSession.setAttribute("FIXED_INCOME_REPORT_TYPE_NAME", String.valueOf(reportTypeName),
+					PortletSession.APPLICATION_SCOPE);
 			portletSession.setAttribute("FIXED_INCOME_REPORT_TYPE", String.valueOf(reportType));
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_GET_RATING_DETAILS)) {
 			String description = ParamUtil.getString(resourceRequest, "description");
@@ -124,28 +153,51 @@ public class ReportPortlet extends MVCPortlet {
 			String portfolioIds = ParamUtil.getString(resourceRequest, "portfolioIds");
 			writer.println(MyResultServiceUtil.getTotalMarketValue(portfolioIds));
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_ENABLE_REPORT)) {
-			System.out.println("inside enable report");
-			
 			toggleReport(resourceRequest);		
 		}
-		
 		writer.close();
 	}
 
 	private void toggleReport(ResourceRequest resourceRequest) {
 		long categoryId = ParamUtil.getLong(resourceRequest, "categoryId");		
 		boolean categoryCheck = ParamUtil.getBoolean(resourceRequest, "categoryCheck");
-		
 		List<Long> assetCategoryIds = null;
 		try {
 			assetCategoryIds = AssetCategoryLocalServiceUtil.getSubcategoryIds(categoryId);
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}
-				
+		}	
 		for (long assetCategoryId : assetCategoryIds) {
-			// Store the Status
-			ReportConfigServiceUtil.getReportConfig(assetCategoryId, categoryCheck);
+			ReportConfigServiceUtil.setReportConfig(assetCategoryId, categoryCheck);
+		}
+		toggleReportParents(categoryId, categoryCheck);		
+	}
+
+	private void toggleReportParents(long categoryId, boolean categoryCheck) {
+		AssetCategory selectedAssetCategory = null;
+		try {
+			selectedAssetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(categoryId);
+		} catch (PortalException | SystemException e1) {
+			e1.printStackTrace();
+		}
+		if(selectedAssetCategory.getParentCategoryId() > 0) {
+			boolean saveReport = false;
+			List<AssetCategory> assetCategories = null;
+			try {
+				assetCategories = AssetCategoryLocalServiceUtil.getChildCategories(selectedAssetCategory.getParentCategoryId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			for (AssetCategory assetCategory : assetCategories) {
+				ReportConfig reportConfig = ReportConfigServiceUtil.getReportConfig(assetCategory.getCategoryId());
+				if(categoryId != assetCategory.getCategoryId() && reportConfig.getEnabled() != categoryCheck && categoryCheck == true) {
+					saveReport = true;
+				}
+			}
+			if(saveReport) {
+				ReportConfigServiceUtil.setReportConfig(selectedAssetCategory.getParentCategoryId(), categoryCheck);
+			}
+			toggleReportParents(selectedAssetCategory.getParentCategoryId(), categoryCheck);
 		}
 	}
 	

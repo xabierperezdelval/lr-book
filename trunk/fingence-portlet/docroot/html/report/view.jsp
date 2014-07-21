@@ -1,3 +1,5 @@
+<%@page import="java.util.Map.Entry"%>
+<%@page import="com.fingence.slayer.service.ReportConfigServiceUtil"%>
 <%@ include file="/html/report/init.jsp"%>
 
 <%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
@@ -24,9 +26,28 @@
 		}
 	}	
 	
-	int allocationBy = GetterUtil.getInteger(portletSession.getAttribute(
-			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE),
-			IConstants.BREAKUP_BY_RISK_COUNTRY);
+	long menuItemId = GetterUtil.getLong(portletSession.getAttribute(
+			"MENU_ITEM_ID", PortletSession.APPLICATION_SCOPE), 0);
+	
+	long defaultId = 0;
+	String defaultName = "";
+	for (Entry<Long, String> item : ReportConfigServiceUtil.getMenuItems(menuItemId).entrySet()) {
+		defaultId = item.getKey();
+		defaultName = item.getValue();
+		break;
+	}
+	
+	String allocationByName = GetterUtil.getString(portletSession.getAttribute(
+			"ALLOCATION_BY_NAME", PortletSession.APPLICATION_SCOPE), defaultName);
+	
+	long allocationBy = GetterUtil.getLong(portletSession.getAttribute(
+			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE), defaultId);
+	
+	String fixedIncomeReportTypeName = GetterUtil.getString(portletSession.getAttribute(
+			"FIXED_INCOME_REPORT_TYPE_NAME", PortletSession.APPLICATION_SCOPE), defaultName);
+	
+	long fixedIncomeReportType = GetterUtil.getLong(portletSession.getAttribute(
+			"FIXED_INCOME_REPORT_TYPE"), defaultId);
 	
 	boolean reportsPage = !layoutName.equalsIgnoreCase(IConstants.PAGE_REPORTS_HOME) && !layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO)  && !layoutName.equalsIgnoreCase(IConstants.ADD_USER);
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT) && reportsPage;
@@ -70,22 +91,20 @@
 				</c:otherwise>				
 			</c:choose>
 		</aui:column>
-				
+		
 		<c:if test="<%= showAllocationSwitch %>">
 			<aui:column>
 				<aui:select name="allocationBy" onChange="javascript:switchAllocationBy(this.value);">
-					<aui:option value="<%=IConstants.BREAKUP_BY_RISK_COUNTRY%>"
-						label="<%=IConstants.LBL_BREAKUP_BY_RISK_COUNTRY%>"
-						selected="<%=(allocationBy == IConstants.BREAKUP_BY_RISK_COUNTRY)%>" />
-					<aui:option value="<%=IConstants.BREAKUP_BY_CURRENCY%>"
-						label="<%=IConstants.LBL_BREAKUP_BY_CURRENCY%>"
-						selected="<%=(allocationBy == IConstants.BREAKUP_BY_CURRENCY)%>" />
-					<aui:option value="<%=IConstants.BREAKUP_BY_SECURITY_CLASS%>"
-						label="<%=IConstants.LBL_BREAKUP_BY_SECURITY_CLASS%>"
-						selected="<%=(allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS)%>" />
-					<aui:option value="<%=IConstants.BREAKUP_BY_INDUSTRY_SECTOR%>"
-						label="<%=IConstants.LBL_BREAKUP_BY_INDUSTRY_SECTOR %>"
-						selected="<%=(allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR)%>" />
+					<%  
+						for (Entry<Long, String> item : ReportConfigServiceUtil.getMenuItems(menuItemId).entrySet()) {
+							%>
+								<aui:option value="<%= item.getKey() %>"
+									label="<%= item.getValue() %>"
+									selected="<%=(allocationBy == item.getKey())%>" />
+
+							<%
+						}
+					%>
 				</aui:select>
 			</aui:column>
 		</c:if>
@@ -103,19 +122,20 @@
 		</c:if>
 		
 		<c:if test="<%= fixedIncomeReport %>">
-			<%
-				int fixedIncomeReportType = GetterUtil.getInteger(portletSession.getAttribute("FIXED_INCOME_REPORT_TYPE"), IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY);
-			%>
 			<aui:column>
 				<aui:select name="fixedIncomeReportType" onChange="javascript:changeFixedIncomeReport(this.value);">
-					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY %>" label="fixed-income-bonds-maturity" selected="<%= (IConstants.FIXED_INCOME_TYPE_BONDS_MATURITY == fixedIncomeReportType) %>"/>
-					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY %>" label="fixed-income-bonds-quality" selected="<%= (IConstants.FIXED_INCOME_TYPE_BONDS_QUALITY == fixedIncomeReportType) %>"/>
-					<aui:option value="<%= IConstants.FIXED_INCOME_TYPE_CASH_FLOW %>" label="fixed-income-cash-flow" selected="<%= (IConstants.FIXED_INCOME_TYPE_CASH_FLOW == fixedIncomeReportType) %>"/>
-					<aui:option value="<%= IConstants.FIXED_INCOME_YLD_TO_MATURITY %>" label="fixed-income-yld-to-maturity" selected="<%= (IConstants.FIXED_INCOME_YLD_TO_MATURITY == fixedIncomeReportType) %>"/>
-					<aui:option value="<%= IConstants.FIXED_INCOME_CPN_TYP_VS_MTY_TYP %>" label="fixed-income-cpn-typ-vs-mty-typ" selected="<%= (IConstants.FIXED_INCOME_CPN_TYP_VS_MTY_TYP == fixedIncomeReportType) %>"/>
+					<%  
+						for (Entry<Long, String> item : ReportConfigServiceUtil.getMenuItems(menuItemId).entrySet()) {
+							%>
+								<aui:option value="<%= item.getKey() %>"
+									label="<%= item.getValue() %>"
+									selected="<%=(fixedIncomeReportType == item.getKey())%>" />
+							<%
+						}
+					%>
 				</aui:select>
 			</aui:column>
-		</c:if>		
+		</c:if>
 	</aui:row>
 </c:if>
 
@@ -243,7 +263,7 @@
 	</c:if>
 	
 	<c:if test="<%= showAllocationSwitch %>">
-		function switchAllocationBy(value) {
+		function switchAllocationBy(value, menuItemId) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
 			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_SET_ALLOCATION_BY %>');
@@ -309,7 +329,7 @@
 		ajaxURL.setParameter('portfolioId', portfolioId);
 		ajaxURL.setWindowState('pop_up');
 	
-	    AUI().use('aui-dialog', function(A) {
+	    AUI().use('liferay-util-window', function(A) {
 			Liferay.Util.openWindow({
 	        	dialog: {
 	            	centered: true,
@@ -354,7 +374,7 @@
 		ajaxURL.setParameter('portfolioItemId', portfolioItemId);
 		ajaxURL.setWindowState('pop_up');
 	
-	    AUI().use('aui-dialog', function(A) {
+	    AUI().use('liferay-util-window', function(A) {
 			Liferay.Util.openWindow({
 	        	dialog: {
 	            	centered: true,
