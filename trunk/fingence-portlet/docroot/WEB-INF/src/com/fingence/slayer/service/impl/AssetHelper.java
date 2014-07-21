@@ -75,13 +75,13 @@ public class AssetHelper {
 		return assetVocabulary.getVocabularyId();
 	}
 	
-	public static long getGuestGroupId() {
+	public static long getGroupId(String groupName) {
 		
 		long companyId = CompanyThreadLocal.getCompanyId();
 		
 		long guestGroupId = 0l;
 		try {
-			Group guestGroup = GroupLocalServiceUtil.getGroup(companyId, "Guest");
+			Group guestGroup = GroupLocalServiceUtil.getGroup(companyId, groupName);
 			guestGroupId = guestGroup.getGroupId();
 		} catch (PortalException e) {
 			e.printStackTrace();
@@ -89,6 +89,10 @@ public class AssetHelper {
 			e.printStackTrace();
 		}
 		return guestGroupId;
+	}	
+	
+	public static long getGuestGroupId() {
+		return getGroupId("Guest");
 	}
 	
 	private static long getCategoryId(long userId, String name, ServiceContext serviceContext, long vocabularyId, long parentCategoryId) {
