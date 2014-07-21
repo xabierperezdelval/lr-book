@@ -152,7 +152,7 @@
 		ajaxURL.setParameter('portfolioId', portfolioId);
 		ajaxURL.setWindowState('pop_up');
     
-        AUI().use('aui-dialog', function(A) {
+        AUI().use('liferay-util-window', function(A) {
 			Liferay.Util.openWindow({
             	dialog: {
                 	centered: true,
@@ -176,7 +176,7 @@
 		ajaxURL.setParameter('portfolioId', portfolioId);
 		ajaxURL.setWindowState('pop_up');    
     
-        AUI().use('aui-dialog', function(A) {
+        AUI().use('liferay-util-window', function(A) {
 			Liferay.Util.openWindow({
             	dialog: {
                 	centered: true,

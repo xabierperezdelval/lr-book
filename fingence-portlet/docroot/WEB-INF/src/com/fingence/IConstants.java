@@ -8,25 +8,26 @@ public interface IConstants {
 	
 	String ROLE_RELATIONSHIP_MANAGER = "Relationship Manager";
 
+	String VOCABULARY_FINGENCE_REPORT = "Fingence Reports";
 	String PAGE_REPORTS_HOME = "Summary";
 	String PAGE_ASSET_REPORT = "Asset Report";
+	String PAGE_PERFORMANCE = "Performance";
 	String PAGE_FIXED_INCOME = "Fixed Income";
 	String PAGE_RISK_REPORT = "Risk Report";
-	String PAGE_PERFORMANCE = "Performance";
 	String PAGE_VIOLATIONS = "Violations";
 	String ADD_PORTFOLIO = "Add Portfolio";
 	String ADD_USER = "Add User";
 	
 	String PAGE_PORTFOLIO = "Portfolio";
 	
-	String[] REPORT_MENU_ITEMS = {
-		PAGE_REPORTS_HOME,
-		PAGE_ASSET_REPORT,
-		PAGE_PERFORMANCE,
-		PAGE_FIXED_INCOME,
-		PAGE_RISK_REPORT,
-		PAGE_VIOLATIONS
-	};
+//	String[] REPORT_MENU_ITEMS = {
+//		PAGE_REPORTS_HOME,
+//		PAGE_ASSET_REPORT,
+//		PAGE_PERFORMANCE,
+//		PAGE_FIXED_INCOME,
+//		PAGE_RISK_REPORT,
+//		PAGE_VIOLATIONS
+//	};
 	
 	String PARENT_ORG_FIRMS = "Firms";
 	String PARENT_ORG_BANKS = "Banks";
@@ -69,17 +70,15 @@ public interface IConstants {
 	String SELECTED = "selected";
 	String UN_SPECIFIED = "Un-Specified";
 	
-	int FIXED_INCOME_TYPE_BONDS_MATURITY = 1;
-	int FIXED_INCOME_TYPE_BONDS_QUALITY = 2;
-	int FIXED_INCOME_TYPE_CASH_FLOW = 3;	
-	int FIXED_INCOME_TYPE_COLLATERAL = 4;
-	int FIXED_INCOME_YLD_TO_MATURITY = 5;
-	int FIXED_INCOME_CPN_TYP_VS_MTY_TYP = 6;
+	String FIXED_INCOME_TYPE_BONDS_MATURITY = "Bonds Maturity";
+	String FIXED_INCOME_TYPE_BONDS_QUALITY = "Bonds Quality";
+	String FIXED_INCOME_TYPE_CASH_FLOW = "Cash Flow Report";	
+	String FIXED_INCOME_TYPE_COLLATERAL = "Collateral Breakdown";
+	String FIXED_INCOME_YLD_TO_MATURITY = "Yield To Maturity";
+	String FIXED_INCOME_CPN_TYP_VS_MTY_TYP = "Coupon Vs Maturity Types";
 	
 	int HISTORY_TYPE_EQUITY = 1;
 	int HISTORY_TYPE_BOND = 2;
 	int HISTORY_TYPE_BOND_CASHFLOW = 3;
 	int HISTORY_TYPE_DIVIDENDS = 4;
-	
-	String VOCABULARY_FINGENCE_REPORT = "Fingence Reports";	
 }

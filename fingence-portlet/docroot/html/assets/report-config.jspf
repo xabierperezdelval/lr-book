@@ -2,7 +2,7 @@
 <div id="myTreeView"></div>
 
 <aui:script use="liferay-portlet-url">
-
+	var treeView;
 	AUI().ready(function(A) {  
 		Liferay.Service(
 		  	'/fingence-portlet.reportconfig/get-tree-structure',
@@ -19,7 +19,7 @@
 		YUI().use(
 			'aui-tree-view',
 			function(Y) {
-		  		new Y.TreeViewDD( {
+		  		treeView = new Y.TreeViewDD( {
 		        	boundingBox: '#myTreeView',
 		        	children: data,
 			        	on: {
@@ -39,7 +39,21 @@
 		ajaxURL.setParameter('categoryCheck', event.newVal.get('checked'));
 		
 		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
-			sync: true
+			sync: true,
+			on: {
+				success: function() {
+					Liferay.Service(
+					  	'/fingence-portlet.reportconfig/get-tree-structure',
+					  	{
+				   			title: '<%= IConstants.VOCABULARY_FINGENCE_REPORT %>'
+				 			},
+					  	function(data) {
+					  		treeView.empty();
+							renderTree(data);	 
+						}
+					);
+				}
+			}
 		});
     }	
 </aui:script>
