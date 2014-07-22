@@ -64,12 +64,15 @@ public class CreateReportTypes extends SimpleAction {
 
 	private long checkTreeVocabulary(long userId, String vocabularyName, ServiceContext serviceContext) {
 		AssetVocabulary assetVocabulary = null;
+
 		try {
 			assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(AssetHelper.getGuestGroupId(), vocabularyName);
-		} catch (PortalException | SystemException e) {
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (Validator.isNull(assetVocabulary)) {
 			try {
 				assetVocabulary = AssetVocabularyLocalServiceUtil.addVocabulary(userId, vocabularyName, serviceContext);
