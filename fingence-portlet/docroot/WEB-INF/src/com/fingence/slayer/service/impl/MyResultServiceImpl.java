@@ -286,7 +286,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			double totalValueOfBonds = 0.0;
 						
 			while (rs.next()) {
-				//int maturingAfter = rs.getInt("maturing_after");
 				String collatTyp = rs.getString("collat_typ");
 				double currentMarketValue = rs.getDouble("currentMarketValue");
 				totalValueOfBonds += currentMarketValue;
