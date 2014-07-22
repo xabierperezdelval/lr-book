@@ -107,11 +107,15 @@ public class CreateReportTypes extends SimpleAction {
 	
 	private long createTreeItem(long vocabularyId, long parentItemId, String itemName, long defaultUserId, ServiceContext serviceContext) {
 		AssetCategory assetCategory = null;
+
 		try {
 			assetCategory = AssetCategoryLocalServiceUtil.addCategory(defaultUserId, itemName, vocabularyId, serviceContext);
-		} catch (SystemException | PortalException e) {
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+
 		assetCategory.setParentCategoryId(parentItemId);
 		try {
 			AssetCategoryLocalServiceUtil.updateAssetCategory(assetCategory);
