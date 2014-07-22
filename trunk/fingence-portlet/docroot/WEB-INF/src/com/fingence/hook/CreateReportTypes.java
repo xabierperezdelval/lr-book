@@ -76,9 +76,11 @@ public class CreateReportTypes extends SimpleAction {
 		if (Validator.isNull(assetVocabulary)) {
 			try {
 				assetVocabulary = AssetVocabularyLocalServiceUtil.addVocabulary(userId, vocabularyName, serviceContext);
-			} catch (SystemException | PortalException e) {
+			} catch (PortalException e) {
 				e.printStackTrace();
-			}			
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return assetVocabulary.getVocabularyId();
