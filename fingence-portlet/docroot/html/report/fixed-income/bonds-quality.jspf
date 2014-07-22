@@ -1,4 +1,4 @@
-<h4>Bond Quality Analysis in USD <i>(as of today)</i></h4><hr/>
+<h4>Exposure As Per Rating Table Analysis in USD <i>(as of today)</i></h4><hr/>
 
 <aui:row>
 	<aui:column>
@@ -42,7 +42,7 @@
 		        	layout:'vertical'
         		};
         		
-  				renderBarChart(data, 'Bonds Quality Breakup');
+  				renderBarChart(data, 'Exposure As Per Rating Table Breakup');
 				divForMasking.loadingmask.toggle();
   			}
 		);
