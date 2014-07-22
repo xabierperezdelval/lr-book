@@ -197,8 +197,15 @@ public class ReportPortlet extends MVCPortlet {
 			
 			for (AssetCategory assetCategory : assetCategories) {
 				ReportConfig reportConfig = ReportConfigServiceUtil.getReportConfig(assetCategory.getCategoryId());
-				if (categoryId != assetCategory.getCategoryId() && reportConfig.getEnabled() != categoryCheck && categoryCheck) {
-					saveReport = true;
+				
+				if (Validator.isNull(reportConfig)) {
+					if (categoryCheck) {
+						saveReport = true;
+					}
+				} else {
+					if (categoryId != assetCategory.getCategoryId() && reportConfig.getEnabled() != categoryCheck && categoryCheck) {
+						saveReport = true;
+					}
 				}
 			}
 			if (saveReport) {
