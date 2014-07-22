@@ -70,12 +70,12 @@ public interface IConstants {
 	String SELECTED = "selected";
 	String UN_SPECIFIED = "Un-Specified";
 	
-	String FIXED_INCOME_TYPE_BONDS_MATURITY = "Bonds Maturity";
-	String FIXED_INCOME_TYPE_BONDS_QUALITY = "Bonds Quality";
+	String FIXED_INCOME_TYPE_BONDS_MATURITY = "Bond Collateral Type Breakdown";
+	String FIXED_INCOME_TYPE_BONDS_QUALITY = "Exposure As Per Rating Table";
 	String FIXED_INCOME_TYPE_CASH_FLOW = "Cash Flow Report";	
 	String FIXED_INCOME_TYPE_COLLATERAL = "Collateral Breakdown";
-	String FIXED_INCOME_YLD_TO_MATURITY = "Yield To Maturity";
-	String FIXED_INCOME_CPN_TYP_VS_MTY_TYP = "Coupon Vs Maturity Types";
+	String FIXED_INCOME_YLD_TO_MATURITY = "YTM and Duration Table";
+	String FIXED_INCOME_CPN_TYP_VS_MTY_TYP = "Coupon Type to Maturity Type";
 	
 	int HISTORY_TYPE_EQUITY = 1;
 	int HISTORY_TYPE_BOND = 2;

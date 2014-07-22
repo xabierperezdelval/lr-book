@@ -1,5 +1,5 @@
 <%@page import="com.fingence.slayer.service.MyResultServiceUtil"%>
-<h4>Maturity Schedule Analysis in USD <i>(as of today)</i></h4><hr/>
+<h4>Coupon Type to Maturity Type Analysis in USD <i>(as of today)</i></h4><hr/>
 
 <aui:row>
 	<aui:column>
@@ -40,7 +40,7 @@
 			    	y: 100
   				};
   				
-  				//renderPieChart(data, 'Bonds Maturity Breakup', legend);				
+  				//renderPieChart(data, 'Bond Collateral Type Breakup', legend);				
 				divForMasking.loadingmask.toggle();
   			}
 		);

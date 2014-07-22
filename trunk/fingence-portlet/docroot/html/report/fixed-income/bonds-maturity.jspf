@@ -1,4 +1,4 @@
-<h4>Maturity Schedule Analysis in USD <i>(as of today)</i></h4><hr/>
+<h4>Bond Collateral Type Breakdown Analysis in USD <i>(as of today)</i></h4><hr/>
 
 <aui:row>
 	<aui:column>
@@ -26,7 +26,7 @@
     			portfolioIds: '<%= portfolioIds %>'
   			},
   			function(data) {
-  				showDataTable(data, '#gridContainer', 'Bond Maturity<br/>Schedule');
+  				showDataTable(data, '#gridContainer', 'Bond Collateral Type Breakdown');
   				
   				var legend = {
 			    	enabled: true,
@@ -38,7 +38,7 @@
 			    	y: 100
   				};
   				
-  				renderPieChart(data, 'Bonds Maturity Breakup', legend);				
+  				renderPieChart(data, 'Bond Collateral Type Breakup', legend);				
 				divForMasking.loadingmask.toggle();
   			}
 		);
