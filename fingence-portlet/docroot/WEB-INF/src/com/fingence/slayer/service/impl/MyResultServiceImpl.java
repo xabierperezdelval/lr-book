@@ -198,7 +198,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			{1826, 3650},
 			{3651, 10000}
 		};
-		
+				
 		int index = -1; 
 		for (int i=0; i<bucketNames.length; i++) {
 			if (bucketName.equalsIgnoreCase(bucketNames[i])) {
@@ -206,7 +206,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				break;
 			}
 		}
-		
+				
 		StringBuilder sb = new StringBuilder();
 		sb.append(" and a.assetId = f.assetId");
 		sb.append(" and DATEDIFF(f.maturity_dt,now()) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);

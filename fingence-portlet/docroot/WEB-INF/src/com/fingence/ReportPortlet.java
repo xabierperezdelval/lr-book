@@ -73,11 +73,14 @@ public class ReportPortlet extends MVCPortlet {
 			long allocationBy = ParamUtil.getLong(resourceRequest, "allocationBy");
 			String allocationByName = "";
 			
-	 		AssetCategory assetCategory;
+	 		AssetCategory assetCategory = null;
+
 			try {
 				assetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(allocationBy);
 				allocationByName = assetCategory.getName();
-			} catch (PortalException | SystemException e) {
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
 				e.printStackTrace();
 			}
 			
