@@ -175,12 +175,18 @@ public class ReportPortlet extends MVCPortlet {
 
 	private void toggleReportParents(long categoryId, boolean categoryCheck) {
 		AssetCategory selectedAssetCategory = null;
+
 		try {
 			selectedAssetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(categoryId);
-		} catch (PortalException | SystemException e1) {
-			e1.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
-		if(selectedAssetCategory.getParentCategoryId() > 0) {
+
+		if (Validator.isNull(selectedAssetCategory)) return;
+		
+		if (selectedAssetCategory.getParentCategoryId() > 0) {
 			boolean saveReport = false;
 			List<AssetCategory> assetCategories = null;
 			try {
@@ -188,13 +194,14 @@ public class ReportPortlet extends MVCPortlet {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+			
 			for (AssetCategory assetCategory : assetCategories) {
 				ReportConfig reportConfig = ReportConfigServiceUtil.getReportConfig(assetCategory.getCategoryId());
-				if(categoryId != assetCategory.getCategoryId() && reportConfig.getEnabled() != categoryCheck && categoryCheck == true) {
+				if (categoryId != assetCategory.getCategoryId() && reportConfig.getEnabled() != categoryCheck && categoryCheck) {
 					saveReport = true;
 				}
 			}
-			if(saveReport) {
+			if (saveReport) {
 				ReportConfigServiceUtil.setReportConfig(selectedAssetCategory.getParentCategoryId(), categoryCheck);
 			}
 			toggleReportParents(selectedAssetCategory.getParentCategoryId(), categoryCheck);
