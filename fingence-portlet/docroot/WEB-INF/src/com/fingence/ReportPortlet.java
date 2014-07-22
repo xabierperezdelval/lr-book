@@ -138,14 +138,17 @@ public class ReportPortlet extends MVCPortlet {
 			int reportType = ParamUtil.getInteger(resourceRequest, "reportType");
 			String reportTypeName = "";
 			
-	 		AssetCategory assetCategory;
+	 		AssetCategory assetCategory = null;
+
 			try {
 				assetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(reportType);
 				reportTypeName = assetCategory.getName();
-			} catch (PortalException | SystemException e) {
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
 				e.printStackTrace();
 			}
-			
+				
 			portletSession.setAttribute("FIXED_INCOME_REPORT_TYPE_NAME", String.valueOf(reportTypeName),
 					PortletSession.APPLICATION_SCOPE);
 			portletSession.setAttribute("FIXED_INCOME_REPORT_TYPE", String.valueOf(reportType));
