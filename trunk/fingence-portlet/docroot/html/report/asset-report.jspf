@@ -1,8 +1,5 @@
-<%@page import="java.util.List"%>
-<%@page import="com.liferay.portlet.asset.model.AssetCategory"%>
-<%@page import="com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil"%>
 <%@page import="java.util.Map.Entry"%>
-<%@page import="com.fingence.IConstants"%>
+
 <h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
 
 <%
@@ -68,7 +65,7 @@
 				renderChart('<%= groupByField[allocationByIndex] %>', '#chartContainer', '<%= groupByTitle[allocationByIndex] %>');
 				
 				//4. Group By currency with Weightage.
-				showTreeble('<%= allocationByIndex %>');
+				showTreeble('<%= (allocationByIndex + 1) %>');
 				
 				divForMasking.loadingmask.toggle();
   			}
@@ -76,7 +73,7 @@
 	});
 	
 	function showTreeble(allocationBy) {
-	
+		
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
 				
 		var resultantDataArray = [];
