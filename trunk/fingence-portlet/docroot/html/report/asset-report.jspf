@@ -7,8 +7,9 @@
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
  	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
  	for(int i = 0; i < groupByTitle.length; i++) {
- 		if(allocationByName.equalsIgnoreCase(groupByTitle[i])) {
+ 		if (allocationByName.equalsIgnoreCase(groupByTitle[i])) {
  			allocationByIndex = i;
+ 			break;
  		}
  	}
 %>
@@ -185,7 +186,7 @@
 	
 				// column configuration
 				var cols = [
-					<c:if test="<%= allocationByIndex != IConstants.BREAKUP_BY_CURRENCY %>">
+					<c:if test="<%= (allocationByIndex+1) != IConstants.BREAKUP_BY_CURRENCY %>">
 						{
 							label : '&nbsp;',
 							nodeFormatter : Y.Treeble.buildTwistdownFormatter(sendRequest)
