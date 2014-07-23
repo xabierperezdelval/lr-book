@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.fingence.slayer.service.MyResultServiceUtil"%>
 <h4>Coupon Type to Maturity Type Analysis in USD <i>(as of today)</i></h4><hr/>
 
@@ -91,6 +92,8 @@
 	}
 	
 	function showDataTable1(data, divId) {
+	
+		console.log(JSON.stringify(data));
 				
 		YUI().use(
 			'aui-datatable',
@@ -107,6 +110,7 @@
 		    			allowHTML: true
 		    		},
 		    		<%
+		    			int i=0;
 		    			List<String> mtyTypes = MyResultServiceUtil.getDistinctValues("mty_typ", portfolioIds);
 		    			for (String mtyType: mtyTypes) {
 		    				%>
@@ -114,11 +118,12 @@
 						 			key: '<%= mtyType %>',
 									formatter: function(obj) {
 										var tmp = obj.value;
+										var key1 = obj.data[obj.data['cpnType'] + <%= ++i %>];
 										obj.value = formatCustom(obj.value, 'percent');
 										if (obj.data.summary) {
 											obj.value = '<b>' + obj.value + '</b>';
 										} else if (tmp > 0.0) {
-						 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
+						 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails1(\'' + key1 + '\');">' + obj.value + '</a>';
 						 				}							
 									},			 			
 						 			allowHTML: true		    							
@@ -148,6 +153,33 @@
 					}).render(divId);		   		
 		   		}
 		  	}
+		);
+	}
+	
+	function showDetails1(combo) {
+							
+		Liferay.Service(
+			'/fingence-portlet.myresult/get-bonds-by-cpn-typ-vs-mty-typ',
+			{
+				combo: combo,
+				portfolioIds : '<%= portfolioIds %>'
+			},
+			function(data) {
+				var ajaxURL = Liferay.PortletURL.createResourceURL();
+				ajaxURL.setPortletId('report_WAR_fingenceportlet');
+				ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_NET_WORTH %>');
+				ajaxURL.setWindowState('exclusive');
+				ajaxURL.setParameter('portfolioIds', '<%= portfolioIds %>');
+				
+				AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+					sync: true,
+					on: {
+						success: function() {
+							displayItemsGrid(data, '#portfolioDetails', this.get('responseData'));
+						}
+					}
+				});
+			}
 		);
 	}	
 </aui:script>
