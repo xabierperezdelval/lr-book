@@ -73,15 +73,9 @@
 	});
 	
 	function showTreeble(allocationBy) {
-			
-		//console.log(JSON.stringify(_data));
-		
-		alert(groupByKeys[allocationBy]);
-		
+							
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
-		
-		//console.log(JSON.stringify(itemList));
-				
+						
 		var resultantDataArray = [];
 						
 		_.each(itemList, function(item) {
@@ -175,9 +169,7 @@
 				resultantDataArray.push(jsonObj0);
 			});
 		});	
-		
-		console.log(JSON.stringify(resultantDataArray));
-						
+								
 		YUI().use(
 			'datatable',
 			'gallery-treeble',
