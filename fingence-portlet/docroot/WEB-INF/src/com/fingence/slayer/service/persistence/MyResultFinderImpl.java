@@ -27,7 +27,7 @@ public class MyResultFinderImpl extends BasePersistenceImpl<MyResult> implements
 		Session session = openSession();
 						
 		String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
-		
+				
 		SQLQuery query = session.createSQLQuery(sql);
 				
 		query.addEntity("MyResult", MyResultImpl.class);
