@@ -103,10 +103,15 @@
                          	}
 	   					];
 	   
-	   					new Y.DataTable({
-							columnset: columns,
-	    					recordset: data
-						}).render('#portfolioContainer');
+	   					var placeHolderDiv = AUI().one("#portfolioContainer");
+	   					
+	   					if (placeHolderDiv != null) {
+		   					new Y.DataTable({
+								columnset: columns,
+		    					recordset: data
+							}).render(placeHolderDiv);	   					
+	   					}
+
 						
 						divForMasking.loadingmask.toggle();
 	  				}

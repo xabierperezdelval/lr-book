@@ -97,10 +97,14 @@
 					}				 		
 		   	 	];
 		   
-		   		new Y.DataTable({
-					columnset: columns,
-				    recordset: dataWithSummary
-				}).render(divId);
+		   		var placeHolderDiv = AUI().one(divId);
+				
+				if (placeHolderDiv != null) {
+			   		new Y.DataTable({
+						columnset: columns,
+					    recordset: dataWithSummary
+					}).render(divId);				
+				}
 		  	}
 		);
 	}

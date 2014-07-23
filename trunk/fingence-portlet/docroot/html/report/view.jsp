@@ -486,10 +486,13 @@
 	            }
 			];
 			
-			new Y.DataTable({
-				columnset: columns,
-			    recordset: results
-			}).render(divId);
+			var placeHolderDiv = AUI().one(divId);
+			if (placeHolderDiv != null) {
+				new Y.DataTable({
+					columnset: columns,
+				    recordset: results
+				}).render(divId);			
+			}
 		});
 	}
 </aui:script>

@@ -288,8 +288,12 @@
 				table.plug(Y.Plugin.DataTableDataSource, {
 					datasource : ds
 				});
-		
-				table.render("#gridContainer");
+
+				var placeHolderDiv = AUI().one("#gridContainer");
+				
+				if (placeHolderDiv != null) {
+					table.render("#gridContainer");
+				}
 		
 				sendRequest();
 			}
