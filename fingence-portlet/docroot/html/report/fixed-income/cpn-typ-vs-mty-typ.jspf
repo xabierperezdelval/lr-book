@@ -139,10 +139,14 @@
    					}		    						 			 					 		
 		   	 	];
 		   
-		   		new Y.DataTable({
-					columnset: columns,
-				    recordset: data
-				}).render(divId);
+		   		var placeHolderDiv = AUI().one(divId);
+		   		
+		   		if (placeHolderDiv != null) {
+			   		new Y.DataTable({
+						columnset: columns,
+					    recordset: data
+					}).render(divId);		   		
+		   		}
 		  	}
 		);
 	}	
