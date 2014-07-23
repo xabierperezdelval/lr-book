@@ -256,6 +256,27 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
 		
 		return myResults;
+	}
+	
+	public List<MyResult> getBondsByCpnTypVsMtyTyp(String combo, String portfolioIds) {
+		
+		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" and a.assetId = f.assetId");
+		
+		String[] parts = combo.split(StringPool.COLON);
+		String mtyTyp = parts[0];
+		String cpnTyp = parts[1];
+		
+		sb.append(" and mty_typ ='").append(mtyTyp).append("'");
+		sb.append(" and cpn_typ ='").append(cpnTyp).append("'");
+		
+		String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", sb.toString()};
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
+		
+		return myResults;
 	}	
 	
 	public List<MyResult> getBondsByQuality(String bucketName, String portfolioIds) {
@@ -529,8 +550,12 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			
 			jsonObject.put("cpnType", cpnType);
+			int i=0;
 			for (String mtyType: mtyTypes) {
 				jsonObject.put(mtyType, 0.0d);
+				jsonObject.put(cpnType + ++i, 
+					mtyType + StringPool.COLON + cpnType);
+				
 			}
 			jsonObject.put("grandTotal", 0.0d);
 			
