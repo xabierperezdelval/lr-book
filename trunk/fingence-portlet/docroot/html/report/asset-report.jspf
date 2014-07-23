@@ -3,7 +3,7 @@
 <h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
 
 <%
-	int allocationByIndex = 0;
+	int allocationByIndex = -1;
 	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
  	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
  	for(int i = 0; i < groupByTitle.length; i++) {
@@ -51,7 +51,7 @@
   			'/fingence-portlet.myresult/get-my-results',
   			{
     			portfolioIds: '<%= portfolioIds %>',
-    			allocationBy: '<%= allocationByIndex %>'
+    			allocationBy: '<%= allocationByIndex+1 %>'
   			},
   			function(data) {
   			
@@ -65,7 +65,7 @@
 				renderChart('<%= groupByField[allocationByIndex] %>', '#chartContainer', '<%= groupByTitle[allocationByIndex] %>');
 				
 				//4. Group By currency with Weightage.
-				showTreeble('<%= (allocationByIndex + 1) %>');
+				showTreeble('<%= (allocationByIndex+1) %>');
 				
 				divForMasking.loadingmask.toggle();
   			}
@@ -73,8 +73,14 @@
 	});
 	
 	function showTreeble(allocationBy) {
+			
+		//console.log(JSON.stringify(_data));
+		
+		alert(groupByKeys[allocationBy]);
 		
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
+		
+		//console.log(JSON.stringify(itemList));
 				
 		var resultantDataArray = [];
 						
@@ -169,6 +175,8 @@
 				resultantDataArray.push(jsonObj0);
 			});
 		});	
+		
+		console.log(JSON.stringify(resultantDataArray));
 						
 		YUI().use(
 			'datatable',

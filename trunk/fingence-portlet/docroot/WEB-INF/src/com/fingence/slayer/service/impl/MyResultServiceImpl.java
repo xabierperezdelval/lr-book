@@ -120,8 +120,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			if (Validator.isNull(myResult.getIndustry_sector())) {
 				myResult.setIndustry_sector(IConstants.UN_SPECIFIED);
 			}
-			
-			if (allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS || allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR) {
+						
+			if (allocationBy != IConstants.BREAKUP_BY_CURRENCY) {
 				setCategoryFields(myResult, allocationBy);
 			}
 		}
@@ -162,7 +162,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				e.printStackTrace();
 			}
 			
-			if (vocabularyName.equalsIgnoreCase("BB_Security") && (allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS)) {
+			if (vocabularyName.equalsIgnoreCase("BB_Security") && (allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS || allocationBy == IConstants.BREAKUP_BY_RISK_COUNTRY)) {				
 				myResult.setSecurity_typ(assetCategory.getName());
 				
 				try {
