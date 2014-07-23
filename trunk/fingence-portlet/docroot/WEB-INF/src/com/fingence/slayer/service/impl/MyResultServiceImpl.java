@@ -73,6 +73,12 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	static String QUERY2 = MyResultFinderImpl.class.getName() + ".getDistinct";
 	static String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
 	
+	static double yldToMaturityRange[][] =
+		{{0, 1},{1, 3},{3, 5},{5, 7},{7, 9},{9, 11},{11, 90}};
+	
+	public static double durationRange[][] =
+		{{0, 2},{2, 4},{4, 6},{6, 8},{8, 10},{10, 15},{15, 90}};
+	
 	public List<MyResult> getMyResults(String portfolioIds) {
 		return getMyResults(portfolioIds, 0);
 	}
@@ -224,6 +230,27 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" and a.assetId = f.assetId");
 		sb.append(" and f.collat_typ = '").append(bucketName).append("'");
+		String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", sb.toString()};
+		
+		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
+		
+		return myResults;
+	}	
+	
+	public List<MyResult> getBondsByYldToMaturity(String index, String portfolioIds) {
+		
+		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" and a.assetId = f.assetId");
+		
+		String[] parts = index.split(StringPool.COLON);
+		int i = Integer.parseInt(parts[0]);
+		int j = Integer.parseInt(parts[1]);
+		
+		sb.append(" and yld_ytm_bid between ").append(yldToMaturityRange[i][0]).append(" and ").append(yldToMaturityRange[i][1]);
+		sb.append(" and dur_mid between ").append(durationRange[j][0]).append(" and ").append(durationRange[j][1]);
+		
 		String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", sb.toString()};
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
@@ -404,14 +431,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	public JSONArray getYldToMaturity(String portfolioIds) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-		
-		double yldToMaturityRange[][] =
-			{{0, 1},{1, 3},{3, 5},{5, 7},{7, 9},{9, 11},{11, 90}};
-		
-		double durationRange[][] =
-			{{0, 2},{2, 4},{4, 6},{6, 8},{8, 10},{10, 15},{15, 90}};
-	
-		
+				
 		for (int i=0; i<yldToMaturityRange.length; i++) {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			if (i<=5) {
@@ -421,6 +441,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			}
 			for (int j=0; j<durationRange.length; j++) {
 				jsonObject.put((int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs", 0.0d);
+				jsonObject.put("index"+j, (i + StringPool.COLON + j));
 			}
 			jsonArray.put(jsonObject);
 		}

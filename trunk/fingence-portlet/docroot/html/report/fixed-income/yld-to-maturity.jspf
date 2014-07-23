@@ -1,3 +1,5 @@
+<%@page import="com.fingence.slayer.service.MyResultServiceUtil"%>
+<%@page import="com.fingence.slayer.service.impl.MyResultServiceImpl"%>
 <h4>YTM and Duration Table Analysis in USD <i>(as of today)</i></h4><hr/>
 
 <aui:row>
@@ -107,86 +109,33 @@
 			 				}
 			 			},		    			
 		    			allowHTML: true
-		    		},
-			 		{
-			 			key: '0-2 Yrs',
-						formatter: function(obj) {
-							var tmp = obj.value;
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {
-								obj.value = '<b>' + obj.value + '</b>';
-							} else if (tmp > 0.0) {
-			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
-			 				}
-						},
-						allowHTML: true	 			
-			 		},
-			 		{
-			 			key: '2-4 Yrs',
-						formatter: function(obj) {
-							var tmp = obj.value;
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {
-								obj.value = '<b>' + obj.value + '</b>';
-							} else if (tmp > 0.0) {
-			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
-			 				}							
-						},			 			
-			 			allowHTML: true
-			 		},	
-			 		{
-			 			key: '4-6 Yrs',
-						formatter: function(obj) {
-							var tmp = obj.value;
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {
-								obj.value = '<b>' + obj.value + '</b>';
-							} else if (tmp > 0.0) {
-			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
-			 				}							
-						},			 			
-			 			allowHTML: true
-			 		},		
-			 		{
-			 			key: '6-8 Yrs',
-						formatter: function(obj) {
-							var tmp = obj.value;
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {
-								obj.value = '<b>' + obj.value + '</b>';
-							} else if (tmp > 0.0) {
-			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
-			 				}							
-						},			 			
-			 			allowHTML: true
-			 		},	
-			 		{
-			 			key: '10-15 Yrs',
-						formatter: function(obj) {
-							var tmp = obj.value;
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {
-								obj.value = '<b>' + obj.value + '</b>';
-							} else if (tmp > 0.0) {
-			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
-			 				}							
-						},			 			
-			 			allowHTML: true
-			 		},	
-			 		{
-			 			key: '15-90 Yrs',
-			 			label: '15+ Yrs',
-						formatter: function(obj) {
-							var tmp = obj.value;
-							obj.value = formatCustom(obj.value, 'percent');
-							if (obj.data.summary) {
-								obj.value = '<b>' + obj.value + '</b>';
-							} else if (tmp > 0.0) {
-			 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails(\'' + obj.value + '\');">' + obj.value + '</a>';
-			 				}							
-						},			 			
-			 			allowHTML: true
-			 		},				 				 				 			 					 		
+		    		}
+		    		<%
+		    			for (int i=0; i<MyResultServiceImpl.durationRange.length; i++) {
+		    				%>
+						 		,{
+						 			key: '<%= (int)MyResultServiceImpl.durationRange[i][0] + StringPool.DASH + (int)MyResultServiceImpl.durationRange[i][1] %> Yrs', 
+						 			<% 
+						 				if (i == MyResultServiceImpl.durationRange.length-1) {
+						 					%>
+						 						label: '15+ Yrs',
+						 					<%
+						 				}
+						 			%>
+									formatter: function(obj) {
+										var tmp = obj.value;
+										obj.value = formatCustom(obj.value, 'percent');
+										if (obj.data.summary) {
+											obj.value = '<b>' + obj.value + '</b>';
+										} else if (tmp > 0.0) {
+						 					obj.value = '<a href="#portfolioDetails" onclick="javascript:showDetails1(\'' + obj.data.index<%= i %> + '\');">' + obj.value + '</a>';
+						 				}
+									},
+									allowHTML: true	 			
+						 		}		    				
+		    				<%
+		    			}
+		    		%>
 		   	 	];
 		   
 		   		new Y.DataTable({
@@ -196,4 +145,32 @@
 		  	}
 		);
 	}	
+	
+	function showDetails1(index) {
+						
+		Liferay.Service(
+			'/fingence-portlet.myresult/get-bonds-by-yld-to-maturity',
+			{
+				index: index,
+				portfolioIds : '<%= portfolioIds %>'
+			},
+			function(data) {
+				var ajaxURL = Liferay.PortletURL.createResourceURL();
+				ajaxURL.setPortletId('report_WAR_fingenceportlet');
+				ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_GET_NET_WORTH %>');
+				ajaxURL.setWindowState('exclusive');
+				ajaxURL.setParameter('portfolioIds', '<%= portfolioIds %>');
+				
+				AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+					sync: true,
+					on: {
+						success: function() {
+							displayItemsGrid(data, '#portfolioDetails', this.get('responseData'));
+						}
+					}
+				});
+			}
+		);
+	}	
+	
 </aui:script>
