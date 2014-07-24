@@ -19,7 +19,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -123,8 +122,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
 		int columnCount = 0;
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyD");
-		
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			
@@ -170,11 +167,10 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}
 				
 				double value = CellUtil.getDouble(row.getCell(++i));
-				int dateAsNumber = Integer.valueOf(sdf.format(date));
 				
 				History history = null;
 				try {
-					history = historyPersistence.fetchByAssetId_Date_Type(assetId, dateAsNumber, type);
+					history = historyPersistence.fetchByAssetId_Date_Type(assetId, date, type);
 					_log.debug("history record already present...");
 				} catch (SystemException e) {
 					e.printStackTrace();
@@ -192,7 +188,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					history.setAssetId(assetId);
 					history.setType(type);
 					history.setValue(value);
-					history.setDateAsNumber(dateAsNumber);
+					history.setLogDate(date);
 					
 					if (type == IConstants.HISTORY_TYPE_BOND_CASHFLOW) {
 						double principal = CellUtil.getDouble(row.getCell(++i));
@@ -242,8 +238,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
 		int columnCount = 0;
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyD");
-		
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			
@@ -288,28 +282,11 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 					continue;
 				}
 				
-				int _declaredDate = Integer.valueOf(sdf.format(declaredDate));
+				Date exDate = CellUtil.getDate(row.getCell(++i));
 				
-				int _exDate = 0;
-				try {
-					_exDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
-				} catch (Exception e) {
-					// ignore
-				}	
+				Date recordDate = CellUtil.getDate(row.getCell(++i));
 				
-				int _recordDate = 0;
-				try {
-					_recordDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
-				} catch (Exception e) {
-					// ignore
-				}	
-				
-				int _payableDate = 0;
-				try {
-					_payableDate = Integer.valueOf(sdf.format(CellUtil.getDate(row.getCell(++i))));
-				} catch (Exception e) {
-					// ignore
-				}					
+				Date payableDate = CellUtil.getDate(row.getCell(++i));
 				
 				double amount = CellUtil.getDouble(row.getCell(++i));
 				String frequency = CellUtil.getString(row.getCell(++i));
@@ -317,7 +294,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				
 				Dividend dividend = null;
 				try {
-					dividend = dividendPersistence.fetchByAssetId_DeclaredDate(assetId, _declaredDate);
+					dividend = dividendPersistence.fetchByAssetId_DeclaredDate(assetId, declaredDate);
 					_log.debug("dividend record already present...");
 				} catch (SystemException e) {
 					e.printStackTrace();
@@ -336,11 +313,11 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}	
 				
 				// update the record
-				dividend.setDeclaredDate(_declaredDate);
-				dividend.setExDate(_exDate);
+				dividend.setDeclaredDate(declaredDate);
+				dividend.setExDate(exDate);
 				dividend.setAssetId(assetId);
-				dividend.setRecordDate(_recordDate);
-				dividend.setPayableDate(_payableDate);
+				dividend.setRecordDate(recordDate);
+				dividend.setPayableDate(payableDate);
 				dividend.setAmount(amount);
 				dividend.setFrequency(frequency);
 				dividend.setType(type);
