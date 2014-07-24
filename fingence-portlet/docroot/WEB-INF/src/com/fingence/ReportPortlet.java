@@ -127,7 +127,6 @@ public class ReportPortlet extends MVCPortlet {
 			
 			long portfolioId = ParamUtil.getLong(resourceRequest, "portfolioId", 0l);
 			boolean checked = ParamUtil.getBoolean(resourceRequest, "checked");
-			
 			if (checked) {
 				portletSession.setAttribute("PORTFOLIO_ADDED_"+portfolioId, String.valueOf(portfolioId));
 			} else {
