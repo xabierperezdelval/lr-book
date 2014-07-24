@@ -407,6 +407,11 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 
 			String id_isin = CellUtil.getString(row.getCell(columnNames.get("ID_ISIN")));
 			
+			if (Validator.isNull(id_isin)) {
+				System.out.println("id_isin is null or empty.. continuing...");
+				continue;
+			}
+			
 			Asset asset = getAsset(userId, id_isin);
 			
 			asset.setSecurity_ticker(CellUtil.getString(row.getCell(columnNames.get("SECURITY_TICKER"))));
@@ -505,7 +510,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			if (securityClass.equalsIgnoreCase("Fixed Income")) {
 				Bond bond = getBond(assetId);
-             	//bond.setIssuer_bulk(CellUtil.getString(row.getCell(columnNames.get("ISSUER_BULK"))));
+             	bond.setIssuer_bulk(CellUtil.getString(row.getCell(columnNames.get("ISSUER_BULK"))));
              	bond.setCpn(CellUtil.getDouble(row.getCell(columnNames.get("CPN"))));
              	bond.setCpn_typ(CellUtil.getString(row.getCell(columnNames.get("CPN_TYP"))));
              	bond.setMty_typ(CellUtil.getString(row.getCell(columnNames.get("MTY_TYP"))));
@@ -671,9 +676,10 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				assetId = asset.getAssetId();
 			}
 		} catch (NoSuchAssetException e) {
-			e.printStackTrace();
+			System.out.println("No Asset with this id found..." + id_isin);
+			//e.printStackTrace();
 		} catch (SystemException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		return assetId;
