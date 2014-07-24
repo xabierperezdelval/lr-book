@@ -73,9 +73,10 @@
 				<c:otherwise>
 					<liferay-ui:message key="portfolio-list"/>&nbsp;|&nbsp;<a id="mergeLink" href="javascript:void();">Merge Portfolio&raquo;</a>  
 					<div class="protfoliodropdown">
-						<aui:select name="portfolioList" type="select" label=""  onChange="javascript:changePortfolio(this.value);" />
+						<aui:select name="portfolioList" type="select" label="" onChange="javascript:changePortfolio(this.value);" />
 					</div>
 					<ul class="dropdown-menu merge" id="version-dropdown">
+						<li style="text-align: center;"><button type="button" onClick="javascript:appendPortfolio();">Ok</button><button type="button" id="closePortfolioPopUp">Cancel</button></li>
 						<%
 							List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
 							for (Portfolio _portfolio: _portfolios) {
@@ -83,11 +84,11 @@
 									long otherPortfolioId = _portfolio.getPortfolioId();
 									String checkboxName = "addToReport_" + otherPortfolioId;
 									boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
-									%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:appendPortfolio(this);"/><%
+									%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:addPortfolio(this);"/><%
 								}	
 							}
 						%>
-					</ul>					
+					</ul>		
 				</c:otherwise>				
 			</c:choose>
 		</aui:column>
@@ -136,6 +137,19 @@
 				</aui:select>
 			</aui:column>
 		</c:if>
+		
+		<aui:column columnWidth="30">
+			<b>Following portfolios are shown in this report</b> : <%=PortfolioServiceUtil.getPortfolioName(portfolioId)%>
+			<%  List<Portfolio> _portfoliosChecked = PortfolioLocalServiceUtil.getPortfolios(userId);
+				for (Portfolio _portfolio: _portfoliosChecked) {
+					if (portfolioId != _portfolio.getPortfolioId()) {
+						long checkedvaluePortfolioId = _portfolio.getPortfolioId();
+						boolean checkedvalue = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+checkedvaluePortfolioId));
+						if(checkedvalue) { %><%= StringPool.COMMA + StringPool.SPACE + _portfolio.getPortfolioName() %><% }
+					}
+				} %>
+		</aui:column>
+		
 	</aui:row>
 </c:if>
 
@@ -174,6 +188,7 @@
 </c:choose>
 
 <aui:script>
+	var portfoliosMap = {};
 
 	function formatCustom(value, _type) {
 		var _value = (_type == 'amount')? 
@@ -217,23 +232,29 @@
 			});	
 		}
 		
-		function appendPortfolio(checkbox) {
-			var ajaxURL = Liferay.PortletURL.createResourceURL();
-			ajaxURL.setPortletId('report_WAR_fingenceportlet');
-			ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_ADD_PORTFOLIO_ID %>');
-			ajaxURL.setParameter('portfolioId', checkbox.value);
-			ajaxURL.setParameter('checked', checkbox.checked);
-			ajaxURL.setWindowState('exclusive');
-			
-			AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
-				sync: true,
-				on: {
-					success: function() {
-						Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
-					}
-				}
-			});	
-		}		
+		function addPortfolio(checkbox) {
+			portfoliosMap[checkbox.value] = checkbox.checked;
+		}
+		
+		function appendPortfolio() {
+		
+			for (var key in portfoliosMap) 
+			{
+			    if (portfoliosMap.hasOwnProperty(key))
+			    {
+			    	var ajaxURL = Liferay.PortletURL.createResourceURL();
+					ajaxURL.setPortletId('report_WAR_fingenceportlet');
+					ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_ADD_PORTFOLIO_ID %>');
+					ajaxURL.setParameter('portfolioId', key);
+					ajaxURL.setParameter('checked', portfoliosMap[key]);
+					ajaxURL.setWindowState('exclusive');
+					AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+						sync: true
+					});
+			    }
+			}
+			Liferay.Portlet.refresh('#p_p_id<portlet:namespace/>');
+		}
 
 		AUI().ready(function(A) {
 			var list = document.getElementById('<portlet:namespace/>portfolioList');
@@ -258,8 +279,15 @@
 			mergeLink.on('click', function(e) {
 				portfolios.toggleClass('show');
 				e.preventDefault();
-			});			
-		});
+			});		
+			
+			var closePopUp = A.one('#closePortfolioPopUp');
+			closePopUp.on('click', function(e) {
+				portfolios.toggleClass('show');
+				e.preventDefault();
+			});
+				
+		});		
 	</c:if>
 	
 	<c:if test="<%= showAllocationSwitch %>">
@@ -486,13 +514,10 @@
 	            }
 			];
 			
-			var placeHolderDiv = AUI().one(divId);
-			if (placeHolderDiv != null) {
-				new Y.DataTable({
-					columnset: columns,
-				    recordset: results
-				}).render(divId);			
-			}
+			new Y.DataTable({
+				columnset: columns,
+			    recordset: results
+			}).render(divId);
 		});
 	}
 </aui:script>
