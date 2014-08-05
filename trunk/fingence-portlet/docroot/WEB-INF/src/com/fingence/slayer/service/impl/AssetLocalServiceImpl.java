@@ -365,7 +365,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		
 		long bbSecurityVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Security", serviceContext);
 		long bbIndustryVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Industry", serviceContext);
-		//long bondCPNVocabularyId = AssetHelper.getVocabularyId(userId, "CPN_Type", serviceContext);
+		long bbAssetClassVocabularyId = AssetHelper.getVocabularyId(userId, "BB_Asset_Class", serviceContext);
 		
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
@@ -483,7 +483,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			// Saving to AssetEntry table
 			long entryId = AssetHelper.updateAssetEntry(assetId);
 			
-			AssetHelper.assignCategories(assetId, entryId, userId, row, columnNames, serviceContext, bbSecurityVocabularyId, bbIndustryVocabularyId);
+			AssetHelper.assignCategories(assetId, entryId, userId, row,
+					columnNames, serviceContext, bbSecurityVocabularyId,
+					bbIndustryVocabularyId, bbAssetClassVocabularyId);
 			
 			if (securityClass.equalsIgnoreCase("Fixed Income")) {
 				Bond bond = getBond(assetId);

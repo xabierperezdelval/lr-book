@@ -7,7 +7,9 @@ import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Row;
 
+import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
+import com.fingence.slayer.service.AssetLocalServiceUtil;
 import com.fingence.util.CellUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -16,6 +18,7 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
@@ -146,8 +149,9 @@ public class AssetHelper {
 	
 	public static void assignCategories(long assetId, long entryId, long userId, Row row,
 			Map<String, Integer> columnNames, ServiceContext serviceContext,
-			long bbSecurityVocabularyId, long bbIndustryVocabularyId) {
+			long bbSecurityVocabularyId, long bbIndustryVocabularyId, long bbAssetClassVocabularyId) {
 		
+		// Setting Security Class
 		String securityClass = CellUtil.getString(row.getCell(columnNames.get("BPIPE_REFERENCE_SECURITY_CLASS")));
 		String securityTyp = CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP")));
 		String securityTyp2 = CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2")));
@@ -171,6 +175,7 @@ public class AssetHelper {
 			}			
 		}
 		
+		// Setting Industry Sector
 		String industrySector = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SECTOR")));
 		String industryGroup =  CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP")));
 		String industrySubGroup = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SUBGROUP")));
@@ -185,6 +190,57 @@ public class AssetHelper {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}			
+		}
+		
+		// Setting Asset Class
+		int assetType = 0;
+		try {
+			Asset asset = AssetLocalServiceUtil.fetchAsset(assetId);
+			assetType = asset.getSecurity_class();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (assetType > 0) {
+			String assetClass = StringPool.BLANK;
+			String assetSubClass = StringPool.BLANK;
+			
+			switch (assetType) {
+			case IConstants.SECURITY_CLASS_EQUITY:
+				assetClass = securityClass;
+				assetSubClass = securityTyp2;
+				break;
+				
+			case IConstants.SECURITY_CLASS_FIXED_INCOME:
+				double calcTyp = CellUtil.getDouble(row.getCell(columnNames.get("CALC_TYP")));
+				String collatTyp = CellUtil.getString(row.getCell(columnNames.get("COLLAT_TYP")));
+				String isBondNoCalcTyp = CellUtil.getString(row.getCell(columnNames.get("IS_BOND_NO_CALCTYP")));
+				
+				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
+					assetClass = "Bond";
+					assetSubClass = "Composite Rating";
+				}
+
+				break;
+				
+			case IConstants.SECURITY_CLASS_FUND:
+				assetClass = CellUtil.getString(row.getCell(columnNames.get("FUND_ASSET_CLASS_FOCUS")));
+				assetSubClass = industryGroup;				
+				break;
+			}
+			
+			if (Validator.isNotNull(assetClass) && Validator.isNotNull(assetSubClass)) {
+				long assetClassId = getCategoryId(userId, assetClass, serviceContext, bbAssetClassVocabularyId, 0l);
+				long assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetClassId);
+				
+				if (assetSubClassId > 0l) {
+					try {
+						AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, assetSubClassId);
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}		
+				}
+			}
 		}
 	}
 	
