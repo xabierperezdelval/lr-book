@@ -204,6 +204,8 @@
 		<column name="security_class" type="String"/>
 		<column name="security_typ" type="String"/>
 		<column name="security_typ2" type="String"/>
+		<column name="asset_class" type="String"/>
+		<column name="asset_sub_class" type="String"/>
 		<column name="parent_comp_name" type="String"/>
 		<column name="countryId" type="long"/>
 		<column name="countryName" type="String"/>
@@ -234,6 +236,10 @@
 		<finder return-type="Rating" name="SP_Moody">
 			<finder-column name="sandp"/>
 			<finder-column name="moodys"/>
+		</finder>
+		
+		<finder return-type="Rating" name="Composite">
+			<finder-column name="fitch"/>
 		</finder>
 		
 		<finder return-type="Collection" name="Description">

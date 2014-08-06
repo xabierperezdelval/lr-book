@@ -102,7 +102,6 @@
 								<aui:option value="<%= item.getKey() %>"
 									label="<%= item.getValue() %>"
 									selected="<%=(allocationBy == item.getKey())%>" />
-
 							<%
 						}
 					%>
