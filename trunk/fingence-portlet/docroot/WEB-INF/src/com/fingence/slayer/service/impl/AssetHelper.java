@@ -9,7 +9,8 @@ import org.apache.poi.ss.usermodel.Row;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
-import com.fingence.slayer.service.AssetLocalServiceUtil;
+import com.fingence.slayer.model.Rating;
+import com.fingence.slayer.service.RatingLocalServiceUtil;
 import com.fingence.util.CellUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -147,7 +148,7 @@ public class AssetHelper {
 		return assetCategory.getPrimaryKey();
 	}	
 	
-	public static void assignCategories(long assetId, long entryId, long userId, Row row,
+	public static void assignCategories(Asset asset, long entryId, long userId, Row row,
 			Map<String, Integer> columnNames, ServiceContext serviceContext,
 			long bbSecurityVocabularyId, long bbIndustryVocabularyId, long bbAssetClassVocabularyId) {
 		
@@ -193,13 +194,7 @@ public class AssetHelper {
 		}
 		
 		// Setting Asset Class
-		int assetType = 0;
-		try {
-			Asset asset = AssetLocalServiceUtil.fetchAsset(assetId);
-			assetType = asset.getSecurity_class();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		int assetType = asset.getSecurity_class();
 		
 		if (assetType > 0) {
 			String assetClass = StringPool.BLANK;
@@ -218,7 +213,16 @@ public class AssetHelper {
 				
 				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
 					assetClass = "Bond";
-					assetSubClass = "Composite Rating";
+					assetSubClass = "Not Rated";
+					
+					String bbComposite = CellUtil.getString(row.getCell(columnNames.get("BB_COMPOSITE")));
+					if (Validator.isNotNull(bbComposite)) {
+						Rating rating = RatingLocalServiceUtil.findByFitch(bbComposite);
+						
+						if (Validator.isNotNull(rating) && !rating.getDescription().equalsIgnoreCase("Not Rated")) {
+							assetSubClass = rating.getDescription();
+						}
+					}
 				}
 
 				break;

@@ -134,7 +134,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 		return myResults;
 	}
-	
+
 	private void setCategoryFields(MyResult myResult, int allocationBy) {
 				
 		long assetId = myResult.getAssetId();
@@ -189,6 +189,15 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}				
+			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS)) {
+				myResult.setAsset_sub_class(assetCategory.getName());
+				
+				try {
+					AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
+					myResult.setAsset_class(parentCategory.getName());
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

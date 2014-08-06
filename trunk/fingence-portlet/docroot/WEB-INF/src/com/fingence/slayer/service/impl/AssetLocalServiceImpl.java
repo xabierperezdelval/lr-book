@@ -483,7 +483,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			// Saving to AssetEntry table
 			long entryId = AssetHelper.updateAssetEntry(assetId);
 			
-			AssetHelper.assignCategories(assetId, entryId, userId, row,
+			AssetHelper.assignCategories(asset, entryId, userId, row,
 					columnNames, serviceContext, bbSecurityVocabularyId,
 					bbIndustryVocabularyId, bbAssetClassVocabularyId);
 			

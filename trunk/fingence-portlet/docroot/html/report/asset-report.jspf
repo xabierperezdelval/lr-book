@@ -4,8 +4,8 @@
 
 <%
 	int allocationByIndex = -1;
-	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector"};
- 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector"};
+	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector", "asset_class"};
+ 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector", "Asset Class"};
  	for(int i = 0; i < groupByTitle.length; i++) {
  		if (allocationByName.equalsIgnoreCase(groupByTitle[i])) {
  			allocationByIndex = i;
@@ -36,7 +36,8 @@
 		["countryOfRiskName", "security_class"],
 		["currency_"],
 		["security_class", "security_typ"],
-		["industry_sector", "industry_group", "industry_subgroup"]
+		["industry_sector", "industry_group", "industry_subgroup"],
+		["asset_class", "asset_sub_class"]
 	];
 	// Global Variables END
 	

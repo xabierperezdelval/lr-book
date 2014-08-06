@@ -1,5 +1,6 @@
 package com.fingence;
 
+
 public interface IConstants {
 	int USER_TYPE_INVESTOR = 1;
 	int USER_TYPE_WEALTH_ADVISOR = 2;
@@ -20,15 +21,6 @@ public interface IConstants {
 	
 	String PAGE_PORTFOLIO = "Portfolio";
 	
-//	String[] REPORT_MENU_ITEMS = {
-//		PAGE_REPORTS_HOME,
-//		PAGE_ASSET_REPORT,
-//		PAGE_PERFORMANCE,
-//		PAGE_FIXED_INCOME,
-//		PAGE_RISK_REPORT,
-//		PAGE_VIOLATIONS
-//	};
-	
 	String PARENT_ORG_FIRMS = "Firms";
 	String PARENT_ORG_BANKS = "Banks";
 	
@@ -47,6 +39,7 @@ public interface IConstants {
 	int BREAKUP_BY_CURRENCY = 2;
 	int BREAKUP_BY_SECURITY_CLASS = 3;
 	int BREAKUP_BY_INDUSTRY_SECTOR = 4;
+	int BREAKUP_BY_ASSET_CLASS = 5;
 	
 	int SECURITY_CLASS_FIXED_INCOME = 1;
 	int SECURITY_CLASS_FUND = 2;
@@ -56,6 +49,7 @@ public interface IConstants {
 	String LBL_BREAKUP_BY_CURRENCY = "Currency";
 	String LBL_BREAKUP_BY_SECURITY_CLASS = "Security Class";
 	String LBL_BREAKUP_BY_INDUSTRY_SECTOR = "Industry Sector";
+	String LBL_BREAKUP_BY_ASSET_CLASS = "Asset Class";
 	
 	String THEME_ICON_EDIT = "/common/edit.png";
 	String THEME_ICON_DELETE = "/common/delete.png";
