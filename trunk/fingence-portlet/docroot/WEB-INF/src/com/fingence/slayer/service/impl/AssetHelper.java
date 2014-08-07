@@ -259,6 +259,10 @@ public class AssetHelper {
 				}
 			}
 		}
+		
+		if (asset.getName().equalsIgnoreCase("CREDIT AGRICOLE SA")) {
+			System.out.println("@@@@@ >> " + entryId);
+		}
 	}
 	
 	public static void assignBondCategory(long assetId, long entryId, long userId, Row row,
