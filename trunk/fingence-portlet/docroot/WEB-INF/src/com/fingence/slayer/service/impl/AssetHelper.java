@@ -213,6 +213,7 @@ public class AssetHelper {
 				
 				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
 					assetClass = "Bond";
+					assetSubClass = "Not Rated";
 					
 					String bbComposite = CellUtil.getString(row.getCell(columnNames.get("BB_COMPOSITE")));
 					if (Validator.isNotNull(bbComposite)) {
@@ -224,9 +225,9 @@ public class AssetHelper {
 					}
 				} else {
 					assetClass = "Non-Bond";
+					assetSubClass = "Not Rated";
 				}
-				assetSubClass = "Not Rated";
-
+				
 				break;
 				
 			case IConstants.SECURITY_CLASS_FUND:
