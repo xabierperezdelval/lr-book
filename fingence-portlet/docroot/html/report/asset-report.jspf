@@ -76,7 +76,11 @@
 	
 	function showTreeble(allocationBy) {
 	
-		console.log(JSON.stringify(_data));
+		//console.log(JSON.stringify(_data));
+		
+		_.each(_data, function(item) {
+			console.log('>>>> ' + item.security_class);
+		});
 							
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
 		
