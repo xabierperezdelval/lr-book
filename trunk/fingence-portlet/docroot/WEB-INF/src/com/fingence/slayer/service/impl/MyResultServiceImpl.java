@@ -211,7 +211,9 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					}
 				}
 				
-				System.out.println("Heirachy: " + myResult.getSecurity_class() + " >>> " + myResult.getAsset_class() + " >>> " + myResult.getAsset_sub_class());
+				if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA")) {
+					System.out.println("Heirachy: " + myResult.getSecurity_class() + " >>> " + myResult.getAsset_class() + " >>> " + myResult.getAsset_sub_class());
+				}
 			}
 		}
 	}
