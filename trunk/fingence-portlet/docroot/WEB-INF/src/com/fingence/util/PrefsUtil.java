@@ -55,25 +55,25 @@ public class PrefsUtil {
 		try {
 			preferences = PortletPreferencesLocalServiceUtil.getPortletPreferences(userId, PortletKeys.PREFS_OWNER_TYPE_USER, plid, portletId);
 		} catch (PortalException e) {
-			e.printStackTrace();
+			// ignore
 		} catch (SystemException e) {
+			// ignore
+		}
+		
+		if (Validator.isNotNull(preferences)) return _preference;
+		
+		Document document = null;
+		try {
+			document = SAXReaderUtil.read(preferences.getPreferences());
+		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-
-		if (Validator.isNotNull(preferences)) {
-			Document document = null;
-			try {
-				document = SAXReaderUtil.read(preferences.getPreferences());
-			} catch (DocumentException e) {
-				e.printStackTrace();
-			}
+		
+		for (Iterator<Element> itr = document.getRootElement().elementIterator("preference"); itr.hasNext();) {
+			Element preference = (Element) itr.next();
 			
-			for (Iterator<Element> itr = document.getRootElement().elementIterator("preference"); itr.hasNext();) {
-				Element preference = (Element) itr.next();
-				
-				if (preference.element("name").getText().equalsIgnoreCase(preferenceName)) {
-					_preference = preference.element("value").getText();
-				}
+			if (preference.element("name").getText().equalsIgnoreCase(preferenceName)) {
+				_preference = preference.element("value").getText();
 			}
 		}
 		
