@@ -224,7 +224,8 @@ public class AssetHelper {
 						}
 					}
 				} else {
-					// something else
+					assetClass = "Non-Bond";
+					assetSubClass = "Not Rated";
 				}
 
 				break;
