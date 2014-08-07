@@ -24,6 +24,7 @@
 				a.parent_comp_name,
 				c.purchaseQty,
 				c.purchaseDate,
+				security_class as security_class_int,
 				'' as security_class,
 				a.country as countryId, 
 				d.name as countryName, 
