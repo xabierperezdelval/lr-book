@@ -79,7 +79,7 @@
 		//console.log(JSON.stringify(_data));
 		
 		_.each(_data, function(item) {
-			console.log('>>>> ' + item.security_class);
+			console.log('>>>> ' + item.security_class + ' :: ' + item.name);
 		});
 							
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
