@@ -186,6 +186,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					e.printStackTrace();
 				}				
 			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS)) {
+				
+				System.out.println("myResult.getSecurity_class_int() ==> " + myResult.getSecurity_class_int());
 								
 				if (myResult.getSecurity_class_int() == IConstants.SECURITY_CLASS_EQUITY) {
 					myResult.setAsset_class(assetCategory.getName());
@@ -195,7 +197,9 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 						myResult.setSecurity_class(parentCategory.getName());				
 					} catch (SystemException e) {
 						e.printStackTrace();
-					}					
+					}
+					
+					System.out.println("Heirachy: " + myResult.getSecurity_class() + " >>> " + myResult.getAsset_class());
 				} else {
 					myResult.setAsset_sub_class(assetCategory.getName());
 					
@@ -208,6 +212,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
+					
+					System.out.println("Heirachy: " + myResult.getSecurity_class() + " >>> " + myResult.getAsset_class() + " >>> " + myResult.getAsset_sub_class());
 				}
 			}
 		}
