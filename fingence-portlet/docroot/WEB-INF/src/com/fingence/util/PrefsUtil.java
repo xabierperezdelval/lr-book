@@ -60,7 +60,7 @@ public class PrefsUtil {
 			// ignore
 		}
 		
-		if (Validator.isNotNull(preferences)) return _preference;
+		if (Validator.isNull(preferences)) return _preference;
 		
 		Document document = null;
 		try {
