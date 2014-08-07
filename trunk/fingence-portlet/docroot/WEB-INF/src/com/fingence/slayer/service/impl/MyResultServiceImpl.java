@@ -190,13 +190,28 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					e.printStackTrace();
 				}				
 			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS)) {
-				myResult.setAsset_sub_class(assetCategory.getName());
 				
-				try {
-					AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
-					myResult.setAsset_class(parentCategory.getName());
-				} catch (SystemException e) {
-					e.printStackTrace();
+				if (myResult.getSecurity_class().equalsIgnoreCase("Equity")) {
+					myResult.setAsset_class(assetCategory.getName());
+					
+					try {
+						AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
+						myResult.setSecurity_class(parentCategory.getName());				
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}					
+				} else {
+					myResult.setAsset_sub_class(assetCategory.getName());
+					
+					try {
+						AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
+						myResult.setAsset_class(parentCategory.getName());
+						
+						AssetCategory assetType = AssetCategoryLocalServiceUtil.fetchAssetCategory(parentCategory.getParentCategoryId());
+						myResult.setSecurity_class(assetType.getName());					
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
