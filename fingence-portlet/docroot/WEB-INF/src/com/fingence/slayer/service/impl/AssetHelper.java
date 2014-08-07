@@ -223,6 +223,8 @@ public class AssetHelper {
 							assetSubClass = rating.getDescription();
 						}
 					}
+				} else {
+					// something else
 				}
 
 				break;
@@ -234,8 +236,18 @@ public class AssetHelper {
 			}
 			
 			if (Validator.isNotNull(assetClass) && Validator.isNotNull(assetSubClass)) {
-				long assetClassId = getCategoryId(userId, assetClass, serviceContext, bbAssetClassVocabularyId, 0l);
-				long assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetClassId);
+				long assetTypeId = 0l;
+				long assetClassId = 0l;
+				long assetSubClassId = 0l;
+				
+				if (assetType == IConstants.SECURITY_CLASS_EQUITY) {
+					assetTypeId = getCategoryId(userId, securityClass, serviceContext, bbAssetClassVocabularyId, 0l);
+					assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetTypeId);
+				} else {
+					assetTypeId = getCategoryId(userId, securityClass, serviceContext, bbAssetClassVocabularyId, 0l);
+					assetClassId = getCategoryId(userId, assetClass, serviceContext, bbAssetClassVocabularyId, assetTypeId);
+					assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetClassId);
+				}
 				
 				if (assetSubClassId > 0l) {
 					try {

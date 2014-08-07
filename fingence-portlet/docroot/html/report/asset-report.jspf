@@ -37,7 +37,7 @@
 		["currency_"],
 		["security_class", "security_typ"],
 		["industry_sector", "industry_group", "industry_subgroup"],
-		["asset_class", "asset_sub_class"]
+		["security_class", "asset_class", "asset_sub_class"]
 	];
 	// Global Variables END
 	
@@ -112,12 +112,14 @@
 						var fx_gain_loss1 = 0.0; 
 						var market_value1 = 0.0;
 						
-						if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
+						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>' || (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation != 'Equity'));
+						
+						if (threelevels) {
 							jsonObj1.children = [];
 						}
 						
 						_.each(item.children, function(item) {
-							if (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>') {
+							if (threelevels) {
 								var jsonObj2 = {};
 								jsonObj2.level = 2;
 								jsonObj2.allocation = item.name;
@@ -171,6 +173,8 @@
 				resultantDataArray.push(jsonObj0);
 			});
 		});	
+		
+		console.log(JSON.stringify(resultantDataArray));
 								
 		YUI().use(
 			'datatable',
@@ -204,15 +208,7 @@
 		    				obj.value = prefix + '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.data.hierarchy + '\',\'' + groupByKeys[allocationBy] + '\');">' + obj.value + '</a>';
     					},						
 						allowHTML : true
-					},	
-					{
-						key : 'fx_gain_loss',
-						label : 'FX Gain/Loss',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom1(obj.value, 'amount');
-			 			},
-						allowHTML : true
-					},									
+					},								
 					{
 						key : 'gain_loss',
 						label : '%age G/L',
@@ -241,7 +237,7 @@
 	
 				// treeble config to be set on root datasource
 				var schema = {
-					resultFields : ['hierarchy', 'level', 'allocation', 'fx_gain_loss', 'gain_loss', 'market_value', 'weight',
+					resultFields : ['hierarchy', 'level', 'allocation', 'gain_loss', 'market_value', 'weight',
 						'_open', {
 							key : 'children',
 							parser : 'treebledatasource'
