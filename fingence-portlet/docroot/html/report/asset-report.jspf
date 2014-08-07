@@ -4,7 +4,7 @@
 
 <%
 	int allocationByIndex = -1;
-	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector", "asset_class"};
+	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector", "security_class"};
  	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector", "Asset Class"};
  	for(int i = 0; i < groupByTitle.length; i++) {
  		if (allocationByName.equalsIgnoreCase(groupByTitle[i])) {
@@ -173,9 +173,7 @@
 				resultantDataArray.push(jsonObj0);
 			});
 		});	
-		
-		console.log(JSON.stringify(resultantDataArray));
-								
+										
 		YUI().use(
 			'datatable',
 			'gallery-treeble',
@@ -314,7 +312,7 @@
 	}	
 	
 	function renderChart(groupBy, divId, title){
-		
+			
 		var dataArray = getModifiedArray(_data, groupBy);
 		
 		$(divId).highcharts({
