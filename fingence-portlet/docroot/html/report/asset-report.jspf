@@ -77,6 +77,8 @@
 	function showTreeble(allocationBy) {
 							
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
+		
+		console.log(JSON.stringify(itemList));
 						
 		var resultantDataArray = [];
 						
@@ -172,7 +174,9 @@
 																
 				resultantDataArray.push(jsonObj0);
 			});
-		});	
+		});
+		
+		console.log(JSON.stringify(resultantDataArray));
 										
 		YUI().use(
 			'datatable',
