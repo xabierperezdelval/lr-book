@@ -190,8 +190,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					e.printStackTrace();
 				}				
 			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS)) {
-				
-				if (myResult.getSecurity_class().equalsIgnoreCase("Equity")) {
+								
+				if (myResult.getSecurity_class_int() == IConstants.SECURITY_CLASS_EQUITY) {
 					myResult.setAsset_class(assetCategory.getName());
 					
 					try {
