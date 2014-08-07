@@ -119,10 +119,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				myResult.setCurrency_(IConstants.UN_SPECIFIED);
 			}
 			
-			if (Validator.isNull(myResult.getSecurity_class())) {
-				myResult.setSecurity_class(IConstants.UN_SPECIFIED);
-			}
-			
 			if (Validator.isNull(myResult.getIndustry_sector())) {
 				myResult.setIndustry_sector(IConstants.UN_SPECIFIED);
 			}
