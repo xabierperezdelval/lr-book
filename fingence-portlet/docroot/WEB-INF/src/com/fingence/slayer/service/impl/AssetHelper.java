@@ -235,7 +235,7 @@ public class AssetHelper {
 				break;
 			}
 			
-			if (Validator.isNotNull(assetClass) && Validator.isNotNull(assetSubClass)) {
+			if (Validator.isNotNull(assetClass)) {
 				long assetTypeId = 0l;
 				long assetClassId = 0l;
 				long assetSubClassId = 0l;
@@ -243,7 +243,7 @@ public class AssetHelper {
 				if (assetType == IConstants.SECURITY_CLASS_EQUITY) {
 					assetTypeId = getCategoryId(userId, securityClass, serviceContext, bbAssetClassVocabularyId, 0l);
 					assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetTypeId);
-				} else {
+				} else if (Validator.isNotNull(assetSubClass)) {
 					assetTypeId = getCategoryId(userId, securityClass, serviceContext, bbAssetClassVocabularyId, 0l);
 					assetClassId = getCategoryId(userId, assetClass, serviceContext, bbAssetClassVocabularyId, assetTypeId);
 					assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetClassId);
