@@ -92,9 +92,7 @@
 	}
 	
 	function showDataTable1(data, divId) {
-	
-		console.log(JSON.stringify(data));
-				
+					
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
