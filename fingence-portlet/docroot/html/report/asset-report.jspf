@@ -77,6 +77,8 @@
 	function showTreeble(allocationBy) {
 							
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
+		
+		console.log(JSON.stringify(itemList));
 								
 		var resultantDataArray = [];
 						
@@ -144,9 +146,23 @@
 			
 								jsonObj1.children.push(jsonObj2);
 							} else {
-								gain_loss1 += item.gain_loss_percent;
-								fx_gain_loss1 += item.fx_gain_loss;
-								market_value1 += item.currentMarketValue;
+							
+								if (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Equity') {
+									var cnt = 0;
+									_.each(item.children, function(item) {
+										gain_loss1 += item.gain_loss_percent;
+										fx_gain_loss1 += item.fx_gain_loss;
+										market_value1 += item.currentMarketValue;
+										cnt++;								
+									});
+									gain_loss1 = gain_loss1 / cnt;
+									fx_gain_loss1 = fx_gain_loss1 / cnt;
+									market_value1 = market_value1 / cnt;
+								} else {
+									gain_loss1 += item.gain_loss_percent;
+									fx_gain_loss1 += item.fx_gain_loss;
+									market_value1 += item.currentMarketValue;
+								}	
 							}
 						});
 						
@@ -173,6 +189,8 @@
 				resultantDataArray.push(jsonObj0);
 			});
 		});
+		
+		console.log(JSON.stringify(resultantDataArray));
 												
 		YUI().use(
 			'datatable',
