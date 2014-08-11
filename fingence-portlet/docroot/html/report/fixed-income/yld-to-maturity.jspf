@@ -29,7 +29,6 @@
   			},
   			function(data) {
   			
-  				console.log(JSON.stringify(data));
   				showDataTable1(data, '#gridContainer');
   				
   				var legend = {

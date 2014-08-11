@@ -155,7 +155,7 @@ public class AssetHelper {
 		// Setting Security Class
 		String securityClass = CellUtil.getString(row.getCell(columnNames.get("BPIPE_REFERENCE_SECURITY_CLASS")));
 		String securityTyp = CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP")));
-		String securityTyp2 = CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2")));
+		String securityTyp2 = CellUtil.getString(row.getCell(columnNames.get("SECURITY_TYP2")));	
 		
 		if (securityClass.equalsIgnoreCase("FixedIncome")) {
 			securityClass = "Fixed Income";
@@ -194,7 +194,7 @@ public class AssetHelper {
 		}
 		
 		// Setting Asset Class
-		int assetType = asset.getSecurity_class();
+		int assetType = asset.getSecurity_class();	
 		
 		if (assetType > 0) {
 			String assetClass = StringPool.BLANK;
@@ -258,10 +258,6 @@ public class AssetHelper {
 					}		
 				}
 			}
-		}
-		
-		if (asset.getName().equalsIgnoreCase("CREDIT AGRICOLE SA")) {
-			System.out.println("@@@@@ >> " + entryId);
 		}
 	}
 	

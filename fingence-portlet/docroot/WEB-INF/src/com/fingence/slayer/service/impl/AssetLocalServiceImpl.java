@@ -385,7 +385,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			String id_isin = CellUtil.getString(row.getCell(columnNames.get("ID_ISIN")));
 			
 			if (Validator.isNull(id_isin)) {
-				System.out.println("id_isin is null or empty.. continuing...");
+				System.out.println("id_isin is null or empty.. continuing...the name is..." + CellUtil.getString(row.getCell(columnNames.get("NAME"))));
 				continue;
 			}
 			
