@@ -148,7 +148,6 @@
 								if (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Equity') {
 									var cnt = 0;
 									_.each(item.children, function(item) {
-										console.log(item.currentMarketValue + ' $$$$');
 										gain_loss1 += item.gain_loss_percent;
 										fx_gain_loss1 += item.fx_gain_loss;
 										market_value1 += item.currentMarketValue;
