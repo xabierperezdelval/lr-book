@@ -86,9 +86,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	public List<MyResult> getMyResults(String portfolioIds, int allocationBy) {
 				
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds);
-		
-		System.out.println("myResults size ==> " + myResults.size());
-				
+						
 		for (MyResult myResult: myResults) {
 			
 			String baseCurrency = myResult.getBaseCurrency();
@@ -137,10 +135,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 		long assetId = myResult.getAssetId();
 		
-		if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA") && myResult.getAssetId() == 73) {
-			System.out.println(myResult.getName() + " is the name of asset....");
-		}
-		
 		long entryId = 0l;
 		
 		try {
@@ -148,10 +142,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			entryId = assetEntry.getEntryId();
 		} catch (SystemException e) {
 			e.printStackTrace();
-		}
-		
-		if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA") && myResult.getAssetId() == 73) {
-			System.out.println(entryId + " is the entryId....");
 		}
 		
 		if (entryId == 0l) return;
@@ -163,17 +153,9 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA") && myResult.getAssetId() == 73) {
-			System.out.println("asset Categories ==> " + assetCategories);
-		}
-		
 		if (Validator.isNull(assetCategories)) return;
 		
-		for (AssetCategory assetCategory: assetCategories) {
-			
-			if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA") && myResult.getAssetId() == 73) {
-				System.out.println("assetCategory ==> " + assetCategory.getName());
-			}			
+		for (AssetCategory assetCategory: assetCategories) {		
 			
 			String vocabularyName = StringPool.BLANK;
 			try {
@@ -181,11 +163,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				vocabularyName = assetVocabulary.getName();
 			} catch (SystemException e) {
 				e.printStackTrace();
-			}
-			
-			if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA") && myResult.getAssetId() == 73) {
-				System.out.println("vocabularyName ==> " + vocabularyName);
-			}			
+			}		
 			
 			if (vocabularyName.equalsIgnoreCase("BB_Security") && (allocationBy == IConstants.BREAKUP_BY_SECURITY_CLASS || allocationBy == IConstants.BREAKUP_BY_RISK_COUNTRY)) {				
 				myResult.setSecurity_typ(assetCategory.getName());
@@ -232,10 +210,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
-				}
-				
-				if (myResult.getName().equalsIgnoreCase("CREDIT AGRICOLE SA") && myResult.getAssetId() == 73) {
-					System.out.println("Heirachy: " + myResult.getSecurity_class() + " >>> " + myResult.getAsset_class() + " >>> " + myResult.getAsset_sub_class());
 				}
 			}
 		}
