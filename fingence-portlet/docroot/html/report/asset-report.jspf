@@ -155,6 +155,7 @@
 									});
 									gain_loss1 = gain_loss1 / cnt;
 									fx_gain_loss1 = fx_gain_loss1 / cnt;
+									console.log(market_value1 + ' @@@@');
 								} else {
 									gain_loss1 += item.gain_loss_percent;
 									fx_gain_loss1 += item.fx_gain_loss;
