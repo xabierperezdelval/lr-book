@@ -213,6 +213,7 @@
 		<column name="countryOfRisk" type="long"/>
 		<column name="countryOfRiskName" type="String"/>
 		<column name="currency_" type="String"/>
+		<column name="currencyDesc" type="String"/>
 		<column name="purchasedMarketValue" type="double"/>
 		<column name="currentMarketValue" type="double"/>
 		<column name="gain_loss" type="double"/>

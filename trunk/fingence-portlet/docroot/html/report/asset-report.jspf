@@ -4,7 +4,7 @@
 
 <%
 	int allocationByIndex = -1;
-	String[] groupByField = {"countryOfRiskName", "currency_", "security_class", "industry_sector", "security_class"};
+	String[] groupByField = {"countryOfRiskName", "currencyDesc", "security_class", "industry_sector", "security_class"};
  	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector", "Asset Class"};
  	for(int i = 0; i < groupByTitle.length; i++) {
  		if (allocationByName.equalsIgnoreCase(groupByTitle[i])) {
@@ -34,7 +34,7 @@
 	var groupByKeys = [
 		[],
 		["countryOfRiskName", "security_class"],
-		["currency_"],
+		["currencyDesc"],
 		["security_class", "security_typ"],
 		["industry_sector", "industry_group", "industry_subgroup"],
 		["security_class", "asset_class", "asset_sub_class"]
