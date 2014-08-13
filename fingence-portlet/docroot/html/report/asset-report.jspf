@@ -75,6 +75,8 @@
 	});
 	
 	function showTreeble(allocationBy) {
+	
+		console.log(JSON.stringify(_data));
 							
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
 										
@@ -89,12 +91,14 @@
 				jsonObj0.hierarchy = item.name;
 				var gain_loss0 = 0.0;
 				var fx_gain_loss0 = 0.0; 
+				var usd_invested0 = 0.0;
 				var market_value0 = 0.0;
 							
 				if (item.children[0].assetId) {
 					_.each(item.children, function(item) {
 						gain_loss0 += item.gain_loss_percent;
 						fx_gain_loss0 += item.fx_gain_loss;
+						usd_invested0 += item.purchasedMarketValue;
 						market_value0 += item.currentMarketValue;
 					});
 				} else {
@@ -110,6 +114,7 @@
 						jsonObj1.hierarchy = jsonObj0.allocation + '>>>' + item.name;
 						var gain_loss1 = 0.0; 
 						var fx_gain_loss1 = 0.0; 
+						var usd_invested1 = 0.0;
 						var market_value1 = 0.0;
 						
 						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>' || (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation != 'Equity'));
@@ -126,20 +131,24 @@
 								jsonObj2.hierarchy = jsonObj0.allocation + '>>>' + jsonObj1.allocation + '>>>' + item.name;
 								var gain_loss2 = 0.0; 
 								var fx_gain_loss2 = 0.0; 
+								var usd_invested2 = 0.0;
 								var market_value2 = 0.0;
 								_.each(item.children, function(item) {
 									gain_loss2 += item.gain_loss_percent;
 									fx_gain_loss2 += item.fx_gain_loss;
+									usd_invested2 += item.purchasedMarketValue;
 									market_value2 += item.currentMarketValue;
 								});
 								
 								jsonObj2.gain_loss = gain_loss2/item.children.length;
 								jsonObj2.fx_gain_loss = fx_gain_loss2;
+								jsonObj2.usd_invested = usd_invested2;
 								jsonObj2.market_value = market_value2;
 								jsonObj2.weight = market_value2/_netWorth * 100;
 								
 								gain_loss1 += jsonObj2.gain_loss;
 								fx_gain_loss1 += jsonObj2.fx_gain_loss;
+								usd_invested1 += jsonObj2.usd_invested;
 								market_value1 += jsonObj2.market_value;					
 			
 								jsonObj1.children.push(jsonObj2);
@@ -150,6 +159,7 @@
 									_.each(item.children, function(item) {
 										gain_loss1 += item.gain_loss_percent;
 										fx_gain_loss1 += item.fx_gain_loss;
+										usd_invested1 += item.purchasedMarketValue;
 										market_value1 += item.currentMarketValue;
 										cnt++;								
 									});
@@ -158,6 +168,7 @@
 								} else {
 									gain_loss1 += item.gain_loss_percent;
 									fx_gain_loss1 += item.fx_gain_loss;
+									usd_invested1 += item.purchasedMarketValue;
 									market_value1 += item.currentMarketValue;
 								}	
 							}
@@ -165,11 +176,13 @@
 						
 						jsonObj1.gain_loss = gain_loss1/item.children.length;
 						jsonObj1.fx_gain_loss = fx_gain_loss1;
+						jsonObj1.usd_invested = usd_invested1;
 						jsonObj1.market_value = market_value1;
 						jsonObj1.weight = market_value1/_netWorth * 100;
 						
 						gain_loss0 += jsonObj1.gain_loss;
 						fx_gain_loss0 += jsonObj1.fx_gain_loss;
+						usd_invested0 += jsonObj1.usd_invested;
 						market_value0 += jsonObj1.market_value;			
 	
 						if (jsonObj0.allocation != 'Un-Specified') {
@@ -180,6 +193,7 @@
 				
 				jsonObj0.gain_loss = gain_loss0/item.children.length;
 				jsonObj0.fx_gain_loss = fx_gain_loss0;
+				jsonObj0.usd_invested = usd_invested0;
 				jsonObj0.market_value = market_value0;
 				jsonObj0.weight = market_value0/_netWorth * 100;
 																
@@ -219,15 +233,15 @@
 		    				obj.value = prefix + '<a href="#slicePortfolio" onclick="javascript:sliceChart(\'' + obj.data.hierarchy + '\',\'' + groupByKeys[allocationBy] + '\');">' + obj.value + '</a>';
     					},						
 						allowHTML : true
-					},								
+					},
 					{
-						key : 'gain_loss',
-						label : '%age G/L',
+						key : 'usd_invested',
+						label : 'USD Invested',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom1(obj.value, 'percent');
+			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
 						allowHTML : true
-					},				
+					},																	
 					{
 						key : 'market_value',
 						label : 'Market Value',
@@ -235,7 +249,23 @@
 			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
 						allowHTML : true
-					},				
+					},		
+					{
+						key : 'total_gain_loss',
+						label : 'Total Gain/Loss',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom1(obj.data.market_value - obj.data.usd_invested, 'amount');
+			 			},
+						allowHTML : true
+					},					
+					{
+						key : 'gain_loss',
+						label : '%age Gain/Loss',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom1(obj.value, 'percent');
+			 			},
+						allowHTML : true
+					},								
 					{
 						key : 'weight',
 						label : 'Weight',
@@ -248,7 +278,7 @@
 	
 				// treeble config to be set on root datasource
 				var schema = {
-					resultFields : ['hierarchy', 'level', 'allocation', 'gain_loss', 'market_value', 'weight',
+					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'total_gain_loss', 'gain_loss', 'weight',
 						'_open', {
 							key : 'children',
 							parser : 'treebledatasource'
