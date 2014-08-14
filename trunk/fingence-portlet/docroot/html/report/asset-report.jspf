@@ -106,6 +106,7 @@
 						fx_gain_loss0 += item.fx_gain_loss;
 						usd_invested0 += item.purchasedMarketValue;
 						market_value0 += item.currentMarketValue;
+						conversion0 = item.current_fx;
 					});
 				} else {
 				
@@ -315,7 +316,7 @@
 	
 				// treeble config to be set on root datasource
 				var schema = {
-					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'market_value_in_currency', 'capital_gain_loss', 'fx_gain_loss', 'total_gain_loss', 'gain_loss', 'weight',
+					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'market_value_in_currency', 'conversion', 'capital_gain_loss', 'fx_gain_loss', 'total_gain_loss', 'gain_loss', 'weight',
 						'_open', {
 							key : 'children',
 							parser : 'treebledatasource'
