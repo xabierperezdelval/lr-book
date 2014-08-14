@@ -14,6 +14,7 @@
  	}
 %>
 
+<%-- 
 <aui:row>
 	<aui:column>
 		<div id="chartContainer"></div>
@@ -22,6 +23,10 @@
 		<div id="gridContainer"></div>
 	</aui:column>	
 </aui:row>
+--%>
+
+<div id="chartContainer"></div>
+<div id="gridContainer"></div>
 
 <hr/><div id="slicePortfolio"></div>
 
@@ -93,6 +98,7 @@
 				var fx_gain_loss0 = 0.0; 
 				var usd_invested0 = 0.0;
 				var market_value0 = 0.0;
+				var conversion0 = 1.0;
 							
 				if (item.children[0].assetId) {
 					_.each(item.children, function(item) {
@@ -195,11 +201,14 @@
 				jsonObj0.fx_gain_loss = fx_gain_loss0;
 				jsonObj0.usd_invested = usd_invested0;
 				jsonObj0.market_value = market_value0;
+				jsonObj0.conversion = conversion0;
 				jsonObj0.weight = market_value0/_netWorth * 100;
 																
 				resultantDataArray.push(jsonObj0);
 			});
 		});
+		
+		console.log(JSON.stringify(resultantDataArray));
 														
 		YUI().use(
 			'datatable',
@@ -244,12 +253,40 @@
 					},																	
 					{
 						key : 'market_value',
-						label : 'Market Value',
+						label : 'Market Value<br/>in USD',
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
 						allowHTML : true
-					},		
+					},
+					<c:if test="<%= (allocationByIndex+1) == IConstants.BREAKUP_BY_CURRENCY %>">
+						{
+							key : 'market_value_in_currency',
+							label : 'Market Value<br/>in Given Currency',
+				 			formatter: function(obj) {
+				 				console.log(obj.data.conversion + ':' + obj.data.market_value + '::' + obj.data.market_value / obj.data.conversion);
+				 				obj.value = formatCustom(obj.data.market_value / obj.data.conversion, 'amount');
+				 			},
+							allowHTML : true
+						},	
+						{
+							key : 'capital_gain_loss',
+							label : 'Capital Gain / Loss',
+				 			formatter: function(obj) {
+				 				var total_gain_loss = obj.data.market_value - obj.data.usd_invested;
+				 				obj.value = formatCustom(total_gain_loss - obj.data.fx_gain_loss, 'amount');
+				 			},
+							allowHTML : true
+						},						
+						{
+							key : 'fx_gain_loss',
+							label : 'FX Gain / Loss',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1(obj.value, 'amount');
+				 			},
+							allowHTML : true
+						},												
+					</c:if>		
 					{
 						key : 'total_gain_loss',
 						label : 'Total Gain/Loss',
@@ -260,7 +297,7 @@
 					},					
 					{
 						key : 'gain_loss',
-						label : '%age Gain/Loss',
+						label : '% Gain/Loss',
 			 			formatter: function(obj) {
 			 				obj.value = formatCustom1(obj.value, 'percent');
 			 			},
@@ -278,7 +315,7 @@
 	
 				// treeble config to be set on root datasource
 				var schema = {
-					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'total_gain_loss', 'gain_loss', 'weight',
+					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'market_value_in_currency', 'capital_gain_loss', 'fx_gain_loss', 'total_gain_loss', 'gain_loss', 'weight',
 						'_open', {
 							key : 'children',
 							parser : 'treebledatasource'
@@ -382,7 +419,7 @@
 	        },
 	        plotOptions: {
 	            pie: {
-	            	size: "50%",
+	            	size: "60%",
 	                cursor: 'pointer',
 	                dataLabels: {
 	                    enabled: true,
