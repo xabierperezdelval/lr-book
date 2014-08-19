@@ -175,13 +175,10 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					e.printStackTrace();
 				}
 			} else if (vocabularyName.equalsIgnoreCase("BB_Industry") && (allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR)) {
-				myResult.setIndustry_subgroup(assetCategory.getName());
+				myResult.setIndustry_group(assetCategory.getName());
 				
 				try {
-					AssetCategory industryGroup = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
-					myResult.setIndustry_group(industryGroup.getName());
-					
-					AssetCategory industrySector = AssetCategoryLocalServiceUtil.fetchAssetCategory(industryGroup.getParentCategoryId());
+					AssetCategory industrySector = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
 					myResult.setIndustry_sector(industrySector.getName());
 				} catch (SystemException e) {
 					e.printStackTrace();

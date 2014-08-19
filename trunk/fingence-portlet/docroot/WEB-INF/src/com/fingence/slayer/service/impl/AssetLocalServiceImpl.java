@@ -330,7 +330,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}
 			}
 		}
-	}	
+	}
 	
 	public void importFromExcel(long userId, File excelFile, ServiceContext serviceContext) {
 

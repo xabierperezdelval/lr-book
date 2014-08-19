@@ -14,17 +14,6 @@
  	}
 %>
 
-<%-- 
-<aui:row>
-	<aui:column>
-		<div id="chartContainer"></div>
-	</aui:column>
-	<aui:column>
-		<div id="gridContainer"></div>
-	</aui:column>	
-</aui:row>
---%>
-
 <div id="chartContainer"></div>
 <div id="gridContainer"></div>
 
@@ -41,7 +30,7 @@
 		["countryOfRiskName", "security_class"],
 		["currencyDesc"],
 		["security_class", "security_typ"],
-		["industry_sector", "industry_group", "industry_subgroup"],
+		["industry_sector", "industry_group"],
 		["security_class", "asset_class", "asset_sub_class"]
 	];
 	// Global Variables END
@@ -80,9 +69,7 @@
 	});
 	
 	function showTreeble(allocationBy) {
-	
-		console.log(JSON.stringify(_data));
-							
+								
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
 										
 		var resultantDataArray = [];
@@ -123,8 +110,8 @@
 						var fx_gain_loss1 = 0.0; 
 						var usd_invested1 = 0.0;
 						var market_value1 = 0.0;
-						
-						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_INDUSTRY_SECTOR %>' || (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation != 'Equity'));
+												
+						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation != 'Equity');
 						
 						if (threelevels) {
 							jsonObj1.children = [];
@@ -208,9 +195,7 @@
 				resultantDataArray.push(jsonObj0);
 			});
 		});
-		
-		console.log(JSON.stringify(resultantDataArray));
-														
+																
 		YUI().use(
 			'datatable',
 			'gallery-treeble',

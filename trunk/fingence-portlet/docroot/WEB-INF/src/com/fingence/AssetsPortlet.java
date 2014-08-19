@@ -31,7 +31,7 @@ public class AssetsPortlet extends MVCPortlet {
 		
 		File excelFile = uploadPortletRequest.getFile("assetsMaster");
 		long userId = PortalUtil.getUserId(uploadPortletRequest);
-		
+				
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
