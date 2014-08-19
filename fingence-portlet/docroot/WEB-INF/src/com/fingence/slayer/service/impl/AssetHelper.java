@@ -176,25 +176,34 @@ public class AssetHelper {
 			}			
 		}
 		
+		int assetType = asset.getSecurity_class();	
+		
 		// Setting Industry Sector
-		String industrySector = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SECTOR")));
-		String industryGroup =  CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP")));
-		String industrySubGroup = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SUBGROUP")));
+		String industrySector = StringPool.BLANK;
 		
+		switch (assetType) {
+		case IConstants.SECURITY_CLASS_EQUITY:
+		case IConstants.SECURITY_CLASS_FIXED_INCOME:
+			industrySector = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SECTOR")));
+			break;
+			
+		case IConstants.SECURITY_CLASS_FUND:
+			industrySector = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_SUBGROUP")));
+			break;
+		}
+				
 		long industrySectorId = getCategoryId(userId, industrySector, serviceContext, bbIndustryVocabularyId, 0l);
-		long industryGroupId = getCategoryId(userId, industryGroup, serviceContext, bbIndustryVocabularyId, industrySectorId);
-		long industrySubGroupId = getCategoryId(userId, industrySubGroup, serviceContext, bbIndustryVocabularyId, industryGroupId);
+		long industryGroupId = getCategoryId(userId, securityClass, serviceContext, bbIndustryVocabularyId, industrySectorId);
 		
-		if (industrySubGroupId > 0l) {
+		if (industryGroupId > 0l) {
 			try {
-				AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, industrySubGroupId);
+				AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, industryGroupId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}			
 		}
 		
 		// Setting Asset Class
-		int assetType = asset.getSecurity_class();	
 		
 		if (assetType > 0) {
 			String assetClass = StringPool.BLANK;
@@ -232,7 +241,7 @@ public class AssetHelper {
 				
 			case IConstants.SECURITY_CLASS_FUND:
 				assetClass = CellUtil.getString(row.getCell(columnNames.get("FUND_ASSET_CLASS_FOCUS")));
-				assetSubClass = industryGroup;				
+				assetSubClass = securityClass;				
 				break;
 			}
 			

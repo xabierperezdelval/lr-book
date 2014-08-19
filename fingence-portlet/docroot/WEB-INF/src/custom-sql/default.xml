@@ -11,7 +11,6 @@
 				a.name,
 				'' as industry_sector,
 				'' as industry_group,
-				'' as industry_subgroup,
 				'' as asset_class,
 				'' as asset_sub_class,
 				a.current_price,
