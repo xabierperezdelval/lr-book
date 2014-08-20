@@ -71,24 +71,30 @@
 					<h4><%= PortfolioServiceUtil.getPortfolioName(portfolioId) %></h4>
 				</c:when>
 				<c:otherwise>
-					<liferay-ui:message key="portfolio-list"/>&nbsp;|&nbsp;<a id="mergeLink" href="javascript:void();">Merge Portfolio&raquo;</a>  
+ 					<liferay-ui:message key="portfolio-list"/>&nbsp;|&nbsp;<a href="javascript:mergePortfolio();">Merge Portfolio&raquo;</a>
 					<div class="protfoliodropdown">
 						<aui:select name="portfolioList" type="select" label="" onChange="javascript:changePortfolio(this.value);" />
 					</div>
-					<ul class="dropdown-menu merge" id="version-dropdown">
-						<li style="text-align: center;"><button type="button" onClick="javascript:appendPortfolio();">Ok</button><button type="button" id="closePortfolioPopUp">Cancel</button></li>
-						<%
-							List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
-							for (Portfolio _portfolio: _portfolios) {
-								if (portfolioId != _portfolio.getPortfolioId()) {
-									long otherPortfolioId = _portfolio.getPortfolioId();
-									String checkboxName = "addToReport_" + otherPortfolioId;
-									boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
-									%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:addPortfolio(this);"/><%
-								}	
-							}
-						%>
-					</ul>		
+					<div style="display:none;">
+						<div id="<portlet:namespace />mergeLink">
+							<ul class="dropdown-menu-list">
+								<%
+									List<Portfolio> _portfolios = PortfolioLocalServiceUtil.getPortfolios(userId);
+									for (Portfolio _portfolio: _portfolios) {
+										if (portfolioId != _portfolio.getPortfolioId()) {
+											long otherPortfolioId = _portfolio.getPortfolioId();
+											String checkboxName = "addToReport_" + otherPortfolioId;
+											boolean checked = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+otherPortfolioId));
+											%><li><aui:input type="checkbox" checked="<%= checked %>" value="<%= otherPortfolioId %>" name="<%= checkboxName %>" label="<%= _portfolio.getPortfolioName() %>" onChange="javascript:addPortfolio(this);"/><%
+										}	
+									}
+								%>
+							</ul>
+							<div style="text-align: center;">
+								<button type="button" onClick="javascript:appendPortfolio();">&nbsp;&nbsp;&nbsp;Show&nbsp;&nbsp;&nbsp;</button>
+							</div>
+						</div>
+					</div>
 				</c:otherwise>				
 			</c:choose>
 		</aui:column>
@@ -214,6 +220,34 @@
 	}	
 	
 	<c:if test="<%= (portfolioCount > 1) && reportsPage %>">
+		function mergePortfolio() {
+			AUI().use('liferay-util-window', function(A) {
+				Liferay.Util.openWindow({
+		        	dialog: {
+		        		cache: false,
+		        		close: true,
+		            	centered: true,
+		                modal: true,
+		                width: 400,
+		                height: 300,
+		                destroyOnClose: true,
+		                resizable: false,
+		                bodyContent: AUI().one('#<portlet:namespace />mergeLink')
+	                },
+		            id: '<portlet:namespace/>mergePortfolioPopup',
+		            title: 'Merge Portfolio'
+		       	});
+		    });
+		    
+		    Liferay.provide(window, 'closePopUpAndRefreshPortlet',
+		        function(popupIdToClose) {
+		        	var dialog = Liferay.Util.getWindow("<portlet:namespace/>mergePortfolioPopup");
+					dialog.destroy();
+		        },
+		        ['aui-dialog','aui-dialog-iframe']
+		    );
+		}
+	
 		function changePortfolio(value) {
 			var ajaxURL = Liferay.PortletURL.createResourceURL();
 			ajaxURL.setPortletId('report_WAR_fingenceportlet');
@@ -236,6 +270,8 @@
 		}
 		
 		function appendPortfolio() {
+		
+			closePopUpAndRefreshPortlet("customPopUpID");
 		
 			for (var key in portfoliosMap) 
 			{
@@ -273,18 +309,18 @@
 				);
 			}
 			
-			var mergeLink = A.one('#mergeLink');
-			var portfolios = A.one('#version-dropdown');
-			mergeLink.on('click', function(e) {
-				portfolios.toggleClass('show');
-				e.preventDefault();
-			});		
+<!-- 			var mergeLink = A.one('#mergeLink'); -->
+<!-- 			var portfolios = A.one('#version-dropdown'); -->
+<!-- 			mergeLink.on('click', function(e) { -->
+<!-- 				portfolios.toggleClass('show'); -->
+<!-- 				e.preventDefault(); -->
+<!-- 			});		 -->
 			
-			var closePopUp = A.one('#closePortfolioPopUp');
-			closePopUp.on('click', function(e) {
-				portfolios.toggleClass('show');
-				e.preventDefault();
-			});
+<!-- 			var closePopUp = A.one('#closePortfolioPopUp'); -->
+<!-- 			closePopUp.on('click', function(e) { -->
+<!-- 				portfolios.toggleClass('show'); -->
+<!-- 				e.preventDefault(); -->
+<!-- 			}); -->
 				
 		});		
 	</c:if>
