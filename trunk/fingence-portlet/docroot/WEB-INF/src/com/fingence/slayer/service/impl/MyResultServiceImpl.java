@@ -24,10 +24,12 @@ import java.util.List;
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Bond;
+import com.fingence.slayer.model.Dividend;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.model.Rating;
 import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
+import com.fingence.slayer.service.persistence.DividendPersistence;
 import com.fingence.slayer.service.persistence.MyResultFinderImpl;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -126,9 +128,33 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			if (allocationBy != IConstants.BREAKUP_BY_CURRENCY) {
 				setCategoryFields(myResult, allocationBy);
 			}
+			
+			calculateIncome(myResult);
+			
 		}
 				
 		return myResults;
+	}
+
+	private void calculateIncome(MyResult myResult) {
+		long assetId = myResult.getAssetId();
+		double income = 0l;
+		try {
+			List<Dividend> dividends = dividendPersistence.findByAssetId(assetId);
+			for(Dividend dividend : dividends) {
+				if(Validator.isNotNull(dividend.getPayableDate()) && Validator.isNotNull(myResult.getPurchaseDate())) {
+					if(myResult.getPurchaseDate().after(dividend.getPayableDate())) {
+						income += dividend.getAmount();
+					}
+				}
+			}
+			// Coupon
+			
+			
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		myResult.setIncome(income);
 	}
 
 	private void setCategoryFields(MyResult myResult, int allocationBy) {
@@ -175,7 +201,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					e.printStackTrace();
 				}
 			} else if (vocabularyName.equalsIgnoreCase("BB_Industry") && (allocationBy == IConstants.BREAKUP_BY_INDUSTRY_SECTOR)) {
-				myResult.setIndustry_group(assetCategory.getName());
+				myResult.setSecurity_class(assetCategory.getName());
 				
 				try {
 					AssetCategory industrySector = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());

@@ -10,7 +10,6 @@
 				a.id_isin,
 				a.name,
 				'' as industry_sector,
-				'' as industry_group,
 				'' as asset_class,
 				'' as asset_sub_class,
 				a.current_price,
@@ -35,7 +34,8 @@
 				(a.current_price * c.purchaseQty * e.conversion) as currentMarketValue,
 				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx)) as gain_loss,
 				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx))/(c.purchasePrice * c.purchaseQty * c.purchasedFx) * 100.0 as gain_loss_percent,
-				((e.conversion - c.purchasedFx) * c.purchaseQty) as fx_gain_loss
+				((e.conversion - c.purchasedFx) * c.purchaseQty) as fx_gain_loss,
+				'' as income
 				[$FING_BOND_COLUMNS$]
 			FROM 
 				fing_Asset a,

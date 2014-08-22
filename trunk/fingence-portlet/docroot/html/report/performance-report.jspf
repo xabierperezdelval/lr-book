@@ -17,7 +17,7 @@
 			divForMasking.plug(A.LoadingMask, { background: '#F0F0F0' });
             divForMasking.loadingmask.toggle();
 		}
-			
+		
 		Liferay.Service(
   			'/fingence-portlet.myresult/get-my-results',
   			{
@@ -60,39 +60,105 @@
 		}
 		
 		sorted = sorted.slice(0,<%= assetsToShow %>);
+		
+		
+<!-- 		Security Name	name + security_des -->
+<!-- 		Purchase Date	purchase_dt -->
+<!-- 		Purchase Price	purchase_price -->
+<!-- 		Current Price	last_price or bid_price -->
+
+<!-- 		Holding Period (in Yrs)	current date - purchase_dt (In Yrs) -->
+<!-- 		(A) Capital Gains	Except for Bonds: (last_price - purchase_price) * purchase_qty. For Bonds: ((bid_price - purchase_price)/100) * purchase_qty.   -->
+<!-- 		(B) Income	Dividend, coupon payment.  -->
+<!-- 		Total Returns	A+B -->
+<!-- 		Avg Holding period return	Total Returns / Holding Period (in Yrs) -->
+		
 		if (sorted.length > 0) {
 			YUI().use(
 				'aui-datatable',
 			  	function(Y) {
 			    	var columns = [
-			    		{key: 'name', label: 'Asset Name', sortable: true},
+			    		{
+			    			key: 'name',
+			    			label: 'Security Name', 
+			    			formatter: function(obj) {
+				 				obj.value = obj.data.name + ' ' + obj.data.security_des;
+				 			},
+				 			allowHTML: true,
+			    			sortable: true
+			    		},
 				 		{
-				 			key: 'gain_loss',
-				 			label: title,
+				 			key: 'purchaseDate',
+				 			label: 'Purchase Date',
+				 			formatter: function(obj) {
+				 				obj.value = formatDate(obj.value);
+				 			},
+				 			allowHTML: true,
+				 			sortable: true
+				 		},
+				 		{
+				 			key: 'purchasedMarketValue',
+				 			label: 'Purchase Price',
 				 			formatter: function(obj) {
 				 				obj.value = formatCustom1(obj.value, 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
 				 		},
-						{
-							key: 'gain_loss_percent',
-							label: title + '%' ,
-							formatter: function(obj) {
-								obj.value = formatCustom1(obj.value, 'percent');
-							},
+				 		{
+				 			key: 'last_price',
+				 			label: 'Current Price',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1(obj.value, 'amount');
+				 			},
 				 			allowHTML: true,
 				 			sortable: true
-						},
-						{
-							key: 'gain_loss',
-							label: 'Weight' ,
-							formatter: function(obj) {
-								obj.value = formatCustom((obj.value/totalInvestment * 100.0), 'percent');
-							},
+				 		},
+				 		{
+				 			key: 'purchaseDate',
+				 			label: 'Holding Period <br/>(in Yrs)',
+				 			formatter: function(obj) {
+				 				obj.value = formatYears(obj.value);
+				 			},
 				 			allowHTML: true,
 				 			sortable: true
-						}				 		
+				 		},
+				 		{
+				 			key: 'gain_loss',
+				 			label: 'Capital Gains',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1(obj.value, 'amount');
+				 			},
+				 			allowHTML: true,
+				 			sortable: true
+				 		},
+				 		{
+				 			key: 'income',
+				 			label: 'Income',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1(obj.value, 'amount');
+				 			},
+				 			allowHTML: true,
+				 			sortable: true
+				 		},
+				 		{
+				 			key: 'total_returns',
+				 			label: 'Total Returns',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1(obj.data.gain_loss + obj.data.income, 'amount');
+				 			},
+				 			allowHTML: true,
+				 			sortable: true
+				 		},
+				 		{
+				 			key: 'avg_holding_period_return',
+				 			label: 'Avg Holding period return',
+				 			formatter: function(obj) {
+				 				obj.value = formatCustom1((obj.data.gain_loss + obj.data.income)/formatYears(obj.data.purchaseDate), 'amount');
+				 			},
+				 			allowHTML: true,
+				 			sortable: true
+				 		}
 			   	 	];
 			   
 					var placeHolderDiv = AUI().one(divId);

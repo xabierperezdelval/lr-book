@@ -192,7 +192,6 @@
 		<column name="id_isin" type="String"/>
 		<column name="name" type="String"/>
 		<column name="industry_sector" type="String"/>
-		<column name="industry_group" type="String"/>
 		<column name="purchaseQty" type="double"/>
 		<column name="purchaseDate" type="Date"/>
 		<column name="current_price" type="double"/>
@@ -218,6 +217,7 @@
 		<column name="gain_loss" type="double"/>
 		<column name="gain_loss_percent" type="double"/>
 		<column name="fx_gain_loss" type="double"/>
+		<column name="income" type="double"/>
 		
 		<finder return-type="Collection" name="PortfolioId">
 			<finder-column name="portfolioId"/>
