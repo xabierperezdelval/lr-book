@@ -30,7 +30,7 @@
 		["countryOfRiskName", "security_class"],
 		["currencyDesc"],
 		["security_class", "security_typ"],
-		["industry_sector", "industry_group"],
+		["industry_sector", "security_class"],
 		["security_class", "asset_class", "asset_sub_class"]
 	];
 	// Global Variables END

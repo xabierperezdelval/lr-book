@@ -217,7 +217,30 @@
 		}
 		
 		return _value;
-	}	
+	}
+	
+	function formatDate(value) {
+		var _value = new Date(value);
+		var dd = _value.getDate();
+        var mm = _value.getMonth() + 1;
+        var yyyy = _value.getFullYear();
+        if(dd < 10)
+        {
+        	dd = '0'+ dd;
+        }
+        if(mm < 10)
+        {
+        	mm = '0' + mm;
+        }
+		return dd + '/' + mm + '/' + yyyy;
+	}
+	
+	function formatYears(value) {
+		var _value = new Date(value);
+		var _today = new Date();
+		var diff = _today.getFullYear() - _value.getFullYear();
+		return diff;
+	}
 	
 	<c:if test="<%= (portfolioCount > 1) && reportsPage %>">
 		function mergePortfolio() {
