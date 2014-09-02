@@ -425,7 +425,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			
 			Country country = null;
 			try {
-				String countryCode = CellUtil.getString(row.getCell(columnNames.get("COUNTRY")));
+				String countryCode = CellUtil.getString(row.getCell(columnNames.get("CNTRY_OF_DOMICILE")));
 				
 				if (countryCode.equalsIgnoreCase("SP")) {
 					countryCode = "ES";
@@ -445,9 +445,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				//CNTRY_OF_RISK
 				String countryCode = CellUtil.getString(row.getCell(columnNames.get("CNTRY_OF_RISK")));
 				
-				if (Validator.isNull(countryCode)) {
-					countryCode = CellUtil.getString(row.getCell(columnNames.get("FUND_GEO_FOCUS")));
-				}
+//				if (Validator.isNull(countryCode)) {
+//					countryCode = CellUtil.getString(row.getCell(columnNames.get("FUND_GEO_FOCUS")));
+//				}
 				
 				if (countryCode.equalsIgnoreCase("SP")) {
 					countryCode = "ES";
@@ -459,6 +459,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+			
 			if (Validator.isNotNull(country)) {
 				asset.setCountry_of_risk(country.getCountryId());
 			} else {
