@@ -19,23 +19,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.persistence.OrderBy;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Bond;
 import com.fingence.slayer.model.Dividend;
+import com.fingence.slayer.model.History;
 import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.model.Rating;
+import com.fingence.slayer.model.impl.HistoryModelImpl;
 import com.fingence.slayer.service.CurrencyServiceUtil;
+import com.fingence.slayer.service.HistoryLocalServiceUtil;
+import com.fingence.slayer.service.HistoryServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
 import com.fingence.slayer.service.persistence.DividendPersistence;
+import com.fingence.slayer.service.persistence.HistoryPersistence;
+import com.fingence.slayer.service.persistence.HistoryPersistenceImpl;
 import com.fingence.slayer.service.persistence.MyResultFinderImpl;
+import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
@@ -415,6 +427,97 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				jsonObj.put("bond_holdings_percent", jsonObj.getDouble("market_value")*100/totalValueOfBonds);
 			}
 				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataAccess.cleanUp(conn);
+		}
+		
+		return jsonArray;		
+	}
+	
+	public JSONArray getCashFlow(String portfolioIds) {
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		Connection conn = null;
+		try {
+			conn = DataAccess.getConnection();
+			
+			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
+			String[] replacements = {portfolioIds, ",b.portfolioName ,f.*", ", fing_Bond f", "and a.assetId = f.assetId"};
+			
+			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+			
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next()) {
+				String portfolioName = rs.getString("portfolioName");
+				
+				Date date = new Date();
+				double calcTyp = rs.getDouble("calc_typ");
+				String collatTyp = rs.getString("collat_typ");
+				String isBondNoCalcTyp = rs.getString("is_bond_no_calctyp");
+				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
+					Date issueDate = rs.getDate("issue_dt");
+					List<History> histories = null;
+					try {
+						//System.out.println("Entered If, assetId :: " + rs.getLong("assetId"));
+						OrderByComparator comparator = OrderByComparatorFactoryUtil.create(HistoryModelImpl.TABLE_NAME, "logDate", true);
+						histories = historyPersistence.findByAssetId_Type(rs.getLong("assetId"), 3, 0, historyPersistence.countByAssetId(rs.getLong("assetId")), comparator);
+						
+						for(History history:histories) {
+							//System.out.println("Asset Id :: " + rs.getLong("assetId") + ", History Log Date :: " + history.getLogDate() + ", issueDate :: " + issueDate);
+						}
+						
+						//date = history.getLogDate();
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
+				} else {
+					//date = rs.getDate("purchaseDate");
+					//System.out.println("Entered Else");
+				}
+				
+				// if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
+				//    History
+				//    Query with assetId and Type = 3 (Cash Flow Type)
+				//    First record after issue date
+				// }
+				// Non- Bond
+				// Query dividend table with asset ID
+				// get first which is after the purchaseDate
+				
+				String nameSecurityDes = rs.getString("name") + " " + rs.getString("security_des");
+				String idIsin = rs.getString("id_isin");
+				double purchaseQty = rs.getDouble("purchaseQty");
+				double most_recent_reported_factor = rs.getDouble("amount_outstanding") / rs.getDouble("amount_issued");
+				double amountOutstanding = purchaseQty * most_recent_reported_factor;
+				//String transaction = rs.getString("");
+				double cashFlow = amountOutstanding * (rs.getDouble("cpn") / (rs.getDouble("cpn_freq") * 100) );
+				String currency = rs.getString("currencyDesc");
+				double currencyConversionRate = rs.getDouble("current_fx");
+				double cashFlowCurrency = cashFlow * currencyConversionRate;
+				
+				JSONObject jsonObj = JSONFactoryUtil.createJSONObject();;
+				jsonObj.put("portfolioName", portfolioName);
+				jsonObj.put("date", date);
+				jsonObj.put("nameSecurityDes", nameSecurityDes);
+				jsonObj.put("securityID", idIsin);
+				jsonObj.put("purchaseQty", purchaseQty);
+				jsonObj.put("amountOutstanding", amountOutstanding);
+				jsonObj.put("transaction", "");
+				jsonObj.put("cashFlow", cashFlow);
+				jsonObj.put("currency", currency);
+				jsonObj.put("currencyConversionRate", currencyConversionRate);
+				jsonObj.put("cashFlowCurrency", cashFlowCurrency);
+				
+				jsonArray.put(jsonObj);
+			}
+			
+			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
