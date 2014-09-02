@@ -13,7 +13,7 @@
 	</c:when>	
 	<c:when test="<%= (fixedIncomeReportTypeName.equalsIgnoreCase(IConstants.FIXED_INCOME_CPN_TYP_VS_MTY_TYP)) %>">
 		<%@ include file="/html/report/fixed-income/cpn-typ-vs-mty-typ.jspf"%>
-	</c:when>	
+	</c:when>
 	<c:otherwise>
 		<%@ include file="/html/report/fixed-income/bonds-maturity.jspf"%>
 	</c:otherwise>
@@ -45,7 +45,7 @@
 	function showDataTable(data, divId, title) {
 	
 		var dataWithSummary = appendSummaryRow(data);
-			
+		
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
@@ -94,7 +94,7 @@
 			 				}
 						},
 			 			allowHTML: true
-					}				 		
+					}			 		
 		   	 	];
 		   
 		   		var placeHolderDiv = AUI().one(divId);

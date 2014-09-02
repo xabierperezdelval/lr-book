@@ -46,12 +46,11 @@
 		
 		<finder return-type="Asset" name="IdISIN">
 			<finder-column name="id_isin"/>
-		</finder>		
+		</finder>
 	</entity>
 	
 	<entity name="Bond" local-service="true" remote-service="true" cache-enabled="false">
 		<column name="assetId" type="long" primary="true"/>
-		
 		<column name="issuer_bulk" type="String"/>
 		<column name="cpn" type="double"/>	
 		<column name="cpn_typ" type="String"/>	
@@ -60,6 +59,7 @@
 		<column name="yld_ytm_ask" type="double"/>
 		<column name="yld_ytm_bid" type="double"/>
 		<column name="yld_cur_mid" type="double"/>
+		<column name="issue_dt" type="Date"/>
 		<column name="maturity_dt" type="Date"/>
 		<column name="calc_typ" type="double"/>
 		<column name="is_bond_no_calctyp" type="boolean"/>
@@ -71,6 +71,8 @@
 		<column name="five_y_bid_cds_spread" type="double"/>
 		<column name="dur_mid" type="double"/>
 		<column name="price_to_cash_flow" type="double"/>
+		<column name="amount_issued" type="double"/>
+		<column name="amount_outstanding" type="double"/>		
 	</entity>
 	
 	<entity name="Equity" local-service="true" remote-service="true" cache-enabled="false">		
@@ -259,6 +261,11 @@
 		<finder return-type="History" name="AssetId_Date_Type">
 			<finder-column name="assetId"/>
 			<finder-column name="logDate"/>
+			<finder-column name="type"/>
+		</finder>
+		
+		<finder return-type="Collection" name="AssetId_Type">
+			<finder-column name="assetId"/>
 			<finder-column name="type"/>
 		</finder>
 		

@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="java.util.Map.Entry"%>
 <%@page import="com.fingence.slayer.service.ReportConfigServiceUtil"%>
 <%@ include file="/html/report/init.jsp"%>
@@ -181,7 +182,7 @@
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_VIOLATIONS) %>">
 		<%@ include file="/html/report/violations-report.jspf"%>
-	</c:when>	
+	</c:when>
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO) %>">
 		<%@ include file="/html/report/update.jspf"%>

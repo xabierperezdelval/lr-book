@@ -512,7 +512,9 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
              	bond.setCollat_typ(CellUtil.getString(row.getCell(columnNames.get("COLLAT_TYP"))));
              	bond.setCalc_typ(CellUtil.getDouble(row.getCell(columnNames.get("CALC_TYP"))));
              	bond.setIs_bond_no_calctyp(Validator.isNull(CellUtil.getString(row.getCell(columnNames.get("IS_BOND_NO_CALCTYP")))));
-             	
+             	bond.setIssue_dt(CellUtil.getDate(row.getCell(columnNames.get("ISSUE_DT"))));
+             	bond.setAmount_issued(CellUtil.getDouble(row.getCell(columnNames.get("AMT_ISSUED"))));
+             	bond.setAmount_outstanding(CellUtil.getDouble(row.getCell(columnNames.get("AMT_OUTSTANDING"))));
              	//AssetHelper.assignBondCategory(assetId, entryId, userId, row, columnNames, serviceContext, bondCPNVocabularyId);
              		
              	try {
