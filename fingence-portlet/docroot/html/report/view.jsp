@@ -220,6 +220,13 @@
 		return _value;
 	}
 	
+	function formatCustom2(value, _type, currencySymbol) {
+		var _value = (_type == 'amount')? 
+			accounting.formatMoney(Math.abs(value), currencySymbol, 2) : accounting.toFixed(Math.abs(value), 2) + '%';
+		
+		return _value;
+	}	
+	
 	function formatDate(value) {
 		var _value = new Date(value);
 		var dd = _value.getDate();

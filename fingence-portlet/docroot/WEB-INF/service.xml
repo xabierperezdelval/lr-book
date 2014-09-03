@@ -106,6 +106,7 @@
 		<column name="currencyCode" type="String"/>
 		<column name="currencyDesc" type="String"/>
 		<column name="conversion" type="double"/>
+		<column name="currencySymbol" type="String"/>
 		
 		<order by="ase">
 			<order-column name="currencyCode"/>
@@ -220,6 +221,7 @@
 		<column name="gain_loss_percent" type="double"/>
 		<column name="fx_gain_loss" type="double"/>
 		<column name="income" type="double"/>
+		<column name="currencySymbol" type="String"/>
 		
 		<finder return-type="Collection" name="PortfolioId">
 			<finder-column name="portfolioId"/>
