@@ -86,6 +86,7 @@
 				var usd_invested0 = 0.0;
 				var market_value0 = 0.0;
 				var conversion0 = 1.0;
+				var currencySymbol0 = "";
 							
 				if (item.children[0].assetId) {
 					_.each(item.children, function(item) {
@@ -94,6 +95,10 @@
 						usd_invested0 += item.purchasedMarketValue;
 						market_value0 += item.currentMarketValue;
 						conversion0 = item.current_fx;
+						currencySymbol0 = item.currencySymbol;
+						
+						
+						
 					});
 				} else {
 				
@@ -190,12 +195,13 @@
 				jsonObj0.usd_invested = usd_invested0;
 				jsonObj0.market_value = market_value0;
 				jsonObj0.conversion = conversion0;
+				jsonObj0.currencySymbol = currencySymbol0;				
 				jsonObj0.weight = market_value0/_netWorth * 100;
 																
 				resultantDataArray.push(jsonObj0);
 			});
 		});
-																
+															
 		YUI().use(
 			'datatable',
 			'gallery-treeble',
@@ -250,8 +256,9 @@
 							key : 'market_value_in_currency',
 							label : 'Market Value<br/>in Given Currency',
 				 			formatter: function(obj) {
-				 				console.log(obj.data.conversion + ':' + obj.data.market_value + '::' + obj.data.market_value / obj.data.conversion);
-				 				obj.value = formatCustom(obj.data.market_value / obj.data.conversion, 'amount');
+				 				console.log("===>>>" + obj.data.currencySymbol);
+				 				
+				 				obj.value = formatCustom2(obj.data.market_value / obj.data.conversion, 'amount', obj.data.currencySymbol);
 				 			},
 							allowHTML : true
 						},	
@@ -301,7 +308,7 @@
 	
 				// treeble config to be set on root datasource
 				var schema = {
-					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'market_value_in_currency', 'conversion', 'capital_gain_loss', 'fx_gain_loss', 'total_gain_loss', 'gain_loss', 'weight',
+					resultFields : ['hierarchy', 'level', 'allocation', 'usd_invested', 'market_value', 'market_value_in_currency', 'conversion', 'currencySymbol', 'capital_gain_loss', 'fx_gain_loss', 'total_gain_loss', 'gain_loss', 'weight',
 						'_open', {
 							key : 'children',
 							parser : 'treebledatasource'
