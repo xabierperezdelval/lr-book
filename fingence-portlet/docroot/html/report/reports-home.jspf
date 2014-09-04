@@ -33,7 +33,7 @@
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
 	    							if (obj.value.indexOf('Total') == -1){
-	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:showDetails(' + obj.data.portfolioId +');">'+ obj.data.portfolioName +  '</a>';
+	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:showDetails(' + obj.data.portfolioId +', ' + obj.data.currentPrice + ');">'+ obj.data.portfolioName +  '</a>';
 	    							}
 	    						}
 	   				 		},
@@ -124,11 +124,12 @@
 		$('#viewAllocation').text("Coming Soon");
 	}
 	
-	function showDetails(portfolioId) {
+	function showDetails(portfolioId, currentPrice) {
 		var ajaxURL = Liferay.PortletURL.createRenderURL();
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('jspPage', '/html/report/details.jsp');
 		ajaxURL.setParameter('portfolioId', portfolioId);
+		ajaxURL.setParameter('currentPrice', formatCustom(currentPrice, 'amount'));
 		ajaxURL.setParameter("backURL", '<%= themeDisplay.getURLCurrent() %>');
 		ajaxURL.setWindowState('exclusive');
 				

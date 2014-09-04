@@ -4,13 +4,21 @@
 
 <%
 	long portfolioId = ParamUtil.getLong(renderRequest, "portfolioId");
+	String currentPrice = ParamUtil.getString(renderRequest, "currentPrice");
 	Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(portfolioId);
 	String backURL = ParamUtil.getString(request, "backURL");
 	String managerName = BridgeServiceUtil.getUserName(portfolio.getRelationshipManagerId());
 	
 	int portfolioItemCount = PortfolioItemServiceUtil.getPortfolioItems(portfolioId).size();
 %>
-	
+
+<aui:fieldset>
+	<aui:row>
+		<aui:column columnWidth="100"><b>Portfolio Name :</b> <%= portfolio.getPortfolioName() %></aui:column>
+		<aui:column columnWidth="100"><b>Market Value (USD) :</b> <%= currentPrice %></aui:column>
+	</aui:row>
+</aui:fieldset>
+
 <aui:fieldset>
 	<aui:row>
 		<aui:column columnWidth="20"><b>Investor</b></aui:column>
