@@ -88,19 +88,35 @@
 		    		},
 		    		{
 		    			key: 'purchaseQty',
-			 			label: 'Purchase Qty'
+			 			label: 'Purchase Qty',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom2(obj.value, '', '');
+			 			},
+						allowHTML : true
 		    		},
 		    		{
 		    			key: 'amountOutstanding',
-			 			label: 'Amount Outstanding'
+			 			label: 'Amount Outstanding',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 			},
+						allowHTML : true
 		    		},
 		    		{
 		    			key: 'Transaction',
-			 			label: 'transaction'
+			 			label: 'transaction',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 			},
+						allowHTML : true
 		    		},
 		    		{
 		    			key: 'cashFlow',
-			 			label: 'Cash Flow'
+			 			label: 'Cash Flow',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 			},
+						allowHTML : true
 		    		},
 		    		{
 		    			key: 'currency',
@@ -112,7 +128,11 @@
 		    		},
 		    		{
 		    			key: 'cashFlowCurrency',
-			 			label: 'Cash flow <br>in Currency'
+			 			label: 'Cash flow <br>in Currency',
+			 			formatter: function(obj) {
+			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 			},
+						allowHTML : true
 		    		}			 		
 		   	 	];
 		   

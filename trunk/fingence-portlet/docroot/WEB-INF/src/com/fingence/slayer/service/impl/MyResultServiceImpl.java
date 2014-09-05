@@ -497,12 +497,13 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				//String transaction = rs.getString("");
 				double cashFlow = amountOutstanding * (rs.getDouble("cpn") / (rs.getDouble("cpn_freq") * 100) );
 				String currency = rs.getString("currencyDesc");
+				String currencySymbol = rs.getString("currencySymbol");
 				double currencyConversionRate = rs.getDouble("current_fx");
 				double cashFlowCurrency = cashFlow * currencyConversionRate;
 				
 				JSONObject jsonObj = JSONFactoryUtil.createJSONObject();;
 				jsonObj.put("portfolioName", portfolioName);
-				jsonObj.put("date", date);
+				jsonObj.put("date", date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getYear());
 				jsonObj.put("nameSecurityDes", nameSecurityDes);
 				jsonObj.put("securityID", idIsin);
 				jsonObj.put("purchaseQty", purchaseQty);
@@ -510,6 +511,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				jsonObj.put("transaction", "");
 				jsonObj.put("cashFlow", cashFlow);
 				jsonObj.put("currency", currency);
+				jsonObj.put("currencySymbol", currencySymbol);
 				jsonObj.put("currencyConversionRate", currencyConversionRate);
 				jsonObj.put("cashFlowCurrency", cashFlowCurrency);
 				
