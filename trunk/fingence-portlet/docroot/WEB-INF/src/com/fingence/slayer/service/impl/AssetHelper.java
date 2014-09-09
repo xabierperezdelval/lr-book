@@ -217,6 +217,10 @@ public class AssetHelper {
 				
 			case IConstants.SECURITY_CLASS_FIXED_INCOME:
 				
+				if (Validator.isNull(assetClass)) {
+					assetClass = "Fixed Income";
+				}
+				
 				System.out.println("the item is SECURITY_CLASS_FIXED_INCOME @@@@@@@@@@@@@@");
 				double calcTyp = CellUtil.getDouble(row.getCell(columnNames.get("CALC_TYP")));
 				String collatTyp = CellUtil.getString(row.getCell(columnNames.get("COLLAT_TYP")));
