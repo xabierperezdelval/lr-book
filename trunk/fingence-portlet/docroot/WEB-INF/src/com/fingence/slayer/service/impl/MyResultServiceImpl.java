@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.OrderBy;
-
 import com.fingence.IConstants;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Bond;
@@ -33,14 +31,8 @@ import com.fingence.slayer.model.MyResult;
 import com.fingence.slayer.model.Rating;
 import com.fingence.slayer.model.impl.HistoryModelImpl;
 import com.fingence.slayer.service.CurrencyServiceUtil;
-import com.fingence.slayer.service.HistoryLocalServiceUtil;
-import com.fingence.slayer.service.HistoryServiceUtil;
 import com.fingence.slayer.service.base.MyResultServiceBaseImpl;
-import com.fingence.slayer.service.persistence.DividendPersistence;
-import com.fingence.slayer.service.persistence.HistoryPersistence;
-import com.fingence.slayer.service.persistence.HistoryPersistenceImpl;
 import com.fingence.slayer.service.persistence.MyResultFinderImpl;
-import com.fingence.util.CellUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -223,28 +215,23 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				}				
 			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS)) {
 				
-				if (myResult.getSecurity_class_int() == IConstants.SECURITY_CLASS_EQUITY) {
-					myResult.setAsset_class(assetCategory.getName());
+				AssetCategory grantParentCategory = null;
+				AssetCategory parentCategory = null;
+				
+				try {
+					parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
 					
-					try {
-						AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
-						myResult.setSecurity_class(parentCategory.getName());				
-					} catch (SystemException e) {
-						e.printStackTrace();
-					}
-					
-				} else {
-					myResult.setAsset_sub_class(assetCategory.getName());
-					
-					try {
-						AssetCategory parentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(assetCategory.getParentCategoryId());
+					if (parentCategory.getParentCategoryId() > 0l) {
+						grantParentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(parentCategory.getParentCategoryId());
+						myResult.setSecurity_class(grantParentCategory.getName());
 						myResult.setAsset_class(parentCategory.getName());
-						
-						AssetCategory assetType = AssetCategoryLocalServiceUtil.fetchAssetCategory(parentCategory.getParentCategoryId());
-						myResult.setSecurity_class(assetType.getName());					
-					} catch (SystemException e) {
-						e.printStackTrace();
+						myResult.setAsset_sub_class(assetCategory.getName());
+					} else {
+						myResult.setSecurity_class(parentCategory.getName());
+						myResult.setAsset_class(assetCategory.getName());
 					}
+				} catch (SystemException e) {
+					e.printStackTrace();
 				}
 			}
 		}
