@@ -256,7 +256,7 @@ public class AssetHelper {
 						e.printStackTrace();
 					}		
 				} else {
-					long assetSubClass2Id = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetSubClassId);
+					long assetSubClass2Id = getCategoryId(userId, assetSubClass2, serviceContext, bbAssetClassVocabularyId, assetSubClassId);
 					try {
 						AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, assetSubClass2Id);
 					} catch (SystemException e) {
