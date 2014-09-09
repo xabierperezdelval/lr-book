@@ -238,7 +238,7 @@ public class AssetHelper {
 					assetSubClass = "Non-Bond";
 				}
 				
-				System.out.println("@@@@@@@@@@@@@@@@@ " + assetSubClass + " ############## " + assetSubClass2);
+				System.out.println(assetClass + "@@@@@@@@@@@@@@@@@ " + assetSubClass + " ############## " + assetSubClass2);
 				
 				break;
 				
