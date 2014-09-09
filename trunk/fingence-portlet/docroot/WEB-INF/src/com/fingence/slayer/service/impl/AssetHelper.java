@@ -234,9 +234,8 @@ public class AssetHelper {
 							assetSubClass2 = rating.getDescription();
 						}
 					}
-				} else {
+				} else if (Validator.isNull(assetSubClass)) {
 					assetSubClass = "Non-Bond";
-					assetSubClass2 = "Not Rated";
 				}
 				
 				System.out.println("@@@@@@@@@@@@@@@@@ " + assetSubClass + " ############## " + assetSubClass2);
