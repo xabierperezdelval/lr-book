@@ -206,12 +206,12 @@ public class AssetHelper {
 		// Setting Asset Class
 		
 		if (assetType > 0) {
-			String assetClass = StringPool.BLANK;
+			String assetClass = CellUtil.getString(row.getCell(columnNames.get("FUND_ASSET_CLASS_FOCUS")));
 			String assetSubClass = StringPool.BLANK;
+			String assetSubClass2 = StringPool.BLANK;
 			
 			switch (assetType) {
 			case IConstants.SECURITY_CLASS_EQUITY:
-				assetClass = securityClass;
 				assetSubClass = securityTyp2;
 				break;
 				
@@ -221,50 +221,47 @@ public class AssetHelper {
 				String isBondNoCalcTyp = CellUtil.getString(row.getCell(columnNames.get("IS_BOND_NO_CALCTYP")));
 				
 				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
-					assetClass = "Bond";
-					assetSubClass = "Not Rated";
+					assetSubClass = "Bond";
+					assetSubClass2 = "Not Rated";
 					
 					String bbComposite = CellUtil.getString(row.getCell(columnNames.get("BB_COMPOSITE")));
 					if (Validator.isNotNull(bbComposite)) {
 						Rating rating = RatingLocalServiceUtil.findByFitch(bbComposite);
 						
 						if (Validator.isNotNull(rating) && !rating.getDescription().equalsIgnoreCase("Not Rated")) {
-							assetSubClass = rating.getDescription();
+							assetSubClass2 = rating.getDescription();
 						}
 					}
 				} else {
-					assetClass = "Non-Bond";
-					assetSubClass = "Not Rated";
+					assetSubClass = "Non-Bond";
+					assetSubClass2 = "Not Rated";
 				}
 				
 				break;
 				
 			case IConstants.SECURITY_CLASS_FUND:
-				assetClass = CellUtil.getString(row.getCell(columnNames.get("FUND_ASSET_CLASS_FOCUS")));
-				assetSubClass = securityClass;				
+				assetSubClass = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP")));			
 				break;
 			}
 			
 			if (Validator.isNotNull(assetClass)) {
-				long assetTypeId = 0l;
-				long assetClassId = 0l;
-				long assetSubClassId = 0l;
 				
-				if (assetType == IConstants.SECURITY_CLASS_EQUITY) {
-					assetTypeId = getCategoryId(userId, securityClass, serviceContext, bbAssetClassVocabularyId, 0l);
-					assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetTypeId);
-				} else if (Validator.isNotNull(assetSubClass)) {
-					assetTypeId = getCategoryId(userId, securityClass, serviceContext, bbAssetClassVocabularyId, 0l);
-					assetClassId = getCategoryId(userId, assetClass, serviceContext, bbAssetClassVocabularyId, assetTypeId);
-					assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetClassId);
-				}
+				long assetClassId = getCategoryId(userId, assetClass, serviceContext, bbAssetClassVocabularyId, 0l);
+				long assetSubClassId = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetClassId);
 				
-				if (assetSubClassId > 0l) {
+				if (Validator.isNull(assetSubClass2)) {
 					try {
 						AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, assetSubClassId);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}		
+				} else {
+					long assetSubClass2Id = getCategoryId(userId, assetSubClass, serviceContext, bbAssetClassVocabularyId, assetSubClassId);
+					try {
+						AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, assetSubClass2Id);
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}					
 				}
 			}
 		}
