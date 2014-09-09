@@ -116,7 +116,7 @@
 						var usd_invested1 = 0.0;
 						var market_value1 = 0.0;
 												
-						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation != 'Equity');
+						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Fixed Income' && jsonObj1.allocation == 'Bond');
 						
 						if (threelevels) {
 							jsonObj1.children = [];
