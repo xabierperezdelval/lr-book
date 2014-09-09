@@ -154,7 +154,7 @@
 							} else {
 							
 								//if (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Equity') {
-								if (!threelevels) {
+								if (threelevels) {
 									var cnt = 0;
 									_.each(item.children, function(item) {
 										gain_loss1 += item.gain_loss_percent;
