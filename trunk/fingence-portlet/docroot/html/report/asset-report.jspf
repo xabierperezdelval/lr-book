@@ -71,7 +71,7 @@
 	function showTreeble(allocationBy) {
 								
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
-										
+												
 		var resultantDataArray = [];
 						
 		_.each(itemList, function(item) {
@@ -96,9 +96,6 @@
 						market_value0 += item.currentMarketValue;
 						conversion0 = item.current_fx;
 						currencySymbol0 = item.currencySymbol;
-						
-						
-						
 					});
 				} else {
 				
@@ -132,6 +129,7 @@
 								var fx_gain_loss2 = 0.0; 
 								var usd_invested2 = 0.0;
 								var market_value2 = 0.0;
+								
 								_.each(item.children, function(item) {
 									gain_loss2 += item.gain_loss_percent;
 									fx_gain_loss2 += item.fx_gain_loss;
@@ -153,8 +151,7 @@
 								jsonObj1.children.push(jsonObj2);
 							} else {
 							
-								//if (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Equity') {
-								if (threelevels) {
+								if (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && item.name == '') {
 									var cnt = 0;
 									_.each(item.children, function(item) {
 										gain_loss1 += item.gain_loss_percent;
@@ -170,7 +167,7 @@
 									fx_gain_loss1 += item.fx_gain_loss;
 									usd_invested1 += item.purchasedMarketValue;
 									market_value1 += item.currentMarketValue;
-								}	
+								}
 							}
 						});
 						
