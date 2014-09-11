@@ -59,10 +59,7 @@
 			}
 		}
 		
-		sorted = sorted.slice(0,<%= assetsToShow %>);
-		
-		console.log(JSON.stringify(sorted));
-		
+		sorted = sorted.slice(0,<%= assetsToShow %>);		
 		
 <!-- 		Security Name	name + security_des -->
 <!-- 		Purchase Date	purchase_dt -->
