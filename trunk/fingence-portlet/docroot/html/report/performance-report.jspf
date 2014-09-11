@@ -61,6 +61,8 @@
 		
 		sorted = sorted.slice(0,<%= assetsToShow %>);
 		
+		console.log(JSON.stringify(sorted));
+		
 		
 <!-- 		Security Name	name + security_des -->
 <!-- 		Purchase Date	purchase_dt -->
@@ -100,16 +102,16 @@
 				 			key: 'purchasedMarketValue',
 				 			label: 'Purchase Price',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom1(obj.value, 'amount');
+				 				obj.value = formatCustom(obj.value, 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
 				 		},
 				 		{
-				 			key: 'last_price',
+				 			key: 'currentMarketValue',
 				 			label: 'Current Price',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom1(obj.value, 'amount');
+				 				obj.value = formatCustom(obj.value, 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -136,7 +138,7 @@
 				 			key: 'income',
 				 			label: 'Income',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom1(obj.value, 'amount');
+				 				obj.value = formatCustom(obj.value, 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -145,7 +147,7 @@
 				 			key: 'total_returns',
 				 			label: 'Total Returns',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom1(obj.data.gain_loss + obj.data.income, 'amount');
+				 				obj.value = formatCustom(obj.data.gain_loss + obj.data.income, 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -154,7 +156,7 @@
 				 			key: 'avg_holding_period_return',
 				 			label: 'Avg Holding period return',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom1((obj.data.gain_loss + obj.data.income)/formatYears(obj.data.purchaseDate), 'amount');
+				 				obj.value = formatCustom((obj.data.gain_loss + obj.data.income)/formatYears(obj.data.purchaseDate), 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true

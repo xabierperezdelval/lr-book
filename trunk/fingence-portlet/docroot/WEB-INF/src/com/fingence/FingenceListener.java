@@ -80,7 +80,7 @@ public class FingenceListener extends BaseMessageListener{
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+				
 		return fromAddress;
 	}
 }

@@ -39,5 +39,5 @@ public class MyResultFinderImpl extends BasePersistenceImpl<MyResult> implements
 		
 		// new query
 		return results;
-	}	
+	}
 }

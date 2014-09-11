@@ -221,7 +221,6 @@ public class AssetHelper {
 					assetClass = "Fixed Income";
 				}
 				
-				System.out.println("the item is SECURITY_CLASS_FIXED_INCOME @@@@@@@@@@@@@@");
 				double calcTyp = CellUtil.getDouble(row.getCell(columnNames.get("CALC_TYP")));
 				String collatTyp = CellUtil.getString(row.getCell(columnNames.get("COLLAT_TYP")));
 				String isBondNoCalcTyp = CellUtil.getString(row.getCell(columnNames.get("IS_BOND_NO_CALCTYP")));
@@ -241,9 +240,7 @@ public class AssetHelper {
 				} else if (Validator.isNull(assetSubClass)) {
 					assetSubClass = "Non-Bond";
 				}
-				
-				System.out.println(assetClass + "@@@@@@@@@@@@@@@@@ " + assetSubClass + " ############## " + assetSubClass2);
-				
+								
 				break;
 				
 			case IConstants.SECURITY_CLASS_FUND:
