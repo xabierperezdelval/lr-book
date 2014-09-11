@@ -1,6 +1,5 @@
 package com.fingence;
 
-
 public interface IConstants {
 	int USER_TYPE_INVESTOR = 1;
 	int USER_TYPE_WEALTH_ADVISOR = 2;

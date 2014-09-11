@@ -198,7 +198,7 @@
 
 	function formatCustom(value, _type) {
 		var _value = (_type == 'amount')? 
-			accounting.formatMoney(Math.abs(value), "$ ", 5, ",", ".") : accounting.toFixed(Math.abs(value), 5) + '%';
+			accounting.formatMoney(Math.abs(value)) : accounting.toFixed(Math.abs(value), 2) + '%';
 		
 		if (value < 0) {
 			_value = _value.fontcolor('red');
@@ -209,7 +209,7 @@
 	
 	function formatCustom1(value, _type) {
 		var _value = (_type == 'amount')? 
-			accounting.formatMoney(Math.abs(value), "$ ", 5, ",", ".") : accounting.toFixed(Math.abs(value), 5) + '%';
+			accounting.formatMoney(Math.abs(value)) : accounting.toFixed(Math.abs(value), 2) + '%';
 		
 		if (value < 0) {
 			_value = '-'.fontcolor('red') + _value.fontcolor('red');
@@ -220,12 +220,9 @@
 		return _value;
 	}
 	
-	function formatCustom2(value, _type, currencySymbol) {
-		var _value = (_type == 'amount')? 
-			accounting.formatMoney(Math.abs(value), currencySymbol + " ", 5, ",", ".") : accounting.toFixed(Math.abs(value), 5);
-		
-		return _value;
-	}	
+	function formatCurrency(value, currencySymbol) {
+		return accounting.formatMoney(Math.abs(value), currencySymbol, 2);
+	}
 	
 	function formatDate(value) {
 		var _value = new Date(value);
@@ -528,7 +525,7 @@
 	             	label: 'Quantity',
 	             	sortable: true,
 	             	formatter: function(obj) {
-						obj.value = accounting.toFixed(obj.value, 2);
+						obj.value = accounting.toFixed(obj.value, 5);
 					}
 	           	},
 	            {

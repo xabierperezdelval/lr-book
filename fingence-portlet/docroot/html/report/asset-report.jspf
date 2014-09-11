@@ -253,10 +253,8 @@
 						{
 							key : 'market_value_in_currency',
 							label : 'Market Value<br/>in Given Currency',
-				 			formatter: function(obj) {
-				 				console.log("===>>>" + obj.data.currencySymbol);
-				 				
-				 				obj.value = formatCustom2(obj.data.market_value / obj.data.conversion, 'amount', obj.data.currencySymbol);
+				 			formatter: function(obj) {				 				
+				 				obj.value = formatCurrency(obj.data.market_value / obj.data.conversion, obj.data.currencySymbol);
 				 			},
 							allowHTML : true
 						},	
