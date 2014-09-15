@@ -206,20 +206,18 @@ public class AssetHelper {
 		// Setting Asset Class
 		
 		if (assetType > 0) {
-			String assetClass = CellUtil.getString(row.getCell(columnNames.get("FUND_ASSET_CLASS_FOCUS")));
+			String assetClass = StringPool.BLANK;
 			String assetSubClass = StringPool.BLANK;
 			String assetSubClass2 = StringPool.BLANK;
 			
 			switch (assetType) {
 			case IConstants.SECURITY_CLASS_EQUITY:
+				assetClass = securityClass;
 				assetSubClass = securityTyp2;
 				break;
 				
 			case IConstants.SECURITY_CLASS_FIXED_INCOME:
-				
-				if (Validator.isNull(assetClass)) {
-					assetClass = "Fixed Income";
-				}
+				assetClass = securityClass;
 				
 				double calcTyp = CellUtil.getDouble(row.getCell(columnNames.get("CALC_TYP")));
 				String collatTyp = CellUtil.getString(row.getCell(columnNames.get("COLLAT_TYP")));
@@ -244,6 +242,7 @@ public class AssetHelper {
 				break;
 				
 			case IConstants.SECURITY_CLASS_FUND:
+				assetClass = CellUtil.getString(row.getCell(columnNames.get("FUND_ASSET_CLASS_FOCUS")));
 				assetSubClass = CellUtil.getString(row.getCell(columnNames.get("INDUSTRY_GROUP")));
 				break;
 			}
