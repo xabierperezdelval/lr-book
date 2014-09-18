@@ -133,8 +133,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				setCategoryFields(myResult, allocationBy);
 			}
 			
-			calculateIncome(myResult);
-			
+			//calculateIncome(myResult);
 		}
 				
 		return myResults;
