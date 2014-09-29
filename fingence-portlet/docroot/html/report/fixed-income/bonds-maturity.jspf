@@ -38,7 +38,7 @@
 			    	y: 100
   				};
   				
-  				renderPieChart(data, 'Bond Collateral Type Breakup', legend);				
+  				renderPieChart(data, 'Bond Maturity Schedule', legend);				
 				divForMasking.loadingmask.toggle();
   			}
 		);
