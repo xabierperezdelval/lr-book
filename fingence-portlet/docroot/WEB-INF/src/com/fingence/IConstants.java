@@ -63,7 +63,7 @@ public interface IConstants {
 	String SELECTED = "selected";
 	String UN_SPECIFIED = "Un-Specified";
 	
-	String FIXED_INCOME_TYPE_BONDS_MATURITY = "Bond Collateral Type Breakdown";
+	String FIXED_INCOME_TYPE_BONDS_MATURITY = "Bond Maturity Schedule";
 	String FIXED_INCOME_TYPE_BONDS_QUALITY = "Exposure As Per Rating Table";
 	String FIXED_INCOME_TYPE_CASH_FLOW = "Cash Flow Report";	
 	String FIXED_INCOME_TYPE_COLLATERAL = "Collateral Breakdown";
