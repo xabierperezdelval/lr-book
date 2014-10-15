@@ -89,16 +89,16 @@
 		    		{
 		    			key: 'purchaseQty',
 			 			label: 'Purchase Qty',
-			 			formatter: function(obj) {
-			 				obj.value = formatCustom2(obj.value, '', '');
-			 			},
+		             	formatter: function(obj) {
+							obj.value = accounting.toFixed(obj.value, 5);
+						},	 			
 						allowHTML : true
 		    		},
 		    		{
 		    			key: 'amountOutstanding',
 			 			label: 'Amount Outstanding',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 				obj.value = formatCurrency(obj.value, obj.data.currencySymbol);
 			 			},
 						allowHTML : true
 		    		},
@@ -106,7 +106,7 @@
 		    			key: 'Transaction',
 			 			label: 'transaction',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 				obj.value = formatCurrency(obj.value, obj.data.currencySymbol);
 			 			},
 						allowHTML : true
 		    		},
@@ -114,7 +114,7 @@
 		    			key: 'cashFlow',
 			 			label: 'Cash Flow',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 				obj.value = formatCurrency(obj.value, obj.data.currencySymbol);
 			 			},
 						allowHTML : true
 		    		},
@@ -124,13 +124,16 @@
 		    		},
 		    		{
 		    			key: 'currencyConversionRate',
-			 			label: 'Currency conversion rate'
+			 			label: 'Currency conversion rate',
+		             	formatter: function(obj) {
+							obj.value = accounting.toFixed(obj.value, 3);
+						}			 			
 		    		},
 		    		{
 		    			key: 'cashFlowCurrency',
 			 			label: 'Cash flow <br>in Currency',
 			 			formatter: function(obj) {
-			 				obj.value = formatCustom2(obj.value, 'amount', obj.data.currencySymbol);
+			 				obj.value = formatCurrency(obj.value, obj.data.currencySymbol);
 			 			},
 						allowHTML : true
 		    		}			 		
