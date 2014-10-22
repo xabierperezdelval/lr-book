@@ -5,6 +5,7 @@
 			SELECT
 				c.itemId,
 				b.portfolioId,
+				g.name as institution ,
 				a.assetId,
 				a.security_ticker, 
 				a.id_isin,
@@ -43,6 +44,7 @@
 				fing_Portfolio b,
 				fing_PortfolioItem c,
 				Country d,
+				Organization_ g,
 				fing_Currency e
 				[$FING_BOND_TABLE$]
 			WHERE 
@@ -51,6 +53,7 @@
 				and b.portfolioId = c.portfolioId
 				and a.country = d.countryId
 				and a.currency_ = e.currencyCode
+				and g.organizationId = b.institutionId
 				[$FING_BOND_WHERE_CLAUSE$]
 		]]>
 	</sql>

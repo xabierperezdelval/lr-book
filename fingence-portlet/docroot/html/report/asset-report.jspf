@@ -1,15 +1,25 @@
+<%@page import="com.fingence.slayer.service.PortfolioServiceUtil"%>
 <%@page import="java.util.Map.Entry"%>
 
 <h3>Net Worth: <lable id="<portlet:namespace/>networthLabel"/></h3>
 
 <%
 	int allocationByIndex = -1;
-	String[] groupByField = {"countryOfRiskName", "currencyDesc", "security_class", "industry_sector", "security_class"};
- 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector", "Asset Class"};
+	String[] groupByField = {"countryOfRiskName", "currencyDesc", "security_class", "industry_sector", "security_class", "institution"};
+ 	String[] groupByTitle = {"Risk Country", "Currency", "Security Class", "Industry Sector", "Asset Class", "Security Holding"};
+ 	 	
  	for(int i = 0; i < groupByTitle.length; i++) {
  		if (allocationByName.equalsIgnoreCase(groupByTitle[i])) {
  			allocationByIndex = i;
  			break;
+ 		}
+ 	}
+ 	
+ 	// for security holding report put all portfolios for the user. 
+ 	if (allocationByName.equalsIgnoreCase("Security Holding")) {
+ 		List<Portfolio> userPortfolios = PortfolioServiceUtil.getPortfolios(userId);
+ 		for (Portfolio userPortfolio: userPortfolios) {
+ 			portfolioIds += StringPool.COMMA + userPortfolio.getPortfolioId();
  		}
  	}
 %>
@@ -31,7 +41,8 @@
 		["currencyDesc"],
 		["security_class", "security_typ"],
 		["industry_sector", "security_class"],
-		["security_class", "asset_class", "asset_sub_class"]
+		["security_class", "asset_class", "asset_sub_class"],
+		["institution", "security_class", "asset_class"]
 	];
 	// Global Variables END
 	
@@ -69,7 +80,7 @@
 	});
 	
 	function showTreeble(allocationBy) {
-								
+									
 		var itemList = _.nest(_data, groupByKeys[allocationBy]);
 												
 		var resultantDataArray = [];
@@ -112,8 +123,9 @@
 						var fx_gain_loss1 = 0.0; 
 						var usd_invested1 = 0.0;
 						var market_value1 = 0.0;
-												
-						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Fixed Income' && jsonObj1.allocation == 'Bond');
+								
+						var threelevels = (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && jsonObj0.allocation == 'Fixed Income' && jsonObj1.allocation == 'Bond') || 
+											allocationBy == '<%= IConstants.BREAKUP_BY_SECURITY_HOLDING %>';
 						
 						if (threelevels) {
 							jsonObj1.children = [];
@@ -151,7 +163,7 @@
 								jsonObj1.children.push(jsonObj2);
 							} else {
 							
-								if (allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' && item.name == '') {
+								if ((allocationBy == '<%= IConstants.BREAKUP_BY_ASSET_CLASS %>' || allocationBy == '<%= IConstants.BREAKUP_BY_SECURITY_HOLDING %>') && item.name == '') {
 									var cnt = 0;
 									_.each(item.children, function(item) {
 										gain_loss1 += item.gain_loss_percent;

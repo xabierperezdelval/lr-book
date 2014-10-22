@@ -40,7 +40,7 @@
 	
 	String allocationByName = GetterUtil.getString(portletSession.getAttribute(
 			"ALLOCATION_BY_NAME", PortletSession.APPLICATION_SCOPE), defaultName);
-	
+		
 	long allocationBy = GetterUtil.getLong(portletSession.getAttribute(
 			"ALLOCATION_BY", PortletSession.APPLICATION_SCOPE), defaultId);
 	
@@ -54,6 +54,7 @@
 	boolean showAllocationSwitch = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT) && reportsPage;
 	boolean performanceReport = layoutName.equalsIgnoreCase(IConstants.PAGE_PERFORMANCE) && reportsPage;
 	boolean fixedIncomeReport = layoutName.equalsIgnoreCase(IConstants.PAGE_FIXED_INCOME) && reportsPage;
+	boolean securityHoldingReport = layoutName.equalsIgnoreCase(IConstants.PAGE_ASSET_REPORT) && allocationByName.equalsIgnoreCase("Security Holding");
 	
 	int assetsToShow = 0;
 	if (performanceReport) {
@@ -144,18 +145,19 @@
 			</aui:column>
 		</c:if>
 		
-		<aui:column columnWidth="30">
-			<b>Following portfolios are shown in this report</b> : <%=PortfolioServiceUtil.getPortfolioName(portfolioId)%>
-			<%  List<Portfolio> _portfoliosChecked = PortfolioLocalServiceUtil.getPortfolios(userId);
-				for (Portfolio _portfolio: _portfoliosChecked) {
-					if (portfolioId != _portfolio.getPortfolioId()) {
-						long checkedvaluePortfolioId = _portfolio.getPortfolioId();
-						boolean checkedvalue = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+checkedvaluePortfolioId));
-						if(checkedvalue) { %><%= StringPool.COMMA + StringPool.SPACE + _portfolio.getPortfolioName() %><% }
-					}
-				} %>
-		</aui:column>
-		
+		<c:if test="<%= !securityHoldingReport %>">
+			<aui:column columnWidth="30">
+				<br/><b>Portfolios shown in this report</b>: <%=PortfolioServiceUtil.getPortfolioName(portfolioId)%>
+				<%  List<Portfolio> _portfoliosChecked = PortfolioLocalServiceUtil.getPortfolios(userId);
+					for (Portfolio _portfolio: _portfoliosChecked) {
+						if (portfolioId != _portfolio.getPortfolioId()) {
+							long checkedvaluePortfolioId = _portfolio.getPortfolioId();
+							boolean checkedvalue = Validator.isNotNull(portletSession.getAttribute("PORTFOLIO_ADDED_"+checkedvaluePortfolioId));
+							if(checkedvalue) { %><%= StringPool.COMMA + StringPool.SPACE + _portfolio.getPortfolioName() %><% }
+						}
+					} %>
+			</aui:column>		
+		</c:if>
 	</aui:row>
 </c:if>
 
@@ -182,7 +184,7 @@
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.PAGE_VIOLATIONS) %>">
 		<%@ include file="/html/report/violations-report.jspf"%>
-	</c:when>
+	</c:when>	
 	
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_PORTFOLIO) %>">
 		<%@ include file="/html/report/update.jspf"%>
@@ -191,6 +193,11 @@
 	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_USER) %>">
 		<%@ include file="/html/register/register.jspf"%>
 	</c:when>
+	
+	<c:when test="<%= layoutName.equalsIgnoreCase(IConstants.ADD_USER) %>">
+		<%@ include file="/html/register/register.jspf"%>
+	</c:when>	
+		
 </c:choose>
 
 <aui:script>
