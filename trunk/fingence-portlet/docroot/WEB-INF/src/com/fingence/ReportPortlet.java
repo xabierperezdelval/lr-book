@@ -70,6 +70,7 @@ public class ReportPortlet extends MVCPortlet {
 				}
 			}
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_SET_ALLOCATION_BY)) {
+			
 			long allocationBy = ParamUtil.getLong(resourceRequest, "allocationBy");
 			String allocationByName = "";
 			

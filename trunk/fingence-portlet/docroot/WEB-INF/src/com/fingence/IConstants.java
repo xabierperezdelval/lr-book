@@ -15,6 +15,7 @@ public interface IConstants {
 	String PAGE_FIXED_INCOME = "Fixed Income";
 	String PAGE_RISK_REPORT = "Risk Report";
 	String PAGE_VIOLATIONS = "Violations";
+	String PAGE_SECURITY_HOLDING = "Security Holding";
 	String ADD_PORTFOLIO = "Add Portfolio";
 	String ADD_USER = "Add User";
 	
@@ -39,6 +40,7 @@ public interface IConstants {
 	int BREAKUP_BY_SECURITY_CLASS = 3;
 	int BREAKUP_BY_INDUSTRY_SECTOR = 4;
 	int BREAKUP_BY_ASSET_CLASS = 5;
+	int BREAKUP_BY_SECURITY_HOLDING = 6;
 	
 	int SECURITY_CLASS_FIXED_INCOME = 1;
 	int SECURITY_CLASS_FUND = 2;

@@ -190,6 +190,7 @@
 	<entity name="MyResult" remote-service="true" local-service="true">
 		<column name="itemId" type="long" primary="true"/>
 		<column name="portfolioId" type="long"/>
+		<column name="institution" type="String"/>
 		<column name="assetId" type="long"/>
 		<column name="security_ticker" type="String"/>
 		<column name="id_isin" type="String"/>

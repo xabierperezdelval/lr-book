@@ -212,7 +212,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}				
-			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS)) {
+			} else if (vocabularyName.equalsIgnoreCase("BB_Asset_Class") && (allocationBy == IConstants.BREAKUP_BY_ASSET_CLASS || allocationBy == IConstants.BREAKUP_BY_SECURITY_HOLDING)) {
 				
 				AssetCategory grantParentCategory = null;
 				AssetCategory parentCategory = null;
@@ -222,6 +222,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					
 					if (parentCategory.getParentCategoryId() > 0l) {
 						grantParentCategory = AssetCategoryLocalServiceUtil.fetchAssetCategory(parentCategory.getParentCategoryId());
+				
 						myResult.setSecurity_class(grantParentCategory.getName());
 						myResult.setAsset_class(parentCategory.getName());
 						myResult.setAsset_sub_class(assetCategory.getName());
@@ -232,7 +233,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
-			}
+			} 
 		}
 	}
 	
