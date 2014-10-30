@@ -59,18 +59,9 @@
 			}
 		}
 		
-		sorted = sorted.slice(0,<%= assetsToShow %>);		
+		sorted = sorted.slice(0,<%= assetsToShow %>);
 		
-<!-- 		Security Name	name + security_des -->
-<!-- 		Purchase Date	purchase_dt -->
-<!-- 		Purchase Price	purchase_price -->
-<!-- 		Current Price	last_price or bid_price -->
-
-<!-- 		Holding Period (in Yrs)	current date - purchase_dt (In Yrs) -->
-<!-- 		(A) Capital Gains	Except for Bonds: (last_price - purchase_price) * purchase_qty. For Bonds: ((bid_price - purchase_price)/100) * purchase_qty.   -->
-<!-- 		(B) Income	Dividend, coupon payment.  -->
-<!-- 		Total Returns	A+B -->
-<!-- 		Avg Holding period return	Total Returns / Holding Period (in Yrs) -->
+		setIncomeField(sorted);
 		
 		if (sorted.length > 0) {
 			YUI().use(
@@ -114,10 +105,10 @@
 				 			sortable: true
 				 		},
 				 		{
-				 			key: 'purchaseDate',
+				 			key: 'holdingPeriod',
 				 			label: 'Holding Period <br/>(in Yrs)',
 				 			formatter: function(obj) {
-				 				obj.value = formatYears(obj.value);
+				 				obj.value = moment(obj.data.purchaseDate).fromNow();
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -144,7 +135,7 @@
 				 			key: 'total_returns',
 				 			label: 'Total Returns',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom(obj.data.gain_loss + obj.data.income, 'amount');
+				 				obj.value = formatCustom1(eval(obj.data.gain_loss) + eval(obj.data.income), 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -173,6 +164,13 @@
 		} 
 	}
 	
+	// set the income field for the objects in this list
+	function setIncomeField(sorted) {
+		_.each(sorted, function(item) {
+			item.income = calculateIncome(item.assetId, item.purchaseDate, item.purchaseQty);
+		});
+	}
+	
 	function getAssetItemWeightage(data, sortOrder){
 		var total = 0;
 		_.each(data, function(item) {
@@ -183,4 +181,28 @@
 		});
 		return total;
 	}
+	
+	function calculateIncome(assetId, purchaseDate, purchaseQty) {
+	
+		var income;
+					
+		var ajaxURL = Liferay.PortletURL.createResourceURL();
+		ajaxURL.setPortletId('report_WAR_fingenceportlet');
+		ajaxURL.setParameter('<%= Constants.CMD %>', '<%= IConstants.CMD_CALCULATE_INCOME %>');
+		ajaxURL.setParameter('assetId', assetId);
+		ajaxURL.setParameter('purchaseDate', purchaseDate);
+		ajaxURL.setParameter('purchaseQty', purchaseQty);
+		ajaxURL.setWindowState('exclusive');
+		
+		AUI().io.request('<%= themeDisplay.getURLPortal() %>' + ajaxURL, {
+			sync: true,
+			on: {
+				success: function() {
+					income = this.get('responseData');
+				}
+			}
+		});			
+		
+		return income;
+	}	
 </aui:script>

@@ -3,6 +3,7 @@ package com.fingence;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.portlet.ResourceResponse;
 
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.ReportConfig;
+import com.fingence.slayer.service.DividendLocalServiceUtil;
 import com.fingence.slayer.service.MyResultServiceUtil;
 import com.fingence.slayer.service.PortfolioItemServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
@@ -160,6 +162,13 @@ public class ReportPortlet extends MVCPortlet {
 			writer.println(MyResultServiceUtil.getTotalMarketValue(portfolioIds));
 		} else if (cmd.equalsIgnoreCase(IConstants.CMD_ENABLE_REPORT)) {
 			toggleReport(resourceRequest);		
+		} else if (cmd.equalsIgnoreCase(IConstants.CMD_CALCULATE_INCOME)) {
+						
+			long assetId = ParamUtil.getLong(resourceRequest, "assetId");
+			long purchaseDate = ParamUtil.getLong(resourceRequest, "purchaseDate");
+			double purchaseQty = ParamUtil.getDouble(resourceRequest, "purchaseQty");
+						
+			writer.println(DividendLocalServiceUtil.getIncome(assetId, new Date(purchaseDate), purchaseQty));
 		}
 		writer.close();
 	}
