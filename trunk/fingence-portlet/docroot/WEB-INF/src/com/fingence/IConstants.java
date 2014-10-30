@@ -34,6 +34,7 @@ public interface IConstants {
 	String CMD_GET_RATING_DETAILS = "getRatingDetails";
 	String CMD_GET_NET_WORTH = "getNetWorth";
 	String CMD_ENABLE_REPORT = "enableReport";
+	String CMD_CALCULATE_INCOME = "calculateIncome";
 	
 	int BREAKUP_BY_RISK_COUNTRY = 1;
 	int BREAKUP_BY_CURRENCY = 2;

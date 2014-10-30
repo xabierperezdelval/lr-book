@@ -227,6 +227,7 @@
 		<finder return-type="Collection" name="PortfolioId">
 			<finder-column name="portfolioId"/>
 		</finder>
+		
 	</entity>
 	
 	<entity name="Rating" remote-service="true" local-service="true">
