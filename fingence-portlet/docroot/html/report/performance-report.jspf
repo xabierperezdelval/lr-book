@@ -108,7 +108,11 @@
 				 			key: 'holdingPeriod',
 				 			label: 'Holding Period <br/>(in Yrs)',
 				 			formatter: function(obj) {
-				 				obj.value = moment(obj.data.purchaseDate).fromNow();
+				 				var now = moment().format('DD/MM/YYYY');
+				 				var moment1 = moment(now, '/MM/YYYY');
+				 				var purchased = moment(obj.data.purchaseDate).format('DD/MM/YYYY');
+				 				var moment2 = moment(purchased, '/MM/YYYY');
+				 				obj.value = moment.preciseDiff(moment1, moment2);
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
@@ -144,7 +148,13 @@
 				 			key: 'avg_holding_period_return',
 				 			label: 'Avg Holding period return',
 				 			formatter: function(obj) {
-				 				obj.value = formatCustom((obj.data.gain_loss + obj.data.income)/formatYears(obj.data.purchaseDate), 'amount');
+				 				var totalReturns = eval(obj.data.gain_loss) + eval(obj.data.income);
+				 				var d1 = new Date(obj.data.purchaseDate);
+				 				var d2 = new Date();
+								var months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    							months -= d1.getMonth() + 1;
+    							months += d2.getMonth();		
+				 				obj.value = formatCustom(totalReturns/(months/12), 'amount');
 				 			},
 				 			allowHTML: true,
 				 			sortable: true
