@@ -173,6 +173,8 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 					e.printStackTrace();
 				}
 				
+				if (Validator.isNull(asset)) continue; 
+				
 				double conversion = CurrencyServiceUtil.getConversion(asset.getCurrency());
 				
 				if (Validator.isNotNull(asset)) {
