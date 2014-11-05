@@ -64,8 +64,9 @@
 	
 	function showCashFlowDataTable(data, divId, title) {
 	
+		console.log(JSON.stringify(data));
+	
 		var dataWithSummary = appendCashFlowSummaryRow(data);
-		<!-- console.info(JSON.stringify(data)); -->
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {

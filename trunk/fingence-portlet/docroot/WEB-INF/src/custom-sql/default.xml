@@ -31,13 +31,13 @@
 				a.country_of_risk as countryOfRiskName,
 				a.currency_,
 				e.currencyDesc,
-				(c.purchasePrice * c.purchaseQty * c.purchasedFx) as purchasedMarketValue,
+				((IF (a.security_class = 1, c.purchasePrice/100, c.purchasePrice)) * c.purchaseQty * c.purchasedFx) as purchasedMarketValue,
 				(a.current_price * c.purchaseQty * e.conversion) as currentMarketValue,
-				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx)) as gain_loss,
-				((a.current_price * c.purchaseQty * e.conversion) - (c.purchasePrice * c.purchaseQty * c.purchasedFx))/(c.purchasePrice * c.purchaseQty * c.purchasedFx) * 100.0 as gain_loss_percent,
+				((a.current_price * c.purchaseQty * e.conversion) - ((IF (a.security_class = 1, c.purchasePrice/100, c.purchasePrice)) * c.purchaseQty * c.purchasedFx)) as gain_loss,
+				((a.current_price * c.purchaseQty * e.conversion) - ((IF (a.security_class = 1, c.purchasePrice/100, c.purchasePrice)) * c.purchaseQty * c.purchasedFx))/((IF (a.security_class = 1, c.purchasePrice/100, c.purchasePrice)) * c.purchaseQty * c.purchasedFx) * 100.0 as gain_loss_percent,
 				((e.conversion - c.purchasedFx) * c.purchaseQty) as fx_gain_loss,
 				'' as income,
-				e.currencySymbol
+				e.currencyCode as currencySymbol
 				[$FING_BOND_COLUMNS$]
 			FROM 
 				fing_Asset a,

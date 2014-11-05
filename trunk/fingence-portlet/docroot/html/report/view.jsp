@@ -228,7 +228,7 @@
 	}
 	
 	function formatCurrency(value, currencySymbol) {
-		return accounting.formatMoney(Math.abs(value), currencySymbol, 2);
+		return accounting.formatMoney(Math.abs(value), currencySymbol + ' ', 2);
 	}
 	
 	function formatDate(value) {
