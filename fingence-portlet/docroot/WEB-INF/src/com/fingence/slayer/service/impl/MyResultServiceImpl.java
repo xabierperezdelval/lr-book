@@ -18,6 +18,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -412,6 +414,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			
 			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
 			
+			System.out.println("SQL ==> " + sql);
+			
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			
@@ -422,6 +426,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				double calcTyp = rs.getDouble("calc_typ");
 				String collatTyp = rs.getString("collat_typ");
 				String isBondNoCalcTyp = rs.getString("is_bond_no_calctyp");
+				
+				// if bond
 				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
 					Date issueDate = rs.getDate("issue_dt");
 					List<History> histories = null;
@@ -442,22 +448,12 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					//date = rs.getDate("purchaseDate");
 					//System.out.println("Entered Else");
 				}
-				
-				// if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {
-				//    History
-				//    Query with assetId and Type = 3 (Cash Flow Type)
-				//    First record after issue date
-				// }
-				// Non- Bond
-				// Query dividend table with asset ID
-				// get first which is after the purchaseDate
-				
-				String nameSecurityDes = rs.getString("name") + " " + rs.getString("security_des");
+								
+				String nameSecurityDes = rs.getString("name") + StringPool.SPACE + rs.getString("security_des");
 				String idIsin = rs.getString("id_isin");
 				double purchaseQty = rs.getDouble("purchaseQty");
 				double most_recent_reported_factor = rs.getDouble("amount_outstanding") / rs.getDouble("amount_issued");
 				double amountOutstanding = purchaseQty * most_recent_reported_factor;
-				//String transaction = rs.getString("");
 				double cashFlow = amountOutstanding * (rs.getDouble("cpn") / (rs.getDouble("cpn_freq") * 100) );
 				String currency = rs.getString("currencyDesc");
 				String currencySymbol = rs.getString("currencySymbol");
@@ -466,7 +462,10 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 				JSONObject jsonObj = JSONFactoryUtil.createJSONObject();;
 				jsonObj.put("portfolioName", portfolioName);
-				jsonObj.put("date", date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getYear());
+				
+				DateFormat dateFormat = new SimpleDateFormat("dd/MMM/YYYY");
+				jsonObj.put("date", dateFormat.format(date));
+								
 				jsonObj.put("nameSecurityDes", nameSecurityDes);
 				jsonObj.put("securityID", idIsin);
 				jsonObj.put("purchaseQty", purchaseQty);

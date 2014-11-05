@@ -252,7 +252,7 @@
 			 				obj.value = formatCustom(obj.value, 'amount');
 			 			},
 						allowHTML : true
-					},																	
+					},														
 					{
 						key : 'market_value',
 						label : 'Market Value<br/>in USD',
@@ -262,6 +262,14 @@
 						allowHTML : true
 					},
 					<c:if test="<%= (allocationByIndex+1) == IConstants.BREAKUP_BY_CURRENCY %>">
+						{
+							key : 'actual_invested',
+							label : 'Actual Invested',
+				 			formatter: function(obj) {
+				 				obj.value = formatCurrency(obj.data.usd_invested / obj.data.conversion, obj.data.currencySymbol);
+				 			},
+							allowHTML : true
+						},						
 						{
 							key : 'market_value_in_currency',
 							label : 'Market Value<br/>in Given Currency',

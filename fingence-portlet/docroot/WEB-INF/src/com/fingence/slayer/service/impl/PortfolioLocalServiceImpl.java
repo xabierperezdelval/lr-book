@@ -27,7 +27,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.fingence.IConstants;
-import com.fingence.slayer.NoSuchAssetException;
 import com.fingence.slayer.model.Asset;
 import com.fingence.slayer.model.Portfolio;
 import com.fingence.slayer.model.PortfolioItem;
@@ -120,9 +119,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
         	        	
         	Asset asset = null;
         	try {
-				asset = assetPersistence.findByIdISIN(id_isin);
-			} catch (NoSuchAssetException e) {
-				e.printStackTrace();
+				asset = assetPersistence.fetchByIdISIN(id_isin);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -161,11 +158,6 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
        
 			portfolioItem.setPurchaseDate(CellUtil.getDate(row.getCell(2)));
 			portfolioItem.setPurchasePrice(CellUtil.getDouble(row.getCell(3)));
-			
-			if (asset.getSecurity_class() == IConstants.SECURITY_CLASS_FIXED_INCOME) {
-				portfolioItem.setPurchasePrice(portfolioItem.getPurchasePrice()/100);
-			}
-			
 			portfolioItem.setPurchaseQty(CellUtil.getDouble(row.getCell(4)));
 			
 			double purchasedFx = asset.getCurrency().equalsIgnoreCase(IConstants.CURRENCY_USD)? 1.0d : CellUtil.getDouble(row.getCell(5));

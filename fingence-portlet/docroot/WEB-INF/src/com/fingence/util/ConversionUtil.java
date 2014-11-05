@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
 import com.fingence.slayer.model.Portfolio;
+import com.fingence.slayer.service.CurrencyServiceUtil;
 import com.fingence.slayer.service.PortfolioLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
@@ -34,7 +35,7 @@ public class ConversionUtil {
 			
 		HttpClient client = new HttpClient();
 		GetMethod method = new GetMethod(sb.toString());
-
+		
 		try {
 			client.executeMethod(method);
 		} catch (HttpException e) {
@@ -55,7 +56,8 @@ public class ConversionUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			System.out.println("not able to get the conversion for this date...");
+			conversion = CurrencyServiceUtil.getConversion(currency);
 		}
 
 		return conversion;
