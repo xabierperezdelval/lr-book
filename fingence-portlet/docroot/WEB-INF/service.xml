@@ -47,6 +47,12 @@
 		<finder return-type="Asset" name="IdISIN">
 			<finder-column name="id_isin"/>
 		</finder>
+		
+		<finder return-type="Asset" name="IdISIN_Ticker">
+			<finder-column name="id_isin"/>
+			<finder-column name="security_ticker"/>
+		</finder>
+		
 	</entity>
 	
 	<entity name="Bond" local-service="true" remote-service="true" cache-enabled="false">

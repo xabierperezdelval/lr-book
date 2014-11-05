@@ -67,4 +67,17 @@ public class AssetServiceImpl extends AssetServiceBaseImpl {
 		
 		return results;
 	}
+	
+	public boolean isAssetPresent(String id_isin, String security_ticker) {
+		
+		boolean present = true;
+		
+		try {
+			assetPersistence.fetchByIdISIN_Ticker(id_isin, security_ticker);
+		} catch (SystemException e) {
+			present = false;	
+		}
+		
+		return present;
+	}
 }
