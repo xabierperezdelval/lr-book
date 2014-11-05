@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the asset remote service.
@@ -70,12 +71,13 @@ public class AssetServiceImpl extends AssetServiceBaseImpl {
 	
 	public boolean isAssetPresent(String id_isin, String security_ticker) {
 		
-		boolean present = true;
+		boolean present = false;
 		
 		try {
-			assetPersistence.fetchByIdISIN_Ticker(id_isin, security_ticker);
+			Asset asset = assetPersistence.fetchByIdISIN_Ticker(id_isin, security_ticker);
+			present = Validator.isNotNull(asset);
 		} catch (SystemException e) {
-			present = false;	
+			e.printStackTrace();
 		}
 		
 		return present;
