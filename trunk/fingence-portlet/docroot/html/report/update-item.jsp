@@ -111,4 +111,94 @@
     function closePopup() {
     	Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
     }
+ 
+	AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
+		var testData;
+		var autocompleteList1 = new A.AutoCompleteList({
+			allowBrowserAutocomplete: 'true',
+			activateFirstItem: 'true',
+			inputNode: '#<portlet:namespace />isinId',
+			resultTextLocator:'id_isin',
+			render: 'true',
+			resultHighlighter: 'phraseMatch',
+			resultFilters:['phraseMatch'],
+			source:function(){
+				var inputValue = A.one("#<portlet:namespace />isinId").get('value');
+				var myAjaxRequest = A.io.request('/api/jsonws/fingence-portlet.asset/get-assets/pattern/'+inputValue+'/ticker/false',{
+					dataType: 'json',
+					method:'POST',
+					data:{
+						<portlet:namespace />isinId:inputValue,
+					},
+					autoLoad:false,
+					sync:true,
+					on: {
+						success:function(){
+							testData = this.get('responseData');
+						}
+					}
+				});
+				myAjaxRequest.start();
+				return testData;
+			},
+		});
+	
+		autocompleteList1.on('select', function (e) {
+			Liferay.Service(
+				'/fingence-portlet.asset/get-assets',
+				{
+			    	pattern: e.itemNode.text(),
+			    	ticker: false
+			  	},
+			  	function(obj) {
+			  		document.getElementById('<portlet:namespace />ticker').value = obj[0].security_ticker; 
+			  	}
+			);
+		});
+	});
+	 
+	AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
+		var testData;
+		var autocompleteList2 = new A.AutoCompleteList({
+			allowBrowserAutocomplete: 'true',
+			activateFirstItem: 'true',
+			inputNode: '#<portlet:namespace />ticker',
+			resultTextLocator:'security_ticker',
+			render: 'true',
+			resultHighlighter: 'phraseMatch',
+			resultFilters:['phraseMatch'],
+			source:function() {
+				var inputValue = A.one("#<portlet:namespace />ticker").get('value');
+				var myAjaxRequest = A.io.request('/api/jsonws/fingence-portlet.asset/get-assets/pattern/'+inputValue+'/ticker/true',{
+					dataType: 'json',
+					method:'POST',
+					data:{
+						<portlet:namespace />ticker:inputValue,
+					},
+					autoLoad:false,
+					sync:true,
+					on: {
+						success:function(){
+							testData = this.get('responseData');
+						}
+					}
+				});
+				myAjaxRequest.start();
+				return testData;
+			},
+		});
+		
+		autocompleteList2.on('select', function (e) {
+			Liferay.Service(
+				'/fingence-portlet.asset/get-assets',
+				{
+			    	pattern: e.itemNode.text(),
+			    	ticker: true
+			  	},
+			  	function(obj) {
+					document.getElementById('<portlet:namespace />isinId').value = obj[0].id_isin; 
+			  	}
+			);
+		});
+	});   
 </aui:script>

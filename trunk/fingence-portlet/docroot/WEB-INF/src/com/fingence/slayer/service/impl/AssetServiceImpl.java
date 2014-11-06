@@ -50,14 +50,11 @@ public class AssetServiceImpl extends AssetServiceBaseImpl {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public List<Asset> getAssets(String pattern, boolean ticker) {
-		
+	public List<Asset> getAssets(String pattern, boolean ticker) {	
 		List<Asset> results = new ArrayList<Asset>();
-		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(AssetImpl.class);
-		dynamicQuery.add(RestrictionsFactoryUtil.like(
-				ticker? "security_ticker" : "id_isin", StringPool.PERCENT
-						+ pattern + StringPool.PERCENT));
+		
+		dynamicQuery.add(RestrictionsFactoryUtil.like(ticker? "security_ticker" : "id_isin", StringPool.PERCENT	+ pattern + StringPool.PERCENT));
 		dynamicQuery.addOrder(OrderFactoryUtil.asc(ticker? "security_ticker" : "id_isin"));
 		
 		try {
