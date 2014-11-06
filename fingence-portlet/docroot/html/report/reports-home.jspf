@@ -23,6 +23,9 @@
     			userId: '<%= userId %>'
   			},
   			function(data) {	
+  			
+  				data = appendSummaryRow(data);
+  			
   				YUI().use(
 					'aui-datatable',
   					function(Y) {
@@ -32,7 +35,7 @@
 	    						label: 'Portfolio',
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
-	    							if (obj.value.indexOf('Total') == -1){
+	    							if (typeof obj.data.summary === 'undefined') {
 	    								obj.value = '<a href="javascript:void(0);" onclick="javascript:showDetails(' + obj.data.portfolioId +', ' + obj.data.currentPrice + ');">'+ obj.data.portfolioName +  '</a>';
 	    							}
 	    						}
@@ -40,11 +43,21 @@
 	    					{
 	    						key: 'investorOrAdvisor',
 	    						label: '<%= columnLabel %>',
+	    						formatter: function(obj) {
+	    							if (obj.data.summary) {
+	    								obj.value = '<b>' + obj.value + '</b>';
+	    							}
+	    						},
 	    						allowHTML : 'true'
 	    					},
 	    					{
 	    						key: 'manager',
 	    						label: 'Manager',
+	    						formatter: function(obj) {
+	    							if (obj.data.summary) {
+	    								obj.value = '<b>' + obj.value + '</b>';
+	    							}
+	    						},	    						
 	    						allowHTML : 'true'
 	    					},
 	    					{
@@ -53,6 +66,9 @@
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
 	    							obj.value = formatCustom(obj.value, 'amount');
+	    							if (obj.data.summary) {
+	    								obj.value = '<b>' + obj.value + '</b>';
+	    							}
 	    						}
 	    					},
 	    					{
@@ -62,6 +78,9 @@
 	    						className: 'align-right',
 	    						formatter: function(obj) {
 	    							obj.value = formatCustom(obj.value, 'amount');
+	    							if (obj.data.summary) {
+	    								obj.value = '<b>' + obj.value + '</b>';
+	    							}	    							
 	    						}
 	    					},
 	    					{
@@ -70,6 +89,9 @@
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
 	    							obj.value = formatCustom1(obj.value, 'amount');
+	    							if (obj.data.summary) {
+	    								obj.value = '<b>' + obj.value + '</b>';
+	    							}	    							
 	    						}
 	    					},	 
 	    					{
@@ -78,6 +100,9 @@
 	    						allowHTML : 'true',
 	    						formatter: function(obj) {
 	    							obj.value = formatCustom1(obj.value, 'percent');
+	    							if (obj.data.summary) {
+	    								obj.value = '<b>' + obj.value + '</b>';
+	    							}		    							
 	    						}
 	    					},		    					  					
 			 				{
@@ -217,4 +242,31 @@
 			);
 		}    
     </c:if>
+    
+	function appendSummaryRow(data) {
+	
+		var dataWithSummary = data.slice();
+		
+		var summaryRow = {};
+		summaryRow.summary = true;
+		summaryRow.portfolioName = '<b>Total</b>';
+		summaryRow.manager = '--';
+		summaryRow.investorOrAdvisor = '--';
+		summaryRow.purchasePrice = 0.0;
+		summaryRow.currentPrice = 0.0;
+		summaryRow.gainLoss = 0.0;		
+		summaryRow.gainLossPercent = 0.0;	
+		
+		_.each(data, function(item){
+			summaryRow.purchasePrice += item.purchasePrice;
+			summaryRow.currentPrice += item.currentPrice;
+			summaryRow.gainLoss += item.gainLoss;
+		});
+		
+		summaryRow.gainLossPercent = summaryRow.gainLoss / summaryRow.purchasePrice * 100.0;
+		
+		dataWithSummary.push(summaryRow);
+		
+		return dataWithSummary;
+	}    
 </aui:script>

@@ -127,10 +127,6 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		int userType = bridgeService.getUserType(userId);
 
 		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
-
-		double totalPurchasedValue = 0.0d;
-		double totalCurrentValue = 0.0d;
-		double totalGainLoss = 0.0d;
 		
 		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
@@ -194,24 +190,7 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 			jsonObject.put("gainLossPercent", gainLoss/usdPurchasePrice*100.0d);
 
 			jsonArray.put(jsonObject);
-			
-			totalPurchasedValue += usdPurchasePrice;
-			totalCurrentValue += usdCurrentPrice;
-			totalGainLoss += gainLoss;
 		}
-		
-		// To Add the a final row for Total
-		JSONObject jsonTotal = JSONFactoryUtil.createJSONObject();
-		jsonTotal.put("portfolioName", "<b>Total</b>");
-		jsonTotal.put("portfolioId", "--");
-		jsonTotal.put("manager", "--");
-		jsonTotal.put("investorOrAdvisor", "--");
-		jsonTotal.put("purchasePrice", totalPurchasedValue);
-		jsonTotal.put("currentPrice", totalCurrentValue);
-		jsonTotal.put("gainLoss", totalGainLoss);
-		jsonTotal.put("gainLossPercent", totalGainLoss/totalPurchasedValue*100.0d);
-		
-		jsonArray.put(jsonTotal);
 		
 		return jsonArray;
 	}
