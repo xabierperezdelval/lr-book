@@ -69,7 +69,7 @@ public interface IConstants {
 	String FIXED_INCOME_TYPE_BONDS_MATURITY = "Bond Maturity Schedule";
 	String FIXED_INCOME_TYPE_BONDS_QUALITY = "Exposure As Per Rating Table";
 	String FIXED_INCOME_TYPE_CASH_FLOW = "Cash Flow Report";	
-	String FIXED_INCOME_TYPE_COLLATERAL = "Bond Collateral Type Breakdown";
+	String FIXED_INCOME_TYPE_COLLATERAL = "Bond Payment Rank Breakdown";
 	String FIXED_INCOME_YLD_TO_MATURITY = "YTM and Duration Table";
 	String FIXED_INCOME_CPN_TYP_VS_MTY_TYP = "Coupon Type to Maturity Type";
 	

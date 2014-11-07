@@ -1,4 +1,4 @@
-<h4>Maturity Schedule Analysis in USD <i>(as of today)</i></h4><hr/>
+<h4>Bond Payment Rank Breakup in USD <i>(as of today)</i></h4><hr/>
 
 <aui:row>
 	<aui:column>
@@ -27,7 +27,7 @@
   			},
   			function(data) {
   			
-  				showDataTable(data, '#gridContainer', 'Bond Collateral<br/>Type');
+  				showDataTable(data, '#gridContainer', 'Bond Payment<br/>Rank');
   				
   				var legend = {
 			    	enabled: true,
@@ -39,7 +39,7 @@
 			    	y: 100
   				};
   				
-  				renderPieChart(data, 'Collateral Breakup', legend);				
+  				renderPieChart(data, 'Payment Rank Breakup', legend);				
 				divForMasking.loadingmask.toggle();
   			}
 		);

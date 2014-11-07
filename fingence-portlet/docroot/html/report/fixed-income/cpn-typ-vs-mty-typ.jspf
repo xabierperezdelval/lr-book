@@ -41,7 +41,7 @@
 			    	y: 100
   				};
   				
-  				//renderPieChart(data, 'Bond Collateral Type Breakup', legend);				
+  				//renderPieChart(data, 'Bond Payment Rank Breakup', legend);				
 				divForMasking.loadingmask.toggle();
   			}
 		);
