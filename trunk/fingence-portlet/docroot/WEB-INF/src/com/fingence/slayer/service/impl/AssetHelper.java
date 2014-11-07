@@ -220,7 +220,7 @@ public class AssetHelper {
 				assetClass = securityClass;
 				
 				double calcTyp = CellUtil.getDouble(row.getCell(columnNames.get("CALC_TYP")));
-				String collatTyp = CellUtil.getString(row.getCell(columnNames.get("COLLAT_TYP")));
+				String collatTyp = CellUtil.getString(row.getCell(columnNames.get("PAYMENT_RANK")));
 				String isBondNoCalcTyp = CellUtil.getString(row.getCell(columnNames.get("IS_BOND_NO_CALCTYP")));
 				
 				if (calcTyp > 0.0d && Validator.isNotNull(collatTyp) && Validator.isNotNull(isBondNoCalcTyp)) {

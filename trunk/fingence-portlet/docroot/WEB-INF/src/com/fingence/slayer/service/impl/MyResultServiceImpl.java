@@ -78,7 +78,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";
 	static String QUERY2 = MyResultFinderImpl.class.getName() + ".getDistinct";
-	static String[] bucketNames = {"7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
+	static String[] bucketNames = {"No Maturity", "7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
 	
 	static double yldToMaturityRange[][] =
 		{{0, 1},{1, 3},{3, 5},{5, 7},{7, 9},{9, 11},{11, 90}};
@@ -220,13 +220,14 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
 		
 		int[][] ranges = {
-			{210, 365},
+			{0, 210},	
+			{211, 365},
 			{366, 730},
 			{731, 1825},
 			{1826, 3650},
 			{3651, 10000}
 		};
-				
+						
 		int index = -1; 
 		for (int i=0; i<bucketNames.length; i++) {
 			if (bucketName.equalsIgnoreCase(bucketNames[i])) {
@@ -237,8 +238,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 		StringBuilder sb = new StringBuilder();
 		sb.append(" and a.assetId = f.assetId");
-		sb.append(" and DATEDIFF(f.maturity_dt,now()) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
-		String[] replacements = {portfolioIds, ",f.*, DATEDIFF(f.maturity_dt,now()) AS maturing_after", ",fing_Bond f", sb.toString()};
+		sb.append(" and (mty_years_tdy * 365.25) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
+		String[] replacements = {portfolioIds, ",f.*, (mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", sb.toString()};
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
 		
@@ -493,6 +494,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	
 	public JSONArray getBondsMaturing(String portfolioIds) {
 		
+		System.out.println("this is what being called for bond maturity....");		
+		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		
 		// initialization of JSONArray with default values
@@ -510,7 +513,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			conn = DataAccess.getConnection();
 			
 			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
-			String[] replacements = {portfolioIds, ",f.*, DATEDIFF(f.maturity_dt,now()) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
+			String[] replacements = {portfolioIds, ",f.*, (mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
 					
 			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
 			
@@ -524,19 +527,19 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				int maturingAfter = rs.getInt("maturing_after");
 				double currentMarketValue = rs.getDouble("currentMarketValue");
 				totalValueOfBonds += currentMarketValue;
-				
-				if (maturingAfter < 210) continue; // less than 7 months
-				
+								
 				int index = 0;
-				if (maturingAfter > 366 && maturingAfter < 730) {
+				if (maturingAfter > 0 && maturingAfter < 210) {
 					index = 1;
-				} else if (maturingAfter > 731 && maturingAfter < 1825) {
+				} else if (maturingAfter > 366 && maturingAfter < 730) {
 					index = 2;
-				} else if (maturingAfter > 1826 && maturingAfter < 3650) {
+				} else if (maturingAfter > 731 && maturingAfter < 1825) {
 					index = 3;
-				} else if (maturingAfter > 3651) {
+				} else if (maturingAfter > 1826 && maturingAfter < 3650) {
 					index = 4;
-				}
+				} else if (maturingAfter > 3651) {
+					index = 5;
+				} 
 				
 				JSONObject jsonObj = jsonArray.getJSONObject(index);
 				
