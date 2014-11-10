@@ -109,7 +109,7 @@
 					var purchaseDate = document.getElementById('<portlet:namespace/>purchaseDate').value;
 					var purchaseQty = document.getElementById('<portlet:namespace/>purchaseQty').value;
 					
-					if(!(purchasePrice =="" || purchaseQty == "")) {
+					if (isValidNumber(purchasePrice) && isValidNumber(purchaseQty)) {
 						AUI().io.request('<%= updateItemURL %>',{
 							sync: true,
 							method: 'POST',
@@ -121,10 +121,17 @@
 				    			}
 				  			}
 				 		}); 
-			 		}      		    	
+			 		} else {
+			 			document.getElementById('error_name').innerHTML ="Enter proper values for purchase quantity and purchase price.";
+			 		}     		    	
     		    }
     		}
     	);		
+    }
+    
+    function isValidNumber(value) {
+    	var _value = parseFloat(value);
+    	return (!isNaN(value) && (_value > 0.0));
     }
     
     function closePopup() {

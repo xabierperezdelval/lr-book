@@ -154,8 +154,6 @@
 		ajaxURL.setPortletId('report_WAR_fingenceportlet');
 		ajaxURL.setParameter('jspPage', '/html/report/details.jsp');
 		ajaxURL.setParameter('portfolioId', portfolioId);
-		ajaxURL.setParameter('currentPrice', formatCustom(currentPrice, 'amount'));
-		ajaxURL.setParameter("backURL", '<%= themeDisplay.getURLCurrent() %>');
 		ajaxURL.setWindowState('exclusive');
 				
 		AUI().one('#p_p_id<portlet:namespace/>').load('<%= themeDisplay.getURLPortal() %>' + ajaxURL);
