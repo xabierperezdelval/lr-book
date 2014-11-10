@@ -532,7 +532,7 @@
 	             	label: 'Quantity',
 	             	sortable: true,
 	             	formatter: function(obj) {
-						obj.value = accounting.toFixed(obj.value, 5);
+						obj.value = accounting.formatMoney(accounting.toFixed(obj.value, 5), ' ', 5);
 					}
 	           	},
 	            {
