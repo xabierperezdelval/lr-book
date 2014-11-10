@@ -24,7 +24,7 @@
 			<aui:input name="isinId" value="<%= asset.getId_isin() %>" required="true" />
 		</aui:column>
 		<aui:column>
-			<aui:input name="ticker" value="<%=asset.getSecurity_ticker() %>" required="true"/>
+			<aui:input name="ticker" value="<%=asset.getSecurity_ticker() %>" required="true" />
 		</aui:column>
 	</aui:row>
 	
@@ -62,6 +62,7 @@
 		</aui:column>
 	</aui:row>
 	
+	<label style="color: red" id="error_name"></label>
 	<aui:row>
 		<aui:column><aui:button onclick='javascript:saveItem();' value="save" cssClass="btn-primary"/></aui:column>
 		<aui:column><aui:button onclick='javascript:closePopup();' value="cancel" cssClass="btn-primary"/></aui:column>
@@ -83,29 +84,47 @@
 			changeMonth: true, 
 			changeYear: true
 		});
+		
+		<c:if test="<%= itemId > 0 %>">
+    		document.getElementById('<portlet:namespace/>isinId').readOnly = true;
+			document.getElementById('<portlet:namespace/>ticker').readOnly = true;			
+		</c:if>
 	});
 
     function saveItem() {
     
     	var isinId = document.getElementById('<portlet:namespace/>isinId').value;
 		var ticker = document.getElementById('<portlet:namespace/>ticker').value;
-		var purchasePrice = document.getElementById('<portlet:namespace/>purchasePrice').value;
-		var purchaseDate = document.getElementById('<portlet:namespace/>purchaseDate').value;
-		var purchaseQty = document.getElementById('<portlet:namespace/>purchaseQty').value;
-				
-		if(!(isinId == "" || ticker == "" || purchasePrice =="" || purchaseDate == "" || purchaseQty == "")) {
-			AUI().io.request('<%= updateItemURL %>',{
-				sync: true,
-				method: 'POST',
-				form: { id: '<portlet:namespace/>fm' },
-				on: {
-					success: function() {
-						Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
-	                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
-	    			}
-	  			}
-	 		}); 
- 		}         
+		
+		Liferay.Service(
+    		'/fingence-portlet.asset/is-asset-present',{
+    			id_isin: isinId,
+    			security_ticker: ticker
+    		},
+    		function(obj) {
+    		  	if (!obj) {
+    		  		document.getElementById('error_name').innerHTML ="Invalid ID_ISIN + Ticker Combination.";
+    		    } else {
+					var purchasePrice = document.getElementById('<portlet:namespace/>purchasePrice').value;
+					var purchaseDate = document.getElementById('<portlet:namespace/>purchaseDate').value;
+					var purchaseQty = document.getElementById('<portlet:namespace/>purchaseQty').value;
+					
+					if(!(purchasePrice =="" || purchaseQty == "")) {
+						AUI().io.request('<%= updateItemURL %>',{
+							sync: true,
+							method: 'POST',
+							form: { id: '<portlet:namespace/>fm' },
+							on: {
+								success: function() {
+									Liferay.Util.getWindow('<portlet:namespace/>editPortfolioItemPopup').destroy();
+				                	Liferay.Util.getOpener().<portlet:namespace/>reloadPortlet();
+				    			}
+				  			}
+				 		}); 
+			 		}      		    	
+    		    }
+    		}
+    	);		
     }
     
     function closePopup() {
