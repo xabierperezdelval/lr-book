@@ -78,7 +78,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 
 	static String QUERY = MyResultFinderImpl.class.getName() + ".findResults";
 	static String QUERY2 = MyResultFinderImpl.class.getName() + ".getDistinct";
-	static String[] bucketNames = {"No Maturity", "7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
+	static String[] bucketNames = {"No Maturity", "In 7 Months", "7 to 12 Months", "1 to 2 Years", "2 to 5 Years", "5 to 10 Years", "More than 10 Years"};
 	
 	static double yldToMaturityRange[][] =
 		{{0, 1},{1, 3},{3, 5},{5, 7},{7, 9},{9, 11},{11, 90}};
@@ -220,7 +220,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
 		
 		int[][] ranges = {
-			{0, 210},	
+			{1, 210},	
 			{211, 365},
 			{366, 730},
 			{731, 1825},
@@ -238,7 +238,11 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 		StringBuilder sb = new StringBuilder();
 		sb.append(" and a.assetId = f.assetId");
-		sb.append(" and (mty_years_tdy * 365.25) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
+		if (index == 0) {
+			sb.append(" and (mty_years_tdy * 365.25) = 0 ");
+		} else {
+			sb.append(" and (mty_years_tdy * 365.25) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
+		}
 		String[] replacements = {portfolioIds, ",f.*, (mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", sb.toString()};
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
@@ -493,9 +497,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	}
 	
 	public JSONArray getBondsMaturing(String portfolioIds) {
-		
-		System.out.println("this is what being called for bond maturity....");		
-		
+				
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		
 		// initialization of JSONArray with default values
@@ -529,15 +531,17 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				totalValueOfBonds += currentMarketValue;
 								
 				int index = 0;
-				if (maturingAfter > 0 && maturingAfter < 210) {
+				if (maturingAfter > 0 && maturingAfter <= 210) {
 					index = 1;
-				} else if (maturingAfter > 366 && maturingAfter < 730) {
+				} else if (maturingAfter > 210 && maturingAfter <= 365) {
 					index = 2;
-				} else if (maturingAfter > 731 && maturingAfter < 1825) {
+				} else if (maturingAfter > 365 && maturingAfter <= 730) {
+					index = 2;
+				} else if (maturingAfter > 730 && maturingAfter <= 1825) {
 					index = 3;
-				} else if (maturingAfter > 1826 && maturingAfter < 3650) {
+				} else if (maturingAfter > 1825 && maturingAfter <= 3650) {
 					index = 4;
-				} else if (maturingAfter > 3651) {
+				} else if (maturingAfter > 3650) {
 					index = 5;
 				} 
 				
@@ -726,6 +730,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			}
 			
 			// append a summary row
+			double grandTotal = 0.0d;
 			JSONObject summary = JSONFactoryUtil.createJSONObject();
 			summary.put("summary", true);
 			summary.put("cpnType", "Grand Total");
@@ -736,16 +741,12 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 						summary.put(mtyType, jsonObj.getDouble(mtyType));
 					} else {
 						summary.put(mtyType, summary.getDouble(mtyType) + jsonObj.getDouble(mtyType));
-					}
-					
-					if (Double.isNaN(summary.getDouble("grandTotal"))) {
-						summary.put("grandTotal", summary.getDouble(mtyType));
-					} else {
-						summary.put("grandTotal", summary.getDouble(mtyType) + summary.getDouble("grandTotal"));
+						grandTotal += summary.getDouble(mtyType);
 					}
 				}
 			}
 			
+			summary.put("grandTotal", grandTotal);
 			jsonArray.put(summary);
 				
 		} catch (SQLException e) {

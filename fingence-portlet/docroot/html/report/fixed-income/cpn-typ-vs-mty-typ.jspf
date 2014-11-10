@@ -92,7 +92,7 @@
 	}
 	
 	function showDataTable1(data, divId) {
-					
+						
 		YUI().use(
 			'aui-datatable',
 		  	function(Y) {
@@ -179,5 +179,5 @@
 				});
 			}
 		);
-	}	
+	}		
 </aui:script>

@@ -268,7 +268,7 @@ public class ReportPortlet extends MVCPortlet {
 						
 		PortfolioItemServiceUtil.updateItem(portfolioItemId, portfolioId,
 				isinId, ticker, purchasePrice, purchaseQty, purchasedFx,
-				purchaseDate);		
+				purchaseDate);
 	}
 	
 	public void discussOnPortfolio(ActionRequest actionRequest,
