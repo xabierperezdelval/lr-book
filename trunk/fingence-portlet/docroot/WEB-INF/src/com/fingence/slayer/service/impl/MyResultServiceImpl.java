@@ -219,16 +219,17 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		
 		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
 		
-		int[][] ranges = {
+		int[][] ranges = {	
+			{0, 0},
 			{1, 210},	
 			{211, 365},
 			{366, 730},
 			{731, 1825},
 			{1826, 3650},
-			{3651, 10000}
+			{3651, 100000}
 		};
 						
-		int index = -1; 
+		int index = 0; 
 		for (int i=0; i<bucketNames.length; i++) {
 			if (bucketName.equalsIgnoreCase(bucketNames[i])) {
 				index = i;
@@ -238,12 +239,13 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				
 		StringBuilder sb = new StringBuilder();
 		sb.append(" and a.assetId = f.assetId");
+		
 		if (index == 0) {
-			sb.append(" and (mty_years_tdy * 365.25) = 0 ");
+			sb.append(" and round(mty_years_tdy * 365.25) = 0 ");
 		} else {
-			sb.append(" and (mty_years_tdy * 365.25) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
+			sb.append(" and round(mty_years_tdy * 365.25) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
 		}
-		String[] replacements = {portfolioIds, ",f.*, (mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", sb.toString()};
+		String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", sb.toString()};
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
 		
@@ -515,9 +517,11 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			conn = DataAccess.getConnection();
 			
 			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
-			String[] replacements = {portfolioIds, ",f.*, (mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
+			String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
 					
 			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
+			
+			System.out.println("sql ==> " + sql);
 			
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -536,14 +540,19 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				} else if (maturingAfter > 210 && maturingAfter <= 365) {
 					index = 2;
 				} else if (maturingAfter > 365 && maturingAfter <= 730) {
-					index = 2;
-				} else if (maturingAfter > 730 && maturingAfter <= 1825) {
 					index = 3;
-				} else if (maturingAfter > 1825 && maturingAfter <= 3650) {
+				} else if (maturingAfter > 730 && maturingAfter <= 1825) {
 					index = 4;
-				} else if (maturingAfter > 3650) {
+				} else if (maturingAfter > 1825 && maturingAfter <= 3650) {
 					index = 5;
+				} else if (maturingAfter > 3650) {
+					index = 6;
 				} 
+				
+				String security_ticker = rs.getString("security_ticker");
+				if (security_ticker.equalsIgnoreCase("FR0010772244 Corp")) {
+					System.out.println("got the record ==> " + index);
+				}
 				
 				JSONObject jsonObj = jsonArray.getJSONObject(index);
 				
