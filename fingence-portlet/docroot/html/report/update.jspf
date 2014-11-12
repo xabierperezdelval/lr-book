@@ -89,7 +89,7 @@
 			
 			<aui:row>
 				<aui:column>
-					<aui:select name="baseCurrency" required="true">
+					<aui:select name="baseCurrency" required="true" onChange="javascript:confirmChange(this);">
 						<%
 							List<Currency> currencies = CurrencyServiceUtil.getCurrencies();
 						
@@ -177,5 +177,13 @@
 	
 	function closePopup() {
 		Liferay.Util.getWindow('<portlet:namespace/>editPortfolioPopup').destroy();
+	}
+	
+	function confirmChange(val) {
+		<c:if test="<%= _portfolioId != 0 %>">
+			if (!confirm("Do you really want to change the base currency?")) {
+				document.getElementById('<portlet:namespace />baseCurrency').value = '<%= portfolio.getBaseCurrency() %>';
+			}		
+		</c:if>
 	}
 </aui:script>
