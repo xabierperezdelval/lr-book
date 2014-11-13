@@ -73,6 +73,7 @@
 		<column name="bb_composite" type="String"/>
 		<column name="rtg_sp" type="String"/>
 		<column name="rtg_moody" type="String"/>
+		<column name="rtg_fitch" type="String"/>
 		<column name="cpn_freq" type="double"/>
 		<column name="five_y_bid_cds_spread" type="double"/>
 		<column name="dur_mid" type="double"/>
