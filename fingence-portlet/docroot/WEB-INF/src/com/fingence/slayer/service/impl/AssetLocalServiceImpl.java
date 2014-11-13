@@ -501,6 +501,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
              	bond.setBb_composite(CellUtil.getString(row.getCell(columnNames.get("BB_COMPOSITE"))));
             	bond.setRtg_sp(CellUtil.getString(row.getCell(columnNames.get("RTG_SP"))));
             	bond.setRtg_moody(CellUtil.getString(row.getCell(columnNames.get("RTG_MOODY"))));
+            	bond.setRtg_fitch(CellUtil.getString(row.getCell(columnNames.get("RTG_FITCH"))));
             	bond.setCpn_freq(CellUtil.getDouble(row.getCell(columnNames.get("CPN_FREQ"))));
             	bond.setFive_y_bid_cds_spread(CellUtil.getDouble(row.getCell(columnNames.get("5Y_BID_CDS_SPREAD"))));
             	bond.setDur_mid(CellUtil.getDouble(row.getCell(columnNames.get("DUR_MID"))));
@@ -512,7 +513,6 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
              	bond.setIssue_dt(CellUtil.getDate(row.getCell(columnNames.get("ISSUE_DT"))));
              	bond.setAmount_issued(CellUtil.getDouble(row.getCell(columnNames.get("AMT_ISSUED"))));
              	bond.setAmount_outstanding(CellUtil.getDouble(row.getCell(columnNames.get("AMT_OUTSTANDING"))));
-             	//AssetHelper.assignBondCategory(assetId, entryId, userId, row, columnNames, serviceContext, bondCPNVocabularyId);
              		
              	try {
 					bondLocalService.updateBond(bond);
