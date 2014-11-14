@@ -56,12 +56,12 @@ public class RegisterPortlet extends MVCPortlet {
 		
 		checkInvitationStatus(actionRequest);
 		
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(actionRequest);
-		
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(actionRequest);		
 		SessionMessages.add(request, "userAdded", user.getEmailAddress());
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
 				.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		actionResponse.sendRedirect(themeDisplay.getURLSignIn());		
 	}
 	
