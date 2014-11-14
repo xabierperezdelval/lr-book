@@ -49,10 +49,8 @@ public class LandingPageAction extends Action {
 	}
 
 	private String getLandingPath(HttpServletRequest request) {
-
-		long companyId = PortalUtil.getCompanyId(request);
 		
-		String path = null;
+		String path = "/mine";
 
 		User user = null;
 		try {
@@ -67,25 +65,17 @@ public class LandingPageAction extends Action {
 			// check if user has profile that is incomplete
 			List<Profile> profiles = ProfileLocalServiceUtil.getProfilesForUser(user.getUserId());
 			
-			long profileId = 0l;
-			boolean hasNoProfiles = (Validator.isNull(profiles));
-			
 			for (Profile profile: profiles) {
 				if (profile.getStatus() <= IConstants.PROFILE_STATUS_STEP4_DONE) {
-					profileId = profile.getProfileId();
+					path = "/edit?id=" + String.valueOf(profile.getProfileId());
 					break;
 				}
-			}
-
-			if (!hasNoProfiles && (profileId == 0l)) {
-				path = "/mine";
-			} else {
-				path = "/edit?id=" + String.valueOf(profileId);
 			}
 		}
 		
 		// if path is still null
 		if (Validator.isNull(path)) {
+			long companyId = PortalUtil.getCompanyId(request);
 			try {
 				path = PrefsPropsUtil.getString(
 					companyId, PropsKeys.DEFAULT_LANDING_PAGE_PATH);
