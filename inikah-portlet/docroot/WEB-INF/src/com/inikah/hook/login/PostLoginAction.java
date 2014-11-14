@@ -27,7 +27,6 @@ public class PostLoginAction extends Action {
 	 * @see com.liferay.portal.kernel.events.Action#run(HttpServletRequest arg0, HttpServletResponse arg1)
 	 */
 	public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-		// TODO Auto-generated method stub
 
 		User user = null;
 		try {
