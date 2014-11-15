@@ -65,7 +65,7 @@
 		
 		if (profileId == 0l) {
 			HttpServletRequest origServletRequest = PortalUtil.getOriginalServletRequest(request);
-			profileId = GetterUtil.getLong(origServletRequest.getParameter("id"), 0l);			
+			profileId = GetterUtil.getLong(origServletRequest.getParameter("profileId"), 0l);			
 			renderRequest.setAttribute("profileId", String.valueOf(profileId));
 		}
 		

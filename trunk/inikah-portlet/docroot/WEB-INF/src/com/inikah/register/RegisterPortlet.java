@@ -8,15 +8,21 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.inikah.invite.InviteConstants;
+import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.InvitationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
+import com.inikah.util.PageUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -30,6 +36,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class RegisterPortlet extends MVCPortlet {
@@ -135,4 +142,55 @@ public class RegisterPortlet extends MVCPortlet {
 				
 		return user;
 	}	
+	
+	@Override
+	public void render(RenderRequest request, RenderResponse response)
+			throws PortletException, IOException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+		if (themeDisplay.isSignedIn()) {
+			viewTemplate = "/html/register/signed-in.jsp";
+		} else {
+			viewTemplate = "/html/register/view.jsp";
+		}
+		
+		super.render(request, response);
+	}
+	
+	public void startProfile(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		boolean bride = ParamUtil.getBoolean(actionRequest, "bride", false);
+		String profileName = ParamUtil.getString(actionRequest, "profileName", "Dummy");
+		boolean createdForSelf = ParamUtil.getBoolean(actionRequest, "createdForSelf", false);
+
+		User user = null;
+		try {
+			user = PortalUtil.getUser(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		Profile profile = ProfileLocalServiceUtil.init(user, bride, user.getEmailAddress(), profileName, createdForSelf, serviceContext);
+		
+		PortletSession portletSession = actionRequest.getPortletSession();
+		portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long targetPlId = PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), "edit", Locale.US);
+		PortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, "edit_WAR_inikahportlet", targetPlId, PortletRequest.RENDER_PHASE);
+		portletURL.setParameter("profileId", String.valueOf(profile.getProfileId()));
+		actionResponse.sendRedirect(portletURL.toString());
+	}
 }
