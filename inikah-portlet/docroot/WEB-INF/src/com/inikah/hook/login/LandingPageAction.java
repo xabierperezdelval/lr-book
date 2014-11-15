@@ -67,7 +67,7 @@ public class LandingPageAction extends Action {
 			
 			for (Profile profile: profiles) {
 				if (profile.getStatus() <= IConstants.PROFILE_STATUS_STEP4_DONE) {
-					path = "/edit?id=" + String.valueOf(profile.getProfileId());
+					path = "/edit?profileId=" + String.valueOf(profile.getProfileId());
 					break;
 				}
 			}
