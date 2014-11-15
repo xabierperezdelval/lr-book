@@ -188,7 +188,7 @@ public class RegisterPortlet extends MVCPortlet {
 		portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		long targetPlId = PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), "edit", Locale.US);
+		long targetPlId = PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), Constants.EDIT, Locale.US);
 		PortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, "edit_WAR_inikahportlet", targetPlId, PortletRequest.RENDER_PHASE);
 		portletURL.setParameter("profileId", String.valueOf(profile.getProfileId()));
 		actionResponse.sendRedirect(portletURL.toString());
