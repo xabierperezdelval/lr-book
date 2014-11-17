@@ -267,7 +267,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 	}	
 	
 	public List<MyResult> getBondsByYldToMaturity(String index, String portfolioIds) {
-		
+				
 		String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
 		
 		StringBuilder sb = new StringBuilder();
@@ -277,8 +277,8 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		int i = Integer.parseInt(parts[0]);
 		int j = Integer.parseInt(parts[1]);
 		
-		sb.append(" and yld_ytm_bid between ").append(yldToMaturityRange[i][0]).append(" and ").append(yldToMaturityRange[i][1]);
-		sb.append(" and dur_mid between ").append(durationRange[j][0]).append(" and ").append(durationRange[j][1]);
+		sb.append(" and yld_ytm_bid > ").append(yldToMaturityRange[i][0]).append(" and yld_ytm_bid <= ").append(yldToMaturityRange[i][1]);
+		sb.append(" and dur_mid > ").append(durationRange[j][0]).append(" and dur_mid <= ").append(durationRange[j][1]);
 		
 		String[] replacements = {portfolioIds, ",f.*", ",fing_Bond f", sb.toString()};
 		
@@ -420,9 +420,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			String[] replacements = {portfolioIds, ",b.portfolioName ,f.*", ", fing_Bond f", "and a.assetId = f.assetId"};
 			
 			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
-			
-			System.out.println("SQL ==> " + sql);
-			
+						
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			
@@ -520,9 +518,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
 					
 			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
-			
-			System.out.println("sql ==> " + sql);
-			
+						
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			
@@ -547,11 +543,6 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 					index = 5;
 				} else if (maturingAfter > 3650) {
 					index = 6;
-				} 
-				
-				String security_ticker = rs.getString("security_ticker");
-				if (security_ticker.equalsIgnoreCase("FR0010772244 Corp")) {
-					System.out.println("got the record ==> " + index);
 				}
 				
 				JSONObject jsonObj = jsonArray.getJSONObject(index);
