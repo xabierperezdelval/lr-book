@@ -13,9 +13,15 @@
 		<layout-templates>
 			<custom>
 				<layout-template id="fingence" name="Fingence">
-					<template-path>/layout/fingence.tpl</template-path>
-					<wap-template-path>/layout/fingence.wap.tpl</wap-template-path>
-					<thumbnail-path>/layout/fingence.png</thumbnail-path>
+					<template-path>/layout/report/fingence.tpl</template-path>
+					<wap-template-path>/layout/report/fingence.wap.tpl</wap-template-path>
+					<thumbnail-path>/layout/report/fingence.png</thumbnail-path>
+				</layout-template>
+				
+				<layout-template id="investor" name="Investor">
+					<template-path>/layout/investor/fingence.tpl</template-path>
+					<wap-template-path>/layout/investor/fingence.wap.tpl</wap-template-path>
+					<thumbnail-path>/layout/investor/fingence.png</thumbnail-path>					
 				</layout-template>
 			</custom>
 		</layout-templates>
