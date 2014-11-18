@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.service.BridgeServiceUtil;
+import com.fingence.util.SecurityUtil;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -47,12 +48,14 @@ public class LandingPageAction extends Action {
 	private String getLandingPath(HttpServletRequest request) {
 		
 		String path = StringPool.BLANK;
+		
+		long userId = PortalUtil.getUserId(request);
 
-		int userType = BridgeServiceUtil.getUserType(PortalUtil.getUserId(request));
+		int userType = BridgeServiceUtil.getUserType(userId);
 				
 		switch (userType) {
 			case IConstants.USER_TYPE_INVESTOR:
-				path = "/investor";
+				path = "/investor?investorId=" + SecurityUtil.getEncrypted(userId);
 				break;
 			
 			case IConstants.USER_TYPE_REL_MANAGER:

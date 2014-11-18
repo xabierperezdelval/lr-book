@@ -147,7 +147,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/investors/view.jsp</value>
+			<value>/html/advisor/investors/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -181,7 +181,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/managers/view.jsp</value>
+			<value>/html/advisor/managers/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
