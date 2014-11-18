@@ -22,6 +22,9 @@ import com.fingence.IConstants;
 import com.fingence.slayer.service.base.BridgeServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Contact;
@@ -281,6 +284,13 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+        try {
+            indexer.reindex(userId);
+        } catch (SearchException e) {
+            e.printStackTrace();
+        }		
 	}
 	
 	public void addWealthAdvisorFirm(String firmName, long wealthAdvisorId) {
