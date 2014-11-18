@@ -89,8 +89,8 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		List<Organization> organizations = null;
 		try {
 			organizations = organizationLocalService.getUserOrganizations(userId);
-		} catch (SystemException e1) {
-			e1.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 		
 		for (Organization organization:organizations) {
@@ -105,6 +105,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			} catch (PortalException e) {
 				e.printStackTrace();
 			}
+			
 			for (Organization parent: parents) {
 				if (parent.getName().equalsIgnoreCase(parentOrg)) {
 					performRoleCheck = true;
@@ -113,19 +114,24 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			}					
 			
 			if (performRoleCheck) {
+				
+				boolean hasRole = false;
+				
 				try {
-					havingRole = userGroupRoleLocalService.hasUserGroupRole(
+					hasRole = userGroupRoleLocalService.hasUserGroupRole(
 							userId, organization.getGroupId(),
 							roleName);
 					
-					if (havingRole) {
-						break;
-					}
 				} catch (PortalException e) {
 					e.printStackTrace();
 				} catch (SystemException e) {
 					e.printStackTrace();
-				}						
+				}	
+				
+				if (hasRole || roleName.equalsIgnoreCase(RoleConstants.ORGANIZATION_USER)) {
+					havingRole = true;
+					break;
+				}					
 			}
 		}
 				
@@ -133,7 +139,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 	}
 	
 	public int getUserType(long userId) {
-		int userType = IConstants.USER_TYPE_INVESTOR;
+		int userType = 0;
 		
 		if (isUserHavingRole(userId, IConstants.PARENT_ORG_FIRMS, RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
 			userType = IConstants.USER_TYPE_WEALTH_ADVISOR;
@@ -141,6 +147,8 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			userType = IConstants.USER_TYPE_REL_MANAGER;
 		} else if (isUserHavingRole(userId, IConstants.PARENT_ORG_BANKS, RoleConstants.ORGANIZATION_ADMINISTRATOR)) {
 			userType = IConstants.USER_TYPE_BANK_ADMIN;
+		} else if (isUserHavingRole(userId, IConstants.PARENT_ORG_FIRMS, RoleConstants.ORGANIZATION_USER)) {
+			userType = IConstants.USER_TYPE_INVESTOR;
 		}
 		
 		return userType;
@@ -306,7 +314,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 			}
 			
 			if (Validator.isNotNull(newFirm)) {
-				assignOrganizationRole(wealthAdvisorId, newFirm, RoleConstants.ORGANIZATION_ADMINISTRATOR);	
+				assignOrganizationRole(wealthAdvisorId, newFirm, RoleConstants.ORGANIZATION_ADMINISTRATOR);
 			}
 		}
 	}
@@ -319,7 +327,7 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 
 		User user = null;
 		try {
-			user = userLocalService.addUser(creatorUserId, companyId, true,
+			user = userLocalService.addUserWithWorkflow(creatorUserId, companyId, true,
 					null, null, true, null, emailAddress,
 					0, null, Locale.US, firstName, StringPool.BLANK, lastName,
 					0, 0, male, 1, 1,
