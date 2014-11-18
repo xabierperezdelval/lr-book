@@ -10,4 +10,8 @@
 		<portlet id="investors" />
 		<portlet id="managers" />
 	</category>
+	<category name="Investor">
+		<portlet id="portfolios"/>
+		<portlet id="dashboard"/>
+	</category>
 </display>
