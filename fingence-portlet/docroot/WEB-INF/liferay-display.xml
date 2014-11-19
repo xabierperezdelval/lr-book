@@ -11,7 +11,8 @@
 		<portlet id="managers" />
 	</category>
 	<category name="Investor">
-		<portlet id="portfolios"/>
-		<portlet id="dashboard"/>
+		<portlet id="portfolios" />
+		<portlet id="dashboard" />
+		<portlet id="snapshot"/>
 	</category>
 </display>
