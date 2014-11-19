@@ -458,4 +458,5 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
         
         return exists;
     }
+	
 }

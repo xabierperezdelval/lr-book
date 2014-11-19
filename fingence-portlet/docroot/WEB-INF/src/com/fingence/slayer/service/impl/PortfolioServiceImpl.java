@@ -240,4 +240,19 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 		
 		return baseCurrency;
 	}
+	
+	public JSONArray getSnapshot(String portfolioIds, int allocationBy) {
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		
+		for (int i=0; i<5; i++) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("name", "name-" + i);
+			jsonObject.put("gainLoss", "gl-" + i);
+			jsonObject.put("weight", "wt-" + i);
+			
+			jsonArray.put(jsonObject);
+		}
+		
+		return jsonArray;
+	}
 }

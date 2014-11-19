@@ -4,6 +4,21 @@
 	int allocationBy = GetterUtil.getInteger(portletPreferences.getValue("allocationBy", "0"));
 %>
 
+<aui:script>
+	AUI().ready(function(A) {
+		Liferay.Service(
+  			'/fingence-portlet.portfolio/get-snapshot',
+  			{
+    			portfolioIds: '1,2',
+    			allocationBy: <%= allocationBy %>
+  			},
+  			function(data) {
+  				console.log(JSON.stringify(data));
+  			}
+		);
+	});
+</aui:script>
+
 <c:choose>
 	<c:when test="<%= (allocationBy == IConstants.BREAKUP_BY_CURRENCY) %>">
 		<%@include file="/html/investor/snapshot/currency.jspf"%>
