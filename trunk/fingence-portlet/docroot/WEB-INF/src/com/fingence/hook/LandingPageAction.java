@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import com.fingence.IConstants;
 import com.fingence.slayer.service.BridgeServiceUtil;
-import com.fingence.util.SecurityUtil;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -55,7 +54,7 @@ public class LandingPageAction extends Action {
 				
 		switch (userType) {
 			case IConstants.USER_TYPE_INVESTOR:
-				path = "/investor?investorId=" + SecurityUtil.getEncrypted(userId);
+				path = "/investor?investorId=" + userId;
 				break;
 			
 			case IConstants.USER_TYPE_REL_MANAGER:

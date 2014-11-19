@@ -1,4 +1,3 @@
-<%@page import="com.fingence.util.SecurityUtil"%>
 <%@ include file="/html/init.jsp"%>
 
 <%
@@ -6,7 +5,7 @@
 
 	%><div class="row-fluid"><%
 	for (User investor: investors) {
-		String targetURL = "/investor?investorId=" + SecurityUtil.getEncrypted(investor.getUserId());
+		String targetURL = "/investor?investorId=" + investor.getUserId();
 		%>
 			<aui:a href="<%= targetURL %>">
 				<div class="span4">
