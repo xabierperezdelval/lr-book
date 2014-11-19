@@ -17,6 +17,10 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.PortletSession"%>
 
+<%@page import="javax.servlet.http.HttpServletRequest"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.util.PortalUtil"%>
+
 <%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.model.Organization"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
