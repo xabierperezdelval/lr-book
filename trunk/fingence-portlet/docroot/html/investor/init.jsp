@@ -7,5 +7,3 @@
 	HttpServletRequest httpRequest = PortalUtil.getOriginalServletRequest(request);
 	long investorId = ParamUtil.getLong(httpRequest, "investorId");
 %>
-
-<h1><%= investorId %></h1>
