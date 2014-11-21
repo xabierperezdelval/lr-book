@@ -44,7 +44,7 @@
 			http://code.highcharts.com/highcharts.js
 		</footer-portlet-javascript>
 		<footer-portlet-javascript>
-			http://ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js
+			http://ajax.googleapis.com/ajax/libs/mootools/1.5.1/mootools-yui-compressed.js
 		</footer-portlet-javascript>
 		<footer-portlet-javascript>
 			http://code.highcharts.com/adapters/mootools-adapter.js
@@ -129,10 +129,7 @@
 			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
 		</configuration-action-class>		
 		<instanceable>true</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
+		<header-portlet-css>/css/main.css</header-portlet-css>		
 		<css-class-wrapper>assets-snapshot-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
@@ -151,4 +148,4 @@
 		<role-name>user</role-name>
 		<role-link>User</role-link>
 	</role-mapper>
-</liferay-portlet-app>
+</liferay-portlet-app> 
