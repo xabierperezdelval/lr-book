@@ -23,8 +23,38 @@
     			allocationBy: <%= allocationBy %>
   			},
   			function(data) {
-				
+				renderGrid('#gridContainer', data);
   			}
 		);
 	});		
+	
+	function renderGrid(divId, data) {
+        YUI().use('aui-datatable', function(Y) {
+            var columns = [
+                {
+                	key: 'name', 
+                    label: 'Name',
+                    allowHTML: true,
+                    sortable: true
+                },
+                {
+                    key: 'gainLoss', 
+                    label: '% Gain/Loss',
+                    allowHTML: true,
+                    sortable: true
+                },
+                {
+                    key: 'weight',
+                    label: '% Weight',
+                    sortable: true,
+                    allowHTML: true
+                }
+            ];
+            
+            new Y.DataTable({
+                columnset: columns,
+                recordset: data
+            }).render(divId);
+        });
+    }	
 </aui:script>
