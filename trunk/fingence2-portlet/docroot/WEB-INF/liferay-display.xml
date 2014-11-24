@@ -2,7 +2,11 @@
 <!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
 
 <display>
-	<category name="category.sample">
-		<portlet id="fingence2" />
+	<category name="Fingence2">
+		<portlet id="investors" />
+		<portlet id="managers" />	
+		<portlet id="portfolios" />
+		<portlet id="dashboard" />
+		<portlet id="snapshot"/>
 	</category>
 </display>
