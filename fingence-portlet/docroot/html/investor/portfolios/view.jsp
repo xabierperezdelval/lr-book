@@ -1,1 +1,0 @@
-<%@ include file="/html/investor/init.jsp"%>
