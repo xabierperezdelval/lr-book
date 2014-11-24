@@ -82,56 +82,6 @@
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<css-class-wrapper>assets-portlet</css-class-wrapper>
 	</portlet>
-	<portlet>
-		<portlet-name>investors</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>false</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>investors-portlet</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>managers</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>false</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>managers-portlet</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>portfolios</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>false</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>portfolios-portlet</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>dashboard</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>false</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>dashboard-portlet</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>snapshot</portlet-name>
-		<icon>/icon.png</icon>
-		<configuration-action-class>
-			com.liferay.portal.kernel.portlet.DefaultConfigurationAction
-		</configuration-action-class>		
-		<instanceable>true</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>		
-		<css-class-wrapper>assets-snapshot-portlet</css-class-wrapper>
-	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

@@ -7,12 +7,5 @@
 		<portlet id="report" />
 		<portlet id="menu" />
 		<portlet id="assets" />
-		<portlet id="investors" />
-		<portlet id="managers" />
-	</category>
-	<category name="Investor">
-		<portlet id="portfolios" />
-		<portlet id="dashboard" />
-		<portlet id="snapshot"/>
 	</category>
 </display>
