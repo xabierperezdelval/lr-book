@@ -241,11 +241,11 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 		sb.append(" and a.assetId = f.assetId");
 		
 		if (index == 0) {
-			sb.append(" and round(mty_years_tdy * 365.25) = 0 ");
+			sb.append(" and round(mty_years_tdy * 360) = 0 ");
 		} else {
-			sb.append(" and round(mty_years_tdy * 365.25) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
+			sb.append(" and round(mty_years_tdy * 360) between ").append(ranges[index][0]).append(" and ").append(ranges[index][1]);
 		}
-		String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", sb.toString()};
+		String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 360) AS maturing_after", ",fing_Bond f", sb.toString()};
 		
 		List<MyResult> myResults = myResultFinder.findResults(portfolioIds, tokens, replacements);
 		
@@ -515,7 +515,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			conn = DataAccess.getConnection();
 			
 			String[] tokens = {"[$PORTFOLIO_IDS$]", "[$FING_BOND_COLUMNS$]", "[$FING_BOND_TABLE$]", "[$FING_BOND_WHERE_CLAUSE$]"};
-			String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 365.25) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
+			String[] replacements = {portfolioIds, ",f.*, round(mty_years_tdy * 360) AS maturing_after", ",fing_Bond f", "and a.assetId = f.assetId"};
 					
 			String sql = StringUtil.replace(CustomSQLUtil.get(QUERY), tokens, replacements);
 						
