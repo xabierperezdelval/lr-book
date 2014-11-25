@@ -88,7 +88,7 @@
 .table-col-purchasePrice, .table-col-currentPrice, .table-col-currentPrice, .table-col-gainLoss, .table-col-gainLossPercent,
 .table-col-market_value, .table-col-bond_holdings_percent, .table-col-total_holdings_percent, .table-col-grandTotal,
 .table-col-AT-MATURITY, .table-col-CALLABLE, .table-col-PUTABLE, .table-col-SINKABLE,
-.table-col-0-2-Yrs, .table-col-2-4-Yrs, .table-col-4-6-Yrs, .table-col-6-8-Yrs, .table-col-8-10-Yrs, .table-col-10-15-Yrs, .table-col-15-90-Yrs,
+.table-col-0-2, .table-col-2-4, .table-col-4-6, .table-col-6-8, .table-col-8-10, .table-col-10-15, .table-col-15-90,
 .table-col-purchaseQty, .table-col-amountOutstanding, .table-col-Transaction, .table-col-cashFlow, .table-col-currencyConversionRate, .table-col-cashFlowCurrency,
 .table-col-purchasedMarketValue, .table-col-last_price, .table-col-purchaseDate1, .table-col-gain_loss, .table-col-income, .table-col-total_returns, .table-col-avg_holding_period_return,
 .yui3-datatable-col-usd_invested, .yui3-datatable-col-market_value, .yui3-datatable-col-total_gain_loss, .yui3-datatable-col-gain_loss, .yui3-datatable-col-weight,
