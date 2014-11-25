@@ -113,11 +113,11 @@
 		    			for (int i=0; i<MyResultServiceImpl.durationRange.length; i++) {
 		    				%>
 						 		,{
-						 			key: '<%= (int)MyResultServiceImpl.durationRange[i][0] + StringPool.DASH + (int)MyResultServiceImpl.durationRange[i][1] %> Yrs', 
+						 			key: '<%= (int)MyResultServiceImpl.durationRange[i][0] + StringPool.DASH + (int)MyResultServiceImpl.durationRange[i][1] %>', 
 						 			<% 
 						 				if (i == MyResultServiceImpl.durationRange.length-1) {
 						 					%>
-						 						label: '15+ Yrs',
+						 						label: '15+',
 						 					<%
 						 				}
 						 			%>

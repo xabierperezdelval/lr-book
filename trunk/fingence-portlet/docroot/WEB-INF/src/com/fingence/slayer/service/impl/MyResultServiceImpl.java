@@ -580,7 +580,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 				jsonObject.put("yldToMaturityRange", yldToMaturityRange[i][0] + StringPool.PLUS);
 			}
 			for (int j=0; j<durationRange.length; j++) {
-				jsonObject.put((int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs", 0.0d);
+				jsonObject.put((int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1], 0.0d);
 				jsonObject.put("index"+j, (i + StringPool.COLON + j));
 			}
 			jsonArray.put(jsonObject);
@@ -612,7 +612,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 						JSONObject jsonObj = jsonArray.getJSONObject(i);
 						for (int j=0; j<durationRange.length; j++) {
 							if (dur_mid > durationRange[j][0] && dur_mid <= durationRange[j][1]) {
-								String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs";
+								String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1];
 								jsonObj.put(key, jsonObj.getDouble(key) + currentMarketValue);
 							}
 						}
@@ -626,7 +626,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			for (int i=0; i<yldToMaturityRange.length; i++) {
 				JSONObject jsonObj = jsonArray.getJSONObject(i);
 				for (int j=0; j<durationRange.length; j++) {
-					String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs";
+					String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1];
 					jsonObj.put(key, jsonObj.getDouble(key)*100/totalValueOfBonds);
 				}
 			}
@@ -638,7 +638,7 @@ public class MyResultServiceImpl extends MyResultServiceBaseImpl {
 			for (int i=0; i<yldToMaturityRange.length; i++) {
 				JSONObject jsonObj = jsonArray.getJSONObject(i);
 				for (int j=0; j<durationRange.length; j++) {
-					String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1] + " Yrs";
+					String key = (int)durationRange[j][0] + StringPool.DASH + (int)durationRange[j][1];
 					if (Double.isNaN(summary.getDouble(key))) {
 						summary.put(key, jsonObj.getDouble(key));
 					} else {
