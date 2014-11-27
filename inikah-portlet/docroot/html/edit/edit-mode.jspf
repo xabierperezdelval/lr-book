@@ -8,7 +8,7 @@
 </portlet:renderURL>
 
 <aui:input name="tabs1" type="hidden" value="<%= tabs1 %>"/>
-<liferay-ui:tabs names="<%= tabNames %>" refresh="<%= true %>" url="<%= tabsURL %>">
+<liferay-ui:tabs names="<%= tabNames %>" refresh="true" url="<%= tabsURL %>">
 	<liferay-ui:section>
 		<%@ include file="/html/edit/step1.jspf" %>
 	</liferay-ui:section>

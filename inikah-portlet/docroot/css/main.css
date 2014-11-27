@@ -43,16 +43,18 @@
 
 /* --------------- */
 
-.iddCode-selection select {
+.short-select select {
 	width:70px;    
 }
 
-.iddCode-selection input {
-	width:110px;
+.short-text-box input {
+	width:155px;
 }
+
 .salary-selection select {
     width:135px;    
 }
+
 .salary-selection input {
 	width:120px;
 }

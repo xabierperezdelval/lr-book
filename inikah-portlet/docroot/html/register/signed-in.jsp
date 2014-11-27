@@ -14,20 +14,19 @@
 
 <c:choose>
 	<c:when test="<%= (inCompleteProfileId > 0l) %>">
-		<liferay-portlet:renderURL var="editProfileURL" portletName="edit_WAR_inikahportlet" 
-				plid="<%= PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), Constants.EDIT, locale) %>">
-			<portlet:param name="profileId" value="<%= String.valueOf(inCompleteProfileId) %>"/>
-		</liferay-portlet:renderURL>
-		One profile is in DRAFT state. <aui:a href="<%= editProfileURL %>" label="click-here"/> to complete.
+		<%
+			String targetURL = StringPool.SLASH + Constants.EDIT + StringPool.QUESTION + "profileId" + StringPool.EQUAL + inCompleteProfileId;
+		%>
+		One profile is in DRAFT state. <aui:a href="<%= targetURL %>" label="click-here"/> to complete.
 	</c:when>
 	
 	<c:otherwise>
 		<portlet:actionURL var="startURL" name="startProfile" />
 		 
 		<aui:form action="<%= startURL %>">
-			<aui:input name="profileName" required="<%= true %>" />
+			<aui:input name="profileName" required="true" />
 			<aui:select name="bride" label="profile-type" 
-					showEmptyOption="<%= true %>" required="<%= true %>"> 
+					showEmptyOption="true" required="true"> 
 				<aui:option value="1" label="bride"/>
 				<aui:option value="0" label="groom"/>
 			</aui:select>

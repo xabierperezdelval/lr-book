@@ -24,24 +24,34 @@
 		</aui:column>
 		<c:choose>
 			<c:when test="<%= singleIdd %>">
-				<aui:input name="mobileNumber" value="<%= profile.getPhone(true) %>"
-					prefix="<%= CharPool.PLUS + iddCodes.get(0) %>" required="true"/>
+				<aui:column cssClass="short-text-box">
+					<aui:input name="mobileNumber" value="<%= profile.getPhone(true) %>"
+							prefix="<%= CharPool.PLUS + iddCodes.get(0) %>" required="true">
+						<aui:validator name="digits"/>
+	              		<aui:validator name="minLength">7</aui:validator>
+	              		<aui:validator name="maxLength">11</aui:validator>
+					</aui:input>
+				</aui:column>
 			</c:when>
 			<c:otherwise>
-				<aui:column cssClass="iddCode-selection">
+				<aui:column cssClass="short-select">
 					<aui:select name="mobileIdd">
 						<%= MyListUtil.getIddOptions(profile.getPhoneIdd(true), iddCodes) %>
 					</aui:select>
 				</aui:column>
-				<aui:column cssClass="iddCode-selection">
-					<aui:input name="mobileNumber" value="<%= profile.getPhone(true) %>" required="true"/>
+				<aui:column cssClass="short-text-box">
+					<aui:input name="mobileNumber" value="<%= profile.getPhone(true) %>" required="true">
+						<aui:validator name="digits"/>
+	              		<aui:validator name="minLength">7</aui:validator>
+	              		<aui:validator name="maxLength">11</aui:validator>					
+					</aui:input>
 				</aui:column>
 			</c:otherwise>
 		</c:choose>
 	</aui:row>
 	<aui:row>
 		<aui:column>
-			<aui:select name="motherTongue" required="true" showEmptyOption="<%= true %>">
+			<aui:select name="motherTongue" required="true" showEmptyOption="true">
 				<%= MyListUtil.getLanguagesSpoken(profile) %>
 			</aui:select>
 		</aui:column>

@@ -24,9 +24,9 @@
 	
 	<aui:fieldset>
 		<aui:column>
-			<aui:input autoFocus="true" name="profileName" label="profile-name" required="<%= true %>" />
+			<aui:input autoFocus="true" name="profileName" label="profile-name" required="true" />
 			
-			<aui:input name="emailAddress" required="<%= true %>" value="<%= emailAddress %>">
+			<aui:input name="emailAddress" required="true" value="<%= emailAddress %>">
 				<aui:validator name="email"/>
 				<aui:validator name="custom" errorMessage="email-already-exists">
 					function() {
@@ -38,20 +38,20 @@
 		
 		<aui:column cssClass="mini-selection">
 			<aui:select name="bride" label="profile-type" 
-					showEmptyOption="<%= true %>" required="<%= true %>"> 
+					showEmptyOption="true" required="true"> 
 				<aui:option value="1" label="bride"/>
 				<aui:option value="0" label="groom"/>
 			</aui:select>
 			
 			<aui:select name="creatingForSelf" label="creating-for" 
-					showEmptyOption="<%= true %>" required="<%= true %>">
+					showEmptyOption="true" required="true">
 				<aui:option value="1" label="self"/>
 				<aui:option value="0" label="others"/>
 			</aui:select>						
 		</aui:column>		
 	</aui:fieldset>
 	
-	<aui:input name="" type="checkbox" required="<%= true %>" label="i-agree-to-terms-and-conditions" />
+	<aui:input name="" type="checkbox" required="true" label="i-agree-to-terms-and-conditions" />
 	
 	<aui:button type="submit" value="Register" />
 </aui:form>
