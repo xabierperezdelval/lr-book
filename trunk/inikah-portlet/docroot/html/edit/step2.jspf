@@ -80,9 +80,9 @@
   		});
    
    		new Y.CharCounter({
- 	        	input: '#<portlet:namespace/>occupationDetails',
- 	        	counter: '#<portlet:namespace/>100CountForOccupationDetails',
- 	        	maxLength: 100
+        	input: '#<portlet:namespace/>occupationDetails',
+        	counter: '#<portlet:namespace/>100CountForOccupationDetails',
+        	maxLength: 100
 		});    	        
     });
 </script>

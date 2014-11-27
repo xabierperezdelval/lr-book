@@ -170,6 +170,12 @@
 			<finder-column name="locType"/>
 		</finder>
 		
+		<finder return-type="Collection" name="ParentId_LocType_Active">
+			<finder-column name="parentId"/>
+			<finder-column name="locType"/>
+			<finder-column name="active_"/>
+		</finder>		
+		
 		<reference entity="Address" package-path="com.liferay.portal"/>
 	</entity>
 	

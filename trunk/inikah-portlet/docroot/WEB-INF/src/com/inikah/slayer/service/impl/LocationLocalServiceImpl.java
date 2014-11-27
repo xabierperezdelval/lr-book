@@ -79,8 +79,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		location = locationPersistence.create(locationId);
-		
+		location = createLocation(locationId);
 		location.setParentId(parentId);
 		location.setName(name);
 		location.setLocType(locType);
@@ -88,7 +87,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		location.setActive_(true);
 		
 		try {
-			location = locationPersistence.update(location);
+			location = updateLocation(location);
 			NotifyUtil.newCityCreated(location);
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -125,7 +124,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		location.setActive_(true);
 		
 		try {
-			location = locationPersistence.update(location);
+			location = updateLocation(location);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -136,13 +135,24 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	public List<Location> getLocations(long parentId, int locType) {
 		List<Location> locations = null;
 		try {
-			locations = locationPersistence.findByParentId_LocType(parentId, locType);
+			locations = locationPersistence.findByParentId_LocType_Active(parentId, locType, true);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		return locations;
 	}
+	
+	public List<Location> getLocations(long parentId, int locType, boolean all) {
+		List<Location> locations = null;
+		try {
+			locations = locationPersistence.findByParentId_LocType(parentId, locType);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return locations;
+	}	
 	
 	public String getDisplayInfo(long cityId) {
 		StringBuilder sb = new StringBuilder();
@@ -164,7 +174,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	}
 	
 	public String getUserLocation(long userId) {
-		String location = "Un Known Location";
+		String location = StringPool.BLANK;
 		try {
 			User user = UserLocalServiceUtil.fetchUser(userId);
 			
@@ -178,6 +188,10 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		}
 		
 		return location;
+	}
+	
+	public boolean userHasLocation(long userId) {
+		return Validator.isNotNull(getUserLocation(userId));
 	}
 	
 	public long insertCity(long regionId, String name, long userId) {

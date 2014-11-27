@@ -58,14 +58,13 @@ public class BridgeServiceImpl extends BridgeServiceBaseImpl {
 		if (Validator.isNull(country)) return null;
 		
 		// check if country already 'enabled'
-		if (country.getActive()) return country;
-		
-		country.setActive(true);
-		
-		try {
-			country = countryPersistence.updateImpl(country);
-		} catch (SystemException e) {
-			e.printStackTrace();
+		if (!country.getActive()) {
+			country.setActive(true);
+			try {
+				country = countryPersistence.updateImpl(country);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return country;

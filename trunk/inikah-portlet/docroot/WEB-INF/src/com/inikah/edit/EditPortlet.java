@@ -99,14 +99,11 @@ public class EditPortlet extends MVCPortlet {
 		profile.setComplexion(ParamUtil.getInteger(actionRequest, "complexion"));
 		profile.setHeight(ParamUtil.getInteger(actionRequest, "height"));
 		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
-		
-		String mobileNumber = ParamUtil.getString(actionRequest, "mobileNumber");
-		BridgeLocalServiceUtil.addPhone(userId, Profile.class.getName(), profile.getProfileId(), mobileNumber, "91", true);
 		profile.setAllowNonSingleProposals(!profile.isSingle());
 		
 		// setting locations
 		setLocation(actionRequest, profile, userId, "BIRTH");	
-		setLocation(actionRequest, profile, userId, "LIVING");	
+		setLocation(actionRequest, profile, userId, "LIVING");
 		
 		if (!profile.isEditMode() && profile.getStatus() == IConstants.PROFILE_STATUS_CREATED) {
 			profile.setStatus(IConstants.PROFILE_STATUS_STEP1_DONE);
@@ -132,6 +129,7 @@ public class EditPortlet extends MVCPortlet {
 		
 		if (cityId == -1l) {
 			String cityText = ParamUtil.getString(actionRequest, "new" + cityFld);
+			System.out.println("cityText ==> " + cityText);
 			cityId = LocationLocalServiceUtil.insertCity(regionId, cityText, userId);
 		}		
 		

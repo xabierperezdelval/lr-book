@@ -1,11 +1,11 @@
 <aui:fieldset>
 	<aui:row>
-		<aui:column cssClass="iddCode-selection">
+		<aui:column cssClass="short-select">
 			<aui:select name="sons">
 				<%= MyListUtil.getChildrenList(profile.getSons()) %>
 			</aui:select>
 		</aui:column>
-		<aui:column cssClass="iddCode-selection">
+		<aui:column cssClass="short-select">
 			<aui:select name="daughters">
 				<%= MyListUtil.getChildrenList(profile.getDaughters()) %>
 			</aui:select>

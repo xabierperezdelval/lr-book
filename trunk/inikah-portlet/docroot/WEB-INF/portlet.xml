@@ -18,7 +18,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
-		</supports>
+		</supports> 
 		<resource-bundle>content/Language</resource-bundle>
 		<portlet-info>
 			<title>Main Portlet</title>
