@@ -349,18 +349,18 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNull(address)) {
-			try {
-				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
-						street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
-						IConstants.PHONE_VERIFIED, false, true, serviceContext);
-			} catch (PortalException e) {
-				e.printStackTrace();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}					
-		}
+		if (Validator.isNotNull(address)) return address;
+		
+		try {
+			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+			address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
+					street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
+					IConstants.PHONE_VERIFIED, false, true, serviceContext);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}					
 		
 		return address;
 	}
