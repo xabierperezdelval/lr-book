@@ -70,6 +70,15 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
+		if (!location.isActive_()) {
+			location.setActive_(true);
+			try {
+				location = updateLocation(location);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if (Validator.isNotNull(location)) return location;
 		
 		long locationId = 0l;
