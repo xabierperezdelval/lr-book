@@ -2,7 +2,7 @@
 	List<Photo> album = profile.getApprovedPhotos();
 %>
 
-<c:if test="<%= Validator.isNotNull(album) && album.size() > 0 %>">
+<c:if test="<%= Validator.isNotNull(album) && !album.isEmpty() %>">
 	<fieldset>
 		<div id="myGallery">
 			<%

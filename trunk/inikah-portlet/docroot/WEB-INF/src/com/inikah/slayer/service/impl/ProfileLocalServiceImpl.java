@@ -23,6 +23,7 @@ import com.inikah.slayer.model.Photo;
 import com.inikah.slayer.model.Profile;
 import com.inikah.slayer.model.Relative;
 import com.inikah.slayer.service.BridgeServiceUtil;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
 import com.inikah.slayer.service.base.ProfileLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.MyListUtil;
@@ -38,6 +39,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
@@ -88,8 +90,6 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		if (createdForSelf) {
 			profile.setCreatedFor(BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self"));
 		}
-		
-		profile.setDefaultLocation(user);
 				
 		try {
 			profile = addProfile(profile);
@@ -110,6 +110,33 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return profile;		
 	}
 	
+	private void setDefaultLocation(User user, Profile profile) {
+		
+		if (profile.getResidingCountry() > 0l
+				&& profile.getResidingState() > 0l
+				&& profile.getResidingCity() > 0l
+				&& profile.getCountryOfBirth() > 0l
+				&& profile.getStateOfBirth() > 0l 
+				&& profile.getCityOfBirth() > 0l) {
+			return;
+		}
+		
+		Address address = LocationLocalServiceUtil.getLocation(user);
+			
+		if (Validator.isNotNull(address)) {
+			
+			long city = Long.valueOf(address.getCity());
+			
+			profile.setResidingCountry(address.getCountryId());
+			profile.setResidingState(address.getRegionId());
+			profile.setResidingCity(city);
+			
+			profile.setCountryOfBirth(address.getCountryId());
+			profile.setStateOfBirth(address.getRegionId());
+			profile.setCityOfBirth(city);
+		}
+	}
+
 	/**
 	 * 
 	 * @param bride
@@ -148,11 +175,20 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 * 
 	 */
 	public void setOwnerLastLogin(long userId) {
+		
+		User user = null;
+		try {
+			user = userLocalService.fetchUser(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
 		try {
 			List<Profile> profiles = profilePersistence.findByUserId(userId);
 			
 			for (Profile profile: profiles) {
 				profile.setOwnerLastLogin(new Date());
+				setDefaultLocation(user, profile);
 				updateProfile(profile);
 			}
 		} catch (SystemException e) {
@@ -320,7 +356,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		int count = 0;
 		
 		List<Profile> profiles = getProfilesWithStatus(status);
-		if (Validator.isNotNull(profiles) && profiles.size() > 0) {
+		if (Validator.isNotNull(profiles) && !profiles.isEmpty()) {
 			count = profiles.size();
 		}
 		

@@ -34,7 +34,7 @@ public class LocationFinderImpl extends BasePersistenceImpl<Location> implements
 		@SuppressWarnings("unchecked")
 		List<Location> result = query.list();
 		
-		if (Validator.isNotNull(result) && result.size() > 0) {
+		if (Validator.isNotNull(result) && !result.isEmpty()) {
 			_city = result.get(0);
 		}
 
@@ -60,7 +60,7 @@ public class LocationFinderImpl extends BasePersistenceImpl<Location> implements
 		@SuppressWarnings("unchecked")
 		List<Location> result = query.list();
 		
-		if (Validator.isNotNull(result) && result.size() > 0) {
+		if (Validator.isNotNull(result) && !result.isEmpty()) {
 			_city = result.get(0);
 		}
 
@@ -85,7 +85,7 @@ public class LocationFinderImpl extends BasePersistenceImpl<Location> implements
 		@SuppressWarnings("unchecked")
 		List<Location> result = query.list();
 		
-		if (Validator.isNotNull(result) && result.size() > 0) {
+		if (Validator.isNotNull(result) && !result.isEmpty()) {
 			_region = result.get(0);
 		}		
 
