@@ -159,6 +159,8 @@ public class ProfileImpl extends ProfileBaseImpl {
 		// set other attributes for the profile before updating it
 		Address address = LocationLocalServiceUtil.getLocation(user);
 		
+		System.out.println("user address ==> " + address);
+		
 		if (Validator.isNotNull(address)) {
 			
 			long city = Long.valueOf(address.getCity());
