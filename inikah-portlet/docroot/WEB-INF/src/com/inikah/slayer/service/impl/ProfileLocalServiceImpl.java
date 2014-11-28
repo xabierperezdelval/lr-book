@@ -90,6 +90,9 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		if (createdForSelf) {
 			profile.setCreatedFor(BridgeServiceUtil.getListTypeId(IConstants.LIST_CREATED_FOR, "self"));
 		}
+		
+		// this line while creating profile as logged-in user
+		setDefaultLocation(user, profile);
 				
 		try {
 			profile = addProfile(profile);
