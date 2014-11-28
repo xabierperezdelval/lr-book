@@ -272,6 +272,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 					addressLocalService.getAddresses(
 							user.getCompanyId(), Location.class.getName(), user.getUserId());
 			
+			System.out.println("addresses ==> " + addresses);
+			
 			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
 				address = addresses.get(addresses.size()-1);
 			}
