@@ -151,30 +151,6 @@ public class ProfileImpl extends ProfileBaseImpl {
 		return sb.toString();
 	}
 	
-	/**
-	 * 
-	 * @param user
-	 */
-	public void setDefaultLocation(User user) {
-		// set other attributes for the profile before updating it
-		Address address = LocationLocalServiceUtil.getLocation(user);
-		
-		System.out.println("user address ==> " + address);
-		
-		if (Validator.isNotNull(address)) {
-			
-			long city = Long.valueOf(address.getCity());
-			
-			setResidingCountry(address.getCountryId());
-			setResidingState(address.getRegionId());
-			setResidingCity(city);
-			
-			setCountryOfBirth(address.getCountryId());
-			setStateOfBirth(address.getRegionId());
-			setCityOfBirth(city);
-		}
-	}
-	
 	public String getPriceText(long planId) {
 		
 		return String.valueOf(getPrice(planId));
