@@ -1,13 +1,12 @@
 package com.inikah.hook.login;
 
-import com.inikah.slayer.service.InvitationLocalServiceUtil;
-import com.inikah.slayer.service.ProfileLocalServiceUtil;
-import com.inikah.util.MaxMindUtil;
-import com.liferay.portal.kernel.events.Action;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.inikah.slayer.service.InvitationLocalServiceUtil;
+import com.inikah.slayer.service.LocationLocalServiceUtil;
+import com.inikah.slayer.service.ProfileLocalServiceUtil;
+import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -40,7 +39,7 @@ public class PostLoginAction extends Action {
 		if (Validator.isNull(user)) return;
 		
 		// Set Max Mind Coordinates
-		MaxMindUtil.setCoordinates(user);
+		LocationLocalServiceUtil.setCoordinates(user);
 		
 		// check for any invitations for this user
 		InvitationLocalServiceUtil.linkInvitation(user);

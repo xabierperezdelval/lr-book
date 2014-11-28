@@ -20,7 +20,7 @@
 </aui:fieldset>
 
 <aui:fieldset>
-	<aui:column>
+	<aui:column cssClass="salary-selection">
 		<aui:input name="income" value="<%= profile.getIncome() %>"
 			prefix="<%= profile.getCurrencyCode() %>" required="<%= !profile.isBride() %>"/>
 	</aui:column>
