@@ -14,10 +14,16 @@
 
 package com.inikah.slayer.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.Soundex;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 
 import com.inikah.slayer.model.Location;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
@@ -28,6 +34,9 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -363,5 +372,238 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		}					
 		
 		return address;
+	}
+	
+	public Location setCoordinates(User user) {
+		
+		String ipAddress = user.getLastLoginIP();
+		
+		Location location = null;
+		
+		if (existingIPAddress(ipAddress)) {
+			location = getLocationForIP(ipAddress);
+		} else {
+			
+			String country = "IN";
+			String region = "Karnataka";
+			String city = "Bangalore";
+			
+			if (Validator.isIPAddress(ipAddress)) {
+				String url = "http://ipinfo.io/" + ipAddress + "/geo";
+				
+				HttpClient client = new HttpClient();
+				GetMethod method = new GetMethod(url);
+				
+				try {
+					client.executeMethod(method);
+				} catch (HttpException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				InputStream inputStream = null;
+				try {
+					inputStream = method.getResponseBodyAsStream();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				String jsonResponse = null;
+				try {
+					jsonResponse = IOUtils.toString(inputStream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				JSONObject jsonObject = null;
+				try {
+					jsonObject = JSONFactoryUtil.createJSONObject(jsonResponse);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+				country = jsonObject.getString("country");
+				region = jsonObject.getString("region");
+				city = jsonObject.getString("city");
+			}
+			
+			location = locationFinder.getCity(country, region, city);
+			
+			if (Validator.isNull(location)) {
+				location = insertCity(country, region, city);
+			}			
+		}
+		
+		updateAddress(user, location);
+		
+		return location;
+	}
+
+	private Location getLocationForIP(String ipAddress) {
+		// TODO Auto-generated method stub
+		
+		Location location = null;
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Address.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("zip", ipAddress));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
+				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
+		
+		try {
+			@SuppressWarnings("unchecked")
+			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
+			
+			if (Validator.isNotNull(addresses) && addresses.size() > 0) {
+				
+				
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return location;
+	}
+
+	private boolean existingIPAddress(String ipAddress) {
+		
+		if (Validator.isNull(ipAddress) || ipAddress.equalsIgnoreCase("127.0.0.1")) {
+			return false;
+		}
+		
+		boolean existing = false;
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Address.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("zip", ipAddress));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
+				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
+		
+		try {
+			@SuppressWarnings("unchecked")
+			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
+			existing = (Validator.isNotNull(addresses) && addresses.size() > 0);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
+		
+		return existing;
+	}
+
+	private void updateAddress(User user, Location location) {
+
+		// check if a record exists in the 'Address' table with the same coordinates
+		
+		long cityId = location.getLocationId();
+		long regionId = location.getParentId();
+		long countryId = 0l;
+		
+		try {
+			Location _region = fetchLocation(regionId);
+			countryId = _region.getParentId();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		long userId = user.getUserId();
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Address.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
+				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classPK", userId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("city", String.valueOf(cityId)));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("regionId", regionId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("countryId", countryId));
+		
+		Address address = null;
+		
+		try {
+			@SuppressWarnings("unchecked")
+			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
+			for (Address _address: addresses) {
+				address = _address;
+				break;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(address)) {
+			try {
+				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
+						StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, String.valueOf(cityId), user.getLastLoginIP(), regionId, countryId, 
+						IConstants.PHONE_VERIFIED, false, true, serviceContext);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}	
+		}
+	}
+
+	private Location insertCity(String country, String region, String city) {
+
+		Location _region = locationFinder.getRegion(country, region);
+		
+		if (Validator.isNull(_region)) {
+			_region = insertRegion(country, region);
+		}
+		
+		long locationId = 0l;
+		try {
+			locationId = counterLocalService.increment(Location.class.getName());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}		
+		Location _city = createLocation(locationId);
+		_city.setParentId(_region.getLocationId());
+		_city.setName(city);
+		_city.setActive_(true);
+		_city.setLocType(IConstants.LOC_TYPE_CITY);		
+		
+		try {
+			_city = addLocation(_city);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		 
+		return _city;
+	}
+
+	private Location insertRegion(String country, String region) {
+		
+		long locationId = 0l;
+		try {
+			locationId = counterLocalService.increment(Location.class.getName());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		Location _region = createLocation(locationId);
+		
+		Country _country = null;
+		try {
+			_country = CountryServiceUtil.fetchCountryByA2(country);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(_country)) {
+			_region.setParentId(_country.getCountryId());
+			_region.setName(region);
+			_region.setActive_(true);
+			_region.setLocType(IConstants.LOC_TYPE_REGION);
+			
+			try {
+				_region = addLocation(_region);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return _region;
 	}
 }
