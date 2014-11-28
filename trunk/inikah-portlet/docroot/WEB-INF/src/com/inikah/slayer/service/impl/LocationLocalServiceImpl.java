@@ -457,7 +457,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			@SuppressWarnings("unchecked")
 			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
 			
-			if (Validator.isNotNull(addresses) && addresses.size() > 0) {
+			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
 				Address address = addresses.get(0);
 				
 				long countryId = address.getCountryId();
@@ -490,10 +490,12 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		try {
 			@SuppressWarnings("unchecked")
 			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
-			existing = (Validator.isNotNull(addresses) && addresses.size() > 0);
+			existing = (Validator.isNotNull(addresses) && !addresses.isEmpty());
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}		
+		
+		System.out.println("existing IP address " + existing + ":" + ipAddress);
 		
 		return existing;
 	}
@@ -501,6 +503,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	private void updateAddress(User user, Location location) {
 
 		// check if a record exists in the 'Address' table with the same coordinates
+		
+		System.out.println("going to update the address record....");
 		
 		long cityId = location.getLocationId();
 		long regionId = location.getParentId();
