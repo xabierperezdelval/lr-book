@@ -59,7 +59,7 @@ public class RelativeServiceImpl extends RelativeServiceBaseImpl {
 		
 		try {
 			List<Relative> relatives = relativePersistence.findByRelationship(profileId, relationship);
-			if (Validator.isNotNull(relatives) && relatives.size() > 0) {
+			if (Validator.isNotNull(relatives) && !relatives.isEmpty()) {
 				flag = relatives.get(0).getRelationship();
 			}
 		} catch (SystemException e) {

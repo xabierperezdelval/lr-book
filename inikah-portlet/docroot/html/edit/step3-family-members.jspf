@@ -1,6 +1,6 @@
 <%
 	List<Relative> relatives = RelativeServiceUtil.getRelatives(profile.getProfileId());
-	boolean hasRelatives = (Validator.isNotNull(relatives) && relatives.size() > 0);
+	boolean hasRelatives = (Validator.isNotNull(relatives) && !relatives.isEmpty());
 %>
 
 <c:if test="<%= hasRelatives %>">
