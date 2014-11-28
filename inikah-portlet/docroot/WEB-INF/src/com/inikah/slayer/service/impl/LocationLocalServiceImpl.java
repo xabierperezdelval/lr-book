@@ -535,12 +535,16 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			e.printStackTrace();
 		}
 		
+		System.out.println("address ==> " + address);
+		
 		if (Validator.isNull(address)) {
 			try {
 				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
 						"LOC", StringPool.BLANK, StringPool.BLANK, String.valueOf(cityId), user.getLastLoginIP(), regionId, countryId, 
 						IConstants.PHONE_VERIFIED, false, true, serviceContext);
+				
+				System.out.println("address ==> " + address);
 			} catch (PortalException e) {
 				e.printStackTrace();
 			} catch (SystemException e) {
