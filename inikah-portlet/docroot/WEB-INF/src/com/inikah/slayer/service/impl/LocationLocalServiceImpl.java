@@ -26,6 +26,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
 import com.inikah.slayer.model.Location;
+import com.inikah.slayer.service.BridgeServiceUtil;
 import com.inikah.slayer.service.base.LocationLocalServiceBaseImpl;
 import com.inikah.util.IConstants;
 import com.inikah.util.NotifyUtil;
@@ -39,7 +40,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
@@ -70,85 +70,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.inikah.slayer.service.LocationLocalServiceUtil} to access the location local service.
 	 */
-	
-	public Location getLocation(long parentId, String name, int locType, long userId) {
-		Location location = null;
-		try {
-			location = locationPersistence.fetchByParentId_Name(parentId, name, locType);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (!location.isActive_()) {
-			location.setActive_(true);
-			try {
-				location = updateLocation(location);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if (Validator.isNotNull(location)) return location;
-		
-		long locationId = 0l;
-		try {
-			locationId = counterLocalService.increment(Location.class.getName());
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		location = createLocation(locationId);
-		location.setParentId(parentId);
-		location.setName(name);
-		location.setLocType(locType);
-		location.setUserId(userId);
-		location.setActive_(true);
-		
-		try {
-			location = updateLocation(location);
-			NotifyUtil.newCityCreated(location);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return location;		
-	}
-	
-	public Location getLocation(long parentId, String code, String name, long userId) {
-		
-		Location location = null;
-		try {
-			location = locationPersistence.fetchByParentId_Code(parentId, code, IConstants.LOC_TYPE_REGION);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (Validator.isNotNull(location)) return location;
-		
-		long locationId = 0l;
-		try {
-			locationId = counterLocalService.increment(Location.class.getName());
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		location = locationPersistence.create(locationId);
-		
-		location.setParentId(parentId);
-		location.setCode(code);
-		location.setLocType(IConstants.LOC_TYPE_REGION);
-		location.setUserId(userId);
-		location.setName(StringUtil.replace(name, "State Of ", StringPool.BLANK));
-		location.setActive_(true);
-		
-		try {
-			location = updateLocation(location);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		return location;
-	}
+
 	
 	public List<Location> getLocations(long parentId, int locType) {
 		List<Location> locations = null;
@@ -271,9 +193,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			List<Address> addresses = 
 					addressLocalService.getAddresses(
 							user.getCompanyId(), Location.class.getName(), user.getUserId());
-			
-			System.out.println("addresses ==> " + addresses);
-			
+						
 			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
 				address = addresses.get(addresses.size()-1);
 			}
@@ -283,99 +203,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		return address;
 	}
-	
-	/**
-	 * 
-	 */
-	public boolean isLocationSet(User user) {
 		
-		long userId = user.getUserId();
-		boolean locationSet = false;
-		String ipAddress = user.getLastLoginIP();
-		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-				Address.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("zip", ipAddress));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
-				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
-		
-		Address existing = null;
-		try {
-			@SuppressWarnings("unchecked")
-			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
-			
-			for (Address address: addresses) {
-				existing = address;
-				if (address.getClassPK() == userId) {
-					locationSet = true;
-					break;
-				}
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (!locationSet && Validator.isNotNull(existing)) {
-			existing = insertAddress(userId, existing.getStreet1(), existing.getStreet2(),
-					existing.getStreet3(), Long.valueOf(existing.getCity()),
-					existing.getRegionId(), existing.getCountryId(), ipAddress);
-			
-			existing.setUserName(user.getFullName());
-			
-			try {
-				addressLocalService.updateAddress(existing);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			
-			locationSet = true;
-		}
-		
-		return locationSet;
-	}
-	
-	public Address insertAddress(long userId, String street1, String street2,
-			String street3, long cityId, long regionId,
-			long countryId, String ipAddress) {
-		
-		Address address = null;
-		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-				Address.class, PortalClassLoaderUtil.getClassLoader());
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
-				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("classPK", userId));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("city", String.valueOf(cityId)));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("regionId", regionId));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("countryId", countryId));
-		
-		try {
-			@SuppressWarnings("unchecked")
-			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
-			for (Address _address: addresses) {
-				address = _address;
-				break;
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		if (Validator.isNotNull(address)) return address;
-		
-		try {
-			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-			address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
-					street1, street2, street3, String.valueOf(cityId), ipAddress, regionId, countryId, 
-					IConstants.PHONE_VERIFIED, false, true, serviceContext);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}					
-		
-		return address;
-	}
-	
 	public Location setCoordinates(User user) {
 		
 		String ipAddress = user.getLastLoginIP();
@@ -494,18 +322,14 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}		
-		
-		System.out.println("existing IP address " + existing + ":" + ipAddress);
-		
+				
 		return existing;
 	}
 
 	private void updateAddress(User user, Location location) {
 
 		// check if a record exists in the 'Address' table with the same coordinates
-		
-		System.out.println("going to update the address record....");
-		
+				
 		long cityId = location.getLocationId();
 		long regionId = location.getParentId();
 		long countryId = 0l;
@@ -540,17 +364,13 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("address ==> " + address);
-		
+				
 		if (Validator.isNull(address)) {
 			try {
 				ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 				address = addressLocalService.addAddress(userId, Location.class.getName(), userId, 
 						"LOC", StringPool.BLANK, StringPool.BLANK, String.valueOf(cityId), user.getLastLoginIP(), regionId, countryId, 
-						IConstants.PHONE_VERIFIED, false, true, serviceContext);
-				
-				System.out.println("address ==> " + address);
+						IConstants.PHONE_VERIFIED, false, true, serviceContext);				
 			} catch (PortalException e) {
 				e.printStackTrace();
 			} catch (SystemException e) {
@@ -599,12 +419,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 
 		Location _region = createLocation(locationId);
 		
-		Country _country = null;
-		try {
-			_country = CountryServiceUtil.fetchCountryByA2(country);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		Country _country = BridgeServiceUtil.getCountry(country);
 		
 		if (Validator.isNotNull(_country)) {
 			_region.setParentId(_country.getCountryId());

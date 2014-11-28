@@ -129,7 +129,6 @@ public class EditPortlet extends MVCPortlet {
 		
 		if (cityId == -1l) {
 			String cityText = ParamUtil.getString(actionRequest, "new" + cityFld);
-			System.out.println("cityText ==> " + cityText);
 			cityId = LocationLocalServiceUtil.insertCity(regionId, cityText, userId);
 		}		
 		

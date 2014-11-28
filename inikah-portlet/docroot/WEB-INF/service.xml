@@ -148,22 +148,9 @@
 		<column name="locationId" type="long" primary="true"/>
 		<column name="parentId" type="long" />
 		<column name="name" type="String" />
-		<column name="code" type="String"/>
 		<column name="locType" type="int" /> <!-- region, city, area, masjid -->
 		<column name="active_" type="boolean"/>
 		<column name="userId" type="long"/>
-		
-		<finder return-type="Location" name="ParentId_Name">
-			<finder-column name="parentId" />
-			<finder-column name="name" />
-			<finder-column name="locType" />
-		</finder>
-		
-		<finder return-type="Location" name="ParentId_Code">
-			<finder-column name="parentId" />
-			<finder-column name="code" />
-			<finder-column name="locType" />
-		</finder>
 		
 		<finder return-type="Collection" name="ParentId_LocType">
 			<finder-column name="parentId"/>
