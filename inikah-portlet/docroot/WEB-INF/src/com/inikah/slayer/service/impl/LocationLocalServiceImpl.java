@@ -456,8 +456,13 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			List<Address> addresses = addressLocalService.dynamicQuery(dynamicQuery);
 			
 			if (Validator.isNotNull(addresses) && addresses.size() > 0) {
+				Address address = addresses.get(0);
 				
+				long countryId = address.getCountryId();
+				long regionId = address.getRegionId();
+				long cityId = Long.valueOf(address.getCity());
 				
+				location = locationFinder.getCity(countryId, regionId, cityId);
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
