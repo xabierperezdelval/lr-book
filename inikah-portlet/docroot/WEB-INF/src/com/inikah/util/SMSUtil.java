@@ -7,12 +7,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 public class SMSUtil {
 	
 	public static void sendVerificationCode(String mobileNumber, String verificationCode) {
+		
+		_log.debug("The verification code: " + verificationCode);
 						
 		String [] oldSubs = {"[$USERNAME$]", "[$PASSWORD$]", "[$API_ID$]", "[$TO$]", "[$MESSAGE$]"};
 		String [] newSubs = {
@@ -43,4 +47,6 @@ public class SMSUtil {
 			method.releaseConnection();
 		}
 	}
+	
+	static Log _log = LogFactoryUtil.getLog(SMSUtil.class);
 }

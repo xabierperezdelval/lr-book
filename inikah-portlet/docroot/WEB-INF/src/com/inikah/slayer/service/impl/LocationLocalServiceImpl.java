@@ -38,6 +38,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -211,6 +213,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		Location location = null;
 		
 		if (existingIPAddress(ipAddress)) {
+			
+			_log.debug("this is an existing IP address in the Address table...");
 			location = getLocationForIP(ipAddress);
 		} else {
 			
@@ -218,56 +222,73 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			String region = "Karnataka";
 			String city = "Bangalore";
 			
-			if (Validator.isIPAddress(ipAddress)) {
-				String url = "http://ipinfo.io/" + ipAddress + "/geo";
+			if (Validator.isIPAddress(ipAddress) && !ipAddress.equals("127.0.0.1")) {
 				
-				HttpClient client = new HttpClient();
-				GetMethod method = new GetMethod(url);
+				_log.debug("this is a valid IP address ==> " + ipAddress);
+				JSONObject jsonObject = makeWSCall(ipAddress);
 				
-				try {
-					client.executeMethod(method);
-				} catch (HttpException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+				if (Validator.isNotNull(jsonObject)) {
+					country = jsonObject.getString("country");
+					region = jsonObject.getString("region");
+					city = jsonObject.getString("city");					
 				}
-				
-				InputStream inputStream = null;
-				try {
-					inputStream = method.getResponseBodyAsStream();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				String jsonResponse = null;
-				try {
-					jsonResponse = IOUtils.toString(inputStream);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				JSONObject jsonObject = null;
-				try {
-					jsonObject = JSONFactoryUtil.createJSONObject(jsonResponse);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				
-				country = jsonObject.getString("country");
-				region = jsonObject.getString("region");
-				city = jsonObject.getString("city");
 			}
 			
-			location = locationFinder.getCity(country, region, city);
+			if (Validator.isNotNull(country) && Validator.isNotNull(region) && Validator.isNotNull(city)) {
+				location = locationFinder.getCity(country, region, city);
+			}
 			
 			if (Validator.isNull(location)) {
 				location = insertCity(country, region, city);
-			}			
+			} else if (!location.isActive_()) {
+				location.setActive_(true);
+				try {
+					location = updateLocation(location);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		updateAddress(user, location);
 		
 		return location;
+	}
+
+	private JSONObject makeWSCall(String ipAddress) {
+		String url = "http://ipinfo.io/" + ipAddress + "/geo";
+		
+		HttpClient client = new HttpClient();
+		GetMethod method = new GetMethod(url);
+		
+		try {
+			client.executeMethod(method);
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			method.releaseConnection();
+		}
+		
+		JSONObject jsonObject = null;
+		
+		try {
+			InputStream inputStream = method.getResponseBodyAsStream();
+			
+			String jsonResponse = IOUtils.toString(inputStream);
+			
+			try {
+				jsonObject = JSONFactoryUtil.createJSONObject(jsonResponse);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return jsonObject;
 	}
 
 	private Location getLocationForIP(String ipAddress) {
@@ -329,6 +350,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	private void updateAddress(User user, Location location) {
 
 		// check if a record exists in the 'Address' table with the same coordinates
+		
+		_log.debug("The user location is ==> " + location);
 				
 		long cityId = location.getLocationId();
 		long regionId = location.getParentId();
@@ -336,6 +359,12 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		try {
 			Location _region = fetchLocation(regionId);
+			
+			if (!_region.isActive_()) {
+				_region.setActive_(true);
+				_region = updateLocation(_region);
+			}
+			
 			countryId = _region.getParentId();
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -436,4 +465,6 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		return _region;
 	}
+	
+	Log _log = LogFactoryUtil.getLog(LocationLocalServiceImpl.class);
 }

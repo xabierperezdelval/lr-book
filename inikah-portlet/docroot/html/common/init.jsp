@@ -45,6 +45,7 @@
 <%@page import="com.inikah.slayer.model.Photo"%>
 <%@page import="com.inikah.util.MyListUtil"%>
 <%@page import="com.inikah.util.PageUtil"%>
+<%@page import="com.inikah.util.URLUtil"%>
 
 <%@page import="com.inikah.slayer.service.BridgeServiceUtil"%>
 <%@page import="com.inikah.slayer.service.ProfileLocalServiceUtil"%>
