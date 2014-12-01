@@ -9,7 +9,6 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -22,7 +21,7 @@ import com.inikah.slayer.service.BridgeLocalServiceUtil;
 import com.inikah.slayer.service.InvitationLocalServiceUtil;
 import com.inikah.slayer.service.ProfileLocalServiceUtil;
 import com.inikah.util.IConstants;
-import com.inikah.util.PageUtil;
+import com.inikah.util.URLUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -36,7 +35,6 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class RegisterPortlet extends MVCPortlet {
@@ -161,7 +159,7 @@ public class RegisterPortlet extends MVCPortlet {
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		boolean bride = ParamUtil.getBoolean(actionRequest, "bride", false);
-		String profileName = ParamUtil.getString(actionRequest, "profileName", "Dummy");
+		String profileName = ParamUtil.getString(actionRequest, "profileName");
 		boolean createdForSelf = ParamUtil.getBoolean(actionRequest, "createdForSelf", false);
 
 		User user = null;
@@ -185,12 +183,8 @@ public class RegisterPortlet extends MVCPortlet {
 		Profile profile = ProfileLocalServiceUtil.init(user, bride, user.getEmailAddress(), profileName, createdForSelf, serviceContext);
 		
 		PortletSession portletSession = actionRequest.getPortletSession();
-		portletSession.setAttribute("SEL_PROFILE", profile, PortletSession.APPLICATION_SCOPE);
+		portletSession.removeAttribute("SEL_PROFILE", PortletSession.APPLICATION_SCOPE);
 		
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		long targetPlId = PageUtil.getPageLayoutId(themeDisplay.getScopeGroupId(), Constants.EDIT, Locale.US);
-		PortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, "edit_WAR_inikahportlet", targetPlId, PortletRequest.RENDER_PHASE);
-		portletURL.setParameter("profileId", String.valueOf(profile.getProfileId()));
-		actionResponse.sendRedirect(portletURL.toString());
+		actionResponse.sendRedirect(URLUtil.editURL(profile.getProfileId()));
 	}
 }

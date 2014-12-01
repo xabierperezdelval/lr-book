@@ -254,6 +254,8 @@ public class EditPortlet extends MVCPortlet {
 		for (int i=0; i<4; i++) {
 			File profilePhoto = uploadPortletRequest.getFile("profilePhoto_" + i);
 			
+			System.out.println("going to upload the umage..." + profilePhoto);
+			
 			if (Validator.isNotNull(profilePhoto) && profilePhoto.length() > 0) {
 				long imageId = ParamUtil.getLong(uploadPortletRequest, "imageId_"+i, 0l);
 				String description = ParamUtil.getString(uploadPortletRequest, "description_"+i);

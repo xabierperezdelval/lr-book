@@ -14,10 +14,7 @@
 
 <c:choose>
 	<c:when test="<%= (inCompleteProfileId > 0l) %>">
-		<%
-			String targetURL = StringPool.SLASH + Constants.EDIT + StringPool.QUESTION + "profileId" + StringPool.EQUAL + inCompleteProfileId;
-		%>
-		One profile is in DRAFT state. <aui:a href="<%= targetURL %>" label="click-here"/> to complete.
+		One profile is in DRAFT state. <aui:a href="<%= URLUtil.editURL(inCompleteProfileId) %>" label="click-here"/> to complete.
 	</c:when>
 	
 	<c:otherwise>
