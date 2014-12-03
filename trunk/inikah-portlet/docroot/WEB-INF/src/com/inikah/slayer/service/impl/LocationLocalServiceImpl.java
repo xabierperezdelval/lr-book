@@ -261,8 +261,22 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		HttpClient client = new HttpClient();
 		GetMethod method = new GetMethod(url);
 		
+		JSONObject jsonObject = null;
+		
 		try {
 			client.executeMethod(method);
+			
+			InputStream inputStream = method.getResponseBodyAsStream();
+			
+			String jsonResponse = IOUtils.toString(inputStream);
+			
+			_log.debug("jsonResponse ==> " + jsonResponse);
+			
+			try {
+				jsonObject = JSONFactoryUtil.createJSONObject(jsonResponse);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}			
 		} catch (HttpException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -270,24 +284,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		} finally {
 			method.releaseConnection();
 		}
-		
-		JSONObject jsonObject = null;
-		
-		try {
-			InputStream inputStream = method.getResponseBodyAsStream();
-			
-			String jsonResponse = IOUtils.toString(inputStream);
-			
-			try {
-				jsonObject = JSONFactoryUtil.createJSONObject(jsonResponse);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+				
 		return jsonObject;
 	}
 
