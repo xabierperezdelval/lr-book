@@ -128,6 +128,10 @@ public class PortfolioServiceImpl extends PortfolioServiceBaseImpl {
 
 		List<Portfolio> portfolios = portfolioLocalService.getPortfolios(userId);
 		
+		if (Validator.isNull(portfolios) || portfolios.isEmpty()) {
+			return jsonArray;
+		}
+		
 		for (Portfolio portfolio : portfolios) {
 			long portfolioId = portfolio.getPortfolioId();
 			
