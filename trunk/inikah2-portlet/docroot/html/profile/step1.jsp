@@ -1,6 +1,7 @@
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@include file="/html/profile/init.jsp" %>
 
-<liferay-ui:header title="step1-title"/>
+<liferay-ui:header title="<%= profile.getCode() + StringPool.COMMA + StringPool.BLANK + profile.getProfileName() %>" />
 
 <portlet:actionURL var="saveProfileURL" name="saveProfile"/>
 

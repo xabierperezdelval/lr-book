@@ -1,7 +1,13 @@
 <%@include file="/html/init.jsp" %>
 
-<portlet:renderURL var="addProfileURL">
+<portlet:renderURL var="addBrideURL">
 	<portlet:param name="jspPage" value="/html/profile/step1.jsp"/>
+	<portlet:param name="bride" value="true"/>
 </portlet:renderURL>
 
-<aui:a href="<%= addProfileURL %>" label="add-profile"/>
+<portlet:renderURL var="addGroomURL">
+	<portlet:param name="jspPage" value="/html/profile/step1.jsp"/>
+	<portlet:param name="bride" value="false"/>
+</portlet:renderURL>
+
+<aui:a href="<%= addBrideURL %>" label="add-bride"/> | <aui:a href="<%= addGroomURL %>" label="add-groom"/>
