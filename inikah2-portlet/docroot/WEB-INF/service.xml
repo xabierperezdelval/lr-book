@@ -14,28 +14,85 @@
 
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
-		<column name="userName" type="String" />
+		<column name="userName" type="String" /> <!-- ownerName for offline profile -->
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
+		<column name="ownerLastLogin" type="Date" />
 
 		<!-- Other fields -->
-
-		<column name="field1" type="String" />
-		<column name="field2" type="String" />
+		<column name="createdFor" type="int" />
+		<column name="profileName" type="String" />
+		<column name="bride" type="boolean" />
+		<column name="maritalStatus" type="int" />
+		<column name="bornOn" type="int" />
 		
-		<column name="field3" type="String" />
-		<column name="field4" type="String" />
+		<!-- fields related to "married/widow/divorce" -->
+		<column name="reMarriageReason" type="int" />
+		<column name="sons" type="int" />
+		<column name="daughters" type="int" />		
+
+		<!-- additional attributes -->
+		<column name="height" type="int" />
+		<column name="weight" type="int" />
+		<column name="complexion" type="int" />
+		<column name="motherTongue" type="int" />
+
+		<!-- Contact Information -->
+		<column name="emailAddress" type="String" />
+		<column name="residingCountry" type="long" />
+		<column name="residingState" type="long" />
+		<column name="residingCity" type="long" />
+		<column name="residingArea" type="String" />
+		<column name="nearbyMasjid" type="String" />
+
+		<!-- Education/Occupation Information -->
+		<column name="education" type="int" />
+		<column name="educationOther" type="String" />
+		<column name="educationDetail" type="String" />
+		<column name="educationSchool" type="String" />
+		<column name="religiousEducation" type="int" />
+		<column name="religiousEducationOther" type="String" />
+		<column name="religiousEducationDetail" type="String" />
+		<column name="religiousEducationSchool" type="String" />
+		<column name="profession" type="int" />
+		<column name="professionOther" type="String" />
+		<column name="professionDetail" type="String" />
+		<column name="organization" type="String" />
+		<column name="income" type="int" />
+		<column name="incomeFrequency" type="int" />
+		<column name="payZakath" type="boolean" />
+
+		<!-- Family Details -->
+		<column name="countryOfBirth" type="long" />
+		<column name="stateOfBirth" type="long" />
+		<column name="cityOfBirth" type="long" />
+		<column name="canSpeak" type="String"/>
+
+		<!-- Additional Information -->
+		<column name="description" type="String" />
+		<column name="expectation" type="String" />
+		<column name="hobbies" type="String" />
+		<column name="physicallyChallenged" type="boolean" />
+		<column name="physicallyChallengedDetails" type="String" />
+		<column name="performedHaj" type="boolean" />
+		<column name="revertedToIslam" type="boolean" />
+		<column name="muslimSince" type="int" />
+		<column name="hasNoFather" type="boolean" />
+		<column name="hasNoMother" type="boolean" />
 		
-		<column name="field5" type="String" />
-		<column name="field6" type="String" />
-
-		<!-- Order -->
-
-		<order by="asc">
-			<order-column name="field1" />
+		<!-- status -->
+		<column name="status" type="int" />
+		<column name="validUpto" type="Date"/>
+		<column name="allowNonSingleProposals" type="boolean"/>
+		<column name="portraitId" type="long"/>
+		
+		<order by="desc">
+			<order-column name="ownerLastLogin"/>
 		</order>
-
-		<!-- Finder methods -->
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId" />
+		</finder>
 
 	</entity>
 </service-builder>

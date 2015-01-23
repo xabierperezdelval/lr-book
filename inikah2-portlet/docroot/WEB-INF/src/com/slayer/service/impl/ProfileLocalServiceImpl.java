@@ -41,7 +41,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.slayer.service.ProfileLocalServiceUtil} to access the profile local service.
 	 */
 	
-	public Profile init(long userId) {
+	public Profile init(long userId, boolean bride) {
 		
 		long profileId = 0l;
 		try {
@@ -53,6 +53,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		Profile profile = createProfile(profileId);
 		profile.setCreateDate(new Date());
 		profile.setUserId(userId);
+		profile.setBride(bride);
 		
 		try {
 			profile = addProfile(profile);
