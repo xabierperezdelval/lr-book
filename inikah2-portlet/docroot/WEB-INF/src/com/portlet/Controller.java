@@ -60,22 +60,22 @@ public class Controller extends MVCPortlet {
 	private void saveStep1(ActionRequest actionRequest, Profile profile) {
 		
 		_log.debug("inside step1...");
-		profile.setField1(ParamUtil.getString(actionRequest, "field1"));
-		profile.setField2(ParamUtil.getString(actionRequest, "field2"));
+		//profile.setField1(ParamUtil.getString(actionRequest, "field1"));
+		//profile.setField2(ParamUtil.getString(actionRequest, "field2"));
 	}
 	
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
 		_log.debug("inside step2...");
-		profile.setField3(ParamUtil.getString(actionRequest, "field3"));
-		profile.setField4(ParamUtil.getString(actionRequest, "field4"));
+		//profile.setField3(ParamUtil.getString(actionRequest, "field3"));
+		//profile.setField4(ParamUtil.getString(actionRequest, "field4"));
 	}
 	
 	private void saveStep3(ActionRequest actionRequest, Profile profile) {
 		
 		_log.debug("inside step3...");
-		profile.setField5(ParamUtil.getString(actionRequest, "field5"));
-		profile.setField6(ParamUtil.getString(actionRequest, "field6"));
+		//profile.setField5(ParamUtil.getString(actionRequest, "field5"));
+		//profile.setField6(ParamUtil.getString(actionRequest, "field6"));
 	}
 	
 	private final Log _log = LogFactoryUtil.getLog(Controller.class);
