@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.Profile;
 import com.slayer.service.ProfileLocalServiceUtil;
@@ -60,8 +61,19 @@ public class Controller extends MVCPortlet {
 	private void saveStep1(ActionRequest actionRequest, Profile profile) {
 		
 		_log.debug("inside step1...");
-		//profile.setField1(ParamUtil.getString(actionRequest, "field1"));
-		//profile.setField2(ParamUtil.getString(actionRequest, "field2"));
+		
+		int bornMonth = ParamUtil.getInteger(actionRequest, "bornMonth");
+		int bornYear = ParamUtil.getInteger(actionRequest, "bornYear");
+		
+		if (bornMonth >= 0 && bornYear > 0) {
+			profile.setBornOn(Integer.valueOf(bornYear + String.format("%02d", bornMonth)));
+		}
+		
+		profile.setProfileName(TextFormatter.format(ParamUtil.getString(actionRequest, "profileName"), TextFormatter.J));
+		profile.setMaritalStatus(ParamUtil.getInteger(actionRequest, "maritalStatus"));
+		profile.setCreatedFor(ParamUtil.getInteger(actionRequest, "createdFor"));
+		profile.setHeight(ParamUtil.getInteger(actionRequest, "height"));
+		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
 	}
 	
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
