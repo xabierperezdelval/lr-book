@@ -34,7 +34,6 @@
 		<!-- additional attributes -->
 		<column name="height" type="int" />
 		<column name="weight" type="int" />
-		<column name="complexion" type="int" />
 		<column name="motherTongue" type="int" />
 
 		<!-- Contact Information -->

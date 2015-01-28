@@ -54,6 +54,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setCreateDate(new Date());
 		profile.setUserId(userId);
 		profile.setBride(bride);
+		profile.setOwnerLastLogin(new Date());
 		
 		try {
 			profile = addProfile(profile);

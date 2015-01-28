@@ -1,4 +1,9 @@
+<%@page import="java.util.Calendar"%>
 <%@include file="/html/profile/init.jsp" %>
+
+<%
+	String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+%>
 
 <liferay-ui:header title="<%= profile.getCode() %>" />
 
@@ -14,55 +19,85 @@
 			<aui:input name="profileName" required="true" autoFocus="true" bean="<%= profile %>"/>
 		</aui:column>
 		<aui:column>
-			<aui:select name="maritalStatus" required="true" bean="<%= profile %>" showEmptyOption="true">
-				<aui:option value="1" label="marital-status-single" />
-				<aui:option value="2" label="marital-status-divorced" />
-				<aui:option value="3" label="marital-status-widow" />
+			<aui:select name="maritalStatus" required="true" showEmptyOption="true">
+				<aui:option value="1" label="marital-status-single" selected="<%= profile.getMaritalStatus() == 1 %>"/>
+				<aui:option value="2" label="marital-status-divorced" selected="<%= profile.getMaritalStatus() == 2 %>"/>
+				<aui:option value="3" label="marital-status-widow" selected="<%= profile.getMaritalStatus() == 3 %>"/>
 				<c:if test="<%= !profile.isBride() %>">
-					<aui:option value="4" label="marital-status-married" />
+					<aui:option value="4" label="marital-status-married" selected="<%= profile.getMaritalStatus() == 4 %>"/>
 				</c:if>
 			</aui:select> 
 		</aui:column>
 		<aui:column>
-			<aui:select name="createdFor" required="true" bean="<%= profile %>" showEmptyOption="true">
-				<aui:option value="1" label="created-for-self"/>
+			<aui:select name="createdFor" required="true" showEmptyOption="true">
+				<aui:option value="1" label="created-for-self" selected="<%= profile.getCreatedFor() == 1 %>"/>
 				
 				<c:choose>
 					<c:when test="<%= !profile.isBride() %>">
-						<aui:option value="2" label="created-for-son"/>
-						<aui:option value="3" label="created-for-brother"/>
-						<aui:option value="4" label="created-for-grand-son"/>
-						<aui:option value="5" label="created-for-uncle"/>
-						<aui:option value="6" label="created-for-nephew"/>
+						<aui:option value="2" label="created-for-son" selected="<%= profile.getCreatedFor() == 2 %>"/>
+						<aui:option value="3" label="created-for-brother" selected="<%= profile.getCreatedFor() == 3 %>"/>
+						<aui:option value="4" label="created-for-grand-son" selected="<%= profile.getCreatedFor() == 4 %>"/>
+						<aui:option value="5" label="created-for-uncle" selected="<%= profile.getCreatedFor() == 5 %>"/>
+						<aui:option value="6" label="created-for-nephew" selected="<%= profile.getCreatedFor() == 6 %>"/>
 					</c:when>
 					<c:otherwise>
-						<aui:option value="7" label="created-for-daughter"/>
-						<aui:option value="8" label="created-for-sister"/>
-						<aui:option value="9" label="created-for-grand-daughter"/>
-						<aui:option value="10" label="created-for-aunt"/>
-						<aui:option value="11" label="created-for-niece"/>						
+						<aui:option value="7" label="created-for-daughter" selected="<%= profile.getCreatedFor() == 7 %>"/>
+						<aui:option value="8" label="created-for-sister" selected="<%= profile.getCreatedFor() == 8 %>"/>
+						<aui:option value="9" label="created-for-grand-daughter" selected="<%= profile.getCreatedFor() == 9 %>"/>
+						<aui:option value="10" label="created-for-aunt" selected="<%= profile.getCreatedFor() == 10 %>"/>
+						<aui:option value="11" label="created-for-niece" selected="<%= profile.getCreatedFor() == 11 %>"/>						
 					</c:otherwise>
 				</c:choose>
 				
-				<aui:option value="12" label="created-for-cousin"/>
-				<aui:option value="13" label="created-for-friend"/>
-				<aui:option value="14" label="created-for-neighbor"/>
-				<aui:option value="15" label="created-for-customer"/>				
+				<aui:option value="12" label="created-for-cousin" selected="<%= profile.getCreatedFor() == 12 %>"/>
+				<aui:option value="13" label="created-for-friend" selected="<%= profile.getCreatedFor() == 13 %>"/>
+				<aui:option value="14" label="created-for-neighbor" selected="<%= profile.getCreatedFor() == 14 %>"/>
+				<aui:option value="15" label="created-for-customer" selected="<%= profile.getCreatedFor() == 15 %>"/>				
 			</aui:select>
 		</aui:column>
 	</aui:row>
 	
 	<aui:row>
 		<aui:column>
-			<%--@ include file="/html/edit/step1-bornon.jspf" --%>
+			<div class="control-group">
+				<label class="control-label" for="bornOn">
+					<liferay-ui:message key="born-on"/> <span class="label-required">(<liferay-ui:message key="required"/>)</span>
+				</label>		
+					
+				<aui:column cssClass="month-selection">
+					<select name="<portlet:namespace/>bornMonth">
+						<option value="-1">Month...</option>
+						<%
+							for (int i=0; i<months.length; i++) {
+								%><option value="<%= i %>"><%= months[i] + StringPool.OPEN_PARENTHESIS + String.format("%02d", i+1) + StringPool.CLOSE_PARENTHESIS %></option><%
+							}
+						%>
+					</select>
+				</aui:column>
+		
+				<aui:column cssClass="year-selection">
+					<select name="<portlet:namespace/>bornYear">
+						<option value="-1">Year...</option>
+						<%
+							int curYear = Calendar.getInstance().get(Calendar.YEAR);
+							int start = curYear - 71;
+							int end = curYear - 10;
+							
+							for (int i=end; i>start; i--) {
+								%><option value="<%= i %>"><%= i + StringPool.NBSP + StringPool.OPEN_PARENTHESIS + StringPool.TILDE + (curYear - i) + " Yrs" + StringPool.CLOSE_PARENTHESIS %></option><%									
+							}
+						%>
+					</select>
+				</aui:column>
+			</div>
 		</aui:column>
 		
 		<aui:column>
-			<aui:select name="height" required="true" showEmptyOption="true" bean="<%= profile %>">
+			<aui:select name="height" required="true" showEmptyOption="true">
 				<%
 					for (int i=140; i<=190; i++) {
 						String label = i + " Cms " + StringPool.SLASH + StringPool.NBSP + MyListUtil.getHeight(i);
-						%><aui:option value="<%= i %>" label="<%= label %>"/><%
+						%><aui:option value="<%= i %>" label="<%= label %>" selected="<%= profile.getHeight() == i %>"/><%
 					}
 				%>
 			</aui:select>		
@@ -73,13 +108,13 @@
 				<%
 					for (int i=30; i<=120; i++) {
 						String label = String.format("%03d", i) + " Kgs " + StringPool.SLASH + StringPool.NBSP + MyListUtil.getWeight(i);
-						%><aui:option value="<%= i %>" label="<%= label %>"/><%
+						%><aui:option value="<%= i %>" label="<%= label %>" selected="<%= profile.getWeight() == i %>"/><%
 					}
 				%>
 			</aui:select>		
 		</aui:column>
 	</aui:row>
-
+	
 	<aui:button type="submit" />
 </aui:form>
 
