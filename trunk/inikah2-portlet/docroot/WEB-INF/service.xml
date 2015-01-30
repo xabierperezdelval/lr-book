@@ -93,8 +93,9 @@
 			<finder-column name="userId" />
 		</finder>
 		
-		<finder return-type="Profile" name="CreatedForSelf" where="createdForSelf = 1">
+		<finder return-type="Profile" name="CreatedForSelf">
 			<finder-column name="userId"/>
+			<finder-column name="createdFor"/>
 		</finder>
 
 	</entity>

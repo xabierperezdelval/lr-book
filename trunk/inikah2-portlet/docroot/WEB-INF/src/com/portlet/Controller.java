@@ -85,6 +85,7 @@ public class Controller extends MVCPortlet {
 			try {
 				Contact contact = PortalUtil.getUser(actionRequest).getContact();
 				contact.setMale(false);
+				contact.setParentContactId(1);
 				ContactLocalServiceUtil.updateContact(contact);
 			} catch (PortalException e) {
 				e.printStackTrace();

@@ -31,7 +31,7 @@
 		<aui:column>
 			<aui:select name="createdFor" required="true" showEmptyOption="true">
 			
-				<c:if test="<%= !ProfileLocalServiceUtil.userHasSelfProfile(user.getUserId()) %>">
+				<c:if test="<%= ProfileLocalServiceUtil.showSelfOption(user.getUserId()) %>">
 					<aui:option value="1" label="created-for-self" selected="<%= profile.getCreatedFor() == 1 %>"/>
 				</c:if>
 				
