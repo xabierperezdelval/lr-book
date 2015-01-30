@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.slayer.model.Profile;
 import com.slayer.service.base.ProfileLocalServiceBaseImpl;
+import com.util.IConstants;
 
 /**
  * The implementation of the profile local service.
@@ -67,18 +68,18 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return profile;
 	}
 	
-	public boolean userHasSelfProfile(long userId) {
+	public boolean showSelfOption(long userId) {
 		
-		boolean userHasSelfProfile = false;
+		boolean showSelfOption = true;
 		
 		try {
-			Profile profile = profilePersistence.fetchByCreatedForSelf(userId);
-			userHasSelfProfile = Validator.isNotNull(profile);
+			Profile profile = profilePersistence.fetchByCreatedForSelf(userId, IConstants.CREATED_FOR_SELF);
+			showSelfOption = Validator.isNull(profile);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
-		return userHasSelfProfile;
+		return showSelfOption;
 	}
 	
 	public List<Profile> getUserProfiles(long userId) {
