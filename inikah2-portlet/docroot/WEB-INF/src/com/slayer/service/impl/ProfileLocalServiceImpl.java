@@ -15,8 +15,10 @@
 package com.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 import com.slayer.model.Profile;
 import com.slayer.service.base.ProfileLocalServiceBaseImpl;
 
@@ -63,5 +65,31 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		}
 		
 		return profile;
+	}
+	
+	public boolean userHasSelfProfile(long userId) {
+		
+		boolean userHasSelfProfile = false;
+		
+		try {
+			Profile profile = profilePersistence.fetchByCreatedForSelf(userId);
+			userHasSelfProfile = Validator.isNotNull(profile);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return userHasSelfProfile;
+	}
+	
+	public List<Profile> getUserProfiles(long userId) {
+		List<Profile> userProfiles = null;
+		
+		try {
+			userProfiles = profilePersistence.findByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return userProfiles;
 	}
 }
