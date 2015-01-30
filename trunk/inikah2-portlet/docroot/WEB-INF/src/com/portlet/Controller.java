@@ -7,14 +7,19 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
+import com.liferay.portal.model.Contact;
+import com.liferay.portal.service.ContactLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.Profile;
 import com.slayer.service.ProfileLocalServiceUtil;
+import com.util.IConstants;
 
 public class Controller extends MVCPortlet {
 	
@@ -74,6 +79,19 @@ public class Controller extends MVCPortlet {
 		profile.setCreatedFor(ParamUtil.getInteger(actionRequest, "createdFor"));
 		profile.setHeight(ParamUtil.getInteger(actionRequest, "height"));
 		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
+		
+		// set the user gender to male if the profile is created for self
+		if (profile.getCreatedFor() == IConstants.CREATED_FOR_SELF && profile.isBride()) {
+			try {
+				Contact contact = PortalUtil.getUser(actionRequest).getContact();
+				contact.setMale(false);
+				ContactLocalServiceUtil.updateContact(contact);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {

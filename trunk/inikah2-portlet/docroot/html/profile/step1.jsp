@@ -30,7 +30,10 @@
 		</aui:column>
 		<aui:column>
 			<aui:select name="createdFor" required="true" showEmptyOption="true">
-				<aui:option value="1" label="created-for-self" selected="<%= profile.getCreatedFor() == 1 %>"/>
+			
+				<c:if test="<%= !ProfileLocalServiceUtil.userHasSelfProfile(user.getUserId()) %>">
+					<aui:option value="1" label="created-for-self" selected="<%= profile.getCreatedFor() == 1 %>"/>
+				</c:if>
 				
 				<c:choose>
 					<c:when test="<%= !profile.isBride() %>">

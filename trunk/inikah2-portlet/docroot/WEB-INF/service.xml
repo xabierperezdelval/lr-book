@@ -86,11 +86,15 @@
 		<column name="portraitId" type="long"/>
 		
 		<order by="desc">
-			<order-column name="ownerLastLogin"/>
+			<order-column name="createDate"/>
 		</order>
 		
-		<finder return-type="Collection" name="UserId">
+		<finder return-type="Collection" name="UserId" where="status != 99">
 			<finder-column name="userId" />
+		</finder>
+		
+		<finder return-type="Profile" name="CreatedForSelf" where="createdForSelf = 1">
+			<finder-column name="userId"/>
 		</finder>
 
 	</entity>
