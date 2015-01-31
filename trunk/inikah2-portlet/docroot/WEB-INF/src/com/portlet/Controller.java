@@ -32,6 +32,10 @@ public class Controller extends MVCPortlet {
 		long profileId = ParamUtil.getLong(actionRequest, "profileId");
 		try {
 			profile = ProfileLocalServiceUtil.fetchProfile(profileId);
+			
+			// do a sanity check for security
+			if (PortalUtil.getUserId(actionRequest) != profile.getUserId()) return;
+			
 			profile.setModifiedDate(new Date());
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -98,8 +102,21 @@ public class Controller extends MVCPortlet {
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		
 		_log.debug("inside step2...");
-		//profile.setField3(ParamUtil.getString(actionRequest, "field3"));
-		//profile.setField4(ParamUtil.getString(actionRequest, "field4"));
+
+		try {
+			Contact contact = PortalUtil.getUser(actionRequest).getContact();
+			
+			if (contact.getParentContactId() == 0) {
+				contact.setMale(ParamUtil.getBoolean(actionRequest, "male"));
+				contact.setParentContactId(1); // user gender set
+				ContactLocalServiceUtil.updateContact(contact);
+			}
+			
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void saveStep3(ActionRequest actionRequest, Profile profile) {
