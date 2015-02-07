@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="com.slayer.service.ProfileLocalServiceUtil"%>
 
 <%@include file="/html/init.jsp" %>
@@ -19,14 +18,24 @@
 	List<Profile> userProfiles = ProfileLocalServiceUtil.getUserProfiles(user.getUserId());
 %>
 
-<liferay-ui:search-container emptyResultsMessage="no-user-profiles" delta="4">
-	<liferay-ui:search-container-results 
-		total="<%= userProfiles.size() %>" 
-		results="<%= ListUtil.subList(userProfiles, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+<c:choose>
+	<c:when test="<%= Validator.isNull(userProfiles) || userProfiles.isEmpty() %>">
+		<hr/>
+		<liferay-ui:journal-article articleId="WELCOME_USER"
+			groupId="<%=themeDisplay.getScopeGroupId()%>" />
+	</c:when>
 	
-	<liferay-ui:search-container-row className="com.slayer.model.Profile" modelVar="profile">
-		<liferay-ui:search-container-column-text property="profileName" name="profile-name"/>
-	</liferay-ui:search-container-row>
-	
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+	<c:otherwise>
+		<liferay-ui:search-container emptyResultsMessage="no-user-profiles" delta="4">
+			<liferay-ui:search-container-results 
+				total="<%= userProfiles.size() %>" 
+				results="<%= ListUtil.subList(userProfiles, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+			
+			<liferay-ui:search-container-row className="com.slayer.model.Profile" modelVar="profile">
+				<liferay-ui:search-container-column-text property="profileName" name="profile-name"/>
+			</liferay-ui:search-container-row>
+			
+			<liferay-ui:search-iterator/>
+		</liferay-ui:search-container>	
+	</c:otherwise>
+</c:choose>
