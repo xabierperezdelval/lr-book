@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -22,6 +23,18 @@ import com.slayer.service.ProfileLocalServiceUtil;
 import com.util.IConstants;
 
 public class Controller extends MVCPortlet {
+	
+	public void startProfile(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		long  userId = PortalUtil.getUserId(actionRequest);
+				
+		if (!ProfileLocalServiceUtil.hasIncompleteProfiles(userId)) {
+			Profile profile = ProfileLocalServiceUtil.init(userId, ParamUtil.getBoolean(actionRequest, "bride"));
+			actionResponse.setRenderParameter("jspPage", "/html/profile/step1.jsp");
+			actionResponse.setRenderParameter("profileId", String.valueOf(profile.getProfileId()));
+		}
+	}
 	
 	public void saveProfile(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
@@ -124,6 +137,30 @@ public class Controller extends MVCPortlet {
 		_log.debug("inside step3...");
 		//profile.setField5(ParamUtil.getString(actionRequest, "field5"));
 		//profile.setField6(ParamUtil.getString(actionRequest, "field6"));
+	}
+	
+	public void deleteProfile(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+
+		long profileId = ParamUtil.getLong(actionRequest, "profileId");
+		
+		System.out.println("delete Profile Id " + profileId);
+		
+		try {
+			Profile profile = ProfileLocalServiceUtil.fetchProfile(profileId);
+			
+			if (Validator.isNotNull(profile) && (profile.getStatus() < IConstants.STATUS_SUBMITTED)) {
+				
+				System.out.println("got the profile...");
+				try {
+					ProfileLocalServiceUtil.deleteProfile(profileId);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private final Log _log = LogFactoryUtil.getLog(Controller.class);

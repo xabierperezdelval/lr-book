@@ -15,3 +15,7 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
+
+<%
+	long userId = user.getUserId();
+%>

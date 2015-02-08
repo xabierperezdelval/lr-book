@@ -10,8 +10,5 @@
 
 	if (profileId > 0l) {
 		profile = ProfileLocalServiceUtil.fetchProfile(profileId);
-	} else {
-		boolean bride = ParamUtil.getBoolean(request, "bride");
-		profile = ProfileLocalServiceUtil.init(user.getUserId(), bride);
 	}
 %>
