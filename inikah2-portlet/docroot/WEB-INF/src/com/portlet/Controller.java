@@ -143,15 +143,12 @@ public class Controller extends MVCPortlet {
 			ActionResponse actionResponse) throws IOException, PortletException {
 
 		long profileId = ParamUtil.getLong(actionRequest, "profileId");
-		
-		System.out.println("delete Profile Id " + profileId);
-		
+				
 		try {
 			Profile profile = ProfileLocalServiceUtil.fetchProfile(profileId);
 			
 			if (Validator.isNotNull(profile) && (profile.getStatus() < IConstants.STATUS_SUBMITTED)) {
 				
-				System.out.println("got the profile...");
 				try {
 					ProfileLocalServiceUtil.deleteProfile(profileId);
 				} catch (PortalException e) {
