@@ -2,17 +2,24 @@
 
 <%@include file="/html/init.jsp" %>
 
-<portlet:renderURL var="addBrideURL">
-	<portlet:param name="jspPage" value="/html/profile/step1.jsp"/>
-	<portlet:param name="bride" value="true"/>
-</portlet:renderURL>
-
-<portlet:renderURL var="addGroomURL">
-	<portlet:param name="jspPage" value="/html/profile/step1.jsp"/>
-	<portlet:param name="bride" value="false"/>
-</portlet:renderURL>
-
-<aui:a href="<%= addBrideURL %>" label="add-bride"/> | <aui:a href="<%= addGroomURL %>" label="add-groom"/>
+<c:choose>
+	<c:when test="<%= ProfileLocalServiceUtil.hasIncompleteProfiles(userId) %>">
+		<div class="alert">
+			<liferay-ui:message key="incomplete-profile-message"/>
+		</div>	
+	</c:when>
+	<c:otherwise>
+		<portlet:actionURL var="addBrideURL" name="startProfile">
+			<portlet:param name="bride" value="true"/>
+		</portlet:actionURL>
+		
+		<portlet:actionURL var="addGroomURL" name="startProfile">
+			<portlet:param name="bride" value="false"/>
+		</portlet:actionURL>
+		
+		<aui:a href="<%= addBrideURL %>" label="add-bride"/> | <aui:a href="<%= addGroomURL %>" label="add-groom"/>	
+	</c:otherwise>
+</c:choose>
 
 <%
 	List<Profile> userProfiles = ProfileLocalServiceUtil.getUserProfiles(user.getUserId());
@@ -33,6 +40,8 @@
 			
 			<liferay-ui:search-container-row className="com.slayer.model.Profile" modelVar="profile">
 				<liferay-ui:search-container-column-text property="profileName" name="profile-name"/>
+				
+				<liferay-ui:search-container-column-jsp path="/html/actions.jsp" name="actions"/>
 			</liferay-ui:search-container-row>
 			
 			<liferay-ui:search-iterator/>

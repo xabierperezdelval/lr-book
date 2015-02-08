@@ -17,6 +17,10 @@ package com.slayer.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.slayer.model.Profile;
@@ -85,12 +89,47 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	public List<Profile> getUserProfiles(long userId) {
 		List<Profile> userProfiles = null;
 		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Profile.class);
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("userId", userId));
+		dynamicQuery.add(RestrictionsFactoryUtil.ne("status", IConstants.STATUS_DELETED));
+		dynamicQuery.addOrder(OrderFactoryUtil.desc("modifiedDate"));
+		
 		try {
-			userProfiles = profilePersistence.findByUserId(userId);
+			userProfiles = dynamicQuery(dynamicQuery);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		
 		return userProfiles;
+	}
+	
+	public List<Profile> getUserProfiles(long userId, int status) {
+		List<Profile> userProfiles = null;
+		
+		try {
+			userProfiles = profilePersistence.findByUserId_Status(userId, status);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return userProfiles;
+	}
+	
+	public boolean hasIncompleteProfiles(long userId) {
+		
+		boolean flag = false;
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Profile.class);
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("userId", userId));
+		dynamicQuery.add(RestrictionsFactoryUtil.lt("status", IConstants.STATUS_SUBMITTED));
+		
+		try {
+			List<Profile> userProfiles = dynamicQuery(dynamicQuery);
+			flag = (Validator.isNotNull(userProfiles) && !userProfiles.isEmpty());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
 	}
 }

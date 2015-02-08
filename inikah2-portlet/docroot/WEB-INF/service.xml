@@ -89,9 +89,10 @@
 			<order-column name="createDate"/>
 		</order>
 		
-		<finder return-type="Collection" name="UserId" where="status != 99">
+		<finder return-type="Collection" name="UserId_Status">
 			<finder-column name="userId" />
-		</finder>
+			<finder-column name="status" />
+		</finder>		
 		
 		<finder return-type="Profile" name="CreatedForSelf">
 			<finder-column name="userId"/>

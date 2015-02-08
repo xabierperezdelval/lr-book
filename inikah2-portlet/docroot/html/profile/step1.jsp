@@ -1,5 +1,6 @@
-<%@page import="java.util.Calendar"%>
 <%@include file="/html/profile/init.jsp" %>
+
+<%@page import="java.util.Calendar"%>
 
 <%
 	String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
@@ -18,16 +19,7 @@
 		<aui:column>
 			<aui:input name="profileName" required="true" autoFocus="true" bean="<%= profile %>"/>
 		</aui:column>
-		<aui:column>
-			<aui:select name="maritalStatus" required="true" showEmptyOption="true">
-				<aui:option value="1" label="marital-status-single" selected="<%= profile.getMaritalStatus() == 1 %>"/>
-				<aui:option value="2" label="marital-status-divorced" selected="<%= profile.getMaritalStatus() == 2 %>"/>
-				<aui:option value="3" label="marital-status-widow" selected="<%= profile.getMaritalStatus() == 3 %>"/>
-				<c:if test="<%= !profile.isBride() %>">
-					<aui:option value="4" label="marital-status-married" selected="<%= profile.getMaritalStatus() == 4 %>"/>
-				</c:if>
-			</aui:select> 
-		</aui:column>
+		
 		<aui:column>
 			<aui:select name="createdFor" required="true" showEmptyOption="true">
 			
@@ -57,10 +49,21 @@
 				<aui:option value="14" label="created-for-neighbor" selected="<%= profile.getCreatedFor() == 14 %>"/>
 				<aui:option value="15" label="created-for-customer" selected="<%= profile.getCreatedFor() == 15 %>"/>				
 			</aui:select>
-		</aui:column>
+		</aui:column>		
 	</aui:row>
 	
 	<aui:row>
+		<aui:column>
+			<aui:select name="maritalStatus" required="true" showEmptyOption="true">
+				<aui:option value="1" label="marital-status-single" selected="<%= profile.getMaritalStatus() == 1 %>"/>
+				<aui:option value="2" label="marital-status-divorced" selected="<%= profile.getMaritalStatus() == 2 %>"/>
+				<aui:option value="3" label="marital-status-widow" selected="<%= profile.getMaritalStatus() == 3 %>"/>
+				<c:if test="<%= !profile.isBride() %>">
+					<aui:option value="4" label="marital-status-married" selected="<%= profile.getMaritalStatus() == 4 %>"/>
+				</c:if>
+			</aui:select> 
+		</aui:column>
+		
 		<aui:column>
 			<div class="control-group">
 				<label class="control-label" for="bornOn">
@@ -93,8 +96,10 @@
 					</select>
 				</aui:column>
 			</div>
-		</aui:column>
-		
+		</aui:column>		
+	</aui:row>
+	
+	<aui:row>
 		<aui:column>
 			<aui:select name="height" required="true" showEmptyOption="true">
 				<%
