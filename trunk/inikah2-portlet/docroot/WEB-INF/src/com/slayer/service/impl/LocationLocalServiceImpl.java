@@ -73,18 +73,14 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		if (existingIPAddress(ipAddress)) {			
 			location = getLocationForIP(ipAddress);
 		} else {
-			
-			String country = StringPool.BLANK;
-			String region = StringPool.BLANK;
-			String city = StringPool.BLANK;
 							
 			JSONObject jsonObject = makeWSCall(ipAddress);
 			
-			if (Validator.isNotNull(jsonObject)) {
-				country = jsonObject.getString("country");
-				region = jsonObject.getString("region");
-				city = jsonObject.getString("city");					
-			}
+			if (Validator.isNull(jsonObject)) return;
+			
+			String country = jsonObject.getString("country");
+			String region = jsonObject.getString("region");
+			String city = jsonObject.getString("city");					
 			
 			if (Validator.isNotNull(country) && Validator.isNotNull(region) && Validator.isNotNull(city)) {				
 				location = locationFinder.getCity(country, region, city);
@@ -98,8 +94,8 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
-				}				
-			}
+				}
+			}			
 		}
 		
 		updateAddress(user.getUserId(), ipAddress, location);
@@ -198,8 +194,9 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	
 	private void updateAddress(long userId, String ipAddress, Location location) {
 
-		// check if a record exists in the 'Address' table with the same coordinates
-						
+		if (Validator.isNull(location)) return;
+		
+		// check if a record exists in the 'Address' table with the same coordinates				
 		long cityId = location.getLocationId();
 		long regionId = location.getParentId();
 		long countryId = 0l;
