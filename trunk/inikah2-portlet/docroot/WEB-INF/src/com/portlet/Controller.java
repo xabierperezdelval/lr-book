@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -149,6 +151,8 @@ public class Controller extends MVCPortlet {
 			
 			if (Validator.isNotNull(profile) && (profile.getStatus() < IConstants.STATUS_SUBMITTED)) {
 				
+				if (profile.getUserId() != PortalUtil.getUserId(actionRequest)) return;
+				
 				try {
 					ProfileLocalServiceUtil.deleteProfile(profileId);
 				} catch (PortalException e) {
@@ -158,6 +162,22 @@ public class Controller extends MVCPortlet {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void doView(RenderRequest renderRequest,
+			RenderResponse renderResponse) throws IOException, PortletException {
+		// TODO Auto-generated method stub
+		
+		for (int i=0; i<1000000; i++) {
+			int value = (int)(Math.random()*60);
+			
+			if (value <= 0 || value >= 59) {
+				System.out.println("value ==> " + value);
+			}
+		}
+		
+		super.doView(renderRequest, renderResponse);
 	}
 	
 	private final Log _log = LogFactoryUtil.getLog(Controller.class);

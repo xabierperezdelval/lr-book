@@ -49,10 +49,7 @@
 				<aui:option value="14" label="created-for-neighbor" selected="<%= profile.getCreatedFor() == 14 %>"/>
 				<aui:option value="15" label="created-for-customer" selected="<%= profile.getCreatedFor() == 15 %>"/>				
 			</aui:select>
-		</aui:column>		
-	</aui:row>
-	
-	<aui:row>
+		</aui:column>
 		<aui:column>
 			<aui:select name="maritalStatus" required="true" showEmptyOption="true">
 				<aui:option value="1" label="marital-status-single" selected="<%= profile.getMaritalStatus() == 1 %>"/>
@@ -62,8 +59,10 @@
 					<aui:option value="4" label="marital-status-married" selected="<%= profile.getMaritalStatus() == 4 %>"/>
 				</c:if>
 			</aui:select> 
-		</aui:column>
-		
+		</aui:column>			
+	</aui:row>
+	
+	<aui:row>
 		<aui:column>
 			<div class="control-group">
 				<label class="control-label" for="bornOn">
@@ -96,10 +95,7 @@
 					</select>
 				</aui:column>
 			</div>
-		</aui:column>		
-	</aui:row>
-	
-	<aui:row>
+		</aui:column>	
 		<aui:column>
 			<aui:select name="height" required="true" showEmptyOption="true">
 				<%
@@ -110,7 +106,6 @@
 				%>
 			</aui:select>		
 		</aui:column>
-		
 		<aui:column>
 			<aui:select name="weight" showEmptyOption="true" bean="<%= profile %>">
 				<%
@@ -122,6 +117,29 @@
 			</aui:select>		
 		</aui:column>
 	</aui:row>
+	
+	<aui:fieldset label="location-info">
+		<aui:column>
+			<aui:select name="residingCountry" required="true" showEmptyOption="true">
+				<aui:option value="1"/>
+			</aui:select> 
+		</aui:column>
+		<aui:column>
+			<aui:select name="residingRegion" required="true" showEmptyOption="true">
+				<aui:option value="1"/>
+			</aui:select> 
+		</aui:column>
+		<aui:column>
+			<aui:select name="residingCity" required="true" showEmptyOption="true">
+				<aui:option value="1"/>
+			</aui:select> 
+		</aui:column>				
+	</aui:fieldset>
+
+	<aui:select name="sameLocation" label="same-location" showEmptyOption="true" required="true" inlineLabel="true">
+		<aui:option value="true" label="yes"/>
+		<aui:option value="false" label="no"/>
+	</aui:select>
 	
 	<aui:button type="submit" />
 </aui:form>

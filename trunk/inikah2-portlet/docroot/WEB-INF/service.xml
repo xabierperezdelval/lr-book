@@ -98,6 +98,32 @@
 			<finder-column name="userId"/>
 			<finder-column name="createdFor"/>
 		</finder>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId" />
+		</finder>
 
 	</entity>
+	
+	<entity name="Location" local-service="true" remote-service="true">
+		<column name="locationId" type="long" primary="true"/>
+		<column name="parentId" type="long" />
+		<column name="name" type="String" />
+		<column name="locType" type="int" /> <!-- region, city, area, masjid -->
+		<column name="active_" type="boolean"/>
+		<column name="userId" type="long"/>
+		
+		<finder return-type="Collection" name="ParentId_LocType">
+			<finder-column name="parentId"/>
+			<finder-column name="locType"/>
+		</finder>
+		
+		<finder return-type="Collection" name="ParentId_LocType_Active">
+			<finder-column name="parentId"/>
+			<finder-column name="locType"/>
+			<finder-column name="active_"/>
+		</finder>		
+		
+		<reference entity="Address" package-path="com.liferay.portal"/>
+	</entity>	
 </service-builder>
