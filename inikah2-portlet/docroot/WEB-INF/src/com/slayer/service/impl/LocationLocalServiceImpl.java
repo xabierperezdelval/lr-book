@@ -104,7 +104,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		updateAddress(user.getUserId(), ipAddress, location);
 	}
-	
+
 	private String getRandomIPAddress() {
 				
 		String[] addresses = PortletProps.getArray("sample.ip.addresses");
