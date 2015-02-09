@@ -125,5 +125,6 @@
 		</finder>		
 		
 		<reference entity="Address" package-path="com.liferay.portal"/>
+		<reference entity="Country" package-path="com.liferay.portal"/>
 	</entity>	
 </service-builder>

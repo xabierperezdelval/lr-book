@@ -135,10 +135,8 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 	
 	public void setOwnerLastLogin(long userId) {
 		
-		/*
 		try {
-			List<Profile> profiles = profilePersistence.findBy
-			
+			List<Profile> profiles = profilePersistence.findByUserId(userId);
 			for (Profile profile: profiles) {
 				profile.setOwnerLastLogin(new Date());
 				updateProfile(profile);
@@ -146,6 +144,5 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		*/
 	}
 }
