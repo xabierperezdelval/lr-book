@@ -38,7 +38,6 @@ import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
-import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.util.portlet.PortletProps;
@@ -317,7 +316,12 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		Country country = null;
 		try {
-			country = CountryServiceUtil.fetchCountryByA2(isoCode);
+			country = countryPersistence.fetchByA2(isoCode);
+			
+			if (Validator.isNotNull(country)) {
+				country.setActive(false);
+				country = countryPersistence.update(country);
+			}			
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
