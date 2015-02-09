@@ -17,5 +17,5 @@
 </portlet:actionURL>
 
 <liferay-ui:icon-menu>
-	<liferay-ui:icon image="delete" message="Delete Profile" url="<%= deleteProfileURL %>"/>
+	<liferay-ui:icon image="delete" url="<%= deleteProfileURL %>"/>
 </liferay-ui:icon-menu>

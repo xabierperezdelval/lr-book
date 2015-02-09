@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="com.slayer.service.persistence.MyKeyValueFinderImpl.findResults"> 
+		<![CDATA[
+			SELECT 
+				A.[$COLUMN_NAME$] AS myKey, 
+				count(A.[$COLUMN_NAME$]) as myValue, 
+				B.name as myName
+			FROM 
+				inikah_profile A, 
+				[$JOIN_TABLE$] B 
+			WHERE 
+				A.[$COLUMN_NAME$] = B.[$TABLE_PRIM_KEY$] 
+				AND bride = ? 
+				AND status = ? 
+				[$NEXT_CLAUSE$]
+			GROUP BY myKey
+			ORDER BY B.name
+		]]>
+	</sql>
+	
+	<sql id="com.slayer.service.persistence.LocationFinderImpl.locateCity"> 
+		<![CDATA[
+			SELECT 
+				C.* 
+			FROM 
+				Country A, 
+				inikah_Location B, 
+				inikah_Location C 
+			WHERE 
+				A.a2 = ?
+				AND A.countryId = B.parentId
+				AND B.name = ? 
+				AND B.locType = 1 
+				AND B.locationId = C.parentId
+				AND C.name = ? 
+				AND C.locType = 2
+		]]>
+	</sql>
+	
+	<sql id="com.slayer.service.persistence.LocationFinderImpl.locateRegion"> 
+		<![CDATA[
+			SELECT 
+				B.* 
+			FROM 
+				Country A, 
+				inikah_Location B
+			WHERE 
+				A.a2 = ?
+				AND A.countryId = B.parentId
+				AND B.name = ? 
+				AND B.locType = 1
+		]]>
+	</sql>
+	
+	<sql id="com.slayer.service.persistence.LocationFinderImpl.locateCityIP">
+		<![CDATA[
+			SELECT 
+				B.* 
+			FROM 
+				inikah_Location A, 
+				inikah_Location B 
+			WHERE 
+				A.parentId = ? 
+				AND A.locationId = ? 
+				AND A.locType = 1 
+				AND A.locationId = B.parentId 
+				AND B.locationId = ? 
+				AND B.locType = 2
+		]]>
+	</sql>
+</custom-sql>
