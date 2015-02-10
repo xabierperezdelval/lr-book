@@ -66,6 +66,13 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		
 		if (ipAddress.equals("127.0.0.1")) {
 			ipAddress = getRandomIPAddress();
+			
+			user.setLastLoginIP(ipAddress);
+			try {
+				user = userLocalService.updateUser(user);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 			
 		Location location = null;
@@ -161,7 +168,7 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 				
 		return existing;
 	}
-	
+		
 	private Location getLocationForIP(String ipAddress) {
 		
 		Location location = null;
