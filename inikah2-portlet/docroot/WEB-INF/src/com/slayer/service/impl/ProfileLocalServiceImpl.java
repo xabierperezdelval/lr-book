@@ -22,7 +22,13 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.AddressLocalServiceUtil;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.slayer.model.Location;
 import com.slayer.model.Profile;
 import com.slayer.service.base.ProfileLocalServiceBaseImpl;
 import com.util.IConstants;
@@ -63,6 +69,8 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		profile.setBride(bride);
 		profile.setOwnerLastLogin(new Date());
 		
+		setDefaultLocation(profile);
+		
 		try {
 			profile = addProfile(profile);
 		} catch (SystemException e) {
@@ -72,6 +80,42 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 		return profile;
 	}
 	
+	private void setDefaultLocation(Profile profile) {
+					
+		User user = null;
+		try {
+			user = userLocalService.fetchUser(profile.getUserId());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+				Address.class, PortalClassLoaderUtil.getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("userId", profile.getUserId()));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("zip", user.getLastLoginIP()));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("classNameId",
+				ClassNameLocalServiceUtil.getClassNameId(Location.class)));
+		
+		try {
+			@SuppressWarnings("unchecked")
+			List<Address> addresses = AddressLocalServiceUtil.dynamicQuery(dynamicQuery);
+			if (Validator.isNotNull(addresses) && !addresses.isEmpty()) {
+				
+				Address address = addresses.get(0);
+				
+				profile.setResidingCountry(address.getCountryId());
+				profile.setResidingState(address.getRegionId());
+				profile.setResidingCity(Long.valueOf(address.getCity()));
+				
+				profile.setCountryOfBirth(address.getCountryId());
+				profile.setRegionOfBirth(address.getRegionId());
+				profile.setPlaceOfBirth(Long.valueOf(address.getCity()));
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}							
+	}	
+
 	public boolean showSelfOption(long userId) {
 		
 		boolean showSelfOption = true;

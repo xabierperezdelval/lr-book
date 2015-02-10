@@ -39,7 +39,6 @@ public class PostLoginAction extends Action {
 		if (Validator.isNull(user)) return;
 		
 		// Set Max Mind Coordinates
-		System.out.println("setCoordinates going to be called...");
 		LocationLocalServiceUtil.setCoordinates(user);
 		
 		// check for any invitations for this user

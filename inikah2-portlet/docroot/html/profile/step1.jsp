@@ -1,6 +1,9 @@
+<%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
 <%@include file="/html/profile/init.jsp" %>
 
 <%@page import="java.util.Calendar"%>
+<%@page import="com.liferay.portal.model.Country"%>
+<%@page import="com.liferay.portal.service.CountryServiceUtil"%>
 
 <%
 	String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
@@ -124,7 +127,17 @@
 	<aui:fieldset label="location-info">
 		<aui:column>
 			<aui:select name="residingCountry" required="true" showEmptyOption="true">
-				<aui:option value="1"/>
+				<%
+					List<Country> countries = CountryServiceUtil.getCountries(false);
+					for (Country country: countries) {
+						long countryId = country.getCountryId();
+						%>
+							<aui:option value="<%= countryId %>" 
+								label="<%= TextFormatter.format(country.getName(), TextFormatter.J) %>" 
+								selected="<%= (countryId == profile.getResidingCountry()) %>" />
+						<%
+					}
+				%>
 			</aui:select> 
 		</aui:column>
 		<aui:column>
