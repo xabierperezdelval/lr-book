@@ -28,8 +28,8 @@
 <c:choose>
 	<c:when test="<%= Validator.isNull(userProfiles) || userProfiles.isEmpty() %>">
 		<hr/>
-		<liferay-ui:journal-article articleId="WELCOME_USER"
-			groupId="<%=themeDisplay.getScopeGroupId()%>" />
+		<liferay-ui:journal-article articleId="USER_WELCOME"
+			groupId="<%= themeDisplay.getScopeGroupId() %>" />
 	</c:when>
 	
 	<c:otherwise>
