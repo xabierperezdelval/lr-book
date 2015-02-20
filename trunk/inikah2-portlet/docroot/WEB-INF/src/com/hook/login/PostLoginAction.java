@@ -1,4 +1,4 @@
-package com.hook;
+package com.hook.login;
 
 import com.liferay.portal.kernel.events.Action;
 
