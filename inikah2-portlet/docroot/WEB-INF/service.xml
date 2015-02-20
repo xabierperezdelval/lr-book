@@ -126,5 +126,27 @@
 		
 		<reference entity="Address" package-path="com.liferay.portal"/>
 		<reference entity="Country" package-path="com.liferay.portal"/>
+	</entity>
+	
+	<entity name="Currency" local-service="true" remote-service="false">
+		<column name="countryId" type="long" primary="true"/>
+		<column name="currencyCode" type="String"/>
+		<column name="currencySymbol" type="String"/>
+		<column name="currencyName" type="String"/>
+		<column name="mainUnit" type="String"/>
+		<column name="subUnit" type="String"/>
+		<column name="toDollars" type="double"/>
+		<column name="pppFactor" type="double"/>
+	</entity>
+	
+	<entity name="MyLanguage" local-service="true" remote-service="false">
+		<column name="languageId" type="long" primary="true"/>
+		<column name="countryId" type="long" />
+		<column name="regionId" type="long" />
+		<column name="language" type="String"/>
+		
+		<finder return-type="Collection" name="CountryId">
+			<finder-column name="countryId"/>
+		</finder>
 	</entity>	
 </service-builder>
