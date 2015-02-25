@@ -5,6 +5,25 @@
 	<portlet>
 		<portlet-name>1</portlet-name>
 		<icon>/icon.png</icon>
+		
+		<scheduler-entry>
+			<scheduler-event-listener-class>com.jobs.UpdateXRates</scheduler-event-listener-class>
+			<trigger>
+				<cron>
+					<cron-trigger-value>0 0 13 * * 6</cron-trigger-value>
+				</cron>
+			</trigger>
+		</scheduler-entry>
+		
+		<scheduler-entry>
+			<scheduler-event-listener-class>com.job.NotifyOldUsers</scheduler-event-listener-class>
+			<trigger>
+				<cron>
+					<cron-trigger-value>0 0 7 1/1 * ? *</cron-trigger-value>
+				</cron>
+			</trigger>
+		</scheduler-entry>		
+				
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>inikah2-portlet</css-class-wrapper>

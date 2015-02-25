@@ -9,7 +9,7 @@
 	String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 %>
 
-<liferay-ui:header title="<%= profile.getCode() %>" />
+<lui:header title="<%= profile.getCode() %>" />
 
 <portlet:actionURL var="saveProfileURL" name="saveProfile"/>
 
@@ -70,7 +70,7 @@
 			<aui:column>
 				<div class="control-group">
 					<label class="control-label" for="bornOn">
-						<liferay-ui:message key="born-on"/> <span class="label-required">(<liferay-ui:message key="required"/>)</span>
+						<lui:message key="born-on"/> <span class="label-required">(<lui:message key="required"/>)</span>
 					</label>		
 						
 					<aui:column cssClass="month-selection">
@@ -162,8 +162,8 @@
 
 <%--
 
-<liferay-ui:panel-container accordion="true">
-	<liferay-ui:panel title="basic-info" extended="true" collapsible="true" >
+<lui:panel-container accordion="true">
+	<lui:panel title="basic-info" extended="true" collapsible="true" >
 		<aui:fieldset>
 			<aui:row>
 				<aui:column>
@@ -205,9 +205,9 @@
 				</aui:column>
 			</aui:row>
 		</aui:fieldset>
-	</liferay-ui:panel>
+	</lui:panel>
 	
-	<liferay-ui:panel title="location-info" extended="true" collapsible="true">
+	<lui:panel title="location-info" extended="true" collapsible="true">
 
 		<c:if test="<%= LocationLocalServiceUtil.userHasLocation(user.getUserId())  %>">
 			<div>
@@ -275,8 +275,8 @@
 				</aui:column>				
 			</aui:row>
 		</aui:fieldset>
-	</liferay-ui:panel>	
-</liferay-ui:panel-container>
+	</lui:panel>	
+</lui:panel-container>
 
 <script type="text/javascript">
 	function cascade1(obj, fld1, fld2) {
