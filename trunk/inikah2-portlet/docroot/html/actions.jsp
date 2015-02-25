@@ -16,6 +16,6 @@
 	<portlet:param name="profileId" value="<%= String.valueOf(_profile.getProfileId()) %>"/>
 </portlet:actionURL>
 
-<liferay-ui:icon-menu>
-	<liferay-ui:icon image="delete" url="<%= deleteProfileURL %>"/>
-</liferay-ui:icon-menu>
+<lui:icon-menu>
+	<lui:icon image="delete" url="<%= deleteProfileURL %>"/>
+</lui:icon-menu>

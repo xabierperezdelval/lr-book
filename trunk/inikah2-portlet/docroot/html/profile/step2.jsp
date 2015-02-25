@@ -1,6 +1,6 @@
 <%@include file="/html/profile/init.jsp" %>
 
-<liferay-ui:header title="step2-title"/>
+<lui:header title="step2-title"/>
 
 <portlet:actionURL var="saveProfileURL" name="saveProfile"/>
 

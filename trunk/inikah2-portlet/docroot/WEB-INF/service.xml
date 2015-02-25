@@ -148,5 +148,10 @@
 		<finder return-type="Collection" name="CountryId">
 			<finder-column name="countryId"/>
 		</finder>
-	</entity>	
+	</entity>
+	
+	<entity name="Bridge"  local-service="true" remote-service="true">
+		<reference entity="Phone" package-path="com.liferay.portal"/>
+		<reference entity="EmailAddress" package-path="com.liferay.portal"/>
+	</entity>		
 </service-builder>
