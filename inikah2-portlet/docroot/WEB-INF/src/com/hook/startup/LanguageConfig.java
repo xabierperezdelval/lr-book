@@ -20,7 +20,7 @@ import com.slayer.service.MyLanguageLocalServiceUtil;
 
 public class LanguageConfig extends SimpleAction {
 	public void run(String[] args) throws ActionException {
-		 
+		
 		String className = LanguageConfig.class.getName();
 		long companyId = Long.valueOf(args[0]);
 		
