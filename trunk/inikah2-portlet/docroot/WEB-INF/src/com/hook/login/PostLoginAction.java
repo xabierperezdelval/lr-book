@@ -47,5 +47,4 @@ public class PostLoginAction extends Action {
 		// Set the ownerLastLogin for all the profiles owned by this user
 		ProfileLocalServiceUtil.setOwnerLastLogin(user.getUserId());
 	}
-
 }
