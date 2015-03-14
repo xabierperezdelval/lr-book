@@ -1,3 +1,5 @@
+<%@page import="com.slayer.model.Location"%>
+<%@page import="com.slayer.service.LocationLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
 <%@include file="/html/profile/init.jsp" %>
 
@@ -125,8 +127,9 @@
 
 	
 	<aui:fieldset label="location-info">
-		<aui:column>
-			<aui:select name="residingCountry" required="true" showEmptyOption="true">
+		<aui:column columnWidth="50">
+			<aui:select name="residingCountry" required="true" showEmptyOption="true"
+					onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
 				<%
 					List<Country> countries = CountryServiceUtil.getCountries(false);
 					for (Country country: countries) {
@@ -138,156 +141,66 @@
 						<%
 					}
 				%>
+			</aui:select>
+			
+			<aui:select name="residingState" required="true" showEmptyOption="true" 
+					onChange="javascript:cascade2(this, 'residingCity');">
+				<%
+					List<Location> regions = LocationLocalServiceUtil.getRegions(profile.getResidingCountry());
+					for (Location region: regions) {
+						long regionId = region.getLocationId();
+						%>
+							<aui:option value="<%= regionId %>" 
+								label="<%= region.getName() %>" 
+								selected="<%= (regionId == profile.getResidingState()) %>" />
+						<%
+					}
+				%>
+			</aui:select>
+			
+			<aui:select name="residingCity" required="true" showEmptyOption="true" 
+					onChange="javascript:cascade3(this, 'newResidingCity');">
+				<%
+					List<Location> cities = LocationLocalServiceUtil.getCities(profile.getResidingState());
+					for (Location city: cities) {
+						long cityId = city.getLocationId();
+						%>
+							<aui:option value="<%= cityId %>" 
+								label="<%= city.getName() %>" 
+								selected="<%= (cityId == profile.getResidingCity()) %>" />
+						<%
+					}
+				%>
 			</aui:select> 
+			
+			<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
+				<aui:input name="newResidingCity" />
+			</div>				
+	 
 		</aui:column>
 		<aui:column>
-			<aui:select name="residingRegion" required="true" showEmptyOption="true">
-				<aui:option value="1"/>
-			</aui:select> 
+			another column...
 		</aui:column>
-		<aui:column>
-			<aui:select name="residingCity" required="true" showEmptyOption="true">
-				<aui:option value="1"/>
-			</aui:select> 
-		</aui:column>				
 	</aui:fieldset>
 
-	<aui:select name="sameLocation" label="same-location" showEmptyOption="true" required="true" inlineLabel="true">
-		<aui:option value="true" label="yes"/>
-		<aui:option value="false" label="no"/>
-	</aui:select>
-	
 	<aui:button type="submit" />
 </aui:form>
 
-<%--
-
-<lui:panel-container accordion="true">
-	<lui:panel title="basic-info" extended="true" collapsible="true" >
-		<aui:fieldset>
-			<aui:row>
-				<aui:column>
-					<aui:select name="maritalStatus" required="true" showEmptyOption="true">
-						<%= MyListUtil.getMaritalStatusOptions(locale, profile) %>
-					</aui:select>					
-				</aui:column>
-				
-				<aui:column>
-					<aui:select name="createdFor" required="true" showEmptyOption="true">
-						<%= MyListUtil.getCreatedFor(locale, profile) %>
-					</aui:select>					
-				</aui:column>
-			</aui:row>
-			
-			<aui:row>
-				<aui:column>
-					<%@ include file="/html/edit/step1-bornon.jspf" %>					
-				</aui:column>
-				
-				<aui:column>
-					<aui:select name="complexion" required="true" showEmptyOption="true">
-						<%= MyListUtil.getComplexionsList(locale, profile) %>
-					</aui:select>						
-				</aui:column>
-			</aui:row>
-			
-			<aui:row>
-				<aui:column>
-					<aui:select name="height" required="true" showEmptyOption="true">
-						<%= MyListUtil.getHeightList(locale, profile.getHeight()) %>
-					</aui:select>				
-				</aui:column>
-				
-				<aui:column>
-					<aui:select name="weight" showEmptyOption="true">
-						<%= MyListUtil.getWeightList(locale, profile.getWeight()) %>
-					</aui:select>						
-				</aui:column>
-			</aui:row>
-		</aui:fieldset>
-	</lui:panel>
-	
-	<lui:panel title="location-info" extended="true" collapsible="true">
-
-		<c:if test="<%= LocationLocalServiceUtil.userHasLocation(user.getUserId())  %>">
-			<div>
-				You are currently accessing the site from: <b><%= LocationLocalServiceUtil.getUserLocation(user.getUserId()) %></b>.
-				<br/> Please confirm OR change <b>BIRTH</b> and <b>RESIDING</b> locations.		
-			</div>		
-		</c:if>
-		
-		<aui:fieldset>
-			<aui:row>
-				<aui:column>
-					<aui:select name="countryOfBirth" required="true" showEmptyOption="true"
-							onChange="javascript:cascade1(this, 'stateOfBirth', 'cityOfBirth');">
-						<%= MyListUtil.getCountries(profile.getCountryOfBirth()) %>
-					</aui:select>					
-				</aui:column>
-				<aui:column>
-					<aui:select name="residingCountry" required="true" showEmptyOption="true" 
-							onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
-						<%= MyListUtil.getCountries(profile.getResidingCountry()) %>
-					</aui:select>				
-				</aui:column>				
-			</aui:row>
-			
-			<aui:row>
-				<aui:column>
-					<aui:select name="stateOfBirth" required="true" showEmptyOption="true"
-							onChange="javascript:cascade2(this, 'cityOfBirth');">
-						<%= MyListUtil.getLocations(profile.getCountryOfBirth(), profile.getStateOfBirth(), IConstants.LOC_TYPE_REGION) %>
-					</aui:select>					
-				</aui:column>
-				<aui:column>
-					<aui:select name="residingState" required="true" showEmptyOption="true"
-							onChange="javascript:cascade2(this, 'residingCity');">
-						<%= MyListUtil.getLocations(profile.getResidingCountry(), profile.getResidingState(), IConstants.LOC_TYPE_REGION) %>
-					</aui:select>				
-				</aui:column>				
-			</aui:row>
-			
-			<aui:row>
-				<aui:column>
-					<aui:select name="cityOfBirth" required="true" showEmptyOption="true"
-							onChange="javascript:cascade3(this, 'newCityOfBirth');">
-						<%= MyListUtil.getLocations(profile.getStateOfBirth(), profile.getCityOfBirth(), IConstants.LOC_TYPE_CITY) %>
-					</aui:select>				
-				</aui:column>
-				<aui:column>
-					<aui:select name="residingCity" required="true" showEmptyOption="true"
-							onChange="javascript:cascade3(this, 'newResidingCity');">
-						<%= MyListUtil.getLocations(profile.getResidingState(), profile.getResidingCity(), IConstants.LOC_TYPE_CITY) %>
-					</aui:select>			
-				</aui:column>				
-			</aui:row>		
-			
-			<aui:row>
-				<aui:column>
-					<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
-						<aui:input name="newcityOfBirth" />
-					</div>			
-				</aui:column>
-				<aui:column>
-					<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
-						<aui:input name="newresidingCity" />
-					</div>		
-				</aui:column>				
-			</aui:row>
-		</aui:fieldset>
-	</lui:panel>	
-</lui:panel-container>
-
-<script type="text/javascript">
+<aui:script>
 	function cascade1(obj, fld1, fld2) {
+		
 		var index = obj.selectedIndex;
 		var child = document.getElementById("<portlet:namespace/>" + fld1);
 		var grandChild = document.getElementById("<portlet:namespace/>" + fld2);
 		
+		if (fld2 == 'residingCity') {
+			hideNewCity('newResidingCity');	
+		}
+		
 		if (index > 0) {
 			var value = obj.options[index].value;
 			Liferay.Service(
-	  			'/inikah-portlet.location/get-regions',
+	  			'<%= request.getContextPath() %>.location/get-regions',
 	  			{
 	    			countryId: value
 	  			},
@@ -313,10 +226,14 @@
 		var index = obj.selectedIndex;
 		var child = document.getElementById("<portlet:namespace/>" + fld1);
 		
+		if (fld1 == 'residingCity') {
+			hideNewCity('newResidingCity');	
+		}
+		
 		if (index > 0) {
 			var value = obj.options[index].value;
 			Liferay.Service(
-	  			'/inikah-portlet.location/get-cities',
+	  			'<%= request.getContextPath() %>.location/get-cities',
 	  			{
 	    			regionId: value
 	  			},
@@ -337,12 +254,12 @@
 	}
 	
 	function cascade3(obj, fld) {
-		
+
 		var index = obj.selectedIndex;
 		var value = obj.options[index].value;
 		var div = document.getElementById("<portlet:namespace/>"+ fld +"Div");
 		var fld = document.getElementById("<portlet:namespace/>" + fld);
-				
+
 		if (value == '-1') {
 			div.style.display = 'block';
 			fld.focus();
@@ -358,6 +275,12 @@
 		fld.selectedIndex = 0;
 		fld.options[0] = new Option("-- select --", "");
 	}
-</script> 
-
---%>
+	
+	function hideNewCity(fld) {
+		var div = document.getElementById("<portlet:namespace/>"+ fld +"Div");
+		var fld = document.getElementById("<portlet:namespace/>" + fld);
+		
+		div.style.display = 'none';
+		fld.required = false;
+	}
+</aui:script>
