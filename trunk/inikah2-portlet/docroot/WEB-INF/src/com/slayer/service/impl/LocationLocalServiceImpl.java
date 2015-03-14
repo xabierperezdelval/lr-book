@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.language.Soundex;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -61,8 +63,6 @@ import com.util.IConstants;
  */
 public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	public void setCoordinates(User user) {
-		
-		System.out.println("inside set coordinates....");
 		
 		String ipAddress = user.getLastLoginIP();
 		
@@ -258,6 +258,54 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 			}	
 		}
 	}
+	
+	public long insertCityUI(long regionId, String name, long userId) {
+		
+		long cityId = 0l;
+		
+		List<Location> cities = null;
+		try {
+			cities = locationPersistence.findByParentId_LocType(regionId, IConstants.LOC_TYPE_CITY);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		// check for soundex
+		for (Location city: cities) {
+			int diff = 0;
+			try {
+				diff = Soundex.US_ENGLISH.difference(city.getName(), name);				
+			} catch (EncoderException e) {
+				e.printStackTrace();
+			}
+			
+			if (diff == 4) {
+				cityId = city.getLocationId();
+				break;
+			}
+		}
+		
+		if (cityId == 0l) {
+			try {
+				cityId = counterLocalService.increment(Location.class.getName());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			Location city = createLocation(cityId);
+			city.setName(name);
+			city.setUserId(userId);
+			city.setLocType(IConstants.LOC_TYPE_CITY);
+			city.setParentId(regionId);
+			city.setActive_(false);
+			
+			try {
+				addLocation(city);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}	
+		return cityId;
+	}	
 	
 	private Location insertCity(String country, String region, String city) {
 

@@ -9,6 +9,7 @@
 
 <%
 	String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+	List<Country> countries = CountryServiceUtil.getCountries(false);
 %>
 
 <lui:header title="<%= profile.getCode() %>" />
@@ -131,7 +132,6 @@
 			<aui:select name="residingCountry" required="true" showEmptyOption="true"
 					onChange="javascript:cascade1(this, 'residingState', 'residingCity');">
 				<%
-					List<Country> countries = CountryServiceUtil.getCountries(false);
 					for (Country country: countries) {
 						long countryId = country.getCountryId();
 						%>
@@ -171,6 +171,7 @@
 						<%
 					}
 				%>
+				<aui:option label="-- New City --" value="-1"/>
 			</aui:select> 
 			
 			<div id="<portlet:namespace/>newResidingCityDiv" hidden="true">
@@ -178,8 +179,57 @@
 			</div>				
 	 
 		</aui:column>
+		
 		<aui:column>
-			another column...
+		
+			<aui:select name="countryOfBirth" required="true" showEmptyOption="true"
+					onChange="javascript:cascade1(this, 'regionOfBirth', 'cityOfBirth');">
+				<%
+					for (Country country: countries) {
+						long countryId = country.getCountryId();
+						%>
+							<aui:option value="<%= countryId %>" 
+								label="<%= TextFormatter.format(country.getName(), TextFormatter.J) %>" 
+								selected="<%= (countryId == profile.getCountryOfBirth()) %>" />
+						<%
+					}
+				%>
+			</aui:select>
+			
+			<aui:select name="regionOfBirth" required="true" showEmptyOption="true"
+					onChange="javascript:cascade2(this, 'cityOfBirth');">
+				<%
+					List<Location> regions = LocationLocalServiceUtil.getRegions(profile.getCountryOfBirth());
+					for (Location region: regions) {
+						long regionId = region.getLocationId();
+						%>
+							<aui:option value="<%= regionId %>" 
+								label="<%= region.getName() %>" 
+								selected="<%= (regionId == profile.getRegionOfBirth()) %>" />
+						<%
+					}
+				%>					
+			</aui:select>					
+		
+			<aui:select name="cityOfBirth" required="true" showEmptyOption="true"
+					onChange="javascript:cascade3(this, 'newCityOfBirth');">
+				<%
+					List<Location> cities = LocationLocalServiceUtil.getCities(profile.getRegionOfBirth());
+					for (Location city: cities) {
+						long cityId = city.getLocationId();
+						%>
+							<aui:option value="<%= cityId %>" 
+								label="<%= city.getName() %>" 
+								selected="<%= (cityId == profile.getCityOfBirth()) %>" />
+						<%
+					}
+				%>
+				<aui:option label="-- New City --" value="-1"/>
+			</aui:select>				
+			
+			<div id="<portlet:namespace/>newCityOfBirthDiv" hidden="true">
+				<aui:input name="newCityOfBirth" />
+			</div>
 		</aui:column>
 	</aui:fieldset>
 
@@ -195,6 +245,8 @@
 		
 		if (fld2 == 'residingCity') {
 			hideNewCity('newResidingCity');	
+		} else {
+			hideNewCity('newCityOfBirth');
 		}
 		
 		if (index > 0) {
@@ -228,6 +280,8 @@
 		
 		if (fld1 == 'residingCity') {
 			hideNewCity('newResidingCity');	
+		} else {
+			hideNewCity('newCityOfBirth');
 		}
 		
 		if (index > 0) {
