@@ -19,6 +19,7 @@ import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.slayer.model.Profile;
+import com.slayer.service.LocationLocalServiceUtil;
 import com.slayer.service.ProfileLocalServiceUtil;
 import com.util.IConstants;
 
@@ -96,6 +97,7 @@ public class Controller extends MVCPortlet {
 		profile.setCreatedFor(ParamUtil.getInteger(actionRequest, "createdFor"));
 		profile.setHeight(ParamUtil.getInteger(actionRequest, "height"));
 		profile.setWeight(ParamUtil.getInteger(actionRequest, "weight"));
+		profile.setAllowNonSingleProposals(profile.getMaritalStatus() > 1);
 		
 		// set the user gender to male if the profile is created for self
 		if (profile.getCreatedFor() == IConstants.CREATED_FOR_SELF && profile.isBride()) {
@@ -110,7 +112,46 @@ public class Controller extends MVCPortlet {
 				e.printStackTrace();
 			}
 		}
+		
+		// setting locations
+		setLocation(actionRequest, profile, "BIRTH");	
+		setLocation(actionRequest, profile, "LIVING");
 	}
+	
+	private void setLocation(ActionRequest actionRequest, Profile profile, String type) {
+		
+		long userId = PortalUtil.getUserId(actionRequest);
+		
+		String countryFld = "countryOfBirth";
+		String stateFld = "regionOfBirth";
+		String cityFld = "cityOfBirth";
+		
+		if (type.equalsIgnoreCase("LIVING")) {
+			countryFld = "residingCountry";
+			stateFld = "residingState";
+			cityFld = "residingCity";			
+		}
+		
+		long countryId = ParamUtil.getLong(actionRequest, countryFld);
+		long regionId = ParamUtil.getLong(actionRequest, stateFld);
+		long cityId = ParamUtil.getLong(actionRequest, cityFld, -1l);
+		
+		if (cityId == -1l) {
+			cityFld = Character.toUpperCase(cityFld.charAt(0)) + cityFld.substring(1); 
+			String cityText = ParamUtil.getString(actionRequest, "new" + cityFld);
+			cityId = LocationLocalServiceUtil.insertCityUI(regionId, cityText, userId);
+		}
+		
+		if (type.equalsIgnoreCase("BIRTH")) {
+			profile.setCountryOfBirth(countryId);
+			profile.setRegionOfBirth(regionId);
+			profile.setCityOfBirth(cityId);
+		} else {
+			profile.setResidingCountry(countryId);
+			profile.setResidingState(regionId);
+			profile.setResidingCity(cityId);
+		}
+	}	
 	
 	private void saveStep2(ActionRequest actionRequest, Profile profile) {
 		

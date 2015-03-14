@@ -109,7 +109,7 @@ public class ProfileLocalServiceImpl extends ProfileLocalServiceBaseImpl {
 				
 				profile.setCountryOfBirth(address.getCountryId());
 				profile.setRegionOfBirth(address.getRegionId());
-				profile.setPlaceOfBirth(Long.valueOf(address.getCity()));
+				profile.setCityOfBirth(Long.valueOf(address.getCity()));
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();

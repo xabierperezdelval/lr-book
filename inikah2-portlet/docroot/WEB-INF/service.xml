@@ -64,7 +64,7 @@
 		<!-- Family Details -->
 		<column name="countryOfBirth" type="long" />
 		<column name="regionOfBirth" type="long" />
-		<column name="placeOfBirth" type="long" />
+		<column name="cityOfBirth" type="long" />
 		<column name="canSpeak" type="String"/>
 
 		<!-- Additional Information -->
