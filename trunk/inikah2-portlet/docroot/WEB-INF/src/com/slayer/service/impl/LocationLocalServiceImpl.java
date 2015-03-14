@@ -62,6 +62,8 @@ import com.util.IConstants;
 public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 	public void setCoordinates(User user) {
 		
+		System.out.println("inside set coordinates....");
+		
 		String ipAddress = user.getLastLoginIP();
 		
 		if (ipAddress.equals("127.0.0.1")) {
@@ -331,5 +333,43 @@ public class LocationLocalServiceImpl extends LocationLocalServiceBaseImpl {
 		}
 		
 		return country;
+	}
+	
+	private List<Location> getLocations(long parentId, int locType) {
+		List<Location> locations = null;
+		try {
+			locations = locationPersistence.findByParentId_LocType_Active(parentId, locType, true);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return locations;
+	}
+	
+	public List<Location> getLocations(long parentId, int locType, boolean all) {
+		List<Location> locations = null;
+		try {
+			locations = locationPersistence.findByParentId_LocType(parentId, locType);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return locations;
+	}
+	
+	public List<Location> getRegions(long countryId) {
+		return getLocations(countryId, IConstants.LOC_TYPE_REGION);
+	}
+	
+	public List<Location> getCities(long regionId) {
+		return getLocations(regionId, IConstants.LOC_TYPE_CITY);
+	}
+	
+	public List<Location> getAreas(long cityId) {
+		return getLocations(cityId, IConstants.LOC_TYPE_AREA);
+	}
+	
+	public List<Location> getMasaajid(long cityId) {
+		return getLocations(cityId, IConstants.LOC_TYPE_MASJID);
 	}
 }
