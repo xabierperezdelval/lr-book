@@ -221,7 +221,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		if (Validator.isNull(workbook)) return;
 
 		// Get first/desired sheet from the workbook
-		XSSFSheet sheet = workbook.getSheetAt(2);
+		XSSFSheet sheet = workbook.getSheetAt(0);
 		
 		Iterator<Row> rowIterator = sheet.iterator();
 		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
