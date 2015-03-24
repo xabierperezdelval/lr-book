@@ -103,20 +103,7 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 		if (Validator.isNull(workbook)) return;
 
 		// Get first/desired sheet from the workbook
-		
-		int sheetIndex = 0;
-		switch (type) {
-		case IConstants.HISTORY_TYPE_EQUITY:
-			sheetIndex = 1;
-			break;
-		case IConstants.HISTORY_TYPE_BOND:
-			sheetIndex = 6;
-			break;
-		case IConstants.HISTORY_TYPE_BOND_CASHFLOW:
-			sheetIndex = 7;
-			break;	
-		}
-		XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
+		XSSFSheet sheet = workbook.getSheetAt(0);
 		
 		Iterator<Row> rowIterator = sheet.iterator();
 		Map<Integer, Long> columnNames = new HashMap<Integer, Long>();
@@ -152,6 +139,8 @@ public class AssetLocalServiceImpl extends AssetLocalServiceBaseImpl {
 				}
 				continue;
 			}
+			
+			System.out.println("going to process data...");
 						
 			for (int i=0; i < columnCount; i++){
 				Date date = CellUtil.getDate(row.getCell(i));
